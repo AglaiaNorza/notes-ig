@@ -1,0 +1,1 @@
+/home/aglaia/scripts/notesync.sh
