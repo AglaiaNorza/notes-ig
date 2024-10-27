@@ -1,6 +1,6 @@
 la collezione dei miei appunti (o meglio, di quelli scritti decentemente) per il cdl triennale di informatica della sapienza ! 
 
-> utili principalmente per amici che magari sono assenti a lezione i guess :)
+> li metto qui principalmente come risorsa per amici che magari sono assenti a lezione i guess :) 
 
 > (per ora, quelli scritti al computer si possono trovare nel mio [vault](https://github.com/AglaiaNorza/obsidian-vault), ma tra poco li sistemerò anche qui)
 
