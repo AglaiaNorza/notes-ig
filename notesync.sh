@@ -1,5 +1,5 @@
 #!/bin/bash
-# script to push my handwritten notes to my gh repo
+# script to push my handwritten notes to my gh repo 
 
 # to be safe
 rclone sync gdrive:GoodNotes/ ~/Documents/gdrive
