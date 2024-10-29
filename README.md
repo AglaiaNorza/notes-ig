@@ -2,7 +2,7 @@ la collezione dei miei appunti (o meglio, di quelli scritti decentemente) per il
 
 gli appunti scritti a mano sono disponibili qui, mentre quelli presi al computer sono consultabili qui: [aglaianorza.github.io/notesig](https://aglaianorza.github.io/notesig/) !
 
-> (sono deployati da obsidian con quartz, e i file originali si trovano nel mio [vault](https://github.com/AglaiaNorza/obsidian-vault))
+> (sono pubblicati da obsidian con quartz, e i file originali si trovano nel mio [vault](https://github.com/AglaiaNorza/obsidian-vault))
 
 > li metto qui principalmente come risorsa per amici che magari sono assenti a lezione i guess :) 
 
