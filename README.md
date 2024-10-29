@@ -1,8 +1,10 @@
 la collezione dei miei appunti (o meglio, di quelli scritti decentemente) per il cdl triennale di informatica della sapienza ! 
 
-> li metto qui principalmente come risorsa per amici che magari sono assenti a lezione i guess :) 
+gli appunti scritti a mano sono disponibili qui, mentre quelli presi al computer sono consultabili qui: [aglaianorza.github.io/notesig](https://aglaianorza.github.io/notesig/) !
 
-> (per ora, quelli scritti al computer si possono trovare nel mio [vault](https://github.com/AglaiaNorza/obsidian-vault), ma tra poco li sistemerò anche qui)
+> (sono deployati da obsidian con quartz, e i file originali si trovano nel mio [vault](https://github.com/AglaiaNorza/obsidian-vault))
+
+> li metto qui principalmente come risorsa per amici che magari sono assenti a lezione i guess :) 
 
 ### primo anno
 (le mie '**cheat sheets**' !! - contengono le informazioni principali che mi servivano per gli esami, esercizi spiegati, e qualche tip)
