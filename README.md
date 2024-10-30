@@ -1,6 +1,6 @@
 la collezione dei miei appunti (o meglio, di quelli scritti decentemente) per il cdl triennale di informatica della sapienza ! 
 
-gli appunti scritti a mano sono disponibili qui, mentre quelli presi al computer sono consultabili qui: [aglaianorza.github.io/notesig](https://aglaianorza.github.io/notesig/) !
+gli appunti scritti a mano sono in questa repo, mentre quelli presi al computer si possono vedere qui: [aglaianorza.github.io/notesig](https://aglaianorza.github.io/notesig/) !
 
 > (sono pubblicati da obsidian con quartz, e i file originali si trovano nel mio [vault](https://github.com/AglaiaNorza/obsidian-vault))
 
