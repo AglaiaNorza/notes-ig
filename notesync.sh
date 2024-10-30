@@ -22,7 +22,7 @@ done
 cd "$dest" && git fetch
 
 if [[ $(git status --porcelain) ]]; then
-    git add . && git commit -m "automatic sync" && git push
+    git add . && git commit -m "sync: $(date +'%d:%m')" && git push
 else
     echo "no changes in the notes!"
 fi
