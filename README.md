@@ -25,5 +25,4 @@ gli appunti scritti a mano sono in questa repo, mentre quelli presi al computer 
 > - algebra dimostrazioni - WIP (per l'orale :') )
 ------
 > in caso servissero a qualcuno, ho anche dei link drive per gli appunti del secondo anno (backup di goodnotes) - si aggiornano in automatico, quindi potrebbero contenere gli appunti appena presi e ancora da sistemare:
-> [[algebra]](https://drive.google.com/file/d/1KuGslbgLNU1U9rboeNKxsBptnqXS95rY/view?usp=sharing), [[formule algebra]](https://drive.google.com/file/d/1kSHqjzirNeuWVRACjaXAZzN51CBvSmSw/view?usp=sharing), [[algebra es]](https://drive.google.com/file/d/10bc4-VZ2bqGsYHfavKYtBK0ApbsDXviP/view?usp=sharing), [[probabilità]](https://drive.google.com/file/d/1z5yY9wkeVek5W3LhSf8P8mh2xpbsMRAs/view?usp=sharing)
-
+> [[algebra]](https://drive.google.com/file/d/1pLKUuNbWrVlW12U7rEf8fbK6sjEBWXTW/view?usp=sharing), [[formule algebra]](https://drive.google.com/file/d/1kSHqjzirNeuWVRACjaXAZzN51CBvSmSw/view?usp=sharing), [[algebra es]](https://drive.google.com/file/d/10bc4-VZ2bqGsYHfavKYtBK0ApbsDXviP/view?usp=sharing), [[probabilità]](https://drive.google.com/file/d/1z5yY9wkeVek5W3LhSf8P8mh2xpbsMRAs/view?usp=sharing)
