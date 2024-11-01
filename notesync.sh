@@ -19,9 +19,9 @@ for file in "${!notes[@]}"; do
     cp "$file" "$dest/${notes[$file]}" || { echo "$file failed"; exit 1; }
 done
 
-cd "$dest" && git fetch
+cd "$dest" && git pull
 
-if [[ $(git status --porcelain) ]]; then
+if [ $? -eq 0 ] && [[ $(git status --porcelain) ]]; then
     git add . && git commit -m "sync: $(date +'%d-%m')" && git push
 else
     echo "no changes in the notes!"
