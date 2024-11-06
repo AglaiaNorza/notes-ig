@@ -7,16 +7,15 @@ gli appunti scritti a mano sono in questa repo, mentre quelli presi al computer 
 > li metto qui principalmente come risorsa per amici che magari sono assenti a lezione i guess :) 
 
 ### primo anno
-
 <details>
     <summary>cheat sheets</summary>
     <br>
 
-    (le mie '**cheat sheets**' !! - contengono le informazioni principali che mi servivano per gli esami, esercizi spiegati, e qualche tip)
+(le mie '**cheat sheets**' !! - contengono le informazioni principali che mi servivano per gli esami, esercizi spiegati, e qualche tip)
 
-    - [progettazione di sistemi digitali](../../raw/main/primo%20anno/psd%20cheat%20sheet.pdf) - (tipi di esercizi d'esame della prof.ssa Massini - e la relativa teoria -, spiegati)
-    - [calcolo differenziale](../../raw/main/primo%20anno/calcdiff%20cheat%20sheet.pdf) - (formule necessarie ed esempi di esercizi)
-    - [architettura degli elaboratori](../../raw/main/primo%20anno/arch%20cheat%20sheet.pdf) - (principalmente tips su come svolgere gli esercizi)
+- [progettazione di sistemi digitali](../../raw/main/primo%20anno/psd%20cheat%20sheet.pdf) - (tipi di esercizi d'esame della prof.ssa Massini - e la relativa teoria -, spiegati)
+- [calcolo differenziale](../../raw/main/primo%20anno/calcdiff%20cheat%20sheet.pdf) - (formule necessarie ed esempi di esercizi)
+- [architettura degli elaboratori](../../raw/main/primo%20anno/arch%20cheat%20sheet.pdf) - (principalmente tips su come svolgere gli esercizi)
 </details>
 
 ### secondo anno
