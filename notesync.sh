@@ -1,8 +1,12 @@
 #!/bin/bash
-# script to push my handwritten notes to my gh repo 
+# script to push my handwritten notes to my gh repo
 
 source="$HOME/Documents/gdrive"
 dest="$HOME/Documents/uni/notes-ig"
+
+if ! mount | grep "gdrive" > /dev/null; then
+    rclone mount --daemon gdrive:GoodNotes/ ~/Documents/gdrive
+fi
 
 # did not need to declare a fancy array for this but i've never used bash arrays before so i wanted to try !
 declare -A notes
