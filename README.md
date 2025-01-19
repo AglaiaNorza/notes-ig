@@ -19,12 +19,12 @@ gli appunti scritti a mano sono in questa repo, mentre quelli presi al computer 
 </details>
 
 ### secondo anno
-(appunti in corso)
+(appunti completi, ma in riorganizzazione/sistemazione)
 
-- [algebra](../../raw/main/secondo%20anno/algebra.pdf) - (senza insiemistica) 
+- [algebra](../../raw/main/secondo%20anno/algebra.pdf) - (senza insiemistica)
 - [calcolo delle probabilità](../../raw/main/secondo%20anno/calcolo%20delle%20probabilità.pdf)
  
-> (per algebra, faccio anche il re-file degli appunti in sub-file (che diventeranno poi cheat sheets) - che però non sono sempre up-to-date :D):
+> (per algebra, sto/stavo facendo anche il re-file degli appunti in sub-file (che diventeranno poi cheat sheets) - che però non sono ancora completi :D):
 > - [algebra formule](../../raw/main/secondo%20anno/algebra%20formule.pdf) - (che uso per guardare velocemente formule e proprietà senza dover sfogliare tutti gli appunti) 
 > - [algebra sheet esercizi](../../raw/main/secondo%20anno/algebra%20es%20sheet.pdf) - (guide agli esercizi)
 > - algebra dimostrazioni - WIP (per l'orale :') )
