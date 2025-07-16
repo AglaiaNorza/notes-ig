@@ -11,7 +11,7 @@ alcuni appunti (segnati con *) sono presi a mano - gli altri sono link al mio [q
     <summary>cheat sheets</summary>
     <br>
 
-(le mie '**cheat sheets**' !! - contengono le informazioni principali che mi servivano per gli esami, esercizi spiegati, e qualche tip)
+(le mie '**cheat sheets**' !! - contengono le informazioni principali che mi servivano per gli esami, esercizi spiegati, e qualche tip (sono un po' disordinate))
 
 - [progettazione di sistemi digitali](../../raw/main/primo%20anno/psd%20cheat%20sheet.pdf) - (tipi di esercizi d'esame della prof.ssa Massini - e la relativa teoria -, spiegati)
 - [calcolo differenziale](../../raw/main/primo%20anno/calcdiff%20cheat%20sheet.pdf) - (formule necessarie ed esempi di esercizi)
@@ -25,8 +25,9 @@ alcuni appunti (segnati con *) sono presi a mano - gli altri sono link al mio [q
 - [basi di dati 1](https://aglaianorza.github.io/notesig/vault/basi-di-dati-1/basi-di-dati-1)
 - [sistemi operativi 1](https://aglaianorza.github.io/notesig/vault/sistemi-operativi-1/sistemi-operativi-1)
 <br></br> <!-- ik /br is not a thing, but it doesn't register the md after it without it -->
-- [progettazione di algoritmi](https://aglaianorza.github.io/notesig/vault/progettazione-di-algoritmi/progettazione-di-algoritmi) - (in corso)
-- [reti di elaboratori](https://aglaianorza.github.io/notesig/vault/reti-di-elaboratori/reti-di-elaboratori) - (in corso)
+- [progettazione di algoritmi](https://aglaianorza.github.io/notesig/vault/progettazione-di-algoritmi/progettazione-di-algoritmi)
+- [reti di elaboratori](https://aglaianorza.github.io/notesig/vault/reti-di-elaboratori/reti-di-elaboratori)
+- [sistemi operativi 2](https://aglaianorza.github.io/notesig/vault/sistemi-operativi-2/sistemi-operativi-2)
 
 <!--  
 > (per algebra, sto/stavo facendo anche il re-file degli appunti in sub-file (che diventeranno poi cheat sheets) - che però non sono ancora completi :D):
