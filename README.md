@@ -32,5 +32,6 @@ alcuni appunti (segnati con *) sono presi a mano, alcuni sono pdf e altri sono l
 ### terzo anno 
 - [automi, calcolabilità e complessità](../../raw/main/terzo%20anno/automi.pdf) -  WIP 
 - [linguaggi di programmazione](../../raw/main/terzo%20anno/linguaggi%20di%20programmmazione.pdf) - WIP
-- [logica matematica](../../raw/main/terzo%20anno/logica%20matematica.pdf) (1022365) -  WIP 
-
+- [logica matematica](../../raw/main/terzo%20anno/logica%20matematica.pdf) (1022365) -  WIP
+- programmazione (embedded e) multicore
+- cybersecurity
