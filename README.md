@@ -30,7 +30,7 @@ alcuni appunti (segnati con *) sono presi a mano, alcuni sono pdf e altri sono l
 - [sistemi operativi 2](https://aglaianorza.github.io/notesig/vault/sistemi-operativi-2/sistemi-operativi-2)
 
 ### terzo anno 
-- [automi](../../raw/main/terzo%20anno/automi.pdf) -  WIP 
+- [automi, calcolabilità e complessità](../../raw/main/terzo%20anno/automi.pdf) -  WIP 
 - [linguaggi di programmazione](../../raw/main/terzo%20anno/linguaggi%20di%20programmmazione.pdf) - WIP
 - [logica matematica](../../raw/main/terzo%20anno/logica%20matematica.pdf) (1022365) -  WIP 
 
