@@ -1,6 +1,6 @@
 la collezione dei miei appunti (o meglio, di quelli scritti decentemente) per il cdl triennale in informatica della sapienza ! 
 
-alcuni appunti sono presi a mano (su tablet), alcuni sono pdf e altri sono link al mio [quartz](https://aglaianorza.github.io/notesig/) (i file originali (md) si trovano nel mio [vault](https://github.com/AglaiaNorza/obsidian-vault))
+alcuni appunti sono presi a mano (su tablet), alcuni sono pdf scritti con LaTeX e altri sono link al mio [quartz](https://aglaianorza.github.io/notesig/) (i file originali (md) si trovano nel mio [vault](https://github.com/AglaiaNorza/obsidian-vault))
 
 > li metto qui principalmente come risorsa per amici che magari sono assenti a lezione i guess :)
  
@@ -35,8 +35,8 @@ alcuni appunti sono presi a mano (su tablet), alcuni sono pdf e altri sono link 
 
 | corso |  |
 |---| ---|
-|[automi, calcolabilità e complessità](../../raw/main/terzo%20anno/automi%2C%20calcolabilit%C3%A0%20e%20complessit%C3%A0.pdf)| WIP. pdf, scritti a mano  |
-| [linguaggi di programmazione](../../raw/main/terzo%20anno/linguaggi%20di%20programmmazione.pdf) | WIP, pdf |
-| [logica matematica](../../raw/main/terzo%20anno/logica%20matematica.pdf) (1022365) |  WIP, pdf |
+|[automi, calcolabilità e complessità](../../raw/main/terzo%20anno/automi%2C%20calcolabilit%C3%A0%20e%20complessit%C3%A0.pdf)| pdf, scritti a mano (wip) |
+| [linguaggi di programmazione](../../raw/main/terzo%20anno/linguaggi%20di%20programmmazione.pdf) | pdf (wip) |
+| [logica matematica](../../raw/main/terzo%20anno/logica%20matematica.pdf) (1022365) |  pdf (wip) |
 | programmazione (embedded e) multicore | tbd |
 | cybersecurity | tbd |
