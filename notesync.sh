@@ -17,9 +17,8 @@ declare -A notes
 #notes["$drive/algebra/REFILE/algebra DIMOSTRAZIONI.pdf"]=secondo anno/algebra dimostrazioni.pdf"
 #notes["$drive/probabilità/probabilità appunti.pdf"]="secondo anno/calcolo delle probabilità.pdf"
 
-#notes["$drive/algebra/algebra ALGEBRA.pdf"]="secondo anno/algebra.pdf"
+notes["$drive/automi/automi.pdf"]="terzo anno/automi, calcolabilità e complessità.pdf"
 
-notes["$latex/automi/automi.pdf"]="terzo anno/automi.pdf"
 notes["$latex/logmat/logmat.pdf"]="terzo anno/logica matematica.pdf"
 notes["$latex/ldp/ldp.pdf"]="terzo anno/linguaggi di programmmazione.pdf"
 
