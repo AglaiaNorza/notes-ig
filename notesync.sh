@@ -1,5 +1,10 @@
 #!/bin/bash
 # script to push my handwritten notes to my gh repo
+hname="PC"
+
+if [ "$(uname -n )" = "aglaia-otg" ]; then
+    hname="portatile"
+fi
 
 drive="$HOME/Documents/gdrive"
 latex="$HOME/Documents/uni/latex"
@@ -29,7 +34,7 @@ done
 cd "$dest" && git pull
 
 if [ $? -eq 0 ] && [[ $(git status --porcelain) ]]; then
-    git add . && git commit -m "sync: $(date +'%d-%m')" && git push
+    git add . && git commit -m "sync: $(date +'%d-%m'), $hname" && git push
 else
     echo "no changes in the notes!"
 fi
