@@ -8,8 +8,6 @@
 \setcoursename{Logica Matematica}
 \setcoursebook{tbd}
 \setauthorname{aglaia norza}
-\setauthoremail{thisisaglaia@gmail.com}
-\setauthorgithub{AglaiaNorza}
 
 \begin{document}
 
@@ -24,7 +22,7 @@
 Definiamo alcuni concetti fondamentali
 
 \begin{defbox}{Linguaggio proposizionale}{}
-    Un linguaggio proposizionale è un insieme di \textbf{variabili} e \textbf{proposizioni}.
+    Un linguaggio proposizionale è un insieme infinito \( \mathcal{L} \) di simboli detti \textbf{variabili proposizionali}, tipicamente denotato come \( \{p_i : i \in I\} \) {\color{gray} (con \( I \) "insieme di indici")}.
 \end{defbox}
 
 \begin{defbox}{Proposizione}{}
@@ -37,18 +35,72 @@ Definiamo alcuni concetti fondamentali
     \end{enumerate}
 \end{defbox}
 
-\begin{defbox}{Assegnamento}{}
+Per facilitare la leggibilità delle formule, definiamo le seguenti regole di \textit{precedenza}: \( \neg \) ha precedenza su \( \land, \lor \), e questi ultimi hanno precedenza su \( \implies \).
+
+
+Per formalizzare le tavole di verità, introduciamo anche il concetto di assegnamento. Ogni riga di una tavola di verità corrisponde ad un assegnamento diverso.
+
     Per un linguaggio \( \mathcal{L} \), un \textbf{assegnamento} è una funzione 
     \[
         \alpha : \mathcal{L} \to \{0, 1\}
     \]
 
     Estendiamo \( \alpha \) ad \( \hat{\alpha} : \text{PROP} \to \{0,1\} \) in questo modo:
+            \vspace{0.5em}
     \begin{itemize}
-        \item 
-    \end{itemize}
+        \item \( \hat{\alpha}(\neg A) = \begin{cases}
+                1 &  A = 0 \\
+                0 & A = 1
+            \end{cases}\)
 
-    
-\end{defbox}
+            \vspace{0.5em}
+
+        \item \( \hat{\alpha}(A \land B) = \begin{cases}
+                1 & \hat{\alpha}(A) = \hat{\alpha}(B)  = 1 \\
+                0 & altrimenti
+            \end{cases}\)
+
+            \vspace{0.5em}
+
+        \item \( \hat{\alpha}(A \lor B) = \begin{cases}
+                0 & \hat{\alpha}(A) = \hat{\alpha}(B)  = 0 \\
+                1 & altrimenti
+            \end{cases}\)
+
+            \vspace{0.5em}
+
+        \item \( \hat{\alpha}(A \implies B) = \begin{cases}
+                0 & \hat{\alpha}(A) = 1 \land \hat{\alpha}(B)  = 0 \\
+                1 & altrimenti
+        \end{cases}\)
+
+\end{itemize}
+
+\begin{gbox}{notazione}
+    Utilizzeremo \( \alpha \) al posto di \( \hat{\alpha} \) per comodità di notazione.
+\end{gbox}
+
+Osserviamo che, data \( A = p_1, p_2, \dots, p_k \) e due assegnamenti \( \alpha \) e \( \beta \) t.c.:
+        \begin{align*}
+            \alpha(p_1) &= \beta(p_1) \\
+            &\dots \\
+            \alpha(p_k) &= \beta(p_k)
+        \end{align*}
+
+        allora necessariamente \( \alpha(A) = \alpha(B) \).
+
+        \begin{gbox}[colframe=PineGreen]{soddisfacibilità}
+            Se per una formula \( A \) e un assegnamento \( \alpha \) si ha \( \alpha (A) = 1 \), si dice che ``\(A \) soddisfa \( \alpha \)'' (o ``\( A \) è vera sotto \( \alpha \)'').
+            \begin{itemize}
+                \item Se \( A \) ha almeno un assegnamento che la soddisfa, si dice \textbf{soddisfacibile} (\( A \in \texttt{SAT} \)).
+                \item Se non esiste un assegnamento che la soddisfa, \( A \) si dice \textbf{insoddisfacibile} (\( A \in \texttt{UNSAT} \)).
+                \item Se \( A \) è soddisfatta da tutti i possibili assegnamenti, si dice \textbf{tautologia} (o "verità logica") (\( A \in \texttt{TAUT} \)).
+            \end{itemize}
+        \end{gbox}
+
+
+        \begin{defbox}{conseguenza logica}{}
+            Aa
+        \end{defbox}
 
 \end{document}
