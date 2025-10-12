@@ -8,6 +8,8 @@
 \setcoursename{Logica Matematica}
 \setcoursebook{tbd}
 \setauthorname{aglaia norza}
+\setauthoremail{thisisaglaia@gmail.com}
+\setauthorgithub{AglaiaNorza}
 
 \begin{document}
 
@@ -19,7 +21,21 @@
 
 \section{Introduzione}
 
-Definiamo alcuni concetti fondamentali
+La logica proposizionale è un linguaggio formale con una semplice struttura sintattica basata su proposizioni elementari (atomiche) e sui seguenti connettivi logici:
+
+
+\begin{itemize}
+    \item \textit{Negazione} ($\neg$): inverte il valore di verità di un enunciato: se un enunciato è vero, la sua negazione è falsa, e viceversa.
+    
+    \item \textit{Congiunzione} ($\land$): il risultato è vero se e solo se entrambi i componenti sono veri.
+    
+    \item \textit{Disgiunzione} ($\lor$): il risultato è vero se almeno uno dei componenti è vero.
+    
+    \item \textit{Implicazione} ($\to$): rappresenta l’enunciato logico “se ... allora”. Il risultato è falso solo se il primo componente è vero e il secondo è falso. 
+    
+    \item \textit{Equivalenza} ($\leftrightarrow$): rappresenta l’enunciato logico “se e solo se”. 
+    Il risultato è vero quando entrambi i componenti hanno lo stesso valore di verità, cioè sono entrambi veri o entrambi falsi.
+\end{itemize}
 
 \begin{defbox}{Linguaggio proposizionale}{}
     Un linguaggio proposizionale è un insieme infinito \( \mathcal{L} \) di simboli detti \textbf{variabili proposizionali}, tipicamente denotato come \( \{p_i : i \in I\} \) {\color{gray} (con \( I \) "insieme di indici")}.
@@ -30,12 +46,12 @@ Definiamo alcuni concetti fondamentali
     \begin{enumerate}
         \item tutte le variabili appartengono a PROP
         \item se \( A \in \) PROP, allora \( \neg A \in \) PROP
-        \item se \( A, B \in \) PROP, allora \( (A \land B), (A \lor B), (A \implies B) \in \) PROP
+        \item se \( A, B \in \) PROP, allora \( (A \land B), (A \lor B), (A \to B) \in \) PROP
         \item nient'altro appartiene a PROP {\color{gray}(PROP è il più piccolo insieme che contiene le variabili e soddisfa le proprietà di chiusura sui connettivi 1 e 2)}
     \end{enumerate}
 \end{defbox}
 
-Per facilitare la leggibilità delle formule, definiamo le seguenti regole di \textit{precedenza}: \( \neg \) ha precedenza su \( \land, \lor \), e questi ultimi hanno precedenza su \( \implies \).
+Per facilitare la leggibilità delle formule, definiamo le seguenti regole di \textit{precedenza}: \( \neg \) ha precedenza su \( \land, \lor \), e questi ultimi hanno precedenza su \( \to \).
 
 
 Per formalizzare le tavole di verità, introduciamo anche il concetto di assegnamento. Ogni riga di una tavola di verità corrisponde ad un assegnamento diverso.
@@ -69,12 +85,23 @@ Per formalizzare le tavole di verità, introduciamo anche il concetto di assegna
 
             \vspace{0.5em}
 
-        \item \( \hat{\alpha}(A \implies B) = \begin{cases}
+        \item \( \hat{\alpha}(A \to B) = \begin{cases}
                 0 & \hat{\alpha}(A) = 1 \land \hat{\alpha}(B)  = 0 \\
                 1 & altrimenti
         \end{cases}\)
 
 \end{itemize}
+
+Si noti che dalla definizione segue che un'implicazione può essere vera senza che ci sia connessione causale o di significato tra antecedente e conseguente (per esempio, "se tutti i quadrati sono pari allora \( \pi \) è irrazionale"). 
+
+In secondo luogo, segue anche che una proposizione è sempre vera se il suo antecedente è falso (il che rispecchia la pratica matematica di considerare vera a vuoto una proposizione ipotetica la cui premessa non si applica).
+
+Questo è giustificabile come segue:
+\begin{itemize}
+    \item vogliamo che \( (A \land B) \to B \) sia sempre vera
+    \item il caso \( 1 \to 1 \) deve essere vero, perché corrisponde al caso in cui \( A \) e \( B \) sono vere; il caso \( 0 \to 0  \) deve essere vero, perché corrisponde al caso in cui \( A\land B \) è falso perché \( B \) è falso; il caso \( 0 \to 0 \) deve essere vero perché corrisponde al caso in cui \( A \land B \) è falso perché \( B \) è falso; il caso \( 0 \to 1 \) deve essere vero perché corrisponde al caso in cui \( A \land B \) è falso perché \( A \) è falso ma \( B \) è vero. Resta dunque soltanto il caso \( 1 \to 0 \), che non corrisponde a nessun caso di \( A \land B \to B \).
+\end{itemize}
+
 
 \begin{gbox}{notazione}
     Utilizzeremo \( \alpha \) al posto di \( \hat{\alpha} \) per comodità di notazione.
@@ -100,7 +127,7 @@ Osserviamo che, data \( A = p_1, p_2, \dots, p_k \) e due assegnamenti \( \alpha
 
 
         \begin{defbox}{conseguenza logica}{}
-            Aa
+            
         \end{defbox}
 
 \end{document}
