@@ -1,0 +1,54 @@
+%! TEX program = xelatex
+\documentclass[a4paper,12pt]{report}
+
+\usepackage{./../packages/mainstyle}
+\usepackage{./../packages/boxes}
+\usepackage{./../packages/titleITA}
+
+\setcoursename{Logica Matematica}
+\setcoursebook{tbd}
+\setauthorname{aglaia norza}
+\setauthoremail{thisisaglaia@gmail.com}
+\setauthorgithub{AglaiaNorza}
+
+\begin{document}
+
+\makefrontpage
+
+\tableofcontents
+
+\chapter{Logica Proposizionale}
+
+\section{Introduzione}
+
+Definiamo alcuni concetti fondamentali
+
+\begin{defbox}{Linguaggio proposizionale}{}
+    Un linguaggio proposizionale è un insieme di \textbf{variabili} e \textbf{proposizioni}.
+\end{defbox}
+
+\begin{defbox}{Proposizione}{}
+    Una \textbf{proposizione} in un linguaggio proposizionale è un elemento dell'insieme PROP così definito:
+    \begin{enumerate}
+        \item tutte le variabili appartengono a PROP
+        \item se \( A \in \) PROP, allora \( \neg A \in \) PROP
+        \item se \( A, B \in \) PROP, allora \( (A \land B), (A \lor B), (A \implies B) \in \) PROP
+        \item nient'altro appartiene a PROP {\color{gray}(PROP è il più piccolo insieme che contiene le variabili e soddisfa le proprietà di chiusura sui connettivi 1 e 2)}
+    \end{enumerate}
+\end{defbox}
+
+\begin{defbox}{Assegnamento}{}
+    Per un linguaggio \( \mathcal{L} \), un \textbf{assegnamento} è una funzione 
+    \[
+        \alpha : \mathcal{L} \to \{0, 1\}
+    \]
+
+    Estendiamo \( \alpha \) ad \( \hat{\alpha} : \text{PROP} \to \{0,1\} \) in questo modo:
+    \begin{itemize}
+        \item 
+    \end{itemize}
+
+    
+\end{defbox}
+
+\end{document}

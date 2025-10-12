@@ -27,6 +27,9 @@ declare -A notes
 notes["$latex/logmat/logmat.pdf"]="terzo anno/logica matematica.pdf"
 notes["$latex/ldp/ldp.pdf"]="terzo anno/linguaggi di programmmazione.pdf"
 
+notes["$latex/logmat/logmat.tex"]="terzo anno/tex/logica matematica.tex"
+notes["$latex/ldp/ldp.pdf"]="terzo anno/tex/linguaggi di programmmazione.tex"
+
 for file in "${!notes[@]}"; do
     cp "$file" "$dest/${notes[$file]}" || { echo "$file failed"; exit 1; }
 done
