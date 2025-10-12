@@ -1,9 +1,11 @@
 %! TEX program = xelatex
-\documentclass[a4paper,12pt]{report}
+\documentclass[a4paper,11pt]{report}
 
 \usepackage{./../packages/mainstyle}
 \usepackage{./../packages/boxes}
 \usepackage{./../packages/titleITA}
+
+\usepackage{float}
 
 \setcoursename{Logica Matematica}
 \setcoursebook{tbd}
@@ -37,6 +39,8 @@ La logica proposizionale è un linguaggio formale con una semplice struttura sin
     Il risultato è vero quando entrambi i componenti hanno lo stesso valore di verità, cioè sono entrambi veri o entrambi falsi.
 \end{itemize}
 
+Introduciamo anche il concetto di disgiunzione esclusiva o "XOR" (\( \oplus \)), il cui risultato è vero solo se gli operandi sono diversi tra di loro (uno vero e uno falso).
+
 \begin{defbox}{Linguaggio proposizionale}{}
     Un linguaggio proposizionale è un insieme infinito \( \mathcal{L} \) di simboli detti \textbf{variabili proposizionali}, tipicamente denotato come \( \{p_i : i \in I\} \) {\color{gray} (con \( I \) "insieme di indici")}.
 \end{defbox}
@@ -53,8 +57,7 @@ La logica proposizionale è un linguaggio formale con una semplice struttura sin
 
 Per facilitare la leggibilità delle formule, definiamo le seguenti regole di \textit{precedenza}: \( \neg \) ha precedenza su \( \land, \lor \), e questi ultimi hanno precedenza su \( \to \).
 
-
-Per formalizzare le tavole di verità, introduciamo anche il concetto di assegnamento. Ogni riga di una tavola di verità corrisponde ad un assegnamento diverso.
+\section{Assegnamenti, tavole di verità}
 
     Per un linguaggio \( \mathcal{L} \), un \textbf{assegnamento} è una funzione 
     \[
@@ -92,20 +95,45 @@ Per formalizzare le tavole di verità, introduciamo anche il concetto di assegna
 
 \end{itemize}
 
-Si noti che dalla definizione segue che un'implicazione può essere vera senza che ci sia connessione causale o di significato tra antecedente e conseguente (per esempio, "se tutti i quadrati sono pari allora \( \pi \) è irrazionale"). 
-
-In secondo luogo, segue anche che una proposizione è sempre vera se il suo antecedente è falso (il che rispecchia la pratica matematica di considerare vera a vuoto una proposizione ipotetica la cui premessa non si applica).
-
-Questo è giustificabile come segue:
-\begin{itemize}
-    \item vogliamo che \( (A \land B) \to B \) sia sempre vera
-    \item il caso \( 1 \to 1 \) deve essere vero, perché corrisponde al caso in cui \( A \) e \( B \) sono vere; il caso \( 0 \to 0  \) deve essere vero, perché corrisponde al caso in cui \( A\land B \) è falso perché \( B \) è falso; il caso \( 0 \to 0 \) deve essere vero perché corrisponde al caso in cui \( A \land B \) è falso perché \( B \) è falso; il caso \( 0 \to 1 \) deve essere vero perché corrisponde al caso in cui \( A \land B \) è falso perché \( A \) è falso ma \( B \) è vero. Resta dunque soltanto il caso \( 1 \to 0 \), che non corrisponde a nessun caso di \( A \land B \to B \).
-\end{itemize}
-
-
 \begin{gbox}{notazione}
     Utilizzeremo \( \alpha \) al posto di \( \hat{\alpha} \) per comodità di notazione.
 \end{gbox}
+ 
+Osserviamo che è possibile rappresentare gli assegnamenti in modo compatto utilizzando le \textbf{tavole di verità}, una presentazione tabulare della funzione di assegnamento.
+
+        Per esempio, possiamo riscrivere la definizione di \( \alpha(\neg A) \) come segue:
+        
+        \[  
+        \begin{array}{c | c}
+            A & \neg A \\
+            \hline
+            0 & 1 \\
+            1 & 0
+                
+        \end{array}
+    \]
+
+    Ogni riga di una tavola di verità corrisponde ad un assegnamento \( \alpha \).
+
+Si noti anche che dalla definizione di \( \alpha \) segue che un'implicazione può essere vera senza che ci sia connessione causale o di significato tra antecedente e conseguente (per esempio, "se tutti i quadrati sono pari allora \( \pi \) è irrazionale"). 
+
+In secondo luogo, segue anche che una proposizione è sempre vera se il suo antecedente è falso (il che rispecchia la pratica matematica di considerare vera a vuoto una proposizione ipotetica la cui premessa non si applica).
+
+
+{\color{CadetBlue} Questo è giustificabile come segue:
+\begin{itemize}
+    \item vogliamo che \( (A \land B) \to B \) sia sempre vera
+    \item il caso \( 1 \to 1 \) deve essere vero, perché corrisponde al caso in cui \( A \) e \( B \) sono vere; 
+
+        il caso \( 0 \to 0  \) deve essere vero, perché corrisponde al caso in cui \( A\land B \) è falso perché \( B \) è falso; il caso \( 0 \to 0 \) deve essere vero perché corrisponde al caso in cui \( A \land B \) è falso perché \( B \) è falso; 
+
+        il caso \( 0 \to 1 \) deve essere vero perché corrisponde al caso in cui \( A \land B \) è falso perché \( A \) è falso ma \( B \) è vero; 
+
+        resta dunque soltanto il caso \( 1 \to 0 \), che non corrisponde a nessun caso di \( A \land B \to B \).
+\end{itemize}
+
+In più, si vuole che valga, per contrapposizione \( (A \to B)\to(\neg B \to \neg A) \).}
+
 
 Osserviamo che, data \( A = p_1, p_2, \dots, p_k \) e due assegnamenti \( \alpha \) e \( \beta \) t.c.:
         \begin{align*}
@@ -125,9 +153,121 @@ Osserviamo che, data \( A = p_1, p_2, \dots, p_k \) e due assegnamenti \( \alpha
             \end{itemize}
         \end{gbox}
 
+        Introduciamo anche alcune regole che 
 
-        \begin{defbox}{conseguenza logica}{}
-            
+        \section{Conseguenza logica}
+
+        \begin{defbox}{Conseguenza logica}{}
+            Sia \( T \) una \textit{teoria}, ossia un insieme  \( \{A_1, \dots, A_n\} \) proposizioni in un dato linguaggio proposizionale, e sia \( A \in \text{PROP}\) .
+
+            Diciamo che \( A \) è \textbf{conseguenza logica} di \( T\) se 
+            \[ \forall \alpha,\ \alpha(T)=1 \to \alpha(A)=1 \] 
+            ovvero se ogni assegnamento che soddisfa \(T\) soddisfa anche \( A_{n+1} \).
+
+            Scriviamo in tal caso \(  T \vDash A_{n+1} \), oppure \( A_1, \dots, A_n \vDash A \).
         \end{defbox}
 
-\end{document}
+        Si ha che:
+        \begin{itemize}
+            \item \(T \not\vDash A\) \ significa che \ \( \exists \alpha \) \ t.c. \ \( \alpha(T) = 1 \land \alpha(A) = 0 \)
+            \item \( \emptyset \vDash A \) \ o, equivalentemente \ \( \vDash A \iff A\) è una tautologia
+        \end{itemize}
+
+        \begin{lemmabox}{Equivalenze}{}
+            \begin{enumerate}
+                \item \( T \vDash A \)
+                \item \( \vDash (A_1 \land \dots \land A_n) \to A \)
+                \item \( (A_1 \land \dots \land A_n) \in \texttt{UNSAT}\) 
+            \end{enumerate}
+
+                    sono equivalenti.
+            
+        \end{lemmabox}
+
+        \section{Completezza funzionale}
+        \todo{da fare}
+
+        \section{Forme normali}
+
+        \begin{gbox}{notazione}
+            Chiamiamo "letterale" una variabile proposizionale o una negazione di una variabile proposizionale
+        \end{gbox}
+
+        È utile individuare alcune forme normali canoniche.
+
+        \begin{defbox}{Forma Normale Disgiuntiva}{}
+            Diciamo che \( A \) è in Forma Normale Disgiuntiva (\textbf{DNF}, \textit{Disjunctive Normal Form}) se \( A \) è una disgiunzione di congiunzioni di letterali, ossia è nella forma seguente:
+
+            \[ \bigvee_{i\leq n} \bigwedge_{j\leq m_i} A_{ij} = (A_{1,1} \land \dots \land A_{1, m_1}) \lor \dots \lor (A_{n,1} \land \dots \land A_{n, m_n}) \]
+
+        \end{defbox}
+
+        \begin{defbox}{Forma Normale Congiuntiva}{}
+            Diciamo che \( A \) è in Forma Normale Congiuntiva (\textbf{CNF}, \textit{Conjunctive Normal Form}) se \( A \) è una disgiunzione di congiunzioni di letterali, ossia è nella forma seguente:
+
+            \[ \bigwedge_{i\leq n} \bigvee_{j\leq m_i} A_{ij} = (A_{1,1} \lor \dots \lor A_{1, m_1}) \land \dots \land (A_{n,1} \lor \dots \lor A_{n, m_n}) \]
+
+        \end{defbox}
+
+        \section{Equivalenza Logica}
+
+        \begin{defbox}[colframe=PineGreen, colback=DeepGreenLight]{Equivalenza logica}{}
+            Due formule \( A, B \in \text{PROP} \) sono logicamente equivalenti (\( A \equiv B \)) quando, per ogni assegnamento \( \alpha \) si ha \( \alpha(A) = \alpha(B) \).
+        \end{defbox}
+
+
+        Introduciamo alcune regole utili per verificare l'equivalenza tra proposizioni.
+
+        Con un piccolo abuso di notazione, definiamo \( 1 \) e \( 0 \) come le formule per cui \( \forall \alpha, \ \alpha(1)= 1 \) e \( \alpha(0) = 0 \).
+
+        In questo modo, abbiamo:
+
+        \begin{table}[H]
+            \centering
+            \renewcommand{\arraystretch}{1.3}
+            \begin{tabular}{|l|l|}
+                \hline
+                \textbf{Involuzione} & $\neg\neg A \equiv A$ \\
+                \hline
+                \textbf{Assorbimento (con 0 e 1)} &
+                $A \lor 0 \equiv A$ \\
+                                                  & $A \land 1 \equiv A$ \\
+                                                  \hline
+                \textbf{Cancellazione} &
+                $A \lor 1 \equiv 1$ \\
+                                       & $A \land 0 \equiv 0$ \\
+                                       \hline
+                \textbf{Terzo escluso (\textit{tertium non datur})} &
+                $A \lor \neg A \equiv 1$ \\
+                                                                    & $A \land \neg A \equiv 0$ \\
+                                                                    \hline
+                \textbf{Leggi di De Morgan} &
+                $\neg(A \lor B) \equiv \neg A \land \neg B$ \\
+                                            & $\neg(A \land B) \equiv \neg A \lor \neg B$ \\
+                                            \hline
+                \textbf{Commutatività} &
+                $A \lor B \equiv B \lor A$ \\
+                                       & $A \land B \equiv B \land A$ \\
+                                       \hline
+                \textbf{Associatività} &
+                $A \lor (B \lor C) \equiv (A \lor B) \lor C$ \\
+                                       & $A \land (B \land C) \equiv (A \land B) \land C$ \\
+                                       \hline
+                \textbf{Distributività} &
+                $A \lor (B \land C) \equiv (A \lor B) \land (A \lor C)$ \\
+                                        & $A \land (B \lor C) \equiv (A \land B) \lor (A \land C)$ \\
+                                        \hline
+                \textbf{I teorema di assorbimento} &
+                $A \lor (A \land B) \equiv A$ \\
+                                                   & $A \land (A \lor B) \equiv A$ \\
+                                                   \hline
+                \textbf{II teorema di assorbimento} &
+                $A \lor (\neg A \land B) \equiv A \lor B$ \\
+                                                    & $A \land (\neg A \lor B) \equiv A \land B$ \\
+                                                    \hline
+
+            \end{tabular}
+            \caption{Principali leggi di equivalenza logica}
+        \end{table}
+
+        \end{document}
