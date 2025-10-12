@@ -41,3 +41,11 @@ if [ $? -eq 0 ] && [[ $(git status --porcelain) ]]; then
 else
     echo "no changes in the notes!"
 fi
+
+cd "$latex" && git pull
+
+if [ $? -eq 0 ] && [[ $(git status --porcelain) ]]; then
+    git add . && git commit -m "sync: $(date +'%d-%m'), $hname" && git push
+else
+    echo "no changes in the .tex files!"
+fi
