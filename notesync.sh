@@ -34,6 +34,8 @@ for file in "${!notes[@]}"; do
     cp "$file" "$dest/${notes[$file]}" || { echo "$file failed"; exit 1; }
 done
 
+echo "updating notes repo"
+
 cd "$dest" && git pull
 
 if [ $? -eq 0 ] && [[ $(git status --porcelain) ]]; then
@@ -41,6 +43,8 @@ if [ $? -eq 0 ] && [[ $(git status --porcelain) ]]; then
 else
     echo "no changes in the notes!"
 fi
+
+echo "updating notes repo"
 
 cd "$latex" && git pull
 
