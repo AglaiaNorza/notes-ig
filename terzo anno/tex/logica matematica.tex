@@ -28,15 +28,15 @@ La logica proposizionale è un linguaggio formale con una semplice struttura sin
 
 \begin{itemize}
     \item \textit{Negazione} ($\neg$): inverte il valore di verità di un enunciato: se un enunciato è vero, la sua negazione è falsa, e viceversa.
-    
+
     \item \textit{Congiunzione} ($\land$): il risultato è vero se e solo se entrambi i componenti sono veri.
-    
+
     \item \textit{Disgiunzione} ($\lor$): il risultato è vero se almeno uno dei componenti è vero.
-    
+
     \item \textit{Implicazione} ($\to$): rappresenta l’enunciato logico “se ... allora”. Il risultato è falso solo se il primo componente è vero e il secondo è falso. 
-    
+
     \item \textit{Equivalenza} ($\leftrightarrow$): rappresenta l’enunciato logico “se e solo se”. 
-    Il risultato è vero quando entrambi i componenti hanno lo stesso valore di verità, cioè sono entrambi veri o entrambi falsi.
+        Il risultato è vero quando entrambi i componenti hanno lo stesso valore di verità, cioè sono entrambi veri o entrambi falsi.
 \end{itemize}
 
 Introduciamo anche il concetto di disgiunzione esclusiva o "XOR" (\( \oplus \)), il cui risultato è vero solo se gli operandi sono diversi tra di loro (uno vero e uno falso).
@@ -59,38 +59,38 @@ Per facilitare la leggibilità delle formule, definiamo le seguenti regole di \t
 
 \section{Assegnamenti, tavole di verità}
 
-    Per un linguaggio \( \mathcal{L} \), un \textbf{assegnamento} è una funzione 
-    \[
-        \alpha : \mathcal{L} \to \{0, 1\}
-    \]
+Per un linguaggio \( \mathcal{L} \), un \textbf{assegnamento} è una funzione 
+\[
+    \alpha : \mathcal{L} \to \{0, 1\}
+\]
 
-    Estendiamo \( \alpha \) ad \( \hat{\alpha} : \text{PROP} \to \{0,1\} \) in questo modo:
-            \vspace{0.5em}
-    \begin{itemize}
-        \item \( \hat{\alpha}(\neg A) = \begin{cases}
-                1 &  A = 0 \\
-                0 & A = 1
-            \end{cases}\)
+Estendiamo \( \alpha \) ad \( \hat{\alpha} : \text{PROP} \to \{0,1\} \) in questo modo:
+\vspace{0.5em}
+\begin{itemize}
+    \item \( \hat{\alpha}(\neg A) = \begin{cases}
+            1 &  A = 0 \\
+            0 & A = 1
+        \end{cases}\)
 
-            \vspace{0.5em}
+        \vspace{0.5em}
 
-        \item \( \hat{\alpha}(A \land B) = \begin{cases}
-                1 & \hat{\alpha}(A) = \hat{\alpha}(B)  = 1 \\
-                0 & altrimenti
-            \end{cases}\)
+    \item \( \hat{\alpha}(A \land B) = \begin{cases}
+            1 & \hat{\alpha}(A) = \hat{\alpha}(B)  = 1 \\
+            0 & altrimenti
+        \end{cases}\)
 
-            \vspace{0.5em}
+        \vspace{0.5em}
 
-        \item \( \hat{\alpha}(A \lor B) = \begin{cases}
-                0 & \hat{\alpha}(A) = \hat{\alpha}(B)  = 0 \\
-                1 & altrimenti
-            \end{cases}\)
+    \item \( \hat{\alpha}(A \lor B) = \begin{cases}
+            0 & \hat{\alpha}(A) = \hat{\alpha}(B)  = 0 \\
+            1 & altrimenti
+        \end{cases}\)
 
-            \vspace{0.5em}
+        \vspace{0.5em}
 
-        \item \( \hat{\alpha}(A \to B) = \begin{cases}
-                0 & \hat{\alpha}(A) = 1 \land \hat{\alpha}(B)  = 0 \\
-                1 & altrimenti
+    \item \( \hat{\alpha}(A \to B) = \begin{cases}
+            0 & \hat{\alpha}(A) = 1 \land \hat{\alpha}(B)  = 0 \\
+            1 & altrimenti
         \end{cases}\)
 
 \end{itemize}
@@ -98,22 +98,22 @@ Per facilitare la leggibilità delle formule, definiamo le seguenti regole di \t
 \begin{gbox}{notazione}
     Utilizzeremo \( \alpha \) al posto di \( \hat{\alpha} \) per comodità di notazione.
 \end{gbox}
- 
+
 Osserviamo che è possibile rappresentare gli assegnamenti in modo compatto utilizzando le \textbf{tavole di verità}, una presentazione tabulare della funzione di assegnamento.
 
-        Per esempio, possiamo riscrivere la definizione di \( \alpha(\neg A) \) come segue:
-        
-        \[  
-        \begin{array}{c | c}
-            A & \neg A \\
-            \hline
-            0 & 1 \\
-            1 & 0
-                
-        \end{array}
-    \]
+Per esempio, possiamo riscrivere la definizione di \( \alpha(\neg A) \) come segue:
 
-    Ogni riga di una tavola di verità corrisponde ad un assegnamento \( \alpha \).
+\[  
+    \begin{array}{c | c}
+        A & \neg A \\
+        \hline
+        0 & 1 \\
+        1 & 0
+
+    \end{array}
+\]
+
+Ogni riga di una tavola di verità corrisponde ad un assegnamento \( \alpha \).
 
 Si noti anche che dalla definizione di \( \alpha \) segue che un'implicazione può essere vera senza che ci sia connessione causale o di significato tra antecedente e conseguente (per esempio, "se tutti i quadrati sono pari allora \( \pi \) è irrazionale"). 
 
@@ -121,188 +121,304 @@ In secondo luogo, segue anche che una proposizione è sempre vera se il suo ante
 
 
 {\color{CadetBlue} Questo è giustificabile come segue:
-\begin{itemize}
-    \item vogliamo che \( (A \land B) \to B \) sia sempre vera
-    \item il caso \( 1 \to 1 \) deve essere vero, perché corrisponde al caso in cui \( A \) e \( B \) sono vere; 
+    \begin{itemize}
+        \item vogliamo che \( (A \land B) \to B \) sia sempre vera
+        \item il caso \( 1 \to 1 \) deve essere vero, perché corrisponde al caso in cui \( A \) e \( B \) sono vere; 
 
-        il caso \( 0 \to 0  \) deve essere vero, perché corrisponde al caso in cui \( A\land B \) è falso perché \( B \) è falso; il caso \( 0 \to 0 \) deve essere vero perché corrisponde al caso in cui \( A \land B \) è falso perché \( B \) è falso; 
+            il caso \( 0 \to 0  \) deve essere vero, perché corrisponde al caso in cui \( A\land B \) è falso perché \( B \) è falso; il caso \( 0 \to 0 \) deve essere vero perché corrisponde al caso in cui \( A \land B \) è falso perché \( B \) è falso; 
 
-        il caso \( 0 \to 1 \) deve essere vero perché corrisponde al caso in cui \( A \land B \) è falso perché \( A \) è falso ma \( B \) è vero; 
+            il caso \( 0 \to 1 \) deve essere vero perché corrisponde al caso in cui \( A \land B \) è falso perché \( A \) è falso ma \( B \) è vero; 
 
-        resta dunque soltanto il caso \( 1 \to 0 \), che non corrisponde a nessun caso di \( A \land B \to B \).
-\end{itemize}
+            resta dunque soltanto il caso \( 1 \to 0 \), che non corrisponde a nessun caso di \( A \land B \to B \).
+    \end{itemize}
 
 In più, si vuole che valga, per contrapposizione \( (A \to B)\to(\neg B \to \neg A) \).}
 
 
 Osserviamo che, data \( A = p_1, p_2, \dots, p_k \) e due assegnamenti \( \alpha \) e \( \beta \) t.c.:
-        \begin{align*}
-            \alpha(p_1) &= \beta(p_1) \\
-            &\dots \\
-            \alpha(p_k) &= \beta(p_k)
-        \end{align*}
+\begin{align*}
+    \alpha(p_1) &= \beta(p_1) \\
+                &\dots \\
+    \alpha(p_k) &= \beta(p_k)
+\end{align*}
 
-        allora necessariamente \( \alpha(A) = \alpha(B) \).
+allora necessariamente \( \alpha(A) = \alpha(B) \).
 
-        \begin{gbox}[colframe=PineGreen]{soddisfacibilità}
-            Se per una formula \( A \) e un assegnamento \( \alpha \) si ha \( \alpha (A) = 1 \), si dice che ``\(A \) soddisfa \( \alpha \)'' (o ``\( A \) è vera sotto \( \alpha \)'').
-            \begin{itemize}
-                \item Se \( A \) ha almeno un assegnamento che la soddisfa, si dice \textbf{soddisfacibile} (\( A \in \texttt{SAT} \)).
-                \item Se non esiste un assegnamento che la soddisfa, \( A \) si dice \textbf{insoddisfacibile} (\( A \in \texttt{UNSAT} \)).
-                \item Se \( A \) è soddisfatta da tutti i possibili assegnamenti, si dice \textbf{tautologia} (o "verità logica") (\( A \in \texttt{TAUT} \)).
-            \end{itemize}
-        \end{gbox}
+\begin{gbox}[colframe=PineGreen]{soddisfacibilità}
+    Se per una formula \( A \) e un assegnamento \( \alpha \) si ha \( \alpha (A) = 1 \), si dice che ``\(A \) soddisfa \( \alpha \)'' (o ``\( A \) è vera sotto \( \alpha \)'').
+    \begin{itemize}
+        \item Se \( A \) ha almeno un assegnamento che la soddisfa, si dice \textbf{soddisfacibile} (\( A \in \texttt{SAT} \)).
+        \item Se non esiste un assegnamento che la soddisfa, \( A \) si dice \textbf{insoddisfacibile} (\( A \in \texttt{UNSAT} \)).
+        \item Se \( A \) è soddisfatta da tutti i possibili assegnamenti, si dice \textbf{tautologia} (o "verità logica") (\( A \in \texttt{TAUT} \)).
+    \end{itemize}
+\end{gbox}
 
-        Introduciamo anche alcune regole che 
+Introduciamo anche alcune regole che 
 
-        \section{Conseguenza logica}
+\section{Conseguenza logica}
 
-        \begin{defbox}{Conseguenza logica}{}
-            Sia \( T \) una \textit{teoria}, ossia un insieme  \( \{A_1, \dots, A_n\} \) proposizioni in un dato linguaggio proposizionale, e sia \( A \in \text{PROP}\) .
+\begin{defbox}{Conseguenza logica}{}
+    Sia \( T \) una \textit{teoria}, ossia un insieme  \( \{A_1, \dots, A_n\} \) proposizioni in un dato linguaggio proposizionale, e sia \( A \in \text{PROP}\) .
 
-            Diciamo che \( A \) è \textbf{conseguenza logica} di \( T\) se 
-            \[ \forall \alpha,\ \alpha(T)=1 \to \alpha(A)=1 \] 
-            ovvero se ogni assegnamento che soddisfa \(T\) soddisfa anche \( A_{n+1} \).
+    Diciamo che \( A \) è \textbf{conseguenza logica} di \( T\) se 
+    \[ \forall \alpha,\ \alpha(T)=1 \to \alpha(A)=1 \] 
+    ovvero se ogni assegnamento che soddisfa \(T\) soddisfa anche \( A_{n+1} \).
 
-            Scriviamo in tal caso \(  T \vDash A_{n+1} \), oppure \( A_1, \dots, A_n \vDash A \).
-        \end{defbox}
+    Scriviamo in tal caso \(  T \vDash A_{n+1} \), oppure \( A_1, \dots, A_n \vDash A \).
+\end{defbox}
 
-        Si ha che:
-        \begin{itemize}
-            \item \(T \not\vDash A\) \ significa che \ \( \exists \alpha \) \ t.c. \ \( \alpha(T) = 1 \land \alpha(A) = 0 \)
-            \item \( \emptyset \vDash A \) \ o, equivalentemente \ \( \vDash A \iff A\) è una tautologia
-        \end{itemize}
+Si ha che:
+\begin{itemize}
+    \item \(T \not\vDash A\) \ significa che \ \( \exists \alpha \) \ t.c. \ \( \alpha(T) = 1 \land \alpha(A) = 0 \)
+    \item \( \emptyset \vDash A \) \ o, equivalentemente \ \( \vDash A \iff A\) è una tautologia
+\end{itemize}
 
-        \begin{lemmabox}{Equivalenze}{}
-            \begin{enumerate}
-                \item \( T \vDash A \)
-                \item \( \vDash (A_1 \land \dots \land A_n) \to A \)
-                \item \( (A_1 \land \dots \land A_n) \in \texttt{UNSAT}\) 
-            \end{enumerate}
+\begin{lemmabox}{Equivalenze}{}
+    \begin{enumerate}
+        \item \( T \vDash A \)
+        \item \( \vDash (A_1 \land \dots \land A_n) \to A \)
+        \item \( (A_1 \land \dots \land A_n) \in \texttt{UNSAT}\) 
+    \end{enumerate}
 
-                    sono equivalenti.
-            
-        \end{lemmabox}
+    sono equivalenti.
 
-        \section{Completezza funzionale}
-        \todo{da fare}
+\end{lemmabox}
 
-        \section{Forme normali}
+\section{Completezza funzionale}
+\textit{Data una tavola di verità arbitraria con \( n \) argomenti, esiste una proposizione \( A \) che ha esattamente quella tavola di verità?}
 
-        \begin{gbox}{notazione}
-            Chiamiamo "letterale" una variabile proposizionale o una negazione di una variabile proposizionale
-        \end{gbox}
+Una proposizione \( A \) contenente le \( n \) variabili proposizionali \( a_1, a_2, \dots, a_n \) determina una funzione di \( n \) argomenti \( f: \{0, 1\}^n \to \{0,1\} \) ("\textbf{funzione di verità}"), tale che il valore di \( f_A \) su un argomento \ \( (x_1, x_2, \dots, x_n) \in \{0,1\}^n\) \ sia dato da un arbitrario assegnamento \( \alpha \) tale che \( \alpha(p_k) = x_k\) \ per \ \(k \in [1,n] \).
 
-        È utile individuare alcune forme normali canoniche.
+\begin{thmbox}{Teorema}{}
+    Sia \( f: \{0, 1\}^n \to \{0,1\} \) una funzione di verità. Esiste una proposizione \( A \) con \( n \) variabili proposizionali tale che, per ogni assegnamento \( \alpha \):
+    \[ \alpha(A) = f(\alpha(a_1), \alpha(a_2), \dots, \alpha(a_n)) \]
+\end{thmbox}
 
-        \begin{defbox}{Forma Normale Disgiuntiva}{}
-            Diciamo che \( A \) è in Forma Normale Disgiuntiva (\textbf{DNF}, \textit{Disjunctive Normal Form}) se \( A \) è una disgiunzione di congiunzioni di letterali, ossia è nella forma seguente:
+\begin{proofbox}[title=dimostrazione]           
+    Si dimostra per induzione su \( n \).
 
-            \[ \bigvee_{i\leq n} \bigwedge_{j\leq m_i} A_{ij} = (A_{1,1} \land \dots \land A_{1, m_1}) \lor \dots \lor (A_{n,1} \land \dots \land A_{n, m_n}) \]
+    \begin{itemize}
+        \item \textbf{caso base}: \( n=1 \)
+            abbiamo quattro possibili \( f \): 
+            \[
+                \begin{aligned}
+                    f_1(0) &= 0, \quad f_1(1) = 0 \\
+                    f_2(0) &= 1, \quad f_2(1) = 1 \\
+                    f_3(0) &= 0, \quad f_3(1) = 1 \\
+                    f_4(0) &= 1, \quad f_4(1) = 0
+                \end{aligned}
+            \]
 
-        \end{defbox}
+            Alla funzione $f_1$ corrisponde la formula $(p \land \neg p)$, alla funzione $f_2$ la formula $(p \lor \neg p)$, 
+            alla funzione $f_3$ la formula $p$, e alla funzione $f_4$ la formula $(\neg p)$.
+        \item \textbf{caso induttivo}: (assumiamo che il teorema valga per \( n-1 \) variabili, e dimostriamo che vale per \( n \))
 
-        \begin{defbox}{Forma Normale Congiuntiva}{}
-            Diciamo che \( A \) è in Forma Normale Congiuntiva (\textbf{CNF}, \textit{Conjunctive Normal Form}) se \( A \) è una disgiunzione di congiunzioni di letterali, ossia è nella forma seguente:
+            Se $n > 1$, scriviamo il grafico di 
+            \[
+                f : \{0,1\}^n \to \{0,1\}
+            \]
 
-            \[ \bigwedge_{i\leq n} \bigvee_{j\leq m_i} A_{ij} = (A_{1,1} \lor \dots \lor A_{1, m_1}) \land \dots \land (A_{n,1} \lor \dots \lor A_{n, m_n}) \]
+            in forma di tavola di verità in questo modo:
 
-        \end{defbox}
+            \[
+                \begin{array}{cccc|c|l}
+                    p_1 & p_2 & \cdots & p_n & f(p_1, \ldots, p_n) & \\ \hline
+                    0 & \cdots & \cdots & 0 & \cdots &  \\
+                    \vdots & & & \vdots & \vdots & \text{grafico di una funzione } f_0\\
+                    0 & \cdots & \cdots & 1 & \cdots & \\ \hline
+                    1 & \cdots & \cdots & 0 & \cdots &  \\
+                    \vdots & & & \vdots & \vdots & \text{grafico di una funzione } f_1\\
+                    1 & \cdots & \cdots & 1 & \cdots & 
+                \end{array}
+            \]
 
-        \section{Equivalenza Logica}
+            Se non consideriamo la prima colonna (\( p_1 \)), la tavola di verità descrive il grafico di due funzioni, \( f_0 \) e \( f_1 \), a \( n-1 \) argomenti.
 
-        \begin{defbox}[colframe=PineGreen, colback=DeepGreenLight]{Equivalenza logica}{}
-            Due formule \( A, B \in \text{PROP} \) sono logicamente equivalenti (\( A \equiv B \)) quando, per ogni assegnamento \( \alpha \) si ha \( \alpha(A) = \alpha(B) \).
-        \end{defbox}
+            Sappiamo, quindi, per ipotesi induttiva, che esistono due formule \( A_0 \) e \( A_1 \) a \( n-1 \) variabili tali che, per ogni assegnamento \( \alpha \):
+            \[ \alpha(A_0) = f_0(\alpha(p_1), \alpha(p_2), \dots, \alpha(p_n)) \]
+            \[ \alpha(A_1) = f_1(\alpha(p_1), \alpha(p_2), \dots, \alpha(p_n)) \]
+
+            Dobbiamo ora combinare le due formule considerando anche la colonna \( p_1 \).
+
+            Possiamo farlo tramite la formula \(A= (\neg p_1 \to A_0) \land (p_1 \to A_1) \).
+
+            Dimostriamo che \( A \) soddisfa il teorem: dobbiamo dimostrare che, dato un assegnamento qualsiasi \( \alpha \), si ha:
+    \[ \alpha(A) = f(\alpha(p_1), \alpha(p_2), \dots, \alpha(p_n)) \]
+
+    Distinguiamo i due casi:
+    \begin{itemize}
+        \item \( \alpha(p_1) = 1 \) 
+
+            in questo caso, si ha:
+            \[
+                \alpha\!\left(
+                    \underset{=1}{(\neg p_1 \to A_0)}
+                    \land
+                \underset{=1}{(p_1} \to A_1)
+                \right)
+            \]
+
+            e la formula vale quindi \( 1 \iff \alpha(A_1) = 1 \).
+
+            Ma \( \alpha(A_1) = f_1(\alpha(p_2), \dots, \alpha(p_n)) \), quindi la formula si comporta esattamente come \( f_1 \):
+            \[
+                f(\alpha(p_1), \alpha(p_2), \ldots, \alpha(p_n))
+                = f(1, \alpha(p_2), \ldots, \alpha(p_n))
+                = f_1(\alpha(p_2), \ldots, \alpha(p_n)).
+            \]
+
+            Quindi, in questo caso, vale 
+            \[\alpha(A) = (\alpha(p_1), \alpha(p_2), \ldots, \alpha(p_n))\]
+
+        \item \( \alpha(p_1) = 0 \)            
+
+            in questo caso, si ha:
+            \[
+                \alpha\!\left(
+                    \underset{=1}{(\neg p_1} \to A_0)
+                    \land
+                    \underset{=1}{(p_1 \to A_1})
+            \right)\]
+
+            che vale \( 1 \iff \alpha(A_0)=1\).
+
+            Quindi si può fare lo stesso ragionamento di sopra, ma per \( A_1 \) e \( f_0 \).
+
+            \begin{gbox}{}
+                Potremmo anche costruire una funzione \( f \) che rappresenta il comportamento di \( A \):
+
+                \[ f(x_1, x_2, \ldots, x_n) =
+                    \begin{cases}
+                        f_1(x_2, \ldots, x_n) & \text{se } x_1 = 1, \\
+                        f_0(x_2, \ldots, x_n) & \text{se } x_1 = 0.
+                    \end{cases}
+                \]
+            \end{gbox}
+
+    \end{itemize}
+
+\end{itemize}
+
+\end{proofbox}
+
+\section{Forme normali}
+
+\begin{gbox}{notazione}
+    Chiamiamo "letterale" una variabile proposizionale o una negazione di una variabile proposizionale
+\end{gbox}
+
+È utile individuare alcune forme normali canoniche.
+
+\begin{defbox}{Forma Normale Disgiuntiva}{}
+    Diciamo che \( A \) è in Forma Normale Disgiuntiva (\textbf{DNF}, \textit{Disjunctive Normal Form}) se \( A \) è una disgiunzione di congiunzioni di letterali, ossia è nella forma seguente:
+
+    \[ \bigvee_{i\leq n} \bigwedge_{j\leq m_i} A_{ij} = (A_{1,1} \land \dots \land A_{1, m_1}) \lor \dots \lor (A_{n,1} \land \dots \land A_{n, m_n}) \]
+
+\end{defbox}
+
+\begin{defbox}{Forma Normale Congiuntiva}{}
+    Diciamo che \( A \) è in Forma Normale Congiuntiva (\textbf{CNF}, \textit{Conjunctive Normal Form}) se \( A \) è una disgiunzione di congiunzioni di letterali, ossia è nella forma seguente:
+
+    \[ \bigwedge_{i\leq n} \bigvee_{j\leq m_i} A_{ij} = (A_{1,1} \lor \dots \lor A_{1, m_1}) \land \dots \land (A_{n,1} \lor \dots \lor A_{n, m_n}) \]
+
+\end{defbox}
+
+\section{Equivalenza Logica}
+
+\begin{defbox}[colframe=PineGreen, colback=DeepGreenLight]{Equivalenza logica}{}
+    Due formule \( A, B \in \text{PROP} \) sono logicamente equivalenti (\( A \equiv B \)) quando, per ogni assegnamento \( \alpha \) si ha \( \alpha(A) = \alpha(B) \).
+\end{defbox}
 
 
-        Introduciamo alcune regole utili per verificare l'equivalenza tra proposizioni.
+Introduciamo alcune regole utili per verificare l'equivalenza tra proposizioni.
 
-        Con un piccolo abuso di notazione, definiamo \( 1 \) e \( 0 \) come le formule per cui \( \forall \alpha, \ \alpha(1)= 1 \) e \( \alpha(0) = 0 \).
+Con un piccolo abuso di notazione, definiamo \( 1 \) e \( 0 \) come le formule per cui \( \forall \alpha, \ \alpha(1)= 1 \) e \( \alpha(0) = 0 \).
 
-        In questo modo, abbiamo:
+In questo modo, abbiamo:
 
-        \begin{table}[H]
-            \centering
-            \renewcommand{\arraystretch}{1.3}
-            \begin{tabular}{|l|l|}
-                \hline
-                \textbf{Involuzione} & $\neg\neg A \equiv A$ \\
-                \hline
-                \textbf{Assorbimento (con 0 e 1)} &
-                $A \lor 0 \equiv A$ \\
-                                                  & $A \land 1 \equiv A$ \\
-                                                  \hline
-                \textbf{Cancellazione} &
-                $A \lor 1 \equiv 1$ \\
-                                       & $A \land 0 \equiv 0$ \\
-                                       \hline
-                \textbf{Terzo escluso (\textit{tertium non datur})} &
-                $A \lor \neg A \equiv 1$ \\
-                                                                    & $A \land \neg A \equiv 0$ \\
-                                                                    \hline
-                \textbf{Leggi di De Morgan} &
-                $\neg(A \lor B) \equiv \neg A \land \neg B$ \\
-                                            & $\neg(A \land B) \equiv \neg A \lor \neg B$ \\
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.3}
+    \begin{tabular}{|l|l|}
+        \hline
+        \textbf{Involuzione} & $\neg\neg A \equiv A$ \\
+        \hline
+        \textbf{Assorbimento (con 0 e 1)} &
+        $A \lor 0 \equiv A$ \\
+                                          & $A \land 1 \equiv A$ \\
+                                          \hline
+        \textbf{Cancellazione} &
+        $A \lor 1 \equiv 1$ \\
+                               & $A \land 0 \equiv 0$ \\
+                               \hline
+        \textbf{Terzo escluso (\textit{tertium non datur})} &
+        $A \lor \neg A \equiv 1$ \\
+                                                            & $A \land \neg A \equiv 0$ \\
+                                                            \hline
+        \textbf{Leggi di De Morgan} &
+        $\neg(A \lor B) \equiv \neg A \land \neg B$ \\
+                                    & $\neg(A \land B) \equiv \neg A \lor \neg B$ \\
+                                    \hline
+        \textbf{Commutatività} &
+        $A \lor B \equiv B \lor A$ \\
+                               & $A \land B \equiv B \land A$ \\
+                               \hline
+        \textbf{Associatività} &
+        $A \lor (B \lor C) \equiv (A \lor B) \lor C$ \\
+                               & $A \land (B \land C) \equiv (A \land B) \land C$ \\
+                               \hline
+        \textbf{Distributività} &
+        $A \lor (B \land C) \equiv (A \lor B) \land (A \lor C)$ \\
+                                & $A \land (B \lor C) \equiv (A \land B) \lor (A \land C)$ \\
+                                \hline
+        \textbf{I teorema di assorbimento} &
+        $A \lor (A \land B) \equiv A$ \\
+                                           & $A \land (A \lor B) \equiv A$ \\
+                                           \hline
+        \textbf{II teorema di assorbimento} &
+        $A \lor (\neg A \land B) \equiv A \lor B$ \\
+                                            & $A \land (\neg A \lor B) \equiv A \land B$ \\
                                             \hline
-                \textbf{Commutatività} &
-                $A \lor B \equiv B \lor A$ \\
-                                       & $A \land B \equiv B \land A$ \\
-                                       \hline
-                \textbf{Associatività} &
-                $A \lor (B \lor C) \equiv (A \lor B) \lor C$ \\
-                                       & $A \land (B \land C) \equiv (A \land B) \land C$ \\
-                                       \hline
-                \textbf{Distributività} &
-                $A \lor (B \land C) \equiv (A \lor B) \land (A \lor C)$ \\
-                                        & $A \land (B \lor C) \equiv (A \land B) \lor (A \land C)$ \\
-                                        \hline
-                \textbf{I teorema di assorbimento} &
-                $A \lor (A \land B) \equiv A$ \\
-                                                   & $A \land (A \lor B) \equiv A$ \\
-                                                   \hline
-                \textbf{II teorema di assorbimento} &
-                $A \lor (\neg A \land B) \equiv A \lor B$ \\
-                                                    & $A \land (\neg A \lor B) \equiv A \land B$ \\
-                                                    \hline
 
-            \end{tabular}
-            \caption{Principali leggi di equivalenza logica}
-        \end{table}
+    \end{tabular}
+    \caption{Principali leggi di equivalenza logica}
+\end{table}
 
-        \section{Formalizzazioni in logica proposizionale}
+\section{Formalizzazioni in logica proposizionale}
 
-        Il concetto di soddisfacibilità ci permette di usare insiemi di formule proposizionali per catturare determinate strutture matematiche.
+Il concetto di soddisfacibilità ci permette di usare insiemi di formule proposizionali per catturare determinate strutture matematiche.
 
-        Per esempio: sia \( X \) un insieme. Consideriamo il linguaggio proposizionale composto dalle variabili \(p_{(x, y)}  \) per ogni \( (x,y) \in X \times X\), e consideriamo il seguente insieme \( T \) di proposizioni in questo linguaggio:
+Per esempio: sia \( X \) un insieme. Consideriamo il linguaggio proposizionale composto dalle variabili \(p_{(x, y)}  \) per ogni \( (x,y) \in X \times X\), e consideriamo il seguente insieme \( T \) di proposizioni in questo linguaggio:
 
-        \begin{enumerate}
-            \item \( \neg p_{x,x} \ \ \forall x \in X\) \ {\color{gray}(antiriflessività)}
-            \item \( p_{x, y} \to \neg p_{y,x} \ \   \forall x \in X\) \ {\color{gray}(asimmetria)}
-            \item \( (p_{x, y} \land p_{y, z}) \to p_{x, z} \ \ \forall x, y, z \in X\) \ {\color{gray}(transitività)}
-            \item \( (p_{x, y} \land p_{y, z}) \to p_{x, z} \  \ \forall x, y, z \in X\) \ {\color{gray}(ordine totale)}
-        \end{enumerate}
+\begin{enumerate}
+    \item \( \neg p_{x,x} \ \ \forall x \in X\) \ {\color{gray}(antiriflessività)}
+    \item \( p_{x, y} \to \neg p_{y,x} \ \   \forall x \in X\) \ {\color{gray}(asimmetria)}
+    \item \( (p_{x, y} \land p_{y, z}) \to p_{x, z} \ \ \forall x, y, z \in X\) \ {\color{gray}(transitività)}
+\item \( (p_{x, y} \lor p_{y, x}) \  \ \forall x \neq  y \in X\) \ {\color{gray}(ordine totale)}
+\end{enumerate}
 
-        L'insieme \( T = T_X \) esprime il concetto di \textbf{ordine totale stretto} su \( X \). Infatti, se avessimo un assegnamento \( \alpha \) che soddisfa tutte le proposizioni di \( T \), l'ordine indotto da tutte le variabili vere sotto \( \alpha \) sarebbe un ordine totale stretto di \( X  \).
+Usiamo una teoria \( T \) per poter gestire anche casi di insiemi infiniti. Infatti, sappiamo che una teoria infinita è soddisfatta se e solo se lo sono tutte le sue proposizioni.
 
-        Se \( \alpha \) è un assegnamento, definiamo la relazione \( \prec_{\alpha} \) su \( X \) come segue:
-        \[ x \prec_\alpha y \leftrightarrow \alpha(p_{x,y})=1 \]
+L'insieme \( T = T_X \) esprime il concetto di \textbf{ordine totale stretto} su \( X \). Infatti, se avessimo un assegnamento \( \alpha \) che soddisfa tutte le proposizioni di \( T \), l'ordine indotto da tutte le variabili vere sotto \( \alpha \) sarebbe un ordine totale stretto di \( X  \).
 
-        Si ha che per ogni assegnamento \( \alpha \) che soddisfca \( T_X \), l'ordine \( \prec_\alpha \) indotto da \( \alpha \) è un ordine totale stretto su \( X \).
+Se \( \alpha \) è un assegnamento, definiamo la relazione \( \prec_{\alpha} \) su \( X \) come segue:
+\[ x \prec_\alpha y \leftrightarrow \alpha(p_{x,y})=1 \]
 
-        Dall'altra parte, se \( \prec \) è un ordine totale stretto su \( X \), e \( \alpha_\prec \) è l'assegnamento indotto da \( \prec \) così definito:
-        \[ \alpha_\prec (p_{x,y}) = 1 \leftrightarrow (x \prec y) \]
+Si ha che per ogni assegnamento \( \alpha \) che soddisfca \( T_X \), l'ordine \( \prec_\alpha \) indotto da \( \alpha \) è un ordine totale stretto su \( X \).
 
-        Si ha che, per ogni ordine totale stretto \( \prec \) su \(X \), l'assegnamento \( \alpha_\prec \) indotto da \( \prec \) sulle variabili \( p_{x, y} \) soddisfa \( T \).
+Dall'altra parte, se \( \prec \) è un ordine totale stretto su \( X \), e \( \alpha_\prec \) è l'assegnamento indotto da \( \prec \) così definito:
+\[ \alpha_\prec (p_{x,y}) = 1 \leftrightarrow (x \prec y) \]
 
-        Ovvero, un assegnamento \( \alpha \) soddisfa la teoria \( T_X \) se e solo se l'ordine indotto da \( \alpha \) su \( X \) è un ordine totale.
+Si ha che, per ogni ordine totale stretto \( \prec \) su \(X \), l'assegnamento \( \alpha_\prec \) indotto da \( \prec \) sulle variabili \( p_{x, y} \) soddisfa \( T \).
 
-        \begin{gbox}{Colorabilità}
-            
-        \end{gbox}
+Ovvero, un assegnamento \( \alpha \) soddisfa la teoria \( T_X \) se e solo se l'ordine indotto da \( \alpha \) su \( X \) è un ordine totale.
+
+\begin{gbox}{Colorabilità}
+
+\end{gbox}
 
 
 
 
 
-        \end{document}
+\end{document}
