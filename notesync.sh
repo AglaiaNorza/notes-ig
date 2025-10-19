@@ -44,7 +44,7 @@ else
     echo "no changes in the notes!"
 fi
 
-echo "updating notes repo"
+echo "updating latex repo"
 
 cd "$latex" && git pull
 
