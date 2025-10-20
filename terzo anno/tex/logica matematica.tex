@@ -13,6 +13,8 @@
 \setauthoremail{thisisaglaia@gmail.com}
 \setauthorgithub{AglaiaNorza}
 
+\settitlecolor{teal!30}
+
 \begin{document}
 
 \makefrontpage
@@ -417,8 +419,92 @@ Ovvero, un assegnamento \( \alpha \) soddisfa la teoria \( T_X \) se e solo se l
 
 \end{gbox}
 
+\section{Teorema di compattezza}
+
+\begin{defbox}{Monotonia della conseguenza logica}{}
+    Si dice che la nozione di conseguenza logica è \textbf{monotona}, ovvero che \[T' \vDash A \land T' \subseteq T \implies T \vDash A\]
+    (se \( A_1, A_2, \dots, A_k \vDash A \), allora \( T \vDash A \) per ogni teoria \( T \) contenente \( A_1, A_2, \dots, A_k \))
+\end{defbox}
+
+Nonostante non sembri intuitivamente vero, vale anche il viceversa:
+
+\begin{thmbox}{Teorema di compattezza v.1}{}
+    Se \( T \vDash A \), esiste un sottoinsieme finito \( T_0 \) di \( T \) tale che \( T_0 \vDash A \)
+\end{thmbox}
+
+Introduciamo il concetto di una teoria finitamente soddisfacibile:
+
+\begin{defbox}{\texttt{FINSAT}}{}
+    Una teoria si dice \textbf{finitamente soddisfacibile} (\( \in \texttt{FINSAT} \)) se \textit{ogni} suo sottoinsieme finito è soddisfacibile.
+\end{defbox}
+
+Possiamo quindi introdurre una nuova versione del teorema di compattezza:
+
+\begin{thmbox}{Teorema di compattezza v.2}{}
+    \( \texttt{FINSAT}\implies \texttt{SAT} \), ovvero se ogni sottoinsieme di \( T \) è soddisfacibile, anche \( T \) è soddisfacibile.
+\end{thmbox}
+
+\begin{lemmabox}{Teorema di compattezza v.1 \( \equiv \) v.2}{}
+    I due punti seguenti (le due versioni del teorema di compattezza) sono equivalenti:
+    \begin{enumerate}
+        \item \( T \vDash A \iff \exists \ T_0 \overset{fin}{\subseteq} T \ t.c. \  T_0 \vDash A\)
+        \item \( T \in \texttt{SAT} \iff T \in \texttt{FINSAT} \)
+    \end{enumerate}
+
+    \begin{proofbox}[title=dim.]{}
+        \begin{itemize}
+            \item \textcircled{1} \( \implies \) \textcircled{2}
+
+                Supponiamo per assurdo che \( T \in \texttt{FINSAT} \implies T \in \texttt{SAT} \), e che \( T \vDash A \) ma che \( \forall T_0 \overset{fin}{\subseteq } T, \ T_0 \not\vDash A \).
+
+                \( T \not\vDash A \) significa \( T \cup \{\neg A\} \in \texttt{SAT} \).
+                
+                Quindi, visto che \( \texttt{FINSAT} \implies \texttt{SAT} \), \( T \cup \{ \neg A\} \in \texttt{SAT}\), il che va in contraddizione con l'ipotesi \( T \vDash A \).
+            \item \textcircled{2} \( \implies \) \textcircled{1}
+
+                Supponiamo per assurdo che \( T\vDash A \implies \exists T_0  \overset{fin}{\subseteq } T \ t.c. \ T_0 \vDash A\), che \( T\in \texttt{FINSAT} \), ma che \( T\not \in \texttt{SAT} \) (\( T\in \texttt{UNSAT} \)).
+
+                Se \( T \in \texttt{UNSAT} \), possiamo dire che \( T \vDash p \land \neg p \) {\small \color{gray} (tutto è conseguenza logica di una teoria insoddisfacibile)}.
+
+                Per \textcircled{2}, quindi, \( \exists T_0 \ t.c, \ T_0 \overset{fin}{\subseteq } T \vDash p \land \neg p \), il che va in contraddizione con \( T \in \texttt{FINSAT} \).\qed
+        \end{itemize}
+
+    \end{proofbox}
+
+\end{lemmabox}
+
+\begin{thmbox}{Estendibilità di \texttt{SAT}}{}
+    Se \( T \) è soddisfacibile, allora \( T \cup \{A\} \) è soddisfacibile oppure \( T \cup \{\neg A\} \) è soddisfacibile.
+
+    \begin{proofbox}[title=dimostrazione dalle dispense]{}
+        Sia \( \alpha \) un assegnamento che soddisfa \( T \). Se \( \alpha(A)=1 \) allora \( T \cup \{A\} \) è soddisfacibile. Se \( \alpha(A) = 0 \),  \( T \cup \{\neg A\} \) è soddisfacibile.
+    \end{proofbox}
+    \begin{proofbox}[title=dimostrazione vista in classe]{}
+        Supponiamo \( T \in \texttt{SAT} \), \ \( T \cup \{A\} \in \texttt{UNSAT}\) \ e \ \( T \cup \{\neg A\} \in \texttt{UNSAT}\). Avremmo entrambi \( T \vDash \{\neg A\}\) e \( T \vDash A \), il che è impossibile se \( T\in \texttt{SAT} \).
+    \end{proofbox}
+\end{thmbox}
+
+Un concetto analogo vale per \texttt{FINSAT}.
+
+\begin{thmbox}{Estendibilità di \texttt{FINSAT}}{}
+    Sia \( T \in \texttt{FINSAT} \). Per ogni formula \( A, \  T \cup \{A\} \in \texttt{FINSAT}\)  \ o \( \ T \cup \{\neg A\} \in \texttt{FINSAT}\)
+    \begin{proofbox}[title=dim]{}
+        Supponiamo per assurdo che \( T \cup \{A\} \not\in \texttt{FINSAT}\) e \( T \cup \{\neg A\} \not\in \texttt{FINSAT}\).
+
+        Vuol dire che esistono \( B \ \overset{fin}{\subseteq} T \cup \{A\}\) \ e \ \( C \ \overset{fin}{\subseteq} T \cup \{\neg A\}\) insoddisfacibili.
+
+        Dato che per ipotesi \( T \in \texttt{FINSAT} \), sappiamo che \( A \in B, C \). Possiamo quindi introdurre \( \hat B = B \setminus \{A\}\) e \( \hat C = C \setminus \{A\}\).
+
+        Sappiamo che l'insieme \( \hat B \cup \hat C  \in \texttt{FINSAT}\), in quanto sottoinsieme finito di \( T \).
+
+        Sia \( \alpha \) un assegnamento che lo soddisfa. Se \( \alpha(A)=1 \), allora soddisfa anche \( B \). Se \( \alpha(A) = 0 \), soddisfa anche \( C \). In entrambi i casi abbiamo una contraddizione.
+
+    \end{proofbox}
+\end{thmbox}
+
 
 
 
 
 \end{document}
+
