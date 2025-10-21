@@ -46,9 +46,9 @@ if [ $? -eq 0 ] && [[ $(git status --porcelain) ]]; then
     # (just having fun w/bash)
     pdf_list=$(git diff --name-only -- '*.pdf' | while read -r f; do
         basename "$f" .pdf
-    done | paste -sd ',' -)
+    done | paste -sd '/' -)
 
-    git add . && git commit -m "sync: $(date +'%d-%m'), $pdf_list [$hname]" && git push
+    git add . && git commit -m "sync $(date +'%d-%m'): $pdf_list [$hname]" && git push
 else
     echo "no changes in the notes!"
 fi
