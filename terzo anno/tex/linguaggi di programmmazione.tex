@@ -645,10 +645,30 @@ In \( Exp \) non c'è, invece, differenza tra eager statico e eager dinamico.
 \begin{itemize}
     \item nella prima espressione, \( y \) è definita solo all'interno di \( N \)
     \item nella seconda, è definita prima, ed è quindi visibile anche in \( L \)
-    \item quindi, le due espressioni sono equivalenti solo se \( y \) non compare libera (non ri-definita) in \( L \)
+    \item quindi, le due espressioni sono equivalenti solo se \( y \) non compare libera {\small \color{gray}(non ri-definita)} in \( L \)
 \end{itemize}
 \end{gbox}
 
 \section{Fun}
+Introduciamo un nuovo linguaggio, \( Fun \), che estende \( Exp \) con la nozione di \textbf{funzione}.
 
+\begin{defbox}{\( Fun \)}{}
+
+La grammatica di \( Fun \) è:
+    \[
+        M, N = k \ | \ x \ | \ M + N \ | \ let \ x = M \ in \ N \ | \ fn \ x \implies M \ | \ MN
+    \]
+    dove:
+    \begin{itemize}
+        \item le regole presenti in \( Exp \) (1-4) rimangono invariate, con gli appropriati cambi di dominio (es. \( let : Var \times Fun \times Fun \to Fun \))
+        \item \( fn : Var \times Fun \to Fun \) \ è una \textbf{funzione} (anonima) con parametro \( x \)     
+        \begin{itemize}
+            \item una funzione \( fn \ x \implies M \) si può rappresentare in maniera alternativa attraverso la sua \textbf{chiusura}, \( (x, M)\in Var \times Fun \)
+        \end{itemize}
+    \item \( \cdot : Fun \times Fun \to Fun \) \ è l'\textbf{applicazione di funzioni} 
+        \subitem il termine sinistro (che, perché l'espressione abbia semanticamente senso, deve necessariamente essere una funzione) viene applicato al termine destro (quindi \( MN=M(N) \))
+    \item l'insieme \( Val \) non coincide più con quello delle costanti, ma corrisponde a \( Var \cup (Var \times Fun) \) (variabili \( \cup \) chiusure)
+    \end{itemize}
+
+\end{defbox}
 \end{document}
