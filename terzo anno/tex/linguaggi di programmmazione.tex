@@ -37,7 +37,7 @@
     \end{enumerate} 
 
     \begin{gbox}{assioma di induzione}
-        L'assioma di induzione è necessario per evitare di equiparare ai numeri naturali insiemi che, essenzialmente, contengono una struttura come quella di \( \mathbb{N} \), e un "qualcosa in più". (Se all'interno dell'insieme \( A \) che stiamo considerando esiste un altro sottoinsieme proprio che rispetta gli altri assiomi, \( A \) non rispetterà il quinto assioma di Peano). 
+        L'assioma di induzione è necessario per evitare di equiparare ai numeri naturali insiemi che, essenzialmente, contengono una struttura come quella di \( \mathbb{N} \), e un ``qualcosa in più''. (Se all'interno dell'insieme \( A \) che stiamo considerando esiste un altro sottoinsieme proprio che rispetta gli altri assiomi, \( A \) non rispetterà il quinto assioma di Peano). 
 
         In più, il quinto assioma di Peano ci fornisce essenzialmente una definizione insiemistica di induzione.
     \end{gbox}
@@ -53,7 +53,7 @@
         \forall P \ \ \ \frac{P(0), \quad P(n) \implies P(n+1)}{\forall n\; P(n)}
     \]
 
-    (la notazione equivale a \( P(0) \land (P(n) \implies P(n+1))  \implies \forall n P(n) \) )
+    (la notazione equivale a \( P(0) \land P(n) \land (P(0) \land (P(n) \implies P(n+1)))  \implies \forall n P(n) \) )
 
 \end{defbox}
 
@@ -67,7 +67,7 @@ In questo modo, dire \( P(0) \) equivale a dire \( 0 \in S \), e dire \( P(n) \i
 
 
 \begin{defbox}{Numeri di von Neumann}{}
-    Un altro modo di descrivere i numeri naturali viene dal matematico \textbf{John von Neumann}, che definisce i numeri naturali ("numeri di von Neumann", \( \mathcal{N} \)) in questo modo:
+    Un altro modo di descrivere i numeri naturali viene dal matematico \textbf{John von Neumann}, che definisce i numeri naturali (``numeri di von Neumann'', \( \mathcal{N} \)) in questo modo:
 
     \begin{itemize}
         \item \(  0_\mathcal{N} = \emptyset\)  \ \ {\color{gray}(ovvero \( \{ \} \))}
@@ -104,8 +104,8 @@ In questo modo, dire \( P(0) \) equivale a dire \( 0 \in S \), e dire \( P(n) \i
 \begin{defbox}{Algebra}{}
     Una \textbf{algebra} è una tupla \( (A, \Gamma) \), dove:
     \begin{itemize}
-        \item \( A \) è l'insieme di riferimento ("carrier" o "insieme sottostante") 
-        \item \( \Gamma = \{\gamma_1, \gamma_2, \dots, \gamma_i\} \), è l'insieme di funzioni chiamate "operazioni fondamentali" o "costruttori" dell'algebra
+        \item \( A \) è l'insieme di riferimento (``carrier'' o ``insieme sottostante'') 
+        \item \( \Gamma = \{\gamma_1, \gamma_2, \dots, \gamma_i\} \), è l'insieme di funzioni chiamate ``operazioni fondamentali'' o ``costruttori'' dell'algebra
             \subitem la segnatura dei costruttori è: \( \gamma_i:A^{\alpha_i}\times K_i \to A \).
 
     \end{itemize}
@@ -142,7 +142,7 @@ In questo modo, dire \( P(0) \) equivale a dire \( 0 \in S \), e dire \( P(n) \i
         Le tre condizioni garantiscono quindi che:
         \begin{itemize}
             \item ci sia solo un modo per costruire ogni elemento dell'algebra (\textit{i, ii})
-            \item non ci siano "elementi inutili" (\textit{iii})
+            \item non ci siano ``elementi inutili'' (\textit{iii})
         \end{itemize}
     \end{gbox}
 
@@ -150,7 +150,7 @@ In questo modo, dire \( P(0) \) equivale a dire \( 0 \in S \), e dire \( P(n) \i
 
 Vediamo come possiamo costruire \( \mathbb{N} \) come algebra induttiva.
 
-La definizione di algebra induttiva non considera il concetto di "elemento", quindi, per il primo assioma di Peano, usiamo una \textit{funzione costante} \( \mathbb{0} \), con segnatura:
+La definizione di algebra induttiva non considera il concetto di ``elemento'', quindi, per il primo assioma di Peano, usiamo una \textit{funzione costante} \( \mathbb{0} \), con segnatura:
 \[\mathbb{1} \times \mathbb{N} : x\to 0 \]
 
 Abbiamo quindi una tupla (\( \mathbb{N}, \{\text{succ}, \mathbb{0}\} \)).
@@ -265,7 +265,7 @@ Per dimostrare che  questa tupla sia un'algebra induttiva, dobbiamo ora verifica
     (definizione algebrica: \( \forall a, b \in A \), date \(\circ\) operazione di \( A \) e \(\bullet\) operazione di \( B \), si ha \( f(a \circ b) = f(a) \bullet f(b) \) )
     \vspace{0.5em}
 
-    {\small \color{gray} un omomorfismo "rispetta le operazioni"}
+    {\small \color{gray} un omomorfismo ``rispetta le operazioni''}
 
     \begin{itemize}
         \item nota: la composizione di due omomorfismi è a sua volta un omomorfismo
@@ -292,7 +292,7 @@ Per dimostrare che  questa tupla sia un'algebra induttiva, dobbiamo ora verifica
             \item Allo stesso modo, \( \exists! \text{ omomorfismo } g : B \to A \).
             \item Componendo i due omomorfismi, si ottiene un omomorfismo \( g \circ f \) con segnatura \( A \to A \). 
 
-            \item Sappiamo che per ogni algebra esiste l'omomorfismo "identità".
+            \item Sappiamo che per ogni algebra esiste l'omomorfismo ``identità''.
             \item Sappiamo anche, per il teorema sopra, che esiste un unico omomorfismo \( A \to A \). 
                 \subitem Ne segue necessariamente che \( g \circ a = \text{Id}_A \). {\small (lo stesso discorso si applica a \( f \circ g = \text{Id}_B \))}
 
@@ -322,7 +322,7 @@ prendiamo come esempio questa grammatica:
 
 Le espressioni che seguono questa grammatica, sono del tipo:
 \begin{itemize}
-    \item "5" o "7" 
+    \item ``5'' o ``7'' 
     \item un'espressione \( M+N \) o \( M*N \), in cui \( M \) e \( N \) rispettano a loro volta la grammatica
 \end{itemize}
 
@@ -334,7 +334,7 @@ Introduciamo una funzione \( eval : L \to \mathbb{N}\), che valuta le espression
     \item \( eval(M*N) = eval(M)*eval(N)\)
 \end{itemize}
 
-Possiamo notare subito che \( (L, eval) \) non è un'algebra induttiva. Infatti, una stringa come "\( 5 + 7 * 5 \)" potrebbe essere stata generata in due modi diversi: \( (5 + 7) * 5 \) e \( 5 + (7 * 5) \). 
+Possiamo notare subito che \( (L, eval) \) non è un'algebra induttiva. Infatti, una stringa come ``\( 5 + 7 * 5 \)'' potrebbe essere stata generata in due modi diversi: \( (5 + 7) * 5 \) e \( 5 + (7 * 5) \). 
 
 Possiamo però stipulare che sia induttiva. Ci basta infatti considerare \( +, \ *, \ 5\) e \( 7 \) come costruttori dell'algebra. In questo modo, \( (5 + 7) * 5 \) risulta essere un oggetto diverso da \( 5 + (7 * 5) \). È quindi possibile dimostrare che \( (L, 5, 7, +, *) \) è un'algebra induttiva.
 
@@ -396,9 +396,9 @@ esempio: \( free(let \ x = 7 \ in \ x+y) = \{y\}\)
 
 \subsection{Semantica operazionale}
 
-Vogliamo introdurre nel linguaggio \( Exp \) il concetto di "quanto fa?" (valutazione di un'espressione).
+Vogliamo introdurre nel linguaggio \( Exp \) il concetto di ``quanto fa?'' (valutazione di un'espressione).
 
-Per farlo, abbiamo bisogno di definire un ambiente all'interno del quale valutare le espressioni (stile operazionale, "structural operational semantics").
+Per farlo, abbiamo bisogno di definire un ambiente all'interno del quale valutare le espressioni (stile operazionale, ``structural operational semantics'').
 
 \begin{defbox}{Ambienti}{}
     Un \textbf{ambiente} è una funzione parziale (funzione non necessariamente definita su tutti gli elementi del dominio) con dominio finito che associa dei valori ad un insieme finito di variabili.
@@ -512,8 +512,143 @@ La valutazione utilizzata fino a questo momento viene definita
 Se infatti consideriamo un caso del tipo
 \( let \ = \text{ [espressione lunghissima] } \ in \ 7 \), notiamo immediatamente che la valutazione di \( N \) non è necessaria, in quanto l'espressione farà, in ogni caso, \( 7 \).
 
-Introduciamo quindi un approccio \textbf{lazy}, che consiste nel valutare un termine solo quando (e se) ce n'è veramente bisogno. La valutazione di \( N \) in un termine del tipo \( let \ x = \ N \ in \ M \) viene rimandata, quindi, al momento in cui ad \( M \) (eventualmente) servirà il suo valore.
+Introduciamo quindi un approccio \textbf{lazy}, che consiste nel valutare un termine solo quando (e se) ce n'è veramente bisogno. 
 
-\todo{finire!}
+La valutazione di \( N \) in un termine del tipo \( let \ x = \ N \ in \ M \) viene rimandata, quindi, al momento in cui ad \( M \) (eventualmente) servirà il suo valore.
+
+\begin{defbox}{Regole della semantica lazy di \(Exp\)}{}
+   \begin{itemize}
+    \item I termini non valutati subito vengono conservati in un ``ambiente pigro'' - estendiamo quindi \( Env \) in questo modo:
+   \[ Env = Var \overset{fin}{\rightharpoonup} Exp \]
+   (gli ambienti contengono ora anche i termini non valutati, quindi non possiamo avere come codominio \( Val \))
+
+\item la nuova regola per le variabili è:
+    \[ \frac{E\vdash M \leadsto v}{E\vdash x \leadsto v} \ \ \text{se } E(x)=M\]
+
+\item la nuova regola per il \( let \) è:
+    \[ \frac{E(x, M)\vdash N \leadsto v}{E \vdash let \ x = M \ in \ N \leadsto v} \]
+
+   \end{itemize}
+\end{defbox}
+
+Notiamo che però non sempre l'approccio lazy è più veloce: per esempio, per l'espressione \( let \ x = N \ in \ (x+x+x) \), \( N \) viene calcolata \( 3 \) volte con l'approccio lazy e una sola con quello eager.
+
+
+Mettiamo i due approcci a confronto sull'espressione \[ let \ x = 2 \ in \ let \ y = x \ in \ let \ x = 7 \ in \ y \leadsto 3 \]
+  
+  \begin{itemize}
+      \item \textbf{approccio eager}:
+  \end{itemize}
+  \vspace{-1em}
+\begin{prooftree}
+\AxiomC{$(x,2) \vdash x \rightsquigarrow 2$}
+\AxiomC{$(x,2) \vdash 1 \rightsquigarrow 1$}
+\BinaryInfC{$(x,2) \vdash x + 1 \rightsquigarrow 3$}
+\AxiomC{$(x,2)(y,3) \vdash 7 \rightsquigarrow 7$}
+\AxiomC{$(x,2)(y,3)(x,7) \vdash y \rightsquigarrow 3$}
+\BinaryInfC{$(x,2)(y,3) \vdash \text{let } x = 7 \text{ in } y \rightsquigarrow 3$}
+\BinaryInfC{$(x,2) \vdash \text{let } y = x + 1 \text{ in let } x = 7 \text{ in } y \rightsquigarrow 3$}
+\UnaryInfC{$\emptyset \vdash \text{let } x = 2 \text{ in let } y = x + 1 \text{ in let } x = 7 \text{ in } y \rightsquigarrow 3$}
+\end{prooftree}
+
+  \begin{itemize}
+      \item \textbf{approccio lazy}:
+  \end{itemize}
+  \vspace{-1em}
+
+\begin{prooftree}
+\AxiomC{$(x,2)(y,x+1)(x,7) \vdash 7 \rightsquigarrow 7$}
+\UnaryInfC{$(x,2)(y,x+1)(x,7) \vdash x \rightsquigarrow 7$}
+\AxiomC{$(x,2)(y,x+1)(x,7) \vdash 1 \rightsquigarrow 1$}
+\BinaryInfC{$(x,2)(y,x+1)(x,7) \vdash x + 1 \rightsquigarrow 8$}
+\UnaryInfC{$(x,2)(y,x+1)(x,7) \vdash y \rightsquigarrow 8$}
+\UnaryInfC{$(x,2)(y,x+1) \ \text{let } x = 7 \text{ in } y \rightsquigarrow 8$}
+\UnaryInfC{$(x,2) \vdash \text{let } y = x + 1 \text{ in let } x = 7 \text{ in } y \rightsquigarrow 8$}
+\UnaryInfC{$\emptyset \vdash \text{let } x = 2 \text{ in let } y = x + 1 \text{ in let } x = 7 \text{ in } y \rightsquigarrow 8$}
+\end{prooftree}
+
+Notiamo che i due approcci ci danno risultati diversi.
+
+Ciò è causato non dall'approccio valutativo, bensì dallo \textbf{scoping} utilizzato. Abbiamo infatti utilizzato quello che viene definito "scoping dinamico", il che ha causato problemi perché, in \( Exp \), lazy dinamico e eager non sono equivalenti.
+
+\pagebreak
+
+\section{Scoping}
+
+\begin{defbox}[colframe=ForestGreen, colback=DeepGreenLight]{Scoping}{}
+    Lo \textbf{scoping} di un linguaggio è l'insieme di regole che determinano la visibilità di una variabile all'interno di un programma (ossia che consentono di associare una variabile a ciascun riferimento {\small \color{gray} (= uso della variabile mediante un identificatore)}).
+\end{defbox}
+
+\begin{defbox}{Scoping statico}{}
+    Quando si usa lo \textbf{scoping statico}, i riferimenti ad una variabile sono risolti in base alla \textbf{struttura sintattica} del programma (tipicamente in base ad una dichiarazione).
+
+    Ovvero, durante la valutazione viene utilizzato l'\textbf{ambiente definito a tempo di interpretazione} (e non di valutazione).
+\end{defbox}
+
+\begin{defbox}{Scoping dinamico}{}
+    Quando si usa lo \textbf{scoping dinamico}, i riferimenti ad una variabile sono risolti in base allo \textbf{stato di esecuzione} del programma (per esempio, una dichiarazione estende il suo effetto fino a che non si incontra un altra dichiarazione di variabile con lo stesso nome).
+
+    Quindi, durante la valutazione viene utilizzato l'\textbf{ambiente definito a tempo di valutazione} stesso.
+\end{defbox}
+
+Dobbiamo quindi mantenere, oltre alle espressioni rimaste da valutare, anche gli ambienti in cui valutarle.
+
+Per farlo, estendiamo nuovamente \( Env \) in questo modo:
+\[ Env_{LS} = Var \overset{fin}{\rightharpoonup} (Exp \times Env_{LS}) \]
+
+
+\begin{defbox}{Regole della semantica lazy statica di \(Exp\)}{}
+
+   \begin{itemize}
+    \item I termini non valutati subito vengono conservati in un ``ambiente pigro'' - estendiamo quindi \( Env \) in questo modo:
+   \[ Env = Var \overset{fin}{\rightharpoonup} Exp \]
+   (gli ambienti contengono ora anche i termini non valutati, quindi non possiamo avere come codominio \( Val \))
+
+\item la nuova regola per le variabili è:
+    \[ \frac{E'\vdash M \leadsto v}{E\vdash x \leadsto v} \ \ \text{se } E(x)=(M, E')\]
+
+\item la nuova regola per il \( let \) è:
+    \[ \frac{E(x, M, E)\vdash N \leadsto v}{E \vdash let \ x = M \ in \ N \leadsto v} \]
+
+   \end{itemize}
+\end{defbox}
+
+Valutiamo la stessa espressione anche con questo approccio:
+
+\begin{prooftree}
+\AxiomC{$(x,2,\emptyset) \vdash x\leadsto 2$}
+\AxiomC{$(x,2,\emptyset) \vdash 1 \leadsto 1 $}
+\BinaryInfC{$(x,2, \emptyset)\vdash x + 1 \rightsquigarrow 3$}
+\UnaryInfC{${\color{blue}E}(x, 7,E) \vdash y \rightsquigarrow 3$}
+\UnaryInfC{${\color{blue}(x,2, \emptyset)(y,x+1, (x, 2, \emptyset)}\vdash \ \text{let } x = 7 \text{ in } y \rightsquigarrow 3$}
+\UnaryInfC{$(x,2,\emptyset) \vdash \text{let } y = x + 1 \text{ in let } x = 7 \text{ in } y \rightsquigarrow 3$}
+\UnaryInfC{$\emptyset \vdash \text{let } x = 2 \text{ in let } y = x + 1 \text{ in let } x = 7 \text{ in } y \rightsquigarrow 3$}
+\end{prooftree}
+
+In \( Exp \) non c'è, invece, differenza tra eager statico e eager dinamico.
+
+\begin{gbox}{}
+   Essenzialmente, in \( Exp \):
+   \vspace{-1em}
+\begin{center}
+\begin{tabular}{c|c|c}
+     & \textbf{statico} & \textbf{dinamico} \\ \hline
+\textbf{lazy} & equiv & non equiv \\ \hline
+\textbf{eager}& \multicolumn{2}{c}{equiv (e uguali tra loro)} \\
+\end{tabular}
+\end{center} 
+\end{gbox}
+
+\begin{gbox}[colframe=BrickRed, colback=white]{``commutatività'' in \( Exp \)}
+    In \( Exp \), si ha:
+    \[ let \ x = (let \ y  = M \ in \ N) \ in \ L \not\equiv \ let \ y = M \ in \ let \ x = N \ in \ L \]
+\begin{itemize}
+    \item nella prima espressione, \( y \) è definita solo all'interno di \( N \)
+    \item nella seconda, è definita prima, ed è quindi visibile anche in \( L \)
+    \item quindi, le due espressioni sono equivalenti solo se \( y \) non compare libera (non ri-definita) in \( L \)
+\end{itemize}
+\end{gbox}
+
+\section{Fun}
 
 \end{document}
