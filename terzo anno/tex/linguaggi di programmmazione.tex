@@ -2,7 +2,7 @@
 \documentclass[a4paper,11pt]{report}
 
 \usepackage{./../packages/mainstyle}
-\usepackage{./../packages/boxes}
+\usepackage{./../packages/newboxes}
 \usepackage{./../packages/titleITA}
 
 \usepackage{bussproofs}
@@ -122,7 +122,7 @@ In questo modo, dire \( P(0) \) equivale a dire \( 0 \in S \), e dire \( P(n) \i
         a_1, \dots, a_n \in S \implies f( a_1, \dots, a_n,  k_1, \dots, k_n) \in S
     \]
 
-    \begin{gbox}[colframe=RedViolet]{nota!}
+    \begin{gbox}[colframe=RedViolet, colbacktitle=RedViolet]{nota!}
         Data un'operazione \( f \) che prende solo elementi esterni all'insieme \( S \) (come per esempio la funzione nullaria \ \( \mathbb{1} \to A \)), un insieme \( S \) si dice chiuso rispetto a \(f \iff \text{Im}(f) \subseteq S \)).
 
     \end{gbox}
@@ -206,12 +206,12 @@ Per dimostrare che  questa tupla sia un'algebra induttiva, dobbiamo ora verifica
 
     Si tratta di un'algebra induttiva (notiamo che i due costruttori hanno immagini chiaramente disgiunte, sono entrambi chiusi per \( A-list \), e c'è un unico modo per costruire ogni lista).
 
-    \begin{gbox}[colframe=Mahogany]{liste infinite}
+    \begin{gbox}[colframe=Mahogany, colbacktitle=Mahogany]{liste infinite}
         Le liste infinite non possono essere un'algebra induttiva, in quanto contengono una sotto-algebra induttiva (quella delle liste finite).
     \end{gbox}
 \end{gbox}
 
-\begin{gbox}[colframe=Orchid]{i booleani come algebra non induttiva}
+\begin{gbox}[colframe=Orchid, colbacktitle=Orchid]{i booleani come algebra non induttiva}
     Consideriamo l'algebra \( (B, \text{not}) \), dove \( B = \{0, 1\} \) e not: \(B \to B : b\to \neg b\).
 
     Notiamo che not è sicuramente iniettiva, e che, poiché è l'unico costruttore, anche la seconda caratteristica delle algebre induttive è rispettata.
@@ -408,7 +408,7 @@ Per farlo, abbiamo bisogno di definire un ambiente all'interno del quale valutar
 
     Notiamo che, essendo \( E \) una funzione parziale, il dominio \( dom(E) \) è un sottoinsieme finito di \( Var \).
 
-    \begin{defbox}[colframe=DarkOrchid]{Insieme di ambienti}{}
+    \begin{defbox}[colframe=DarkOrchid, colbacktitle=DarkOrchid]{Insieme di ambienti}{}
         \( Env \) è definito come l'insieme degli ambienti di \( Exp \).
 
     \end{defbox}
@@ -575,7 +575,7 @@ Ciò è causato non dall'approccio valutativo, bensì dallo \textbf{scoping} uti
 
 \section{Scoping}
 
-\begin{defbox}[colframe=ForestGreen, colback=DeepGreenLight]{Scoping}{}
+\begin{defbox}[colframe=BrightGreen, colback=BrightGreenLight, colbacktitle=BrightGreen]{Scoping}{}
     Lo \textbf{scoping} di un linguaggio è l'insieme di regole che determinano la visibilità di una variabile all'interno di un programma (ossia che consentono di associare una variabile a ciascun riferimento {\small \color{gray} (= uso della variabile mediante un identificatore)}).
 \end{defbox}
 
@@ -639,7 +639,7 @@ In \( Exp \) non c'è, invece, differenza tra eager statico e eager dinamico.
 \end{center} 
 \end{gbox}
 
-\begin{gbox}[colframe=BrickRed, colback=white]{``commutatività'' in \( Exp \)}
+\begin{gbox}[colframe=DeepGrey, colback=DeepGreyLight, colbacktitle=DeepGrey]{``commutatività'' in \( Exp \)}
     In \( Exp \), si ha:
     \[ let \ x = (let \ y  = M \ in \ N) \ in \ L \not\equiv \ let \ y = M \ in \ let \ x = N \ in \ L \]
 \begin{itemize}
@@ -648,6 +648,60 @@ In \( Exp \) non c'è, invece, differenza tra eager statico e eager dinamico.
     \item quindi, le due espressioni sono equivalenti solo se \( y \) non compare libera {\small \color{gray}(non ri-definita)} in \( L \)
 \end{itemize}
 \end{gbox}
+
+\subsection{Riassunto delle regole in \( Exp \)}
+
+\begin{gbox}[colframe=DeepGreen, colback=DeepGreenLight, colbacktitle=DeepGreen]{eager}
+        \[ E \vdash k \leadsto k  \ \ \ [ const ] \] 
+        \vspace{-2.5em}
+
+    \[ E \vdash x \leadsto v  \ \ \ \text{ se }  v = E(x) \ \ \ [ var ] \]
+        \vspace{-2em}
+
+    \[
+        \frac{
+            E \vdash M \leadsto v \quad E \vdash N \leadsto w
+        }{
+            E \vdash M + N \leadsto v + w
+        }
+        \ \ \ [plus]
+    \]
+
+
+
+    \[
+        \frac{
+            E \vdash M \leadsto v_1 \quad E\{(x, v_1)\} \vdash N \leadsto v_2
+        }{
+            E \vdash \ let \ x = M \ in \ N \leadsto v_2
+        }
+        \ \ \  [let]
+    \]
+
+
+\end{gbox}
+
+
+\begin{gbox}[colframe=DeepTeal, colback=DeepTealLight, colbacktitle=DeepTeal]{lazy statico}
+    
+    \[ \frac{E'\vdash M \leadsto v}{E\vdash x \leadsto v} \ \ \text{se } E(x)=(M, E') \ \ \ [var] \]
+
+    \[ \frac{E(x, M, E)\vdash N \leadsto v}{E \vdash let \ x = M \ in \ N \leadsto v} \ \ \ [let]\]
+
+
+\end{gbox}
+
+
+\begin{gbox}[colframe=BlueGray, colback=BlueGrayLight, colbacktitle=BlueGray]{(lazy dinamico)}
+    \[ \frac{E\vdash M \leadsto v}{E\vdash x \leadsto v} \ \ \text{se } E(x)=M \ \ \ [var]\]
+
+    \[ \frac{E(x, M)\vdash N \leadsto v}{E \vdash let \ x = M \ in \ N \leadsto v} \ \ \ [let] \]
+\end{gbox}
+
+
+\todo{esercizi}
+
+\pagebreak
 
 \section{Fun}
 Introduciamo un nuovo linguaggio, \( Fun \), che estende \( Exp \) con la nozione di \textbf{funzione}.
@@ -671,4 +725,7 @@ La grammatica di \( Fun \) è:
     \end{itemize}
 
 \end{defbox}
+
+
+
 \end{document}
