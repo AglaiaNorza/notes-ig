@@ -855,22 +855,21 @@ Esempio:
 
 Introduciamo un termine interessante - \( (fn \ x \implies xx)(fn \ x \implies xx) \) - e tentiamo di valutarlo con un approccio eager (dinamico)
 
-{\tiny
 \begin{prooftree}
+    \def\defaultHypSeparation{\hskip-5pt}
   \AxiomC{\(  \emptyset \vdash fn \ x \implies xx \leadsto (x, xx) \)}
-  \AxiomC{\( \emptyset \vdash fn \ x \implies xx \leadsto (x, xx)  \)}
   \AxiomC{\(  (x, (x,xx))\vdash  x \leadsto (x, xx)\)}
-  \AxiomC{\(  (x, (x,xx))\vdash  x \leadsto (x, xx)\)}
-  \AxiomC{\((x, (x,xx))\vdash  xx \leadsto \)}
-  \TrinaryInfC{\( (x, (x,xx))\vdash  xx \leadsto \)}
-  \TrinaryInfC{\( \emptyset \vdash (fn \ x \implies xx)(fn \ x \implies xx) \)}
+  \AxiomC{\((x, (x,xx))\vdash  x \leadsto (x, xx) \quad (x, (x,xx))\vdash  xx \leadsto \)}
+  \BinaryInfC{\( \emptyset \vdash fn \ x \implies xx \leadsto (x, xx) \quad (x, (x,xx))\vdash  xx \leadsto \)}
+  \BinaryInfC{\( \emptyset \vdash (fn \ x \implies xx)(fn \ x \implies xx) \)}
 \end{prooftree}
-}
+
+
 
 Notiamo che il termine va in loop - infatti, si ha che, per valutare \((x, (x,xx))\vdash  xx \), bisogna prima valutare \((x, (x,xx))\vdash  xx \) (se stesso).
 
 \begin{gbox}{Termine \( \omega \)}
-    Chiamiamo \( \omega \) termine appena introdotto:
+    Chiamiamo \( \omega \) il termine appena introdotto:
     \[ \omega =  (fn \ x \implies xx)(fn \ x \implies xx) \]
 
     
