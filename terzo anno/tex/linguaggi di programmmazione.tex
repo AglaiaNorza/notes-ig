@@ -906,7 +906,7 @@ Possiamo rappresentare anche altri concetti essenziali come la funzione ``succes
     La funzione successore di Church, seguendo lo stesso ragionamento, dovrà ricevere un numero di Church \( z \) in ingresso, e restituire il numero di Church che applica \( x \) a \( y \), \( z+1 \) volte:
     \[ succ \equiv fn \ z \ x \ y \implies x\ (z \ x \ y) \]
     \[\color{gray} succ \equiv fn \ z \implies fn \ x \implies fn \ y \implies x\ (z \ x \ y) \]
-    essenzialmente, dato \( z \) numero di Church da implementare (che vuole quindi come parametri \( x \) funzione e \( y \) valore di partenza), si applica una volta in più \( x \).
+    essenzialmente, dato \( z \) numero di Church di cui calcolare il successore (che vuole quindi come parametri \( x \) funzione e \( y \) valore di partenza), si applica una volta in più \( x \).
 
     La funzione si può scrivere anche, equivalentemente, in questo modo:
     \[ fn \ z \ x \ y \implies z \ x \ (x \ y) \]
