@@ -726,6 +726,64 @@ La grammatica di \( Fun \) è:
 
 \end{defbox}
 
+Quindi, per esempio:
+\begin{itemize}
+    \item \( (fn \ x \implies x+1) \ 5 = 6\) \ \ (la funzione \( x+1 \) è applicata all'argomento \( 6 \))
+    \item \( (fn \ x \implies x \ 5)(fn \ y \implies y + 1) = 6 \)
+        \subitem la funzione prende in input una funzione (in questo caso ``successore''), e la applica a \( 5 \)
+    \item \( (fn \ x \implies (fn \ y \implies y \ x)) \ 3 \ (fn \ z \implies z+1) \ = 4\)
+        \subitem è una funzione che, presa in input un'altra funzione, la applica ad \( x \) - le passiamo la funzione ``successore'', che, applicata a \( 3 \), dà \( 4 \).
+    \item un'applicazione del tipo \( fn \ x \implies x \ 10 \) ``non ha semantica'' (non è valutabile), in quanto \( 10 \) non è una funzione e non si può applicare a \( x \)
+\end{itemize}
+
+\begin{gbox}{precedenza di \( apply \)}
+    la precedenza nell'applicazione è a sinistra
+    \[ MNL \equiv (MN)L \]
+\end{gbox}
+
+\begin{defbox}[colback=DeepGreenLight, colframe=DeepGreen, colbacktitle=DeepGreen]{Semantica eager dinamica di \( Fun \)}{}
+    
+\begin{center}
+    [\( fn \) dinamico eager]
+\end{center}
+\vspace{-1em}
+    \[  E \vdash fn \ x \implies M \leadsto (x, M) \]
+
+\begin{center}
+    [\( apply \) dinamico eager]
+\end{center}
+\vspace{-2.3em}
+\begin{prooftree}
+\AxiomC{$E \vdash M \leadsto (x, M')$}
+\AxiomC{$E\vdash N \leadsto v$}
+\AxiomC{$E (x, v)\vdash M' \leadsto v'$} 
+\TrinaryInfC{$E \vdash MN \leadsto v'$ }
+\end{prooftree}
+    
+\end{defbox}
+
+Esempio:
+\todo{esempio}
+
+\begin{defbox}[colback=DeepGreenLight, colframe=DeepGreen, colbacktitle=DeepGreen]{Semantica eager statica di \( Fun \)}{}
+    \begin{center}
+    [\( fn \) dinamico eager]
+\end{center}
+\vspace{-1em}
+    \[  E \vdash fn \ x \implies M \leadsto (x, M, E)\]
+
+\begin{center}
+    [\( apply \) dinamico]
+\end{center}
+\vspace{-2.3em}
+\begin{prooftree}
+\AxiomC{$E \vdash M \leadsto (x, M', E')$}
+\AxiomC{$E\vdash N \leadsto v$}
+\AxiomC{$E' (x, v)\vdash M' \leadsto v'$} 
+\TrinaryInfC{$E \vdash MN \leadsto v'$ }
+\end{prooftree}
+
+\end{defbox}
 
 
 \end{document}
