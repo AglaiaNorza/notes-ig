@@ -6,6 +6,9 @@
 \usepackage{./../packages/titleITA}
 
 \usepackage{float}
+\usepackage{enumitem}
+
+\newcommand*\xor{\oplus}
 
 \setcoursename{Logica Matematica}
 \setcoursebook{tbd}
@@ -136,7 +139,7 @@ In secondo luogo, segue anche che una proposizione è sempre vera se il suo ante
 
 In più, si vuole che valga, per contrapposizione \( (A \to B)\to(\neg B \to \neg A) \).}
 
-
+\label{asseq}
 Osserviamo che, data \( A = p_1, p_2, \dots, p_k \) e due assegnamenti \( \alpha \) e \( \beta \) t.c.:
 \begin{align*}
     \alpha(p_1) &= \beta(p_1) \\
@@ -144,7 +147,7 @@ Osserviamo che, data \( A = p_1, p_2, \dots, p_k \) e due assegnamenti \( \alpha
     \alpha(p_k) &= \beta(p_k)
 \end{align*}
 
-allora necessariamente \( \alpha(A) = \alpha(B) \).
+allora necessariamente \( \alpha(A) = \alpha(B) \). 
 
 \begin{gbox}[colframe=PineGreen]{soddisfacibilità}
     Se per una formula \( A \) e un assegnamento \( \alpha \) si ha \( \alpha (A) = 1 \), si dice che ``\(A \) soddisfa \( \alpha \)'' (o ``\( A \) è vera sotto \( \alpha \)'').
@@ -451,7 +454,7 @@ Possiamo quindi introdurre una nuova versione del teorema di compattezza:
         \item \( T \in \texttt{SAT} \iff T \in \texttt{FINSAT} \)
     \end{enumerate}
 
-    \begin{proofbox}[title=dim.]{}
+    \begin{pbox}{}
         \begin{itemize}
             \item \textcircled{1} \( \implies \) \textcircled{2}
 
@@ -469,7 +472,7 @@ Possiamo quindi introdurre una nuova versione del teorema di compattezza:
                 Per \textcircled{2}, quindi, \( \exists T_0 \ t.c, \ T_0 \overset{fin}{\subseteq } T \vDash p \land \neg p \), il che va in contraddizione con \( T \in \texttt{FINSAT} \).\qed
         \end{itemize}
 
-    \end{proofbox}
+    \end{pbox}
 
 \end{lemmabox}
 
@@ -488,7 +491,7 @@ Un concetto analogo vale per \texttt{FINSAT}.
 
 \begin{thmbox}{Estendibilità di \texttt{FINSAT}}{}
     Sia \( T \in \texttt{FINSAT} \). Per ogni formula \( A, \  T \cup \{A\} \in \texttt{FINSAT}\)  \ o \( \ T \cup \{\neg A\} \in \texttt{FINSAT}\)
-    \begin{proofbox}[title=dim]{}
+    \begin{pbox}{}
         Supponiamo per assurdo che \( T \cup \{A\} \not\in \texttt{FINSAT}\) e \( T \cup \{\neg A\} \not\in \texttt{FINSAT}\).
 
         Vuol dire che esistono \( B \ \overset{fin}{\subseteq} T \cup \{A\}\) \ e \ \( C \ \overset{fin}{\subseteq} T \cup \{\neg A\}\) insoddisfacibili.
@@ -499,13 +502,171 @@ Un concetto analogo vale per \texttt{FINSAT}.
 
         Sia \( \alpha \) un assegnamento che lo soddisfa. Se \( \alpha(A)=1 \), allora soddisfa anche \( B \). Se \( \alpha(A) = 0 \), soddisfa anche \( C \). In entrambi i casi abbiamo una contraddizione.
 
-    \end{proofbox}
+    \end{pbox}
 
 \end{thmbox}
 
+\subsection{Dimostrazione per i linguaggi numerabili}
+
+\begin{gbox}[colframe=DeepGreen, colback=DeepGreenLight]{}
+    Sia \( T\) in un linguaggio numerabile. \( T \in \texttt{FINSAT} \implies T\in \texttt{SAT}\).
+\end{gbox}
+
+Supponiamo \( \mathcal{L}=\{p_1, p_2, \dots\}\) numerabile. 
+
+Definiamo una ``catena'' di teorie come segue:
+\begin{itemize}
+    \item \( T_0 = T \)
+    \item \( T_1 = \begin{cases}
+            T_0 \cup \{p_1\} & T_0 \cup \{p_1\} \in \texttt{FINSAT} \\
+            T_0 \cup \{\neg p_1\} & T_0 \cup \{\neg p_1\} \in \texttt{FINSAT}
+        \end{cases} \)
+
+        \hspace{1em}\vdots
+
+    \item \( T_{n+1} = \begin{cases}
+            T_n \cup \{p_{n+1}\} & T_0 \cup \{p_{n+1}\} \in \texttt{FINSAT} \\
+            T_n \cup \{\neg p_{n+1}\} & T_0 \cup \{\neg p_{n+1}\} \in \texttt{FINSAT}
+        \end{cases} \)
+\end{itemize}
+
+(aggiungiamo quindi proposizioni una alla volta in modo che \( T_i \) resti \texttt{FINSAT})
+
+\begin{gbox}{}
+    (la definizione è ben posta per l'estendibilità di \texttt{FINSAT} )
+\end{gbox}
+
+Avremo quindi \( {\color{gray} T = }\ T_0 \subseteq T_1 \subseteq T_2 \subseteq \dots \)
+
+Definiamo \[ T^* = \bigcup_{n\in \mathbb{N}} T_n \]
+
+Sappiamo che \( T^* \in \texttt{FINSAT} \) perché \( \forall X = \{A_1, A_2, \dots, A_k\} \overset{fin}{\subseteq} T^*\), esiste \( n^* \) t.c. \( X \subseteq T_{n^*} \).
+
+(\( T \) è costruito come una catena crescente, quindi ogni suo sottoinsieme finito è un sottoinsieme di uno degli insiemi della catena - quello con ``pedice massimo'';
+per esempio, se \( X = \{A_1, A_2\} \) con \( A_1 = \{p_1\}, \ A_2 = \{p_3, p_5\}\), avremo \( X \subseteq T_5 \))
+
+Visto che, per costruzione, \( \forall p_n \) vale \( ( p_n \in T^* \oplus \neg p_n \in T^* )\), possiamo definire un assegnamento:
+\[ \alpha^*(p_n) = \begin{cases}
+    1 & p_n \in T^* \\
+    0 & p_n \not\in T^* \\
+\end{cases} \]
+
+\begin{gbox}[colframe=DeepTeal, colback=DeepTealLight]{}
+    \textbf{Claim}: \( \alpha^*(T) = 1 \)
+    
+    {\small\color{gray}(avremmo \( T\in \texttt{SAT} \), quindi avremmo finito)}
+\end{gbox}
+
+Dobbiamo quindi dimostrare che \( \forall A \in T, \alpha^*(A) = 1 \).
+
+Abbiamo \( A = \{p_{i1}, \dots, p_{i_k} \}\in T\).
+
+Introduciamo la notazione: \( p_n^* = \begin{cases}
+    p_n & p_n \in T^* \  \ {\color{gray} (\alpha^*(p_n)=1)} \\
+    \neg p_n & \neg p_n \in T^* \  \ {\color{gray} (\alpha^*(p_n)=0)} \\
+\end{cases} \)
+
+Poiché \( A\in T \subseteq T^* \) e \( \{p^*_{i1}, \dots, p^*_{ik}\} \), abbiamo \( A^* = A \cup \{p^*_{i1}, \dots, p^*_{ik}\} {\color{gray}= \{A, p^*_{i1}, \dots, p^*_{ik}\}} \overset{fin}{\subseteq } T^*\).
+
+Dato che \( T^* \in \texttt{FINSAT}, \ \exists \beta \) t.c. \( \beta(A^*)=1 \) (il che può succedere solo se \( \beta(A) = 1 \ \land \ \beta(p^*_{ij}) = 1 \ \forall j \in [k] \)).
+
+Ma, poiché \( \beta(p^*_{ij}) = 1 \ \forall j \in [k]  \), notiamo che necessariamente \( \beta(p_j) = 1  \) se \( p_j \in T^* \) e \( \beta(p_j) = 0  \) se \( p_j \neg\in T^* \). Dunque, notiamo che \( \beta \) e \( \alpha^* \) si comportano allo stesso modo per ogni variabile \( p_{i1}, \dots, p_{ik} \).
+
+Da questo (e dall'osservazione a fine pagina \pageref{asseq}), poiché \( p_{i1}, \dots, p_{ik} \) sono le variabili che compongono \( A \), segue che \( \alpha(A) = \alpha(B) \).
+
+Ma \( \beta(A) = 1 \) per scelta di \( \beta \), quindi \( \alpha^*(A) = 1 \). Visto che possiamo applicare lo stesso ragionamento ad ogni \( A \in T \), si ha che \( \alpha^*(T) = 1 \), ovvero \( T \in \texttt{SAT} \) \qed
+
+{\small \color{gray}(ogni proposizione che va verificata, in quanto finita, riguarda solo un sottoinsieme di \(T  \), e crea quindi un ``bottleneck'')}
+
+\subsection{Dimostrazione per i linguaggi arbitrari}
+
+\begin{lemmabox}{Lemma di Zorn}{}
+    Sia \( X \) un insieme, e \( \leq \ \subseteq X^2 \) una relazione di \textbf{ordine parziale} (riflessiva, antisimmetrica e transitiva) su \( X \). 
+    Definiamo, in \( X \), i concetti di:
+    \begin{itemize}
+        \item catena \( C \) = sottoinsieme di \( X \) i cui elementi sono a due a due confrontabili via \( \leq  \)
+        \item maggiorante = elemento \( x \in X \) t.c. \( \forall y \in C, \ y\leq x \)
+    \end{itemize}
+    Il \textbf{lemma di Zorn} afferma che, se per ogni catena \( C \) in \( X \) esiste un \textbf{maggiorante} in \( X \), allora esiste un elemento \( m \in X \) \textbf{massimale}.
+\end{lemmabox}
+
+Il Lemma di Zorn è una forma dell'Assioma della Scelta (che, informalmente, afferma che quando viene data una collezione di insiemi non vuoti si può sempre costruire un nuovo insieme ``scegliendo'' un singolo elemento da ciascuno di quelli di partenza).
+
+A noi basta considerare come relazione d'ordine l'inclusione insiemistica \( \subseteq \) per la quale l'\textbf{unione è un maggiorante}.
+
+Usiamo il Lemma di Zorn per dimostrare (il verso non banale de) il Teorema di Compattezza.
+
+\begin{lemmabox}{Lemma di Zorn per famiglie di insiemi}{}
+
+Sia $A$ un insieme e $\mathcal{P}(A)$ il suo insieme delle parti. 
+
+Sia $\mathcal{F} \subseteq \mathcal{P}(A)$ una famiglia di sottinsiemi di $A$. 
+
+Se per ogni \textbf{catena} $\mathcal{C}$ in $\mathcal{F}$ (i.e., per ogni famiglia di sottinsiemi di $A$ appartenenti a $\mathcal{F}$ i cui elementi sono due a due confrontabili via $\subseteq$) esiste un \textbf{maggiorante} in $\mathcal{F}$ (ossia un sottinsieme $S$ di $A$ in $\mathcal{F}$ tale che per ogni $S' \in \mathcal{C}$ vale $S' \subseteq S$), allora esiste un sottinsieme \textbf{massimale} $M$ di $A$ in $\mathcal{F}$ (ossia $M \in \mathcal{F}$ tale che per ogni $S \in \mathcal{F}$, se $M \subseteq S$ allora $S = M$).
+
+\begin{gbox}{}
+    Si osserva facilmente che se $\mathcal{F}$ contiene l'\textbf{unione} di ogni sua catena allora soddisfa le condizioni di applicabilità del lemma, in quanto l'unione risulta un maggiorante della catena.
+
+\end{gbox}
+
+\end{lemmabox}
+
+Data \( T \in \texttt{FINSAT} \), definiamo \( \mathcal{T} = \{\hat T \mid T \subseteq \hat T \ \land \  \hat T \in \texttt{FINSAT}\} \), la famiglia di teorie \texttt{FINSAT} che estendono \( T \). Sappiamo che \( \mathcal{T}\neq \emptyset \), in quanto contiene almeno \( T \).
+
+Vogliamo verificare che \( \mathcal{T} \) verifichi le condizioni per applicare il lemma di Zorn.
+
+Sia \( C = (T_i) \) una catena crescente. È evidente che \( \bigcup_i T_i\) è un maggiorante, e anche che estende \(T\). Sappiamo anche che è \texttt{FINSAT}. Infatti, se consideriamo un qualsiasi sottoinsieme finito di \( \bigcup_i T_i\), ogni sua proposizione sarà un elemento di qualche elemento della catena; questo significa che l'insieme stesso è un sottoinsieme di un elemento della catena, ed è quindi \texttt{FINSAT}.
+
+Applicando quindi il lemma di Zorn, otteniamo che \( \mathcal{T} \) contiene un massimale \( T^* \), ovvero una teoria tale che:
+\begin{itemize}
+    \item \( T \subseteq T^* \)
+    \item \( T^* \in \texttt{FINSAT}\)
+    \item \( T^* \) non può essere propriamente esteso mantenendo la condizione di finita soddisfacibilità - ovvero \( \forall T' \in \mathcal{T}, \ \ T^* \subseteq T' \implies T' = T^* \)
+\end{itemize}
+
+In quanto massimale, \( T^* \) gode di alcune proprietà:
+\begin{enumerate}
+    \item data \( A \), non può essere che \( \neg A \in T^* \) e \( A \in T^* \)
+    \item se \( A \not\in T^*\), necessariamente \( \neg A \in T^* \) {\color{gray}(altrimenti \( T^* \) potrebbe essere estesa con \( A \) o \( \neg A \) senza perdere la finita soddisfacibilità)}
+    \item se \( A \in T^* \) e \( A \vDash B \), si ha \( B \in T^* \) (\( T^* \) è chiuso per conseguenza logica)
+        \subitem {\color{gray}(se \( B\not\in T^* \), si avrebbe \( \neg B \in T^* \), ma dato che \( A \vDash B \), si avrebbe \( \{A, B\}\subseteq T^* \in \texttt{UNSAT} \), quindi \( T^* \not\in \texttt{FINSAT}\))}
+\end{enumerate}
+
+Come per la dimostrazione precedente, definiamo un assegnamento
+\[ \alpha^*(p_n) = \begin{cases}
+    1 & p_n \in T^* \\
+    0 & \neg p_n \in T^*
+\end{cases}  \]
+
+\textbf{Claim}: \( \alpha^*(T)=1 \)
+
+Dimostrare che \( \alpha^* \) soddisfa \( T^* \) basta a dimostrare che soddisfa anche \( T \). 
+
+Possiamo dimostrare una proprietà più forte: che \( \forall A, \ \alpha(A)=1 \iff A \in T^* \)
+
+Lavoriamo per induzione sulla struttura di \( A \):
+\begin{itemize}
+    \item \textbf{caso base}: \( A = p_n \) \ \ - \ \ si ha \( \alpha^*(p_n) = 1 \iff p_n \in T^* \)
+    \item \textbf{casi induttivi}:
+        \begin{enumerate}
+            \item \( A = \neg B \)
+                \subitem 
+            \item \( A = B \land C \)
+                \subitem
+            \item \( A = B \lor C \)
+                \subitem
+            \item \( A = B \to C\)
+                \subitem TODO
+        \end{enumerate}
+\end{itemize}
+\qed
+
+\section{Applicazioni del teorema di compattezza}
 
 
-\todo
+
+
+
 
 \end{document}
 
