@@ -1,28 +1,26 @@
 #!/bin/bash
 # script to push my handwritten notes to my gh repo
-hname="PC"
-
-if [ "$(uname -n )" = "aglaia-otg" ]; then
-    hname="portatile"
-fi
-
 drive="$HOME/Documents/gdrive"
 latex="$HOME/Documents/uni/latex"
 dest="$HOME/Documents/uni/notes-ig"
 
-if ! mount | grep "gdrive" > /dev/null; then
+declare -A notes
+
+hname="PC"
+
+if [ "$(uname -n )" = "aglaia-otg" ]; then
+    hname="portatile"
+elif ! mount | grep "gdrive" > /dev/null; then
     rclone mount --daemon gdrive:GoodNotes/ ~/Documents/gdrive
+    notes["$drive/automi/automi.pdf"]="terzo anno/automi, calcolabilità e complessità.pdf"
 fi
 
 # did not need to declare a fancy array for this but i've never used bash arrays before so i wanted to try !
-declare -A notes
 #notes["$drive/algebra/algebra ALGEBRA.pdf"]="secondo anno/algebra.pdf"
 #notes["$drive/algebra/REFILE/algebra FORMULE.pdf"]="secondo anno/algebra formule.pdf"
 #notes["$drive/algebra/REFILE/algebra ES SHEET.pdf"]="secondo anno/algebra es sheet.pdf"
 #notes["$drive/algebra/REFILE/algebra DIMOSTRAZIONI.pdf"]=secondo anno/algebra dimostrazioni.pdf"
 #notes["$drive/probabilità/probabilità appunti.pdf"]="secondo anno/calcolo delle probabilità.pdf"
-
-notes["$drive/automi/automi.pdf"]="terzo anno/automi, calcolabilità e complessità.pdf"
 
 notes["$latex/logmat/logmat.pdf"]="terzo anno/logica matematica.pdf"
 notes["$latex/ldp/ldp.pdf"]="terzo anno/linguaggi di programmmazione.pdf"
