@@ -7,6 +7,7 @@
 
 \usepackage{float}
 \usepackage{enumitem}
+\usepackage{bussproofs}
 
 \newcommand*\xor{\oplus}
 
@@ -664,9 +665,173 @@ Lavoriamo per induzione sulla struttura di \( A \):
 \section{Applicazioni del teorema di compattezza}
 
 
+\pagebreak
+
+\section{Decidibilità}
+
+Dato il potere espressivo della logica proposizionale, è naturale chiedersi se sia possibile automatizzare la risposta alla domanda ``\( T\vDash A \)''. 
+
+Se \( T = \{A_1, \dots, A_n\} \) è una \textbf{teoria finita}, la risposta è banalmente ``sì'', in quanto sappiamo che \( T\vDash A \iff (A_1 \land \dots \land A_n) \to A \in \texttt{TAUT} \) (il che è facilmente verificabile tramite tavole di verità).
+
+\begin{defbox}{Decidibilità}{}
+        Dato uno spazio \( X \) di possibili input, chiamiamo un \textit{problema} un qualsiasi sottoinsieme \( S \subseteq X\). 
+
+    Diciamo che \( S \) è \textbf{algoritmicamente decidibile} se esiste un algoritmo tale che \( \forall \ x \in X \), se \( x \in S \), l'algoritmo su input \( x \) termina in tempo finito e risponde ``sì'', e se \( x \in S \), l'algoritmo su input \( x \) termina in tempo finito e risponde ``no''.
+\end{defbox}
+
+Se invece \( T \) è una teoria \textbf{infinita numerabile}, potremmo usare il \textit{teorema di compattezza} per fare un ragionamento del genere:
+\begin{itemize}
+    \item Sappiamo che \( T \vDash A \iff \exists \ T_0 \overset{fin}{\subseteq} T  \ \ t.c. \ \ T_0 \vDash A\) 
+    \item Indicando con \( Fin(T) \) l'insieme dei sottoinsiemi finiti di \( T \), sappiamo che \( Fin(T) \) è numerabile (in quanto \( T \) lo è). 
+    \item Se potessimo quindi produrre algoritmicamente un'enumerazione di \( Fin(T) \) del tipo \( S_1, S_2, S_3, \dots \), poiché, grazie al teorema di compattezza, sappiamo che \( \exists i \in \mathbb{N} \ \ t.c. \ \ S_i \vDash A\), potremmo seguire questa procedura:
+        \subitem partendo da \( i = 1 \), ci chiediamo se \( S_i \vDash A \). Poiché \( S_i \) è finito, si può rispondere algoritmicamente. Se la risposta è ``sì'', terminiamo la procedura e rispondiamo ``sì''. Altrimenti, ripetiamo con \( i+1 \).
+\end{itemize}
+
+Se l'enumerazione di \( Fin(T) \) si può produrre algoritmicamente, allora tutta la procedura è algoritmica. Notiamo però che, mentre nel caso in cui \( T \vDash A \) sicuramente l'algoritmo terminerà e darà la risposta esatta, nel caso in cui \( T \not\vDash A \), esso non terminerà mai (visto che \( T \) è infinita).
+
+Chiamiamo questo tipo di problema semi-decidibile.
+
+\begin{defbox}{Problema semi-decidibile}{}
+    Dato uno spazio ambiente \( X \) e un problema \( S \subseteq X\), diciamo che \( S \) è \textbf{semi-decidibile} se esiste un algoritmo tale che \( \forall \ x \in X \), se \( x\in S \), l'algoritmo (su input \( x \)) termina e risponde ``sì''; se invece \( x \not\in S \), l'algoritmo (su input \( x \)) continua all'infinito (\textit{diverge}).
+\end{defbox}
+
+\begin{defbox}{Problema computabilmente enumerabile}{}
+    Un insieme infinito per cui esiste una procedura algoritmica di enumerazione di tutti e soli i suoi elementi è detto \textbf{computabilmente enumerabile}.
+\end{defbox}
+
+(Notiamo che \( \neg(\text{numerabile}\to \text{computabilmente enumerabile}) \))
+
+\begin{thmbox}{}{}
+    Se \( T \) è computabilmente enumerabile, allora il problema \( T\vDash A \) è semi-decidibile.
+\end{thmbox}
+
+Notiamo quindi che, se lo spazio \( X \) dei possibili input è computabilmente enumerabile, allora:
+    \begin{itemize}
+        \item ogni problema decidibile è anche semi-decidibile
+        \item un problema è semi-decidibile se e solo se è computabilmente numerabile
+    \end{itemize}
 
 
+Possiamo stabilire delle proprietà di \( T \) che ci garantiscano la decidibilità?
+La risposta è sì.
 
+Consideriamo la procedura introdutta poco fa ed estendiamola in questo modo: 
+\begin{itemize}
+    \item ad ogni passo, controlliamo non solo \( S_i \vDash A \), ma anche \( S_i \vDash \neg A \)
+    \item se \( S_i \vDash A \), terminiamo e rispondiamo ``sì''; se \( S_i \vDash \neg A \), terminiamo e rispondiamo ``no''
+\end{itemize}
+
+Escludiamo le teorie per cui si ha \( T\vDash A \land T \vDash \neg A \), in quanto sono ``\textbf{incoerenti}'' (ed insoddisfacibili).
+
+Ci restano quindi tre casi:
+
+\begin{enumerate}
+    \item \textbf{Caso 1}: \(T \models A\) e \(T \not\models \neg A\): la procedura applicata a \(A\) termina e risponde affermativamente mentre la procedura applicata a \(\neg A\) diverge. Possiamo concludere che \(T \models A\).
+
+    \item \textbf{Caso 2}: \(T \not\models A\) e \(T \models \neg A\): la procedura applicata a \(A\) diverge e la procedura applicata a \(\neg A\) termina e risponde affermativamente. Possiamo comunque concludere che \(T \models \neg A\). Se \(T\) non è insoddisfacibile, non può essere che \(T \models A\). Dunque possiamo concludere e rispondere che \(T \models A\).
+
+    \item \textbf{Caso 3}: \(T \not\models A\) e \(T \not\models \neg A\): La procedura diverge quando viene applicata sia ad \(A\) che a \(\neg A\). Questo caso esiste, ma vogliamo escluderlo.
+\end{enumerate}
+
+\begin{defbox}{Teoria semanticamente completa}{}
+    Una teoria \( T \) è detta \textbf{semanticamente completa} se \( \forall \ A \) nel linguaggio di \( T \), vale esattamente una tra \( T \vDash A \) e \( T \vDash \neg A \).
+\end{defbox}
+
+Da questo possiamo derivare che:
+\begin{thmbox}{}{}
+    Se \( T \) è computabilmente enumerabile e semanticamente completa, allora \( T \vDash A ?\) è decidibile algoritmicamente \( \forall \ A \).
+\end{thmbox}
+
+\vspace{1em}
+
+\begin{gbox}{}{}
+    Notiamo che le proprietà seguenti sono equivalenti:
+    \vspace{-1em}
+    \begin{enumerate}
+        \item \(T\) è semanticamente completa.
+        \item Per ogni formula \(A\), vale \(T \models A \iff T \not\models \neg A\).
+        \item \(T\) è soddisfacibile e per ogni formula \(A\) se \(T \not\models A\) allora \(T \models \neg A\).
+        \item \(T\) ha un unico modello.
+        \item Per ogni formula \(A, B\) vale \(T \models A \lor B\) se e solo se \(T \models A\) oppure \(T \models B\).
+        \item Per ogni formula \(A, B\) vale \(T \not\models A \to B\) se e solo se \(T \models A\) e \(T \models \neg B\).
+    \end{enumerate}
+\end{gbox}
+
+\pagebreak
+
+\section{Calcoli deduttivi formali}
+Una dimostrazione rigorosa è una successione ordinata e finita di asserzioni, ognuna delle quali può essere giustificata richiamandosi a una verità assunta come ipotesi (assioma), o a una regola di ragionamento corretta che permette di ottenerla da altre proposizioni.
+
+La regola che utilizziamo nel nostro sistema di dimostrazioni (``alla Hilbert'') è il \textbf{Modus Ponens}: da \( X \land (X\to Y) \) segue \( Y \).
+
+Lo scriviamo in questo modo:
+    \AxiomC{X}
+    \AxiomC{\( X \to Y \)}
+    \BinaryInfC{Y}
+    \DisplayProof
+
+\begin{defbox}{Dimostrazione}{}
+    Una \textbf{dimostrazione} / deduzione è una \textit{successione finita} \( F_1, \dots, F_k \) di proposizioni t.c., \( \forall \ i \in [k] \):
+    \begin{itemize}
+        \item \( F_i \) è un'istanza di un assioma, oppure
+        \item \( F_i \) si ottiene da due formule precedenti tramite regole di inferenza
+    \end{itemize}
+\end{defbox}
+
+Nel nostro sistema (in cui limitiamo il linguaggio ai connettivi \( \neg \) e \( \to \)), scegliamo come assiomi:
+
+\begin{gbox}{}
+    \begin{enumerate}
+        \item \( X \to (Y\to X) \)
+        \item \( (X \to (Y \to Z)) \to\)
+            \subitem \( ( \ (X \to Y) \to (X\to Z)\ )\)
+            \subitem {\color{gray}(se \( X \) implica \( Y \to Z \), allora \( X\to Y \) implica \( X\to Z \) (una sorta di transitività))}
+        \item \( (\neg Y \to \neg X) \to (X \to Y) \)
+    \end{enumerate}
+\end{gbox}
+
+Abbiamo scelto questo sistema perché vogliamo la completezza rispetto alla conseguenza logica.
+Vogliamo quindi che \( \vDash A \iff A \) è dimostrabile da queste regole di inferenza e ipotesi in \( T \).
+
+\begin{defbox}{Dimostrazione nel calcolo proposizionale}{}
+Una \textbf{dimostrazione} / deduzione di \( A \) da \( T \) nel C.P. è una \textit{successione finita} \( F_1, \dots, F_k \) di proposizioni t.c.:
+\begin{itemize}
+    \item \( F_k = A\)
+    \item  \( \forall \ i \in [k] \):
+        \begin{itemize}
+            \item \( F_i \) è un'istanza di \textbf{assioma}
+            \item \( F_i \in T \)
+            \item \( \exists \ p, q < i \ \ \ t.c. \ \ \) 
+                \AxiomC{\(F_q\)}
+                \AxiomC{\(F_p = F_q \to F_i\)}
+                \BinaryInfC{\(F_i\)}
+                \DisplayProof
+                \subitem (è un'istanza del M.P.)
+        \end{itemize}
+\end{itemize}
+\end{defbox}
+
+\begin{defbox}{Teorema}{}
+    \( A \) è un teorema se:
+    \[ \vdash A \]
+    ovvero \( A \) è dimostrabile a partire ``semplicemente'' dagli assiomi.
+\end{defbox}
+
+\begin{thmbox}{Correttezza}{}
+    \[ \vdash A \implies \vDash A \]
+    \[ T \vdash A \implies T \vDash A \]
+\end{thmbox}
+
+La dimostrazione è semplice: \( \vdash A \) significa che \( A \) è dimostrabile a partire dagli assiomi logici (che sono verità logiche), e il Modus Ponens preserva le verità logiche (discorso facilmente estendibile per \( T \vdash A \implies T \vDash A\)).
+
+    Se scriviamo \( Teor(T) = \{A : T\vdash A\}\), la Correttezza si esprime insiemisticamente in questo modo:
+    \[ Teor(T) \subseteq Cons(T) \]
+ovvero, il nostro sistema permette di derivare formalmente dalle ipotesi di \( T \) solo \textit{conseguenze logiche} di \( T \).
+
+\begin{thmbox}{Teorema di completezza}{}
+    \[ \vdash A \iff \vDash A \]
+    \[ T \vdash A \iff T \vDash A \]
+\end{thmbox}
 
 \end{document}
 
