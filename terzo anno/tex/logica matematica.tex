@@ -822,7 +822,7 @@ Una \textbf{dimostrazione} / deduzione di \( A \) da \( T \) nel C.P. è una \te
     \[ T \vdash A \implies T \vDash A \]
 \end{thmbox}
 
-La dimostrazione è semplice: \( \vdash A \) significa che \( A \) è dimostrabile a partire dagli assiomi logici (che sono verità logiche), e il Modus Ponens preserva le verità logiche (discorso facilmente estendibile per \( T \vdash A \implies T \vDash A\)).
+La dimostrazione è semplice: \( \vdash A \) significa che \( A \) è dimostrabile a partire dagli assiomi logici (che sono verità logiche), e il Modus Ponens preserva le verità logiche (e il discorso è facilmente estendibile per \( T \vdash A \implies T \vDash A\)).
 
     Se scriviamo \( Teor(T) = \{A : T\vdash A\}\), la Correttezza si esprime insiemisticamente in questo modo:
     \[ Teor(T) \subseteq Cons(T) \]
@@ -832,6 +832,32 @@ ovvero, il nostro sistema permette di derivare formalmente dalle ipotesi di \( T
     \[ \vdash A \iff \vDash A \]
     \[ T \vdash A \iff T \vDash A \]
 \end{thmbox}
+
+\begin{gbox}{}
+    \textbf{idea di dimostrazione} (\( T\vDash A \implies T\vdash A \)):
+
+    Dal teorema di compattezza sappiamo che
+    \begin{align*}
+        T\vDash A &\iff \exists \{A_1, \dots, A_n\} \subseteq T \ \ t.c. \ \ A_1, \dots, A_n \vDash A \\
+                  &\iff \vDash (A_1 \to (A_2 \to \dots (A_n \to A)\dots))
+    \end{align*}
+
+    Dimostreremo che tutte le tautologie sono teoremi del calcolo proposizionale, e che quindi 
+    \[\exists \{A_1, \dots, A_n\} \subseteq T \ \ t.c. \ \  \vdash (A_1 \to (A_2 \to \dots (A_n \to A)\dots)) \]
+    Da questo vogliamo ottenere \( T\vdash A \). 
+
+    Lo faremo verificando che \( \vdash (A_1 \to (A_2 \to \dots (A_n \to A)\dots)) \iff  A_1, \dots, A_n \vdash A \).
+
+\end{gbox}
+
+\subsection{Dimostrazione del teorema di completezza}
+Per dimostrare il teorema, ci saranno utili le seguenti proprietà:
+
+\begin{enumerate}
+    \item \( T \vdash A \land T \subseteq S \implies S \vdash A\)
+    \item \( T\vdash A \iff \exists S \overset{fin}{\subseteq} T \ \ t.c. \ \ S \vdash A \)
+    \item \( T \vdash A \ \land \ (\forall  B \in T, \ \  S \vdash B) \implies S \vdash A \)
+\end{enumerate}
 
 \end{document}
 
