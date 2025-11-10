@@ -51,7 +51,7 @@
     \begin{enumerate}[label=\arabic*)]
         \item \( 0 \in \mathbb{N} \)
         \item \( n \in  \mathbb{N} \implies \text{succ}(n) \in \mathbb{N} \)
-        \item \( \not\exists n \in \mathbb{N} \ | \ 0 = \text{succ}(n) \)
+        \item \( \not\exists n \in \mathbb{N} \mid 0 = \text{succ}(n) \)
         \item \( \forall n, m \ \text{succ}(n) = \text{succ}(m) \implies n = m \) \ \  {\color{gray}\small (iniettività)}
         \item \( \forall S \subseteq \mathbb{N} \ \ {\color{gray}(}0 \in S \land (n \in S \implies \text{succ}(n)\in S) \implies S = \mathbb{N}{\color{gray})}\) \ \ {\color{gray}\small (assioma di induzione)}
 
@@ -82,7 +82,7 @@ Possiamo dimostrare che il quinto assioma di Peano è equivalente al principio d
 
 Infatti, ad ogni proprietà corrisponde un sottoinsieme i cui elementi sono esattamente quelli che soddisfano tale proprietà
 
-Prendiamo quindi \( S = \{n \in \mathbb{N} \ | \ P(n) \text{ è vera}\}\).
+Prendiamo quindi \( S = \{n \in \mathbb{N} \mid P(n) \text{ è vera}\}\).
 
 In questo modo, dire \( P(0) \) equivale a dire \( 0 \in S \), e dire \( P(n) \implies P(n+1) \) equivale a dire \( n \in S \implies n+1 \in S \). E, allo stesso modo, dire \( \forall n P(n) \) equivale a dire \( \forall n, n \in S\), ovvero \(S = \mathbb{N} \).
 
@@ -110,7 +110,7 @@ In questo modo, dire \( P(0) \) equivale a dire \( 0 \in S \), e dire \( P(n) \i
 
     Un altro concetto che ci servirà è quello di \textbf{funzione costante} o \textbf{nullaria}. Una funzione nullaria \( f \) è tale che:
     \[
-        f: \mathbb{1} \to A \ | \ f() = a \ \ \ \ a\in A
+        f: \mathbb{1} \to A \mid f() = a \ \ \ \ a\in A
     \]
     (chiaramente, essa è sempre iniettiva).
 
@@ -153,7 +153,7 @@ In questo modo, dire \( P(0) \) equivale a dire \( 0 \in S \), e dire \( P(n) \i
     Un'algebra \( A, \Gamma \) si dice \textbf{induttiva} quando:
     \begin{enumerate}
         \item tutte le \( \gamma_i \in \Gamma\) sono iniettive
-        \item \( \forall i, j \ | \ i \neq j , \ \text{Im}(\gamma_i) \cap \text{Im}(\gamma_j) = \emptyset \), ovvero tutte le \( \gamma_i \) hanno immagini disgiunte
+        \item \( \forall i, j \mid i \neq j , \ \text{Im}(\gamma_i) \cap \text{Im}(\gamma_j) = \emptyset \), ovvero tutte le \( \gamma_i \) hanno immagini disgiunte
         \item \( \forall S\subseteq A \), se \( S \) è chiuso rispetto a tutte le \( \gamma_i \), allora \( S = A \) (ovvero il principio di induzione è rispettato)   
     \end{enumerate}
     \begin{gbox}{terza condizione}
@@ -182,7 +182,7 @@ Per dimostrare che  questa tupla sia un'algebra induttiva, dobbiamo ora verifica
         \subitem • \( \mathbb{0} \) è necessariamente induttiva
         \subitem • succ è induttiva per il secondo assioma di Peano
     \item tutti i costruttori hanno immagini disgiunte:
-        \subitem • grazie al terzo assioma di Peano \((\not\exists n \in \mathbb{N} \ | \ 0 = \text{succ}(n)) \), sappiamo che succ e \( \mathbb{0} \) hanno immagini disgiunte
+        \subitem • grazie al terzo assioma di Peano \((\not\exists n \in \mathbb{N} \mid 0 = \text{succ}(n)) \), sappiamo che succ e \( \mathbb{0} \) hanno immagini disgiunte
     \item principio di induzione:
         \subitem • è verificato dal quinto assioma di Peano (\( 0 \in S\) corrisponde alla chiusura rispetto a \(\mathbb{0} \) e \( n \in \mathbb{N} \implies \text{succ}(n) \in \mathbb{N}\) corrisponde alla chiusura rispetto a succ)
 \end{enumerate}
@@ -192,7 +192,7 @@ Per dimostrare che  questa tupla sia un'algebra induttiva, dobbiamo ora verifica
 \begin{gbox}{alberi binari come algebre induttive}
     L'insieme degli alberi binari finiti \( (\texttt{B-trees}, \text{leaf, branch}) \), dove:
     \begin{itemize}
-        \item \( \texttt{B-trees}=\{t \ | \ t \text{ è una foglia, oppure } t=\langle t_1, t_2 \rangle \text{ con } t_1, t_2 \in \texttt{B-trees}\} \)
+        \item \( \texttt{B-trees}=\{t \mid t \text{ è una foglia, oppure } t=\langle t_1, t_2 \rangle \text{ con } t_1, t_2 \in \texttt{B-trees}\} \)
         \item leaf: \( 1\to \texttt{B-trees} \) \ {\color{gray}(foglia)}
         \item branch: \( \texttt{B-trees} \times  \texttt{B-trees} \to  \texttt{B-trees} : (t_{sx}, t_{dx})\to t\) \ {\color{gray}(costruisce rami in modo che \( t_{sx} \) e \( t_{dx} \) siano i due sottoalberi di \( t \))}
     \end{itemize}
@@ -326,8 +326,9 @@ Per dimostrare che  questa tupla sia un'algebra induttiva, dobbiamo ora verifica
 \end{thmbox}
 
 
-\chapter{Espressioni, linguaggi}
+\chapter{Paradigma funzionale}
 
+\section{Linguaggi}
 Definiamo un \textbf{linguaggio} \( L \) come insieme di stringhe. 
 
 Per descrivere la sintassi di linguaggi formali (la grammatica), usiamo la BNF (Backus-Naur Form), con questa sintassi:
@@ -338,7 +339,7 @@ Per descrivere la sintassi di linguaggi formali (la grammatica), usiamo la BNF (
 \textbf{Esempio}:
 prendiamo come esempio questa grammatica:
 \[
-    M, N ::= 5 \ | \ 7 \ | \ M + N \ | \ M * N
+    M, N ::= 5 \mid 7 \mid M + N \mid M * N
 \]
 
 Le espressioni che seguono questa grammatica, sono del tipo:
@@ -365,7 +366,7 @@ Possiamo però stipulare che sia induttiva. Ci basta infatti considerare \( +, \
 
     Introduciamo il linguaggio \( Exp \), con grammatica:
     \[
-        M, N = k \ | \ x \ | \ M + N \ | \ let \ x = M \ in \ N
+        M, N ::= k \mid x \mid M + N \mid let \ x = M \ in \ N
     \]
     dove:
 
@@ -731,7 +732,7 @@ Introduciamo un nuovo linguaggio, \( Fun \), che estende \( Exp \) con la nozion
 
 La grammatica di \( Fun \) è:
     \[
-        M, N = k \ | \ x \ | \ M + N \ | \ let \ x = M \ in \ N \ | \ fn \ x \implies M \ | \ MN
+        M, N ::= k \mid x \mid M + N \mid let \ x = M \ in \ N \mid fn \ x \implies M \mid MN
     \]
     dove:
     \begin{itemize}
@@ -1126,5 +1127,45 @@ fun due x y = x (x y);
 
     val times = fn u => fn v => (u (fn z => (plus z v)) zero);
 \end{lstlisting}
+
+\chapter{Paradigma imperativo}
+
+\begin{gbox}{}
+    Ci è utile conoscere la differenza tra \textbf{call by reference} e \textbf{call by value}:
+    \begin{itemize}
+        \item call by reference: viene passato alla funzione un riferimento (l'indirizzo) alla variabile originale; qualsiasi modifica interna modifica direttamente il valore originale.
+        \item  call by value: viene passata alla funzione una copia del valore della variabile; qualsiasi modifica interna è fatta solo sulla copia e non influisce sul valore originale.
+    \end{itemize}
+
+
+\end{gbox}
+
+\section{Imp}
+\begin{defbox}{Grammatica del linguaggio Imp}{}
+    \[ 
+        k ::= 0 \mid 1 \mid \dots \mid true \mid false
+    \]
+    \[
+        M, N ::= k \mid x \mid M + N \mid M < N
+    \]
+    \vspace{-2em}
+    \begin{align*}
+        p, q ::= \ &skip \mid p;q \mid if \ M \ then \ p \ else \ q \mid while \ M \ do \ p \mid \\
+                                                                        &var \ x = M \ in \ p \mid x:= M
+    \end{align*}
+    dove:
+    \begin{itemize}
+        \item \( M, \ N \in Exp\) 
+        \item \( p, \ q \in Imp\) 
+        \item \( skip \) è il \textbf{programma che non fa niente}
+        \item \( p;q \) indica che verrà eseguito prima \( p \), e poi \( q \)
+        \item \( if-then-else \) esegue \( p \) se l'espressione \( M \) è vera e \( q \) altrimenti
+        \item \( while \) esegue \( p \) finché \( M \) è vera
+        \item \( var \) rappresenta l'\textbf{inizializzazione} di una nuova variabile all'interno di \( p \) (variabile locale in \( p \))
+        \item \( := \) rappresenta l'\textbf{assegnamento} di un valore ad una variabile già definita
+    \end{itemize}
+\end{defbox}
+
+
 
 \end{document}
