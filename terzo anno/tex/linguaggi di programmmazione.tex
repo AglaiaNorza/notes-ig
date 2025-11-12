@@ -35,6 +35,7 @@
   backgroundcolor=\color{gray!5},
 }
 
+\newcommand{\farrow}{\overset{fin}{\rightharpoonup}}
 
 \begin{document}
 
@@ -105,7 +106,7 @@ In questo modo, dire \( P(0) \) equivale a dire \( 0 \in S \), e dire \( P(n) \i
 
 \section{Algebre, algebre induttive}
 
-\begin{gbox}{nota: insieme unità e funzione nullaria}
+\begin{gbox}{insieme unità e funzione nullaria}
     Ci è utile definire l'\textbf{insieme unità} \( \mathbb{1} = \{*\} \). \( \mathbb{1} \) è un insieme formato da un solo elemento (non ci interessa quale). 
 
     Un altro concetto che ci servirà è quello di \textbf{funzione costante} o \textbf{nullaria}. Una funzione nullaria \( f \) è tale che:
@@ -114,7 +115,7 @@ In questo modo, dire \( P(0) \) equivale a dire \( 0 \in S \), e dire \( P(n) \i
     \]
     (chiaramente, essa è sempre iniettiva).
 
-    \begin{gbox}{nota}
+    \begin{gbox}{}
 
         Una funzione nullaria su un insieme \( A \) può essere vista come un elemento di \( A \) (un qualsiasi insieme \( A \) è isomorfo a all'insieme di funzioni \( \mathbb{1}\to A \) (l'insieme di funzioni \( \mathbb{1}\to A \) ha la stessa cardinalità di \( A \)), il che ci permette di \textbf{trattare gli elementi di un insieme come funzioni}.
 
@@ -130,7 +131,7 @@ In questo modo, dire \( P(0) \) equivale a dire \( 0 \in S \), e dire \( P(n) \i
             \subitem la segnatura dei costruttori è: \( \gamma_i:A^{\alpha_i}\times K_i \to A \).
 
     \end{itemize}
-    \begin{gbox}{nota}
+    \begin{gbox}{}
         Tra le algebre, consideriamo anche le algebre eterogenee, che prendono argomenti da insiemi diversi da \( A \).
     \end{gbox}
 \end{defbox}
@@ -156,10 +157,10 @@ In questo modo, dire \( P(0) \) equivale a dire \( 0 \in S \), e dire \( P(n) \i
         \item \( \forall i, j \mid i \neq j , \ \text{Im}(\gamma_i) \cap \text{Im}(\gamma_j) = \emptyset \), ovvero tutte le \( \gamma_i \) hanno immagini disgiunte
         \item \( \forall S\subseteq A \), se \( S \) è chiuso rispetto a tutte le \( \gamma_i \), allora \( S = A \) (ovvero il principio di induzione è rispettato)   
     \end{enumerate}
-    \begin{gbox}{terza condizione}
+    \begin{gbox}{}
         La terza condizione pone quindi che \( A \) sia la più piccola sotto-algebra di se stessa (ovvero non abbia sotto-algebre diverse da se stessa).
     \end{gbox}       
-    \begin{gbox}{nota}
+    \begin{gbox}{}
         Le tre condizioni garantiscono quindi che:
         \begin{itemize}
             \item ci sia solo un modo per costruire ogni elemento dell'algebra (\textit{i, ii})
@@ -424,7 +425,7 @@ Per farlo, abbiamo bisogno di definire un ambiente all'interno del quale valutar
 
 \begin{defbox}{Ambienti}{}
     Un \textbf{ambiente} è una funzione parziale (funzione non necessariamente definita su tutti gli elementi del dominio) con dominio finito che associa dei valori ad un insieme finito di variabili.
-    \[ E : Var \ \overset{fin}{\rightharpoonup} \ Val  \]
+    \[ E : Var \ \farrow \ Val  \]
 
     Scriviamo gli ambienti come insiemi di coppie. Per esempio, l'ambiente \( E \) in cui \( z \) vale \( 3 \) e \( y \) vale \( 9 \) è indicato con \( \{(z, 3), (y, 9)\} \).
 
@@ -541,7 +542,7 @@ La valutazione di \( N \) in un termine del tipo \( let \ x = \ N \ in \ M \) vi
 \begin{defbox}{Regole della semantica lazy di \(Exp\)}{}
    \begin{itemize}
     \item I termini non valutati subito vengono conservati in un ``ambiente pigro'' - estendiamo quindi \( Env \) in questo modo:
-   \[ Env = Var \overset{fin}{\rightharpoonup} Exp \]
+   \[ Env = Var \farrow Exp \]
    (gli ambienti contengono ora anche i termini non valutati, quindi non possiamo avere come codominio \( Val \))
 
 \item la nuova regola per le variabili è:
@@ -616,14 +617,14 @@ Ciò è causato non dall'approccio valutativo, bensì dallo \textbf{scoping} uti
 Dobbiamo quindi mantenere, oltre alle espressioni rimaste da valutare, anche gli ambienti in cui valutarle.
 
 Per farlo, estendiamo nuovamente \( Env \) in questo modo:
-\[ Env_{LS} = Var \overset{fin}{\rightharpoonup} (Exp \times Env_{LS}) \]
+\[ Env_{LS} = Var \farrow (Exp \times Env_{LS}) \]
 
 
 \begin{defbox}{Regole della semantica lazy statica di \(Exp\)}{}
 
    \begin{itemize}
     \item I termini non valutati subito vengono conservati in un ``ambiente pigro'' - estendiamo quindi \( Env \) in questo modo:
-   \[ Env = Var \overset{fin}{\rightharpoonup} Exp \]
+   \[ Env = Var \farrow Exp \]
    (gli ambienti contengono ora anche i termini non valutati, quindi non possiamo avere come codominio \( Val \))
 
 \item la nuova regola per le variabili è:
@@ -1140,8 +1141,8 @@ fun due x y = x (x y);
 
 \end{gbox}
 
-\section{Imp}
-\begin{defbox}{Grammatica del linguaggio Imp}{}
+\section{\( Imp \): un semplice linguaggio imperativo}
+\begin{defbox}{Grammatica del linguaggio \( Imp \)}{}
     \[ 
         k ::= 0 \mid 1 \mid \dots \mid true \mid false
     \]
@@ -1166,6 +1167,258 @@ fun due x y = x (x y);
     \end{itemize}
 \end{defbox}
 
+Introduciamo il concetto di \textbf{locazioni} per prepararci al linguaggio \textit{All}. Le locazioni, definite dall'insieme \( Loc \), sono le locazioni di memoria, ovvero gli indirizzi dove si trovano i valori {\color{gray}\small (essenzialmente come i puntatori)}.
 
+
+\begin{gbox}[colback=DeepBlueLight, colframe=DeepBlue, colbacktitle=DeepBlue]{Domini semantici}
+    Definiamo \( Env \), l'insieme degli ambienti, in questo modo:
+    \[ Env = Var \farrow Loc \]
+    (un ambiente associa alle variabili, invece dei valori, le loro locazioni di memoria)
+
+    Introduciamo anche un insieme \( Store \) delle memorie:
+    \[ Store = Loc \farrow Val \]
+    che ``estrae'' i valori dalle loro locazioni di memoria.
+
+    Allo stesso modo in cui si possono concatenare ambienti, si possono concatenare anche memorie:
+    \[ (S_1 S_2)(x) = \begin{cases}
+        S_2(x) & \text{se } x\in dom(S_2) \\
+        S_1(x) & \text{altrimenti}
+    \end{cases}
+\]
+\end{gbox}
+
+
+\begin{defbox}[colback=DeepGreenLight, colframe=DeepGreen, colbacktitle=DeepGreen]{Semantiche operazionali}{}
+    \( Imp \) definisce due relazioni di valutazione: 
+    \begin{itemize}
+        \item una per le \textbf{espressioni} \( M \) (che producono valori senza avere side-effects):
+            \[ \overset{M}{\leadsto} \subseteq  Env \times Exp \times Store \times Val \]
+            \[ E \vdash M, S \overset{M}{\leadsto} v \]
+
+        \item e una per i \textbf{programmi} \( p \) (che non producono valori ma cambiano la memoria)
+            \[ \overset{p}{\leadsto} Env \times Imp \times Store \times Store \]
+            \[ E \vdash p, S \overset{p}{\leadsto} S' \]
+    \end{itemize}
+
+    (ometteremo gli indici \( M \) e \( p \) perché deducibili dal contesto)
+\end{defbox}
+
+
+\begin{itemize}
+
+    \item Costante:
+        \begin{prooftree}
+            \AxiomC{$E \vdash k, S \leadsto k$}
+        \end{prooftree}
+
+    \item Variabile:
+        \begin{prooftree}
+            \AxiomC{$E \vdash x, S \leadsto v \quad (se\ E(x)=l\ ed\ S(l)=v)$}
+        \end{prooftree}
+
+    \item Somma:
+        \begin{prooftree}
+            (se\ $v_1 + v_2 = v$)
+            \AxiomC{$E \vdash M, S \leadsto v_1$}
+            \AxiomC{$E \vdash N, S \leadsto v_2$}
+            \BinaryInfC{$E \vdash M + N, S \leadsto v \quad $}
+        \end{prooftree}
+
+    \item Minore (vero):
+        \begin{prooftree}
+            (se\ $v_1 < v_2$)
+            \AxiomC{$E \vdash M, S \leadsto v_1$}
+            \AxiomC{$E \vdash N, S \leadsto v_2$}
+            \BinaryInfC{$E \vdash M < N, S \leadsto true \quad $}
+        \end{prooftree}
+
+    \item Minore (falso):
+        \begin{prooftree}
+            (se\ $v_1 \ge v_2$) \ \
+            \AxiomC{$E \vdash M, S \leadsto v_1$}
+            \AxiomC{$E \vdash N, S \leadsto v_2$}
+            \BinaryInfC{$E \vdash M < N, S \leadsto false \quad $}
+        \end{prooftree}
+
+    \item Skip:
+        \begin{prooftree}
+            \AxiomC{$E \vdash skip, S \leadsto S$}
+        \end{prooftree}
+
+    \item Sequenza:
+        \begin{prooftree}
+            \AxiomC{$E \vdash p, S \leadsto S'$}
+            \AxiomC{$E \vdash q, S' \leadsto S''$}
+            \BinaryInfC{$E \vdash p; q, S \leadsto S''$}
+        \end{prooftree}
+
+    \item If (condizione vera):
+        \begin{prooftree}
+            \AxiomC{$E \vdash M, S \leadsto true$}
+            \AxiomC{$E \vdash p, S \leadsto S'$}
+            \BinaryInfC{$E \vdash if\ M\ then\ p\ else\ q, S \leadsto S'$}
+        \end{prooftree}
+
+    \item If (condizione falsa):
+        \begin{prooftree}
+            \AxiomC{$E \vdash M, S \leadsto false$}
+            \AxiomC{$E \vdash q, S \leadsto S'$}
+            \BinaryInfC{$E \vdash if\ M\ then\ p\ else\ q, S \leadsto S'$}
+        \end{prooftree}
+
+    \item While (condizione vera):
+        \begin{prooftree}
+            \AxiomC{$E \vdash M, S \leadsto true$}
+            \AxiomC{$E \vdash p, S \leadsto S'$}
+            \AxiomC{$E \vdash while\ M\ do\ p, S' \leadsto S''$}
+            \TrinaryInfC{$E \vdash while\ M\ do\ p, S \leadsto S''$}
+        \end{prooftree}
+
+    \item While (condizione falsa):
+        \begin{prooftree}
+            \AxiomC{$E \vdash M, S \leadsto false$}
+            \UnaryInfC{$E \vdash while\ M\ do\ p, S \leadsto S$}
+        \end{prooftree}
+
+    \item Inizializzazione:
+        \begin{prooftree}
+            (con \( l \) nuova) \ \
+            \AxiomC{$E \vdash M, S \leadsto v$}
+            \AxiomC{$E(x,l)\vdash p, S(l,v) \leadsto S'$}
+            \BinaryInfC{$E \vdash var\ x := M\ in\ p, S \leadsto S'$}
+        \end{prooftree}
+
+    \item Assegnamento:
+        \begin{prooftree}
+            se \( l = E(x) \) \ \ 
+            \AxiomC{$E \vdash M, S \leadsto v$}
+            \UnaryInfC{$E \vdash x := M, S \leadsto S(l,v)$} 
+        \end{prooftree}
+
+\end{itemize}
+
+\begin{gbox}{}
+    Notiamo che questa semantica non fa ``garbage collection'' !
+\end{gbox}
+
+\newpage
+
+\section{\( All \): un linguaggio con procedure}
+\( All \) rappresenta il nucleo di un linguaggio ``Algol-like''.
+
+\( All \) estende \( Exp \in Imp \) con un costrutto sintattico per indicizzare array. Inoltre, distingue tra espressioni ``assegnabili'' (\( L-Exp \), ammesse alla sinistra di un assegnamento), e non.
+
+\begin{defbox}{Grammatica del linguaggio \( All \)}{}
+    \[ 
+        k ::= 0 \mid 1 \mid \dots \mid true \mid false
+    \]
+    \[ 
+        V (\in L-Exp) ::= x \mid x[M]
+    \]
+    \[
+        M, N ::= k \mid V \mid M + N \mid M < N
+    \]
+    \vspace{-2em}
+    \begin{align*}
+        p, q ::= \ &skip \mid p;q \mid if \ M \ then \ p \ else \ q \mid while \ M \ do \ p \mid \\
+                   &var \ x = M \ in \ p \mid arr \ x = [M_0, \dots, M_n] \  in \ p \mid V:= M \mid \\
+                   &proc \ y(x) \ is \ p \ in \ q \mid call \ y(M)
+    \end{align*}
+    dove:
+    \begin{itemize}
+        \item \( V\) rappresenta quindi le \( L-Exp \)
+        \item \( M, N \in Exp \)
+        \item \( p, \ q \in Imp\) (programmi)
+        \item \( arr \) dichiara un array \( x \) e gli assegna le espressioni \( M_0, \dots, M_n \) in \( p \)
+        \item \( proc \) dichiara una procedura (funzione) \( y \) con parametro \( x \) in \( p \)
+        \item \( call \) chiama la procedura \( y \) passandole come argomento \( M \)
+    \end{itemize}
+\end{defbox}
+
+Gli array in \( All \) sono associati a sequenze finite e non vuote di locazioni (che indichiamo con \( Loc^+ \) {\small \color{gray}(con $^+$ ``chiusura positiva'' della stella di Kleene, ovvero insieme di stringhe di lunghezza finita sull'alfabeto, esclusa la stringa vuota)})
+
+\begin{gbox}[colback=DeepBlueLight, colframe=DeepBlue, colbacktitle=DeepBlue]{Domini semantici}
+    Definiamo \( Env \), l'insieme degli ambienti, in questo modo:
+    \[ Env = Var \farrow Loc^+ \cup (Var \times All \times Env) \]
+    {\small \color{gray}(array, variabile, corpo della funzione e ambiente in cui valutarla)}
+\end{gbox}
+
+\begin{defbox}[colback=DeepGreenLight, colframe=DeepGreen, colbacktitle=DeepGreen]{Semantiche operazionali}{}
+    \begin{itemize}
+        \item introduciamo una nuova relazione di valutazione per le \textbf{espressioni assegnabili}:
+            \[
+                \overset{V}{\leadsto} \subseteq Env \times L-Exp \times Store \times Loc
+            \]
+        \item oltre a quelle (già esistenti) per le \textbf{espressioni} \( M \):
+            \[ \overset{M}{\leadsto} \subseteq Env \times Exp \times Store \times Val \]
+            \[ E \vdash M, S \overset{M}{\leadsto} v \]
+
+        \item e per i \textbf{programmi} \( p \):             
+            \[ \overset{p}{\leadsto} \subseteq  Env \times Imp \times Store \times Store \]
+            \[ E \vdash p, S \overset{p}{\leadsto} S' \]
+    \end{itemize}
+\end{defbox}
+
+Oltre alle regole già definite in \( Imp \), il linguaggio \( All \) definisce:
+
+
+\begin{itemize}
+    \item Loc 1:
+\begin{prooftree}
+    \AxiomC{$E \vdash x, S \stackrel{l}{\leadsto} l$ \ \  se \( E(x) = l \)}
+\end{prooftree}
+
+\item Loc 2:
+\begin{prooftree}
+    \AxiomC{$E \vdash M, S \stackrel{M}{\leadsto} m$}
+    \RightLabel{($\text{se } E(x) = \langle l_0, \ldots, l_n \rangle \text{ e } 0 \le m \le n$)}
+    \UnaryInfC{$E \vdash x[M], S \stackrel{l}{\leadsto} l_m$}
+\end{prooftree}
+
+\item Ref:
+\begin{prooftree}
+    \AxiomC{$E \vdash V, S \stackrel{l}{\leadsto} l$}
+    \RightLabel{($\text{se } S(l) = v$)}
+    \UnaryInfC{$E \vdash V, S \stackrel{v}{\leadsto} v$}
+\end{prooftree}
+
+\item Assign:
+\begin{prooftree}
+    \AxiomC{$E \vdash M, S \stackrel{M}{\leadsto} v$}
+    \AxiomC{$E \vdash V, S \stackrel{l}{\leadsto} l$}
+    \BinaryInfC{$E \vdash V := M, S \stackrel{p}{\leadsto} S\{(l, v)\}$}
+\end{prooftree}
+
+\item Arr:
+\begin{prooftree}
+    \AxiomC{$E \vdash M_0, S \stackrel{v}{\leadsto} v_0$}
+    \AxiomC{$\ldots$}
+    \AxiomC{$E \vdash M_n, S \stackrel{v}{\leadsto} v_n$}
+    \AxiomC{$E\{(x, \langle l_0, \ldots, l_n \rangle)\} \vdash p, S \{(l_i, v_i)\} \stackrel{v}{\leadsto} S'$}
+    \RightLabel{($*$)}
+    \QuaternaryInfC{$E \vdash \text{arr } x = [M_0, \ldots, M_n] \text{ in } p, S \stackrel{v}{\leadsto} S'$}
+\end{prooftree}
+\begin{center}
+    $(*)$ dove $l_i$ è nuova, per $i = 0 \ldots n$
+\end{center}
+
+\item Proc:
+\begin{prooftree}
+    \AxiomC{$E\{(y, \langle x, p, E \rangle)\} \vdash q, S \stackrel{v}{\leadsto} S'$}
+    \UnaryInfC{$E \vdash \text{proc } y(x) \text{ is } p \text{ in } q, S \stackrel{v}{\leadsto} S'$}
+\end{prooftree}
+
+\item Call by value:
+\begin{prooftree}
+    \AxiomC{$E \vdash M, S \stackrel{M}{\leadsto} v$}
+    \AxiomC{$E'\{(x, l)\} \vdash p, S\{(l, v)\} \stackrel{v}{\leadsto} S'$}
+    \RightLabel{($*$)}
+    \BinaryInfC{$E \vdash \text{call } y(M), S \stackrel{v}{\leadsto} S'$}
+\end{prooftree}
+\begin{center}
+    $(*)$ $\text{se } E(y) = \langle x, p, E' \rangle \text{ e } l \text{ è nuova}$
+\end{center}
+
+\end{itemize}
 
 \end{document}
