@@ -2,8 +2,9 @@
 \documentclass[a4paper,11pt]{report}
 
 \usepackage{./../packages/mainstyle}
-\usepackage{./../packages/newboxes}
 \usepackage{./../packages/titleITA}
+
+\usepackage{./../packages/newnewboxes}
 
 \usepackage{graphicx}
 \usepackage{bussproofs}
@@ -598,7 +599,7 @@ Ciò è causato non dall'approccio valutativo, bensì dallo \textbf{scoping} uti
 
 \section{Scoping}
 
-\begin{defbox}[colframe=BrightGreen, colback=BrightGreenLight, colbacktitle=BrightGreen]{Scoping}{}
+\begin{defbox}{Scoping}{}
     Lo \textbf{scoping} di un linguaggio è l'insieme di regole che determinano la visibilità di una variabile all'interno di un programma (ossia che consentono di associare una variabile a ciascun riferimento {\small \color{gray} (= uso della variabile mediante un identificatore)}).
 \end{defbox}
 
@@ -705,7 +706,7 @@ In \( Exp \) non c'è, invece, differenza tra eager statico e eager dinamico.
 \end{gbox}
 
 
-\begin{gbox}[colframe=DeepTeal, colback=DeepTealLight, colbacktitle=DeepTeal]{lazy statico}
+\begin{gbox}[colback=DeepTealLight]{lazy statico}
     
     \[ \frac{E'\vdash M \leadsto v}{E\vdash x \leadsto v} \ \ \text{se } E(x)=(M, E') \ \ \ [var] \]
 
@@ -764,7 +765,7 @@ Quindi, per esempio:
     \[ MNL \equiv (MN)L \]
 \end{gbox}
 
-\begin{defbox}[colback=DeepGreenLight, colframe=DeepGreen, colbacktitle=DeepGreen]{Semantica eager dinamica di \( Fun \)}{}
+\begin{cdefbox}{DeepGreenLight}{DeepGreen} {Semantica eager dinamica di \( Fun \)}{}
     
 \begin{center}
     [\( fn \) dinamico eager]
@@ -783,12 +784,12 @@ Quindi, per esempio:
 \TrinaryInfC{$E \vdash MN \leadsto v'$ }
 \end{prooftree}
     
-\end{defbox}
+\end{cdefbox}
 
 Esempio:
 \todo{esempio}
 
-\begin{defbox}[colback=DeepGreenLight, colframe=DeepGreen, colbacktitle=DeepGreen]{Semantica eager statica di \( Fun \)}{}
+\begin{cdefbox}{DeepGreenLight}{DeepGreen}{Semantica eager statica di \( Fun \)}{}
     \begin{center}
     [\( fn \) statico eager]
 \end{center}
@@ -806,7 +807,7 @@ Esempio:
 \TrinaryInfC{$E \vdash MN \leadsto v'$ }
 \end{prooftree}
 
-\end{defbox}
+\end{cdefbox}
 
 
 \begin{lemmabox}{Eager dinamico e statico in \( Fun \)}{}
@@ -893,13 +894,13 @@ Si trasforma quindi una funzione che prende due argomenti in una funzione ad un 
 
 \end{defbox}
 
-\begin{gbox}[colback=DeepGreenLight, colframe=DeepGreen, colbacktitle=DeepGreen]{Curryficazione in \( Fun \)}
+\begin{cbox}{DeepGreenLight}{DeepGreen}{Curryficazione in \( Fun \)}
     La curryficazione ci permette di introdurre una notazione contratta del \( fn \):
     \[ [ \ fn \ x y \implies \ ] \equiv [ \ fn \ x \implies ( fn \ y \implies ) \ ]\]
 
     Possiamo così introdurre \textbf{funzioni a più argomenti} all'interno del linguaggio \( Fun \).
 
-\end{gbox}
+\end{cbox}
 
 \begin{lemmabox}{Eager dinamico e statico in \( Fun \)}{}
     (Al contrario di \( Exp \)), si ha che:
@@ -971,11 +972,6 @@ Si trasforma quindi una funzione che prende due argomenti in una funzione ad un 
 
 \end{defbox}
 
-\begin{gbox}{Curryficazione in \( Fun \)}
-    La curryficazione ci permette di introdurre una notazione contratta del \( fn \):
-    \[ [ \ fn \ x y \implies \ ] \equiv [ \ fn \ x \implies ( fn \ y \implies ) \ ]\]
-
-\end{gbox}
 
 \chapter{Lambda calcolo}
 \section{Numeri di Church}
@@ -1170,7 +1166,7 @@ fun due x y = x (x y);
 Introduciamo il concetto di \textbf{locazioni} per prepararci al linguaggio \textit{All}. Le locazioni, definite dall'insieme \( Loc \), sono le locazioni di memoria, ovvero gli indirizzi dove si trovano i valori {\color{gray}\small (essenzialmente come i puntatori)}.
 
 
-\begin{gbox}[colback=DeepBlueLight, colframe=DeepBlue, colbacktitle=DeepBlue]{Domini semantici}
+\begin{cbox}{DeepBlueLight}{DeepBlue} {Domini semantici}
     Definiamo \( Env \), l'insieme degli ambienti, in questo modo:
     \[ Env = Var \farrow Loc \]
     (un ambiente associa alle variabili, invece dei valori, le loro locazioni di memoria)
@@ -1185,10 +1181,10 @@ Introduciamo il concetto di \textbf{locazioni} per prepararci al linguaggio \tex
         S_1(x) & \text{altrimenti}
     \end{cases}
 \]
-\end{gbox}
+\end{cbox}
 
 
-\begin{defbox}[colback=DeepGreenLight, colframe=DeepGreen, colbacktitle=DeepGreen]{Semantiche operazionali}{}
+\begin{cdefbox}{DeepGreenLight}{DeepGreen}{Semantiche operazionali}{}
     \( Imp \) definisce due relazioni di valutazione: 
     \begin{itemize}
         \item una per le \textbf{espressioni} \( M \) (che producono valori senza avere side-effects):
@@ -1201,7 +1197,7 @@ Introduciamo il concetto di \textbf{locazioni} per prepararci al linguaggio \tex
     \end{itemize}
 
     (ometteremo gli indici \( M \) e \( p \) perché deducibili dal contesto)
-\end{defbox}
+\end{cdefbox}
 
 
 \begin{itemize}
@@ -1337,13 +1333,13 @@ Introduciamo il concetto di \textbf{locazioni} per prepararci al linguaggio \tex
 
 Gli array in \( All \) sono associati a sequenze finite e non vuote di locazioni (che indichiamo con \( Loc^+ \) {\small \color{gray}(con $^+$ ``chiusura positiva'' della stella di Kleene, ovvero insieme di stringhe di lunghezza finita sull'alfabeto, esclusa la stringa vuota)})
 
-\begin{gbox}[colback=DeepBlueLight, colframe=DeepBlue, colbacktitle=DeepBlue]{Domini semantici}
+\begin{cbox}{DeepBlueLight}{DeepBlue}{Domini semantici}
     Definiamo \( Env \), l'insieme degli ambienti, in questo modo:
     \[ Env = Var \farrow Loc^+ \cup (Var \times All \times Env) \]
     {\small \color{gray}(array, variabile, corpo della funzione e ambiente in cui valutarla)}
-\end{gbox}
+\end{cbox}
 
-\begin{defbox}[colback=DeepGreenLight, colframe=DeepGreen, colbacktitle=DeepGreen]{Semantiche operazionali}{}
+\begin{cdefbox}{DeepGreenLight}{DeepGreen}{Semantiche operazionali}{}
     \begin{itemize}
         \item introduciamo una nuova relazione di valutazione per le \textbf{espressioni assegnabili}:
             \[
@@ -1357,7 +1353,7 @@ Gli array in \( All \) sono associati a sequenze finite e non vuote di locazioni
             \[ \overset{p}{\leadsto} \subseteq  Env \times Imp \times Store \times Store \]
             \[ E \vdash p, S \overset{p}{\leadsto} S' \]
     \end{itemize}
-\end{defbox}
+\end{cdefbox}
 
 Oltre alle regole già definite in \( Imp \), il linguaggio \( All \) definisce:
 
