@@ -2,8 +2,13 @@
 \documentclass[a4paper,11pt]{report}
 
 \usepackage{./../packages/mainstyle}
-\usepackage{./../packages/newnewboxes}
-\usepackage{./../packages/titleITA}
+\usepackage{./../packages/colors}
+\usepackage{./../packages/frameboxes}
+\usepackage{./../packages/title}
+\usepackage{./../packages/packs}
+\usepackage{./../packages/macros}
+
+\usepackage[italian]{babel}
 
 \usepackage{float}
 \usepackage{enumitem}
@@ -17,11 +22,9 @@
 \setauthoremail{thisisaglaia@gmail.com}
 \setauthorgithub{AglaiaNorza}
 
-\settitlecolor{teal!30}
-
 \begin{document}
 
-\makefrontpage
+\maketitle
 
 \tableofcontents
 
@@ -47,11 +50,11 @@ La logica proposizionale è un linguaggio formale con una semplice struttura sin
 
 Introduciamo anche il concetto di disgiunzione esclusiva o "XOR" (\( \oplus \)), il cui risultato è vero solo se gli operandi sono diversi tra di loro (uno vero e uno falso).
 
-\begin{defbox}{Linguaggio proposizionale}{}
+\begin{defframe}{Linguaggio proposizionale}{}
     Un linguaggio proposizionale è un insieme infinito \( \mathcal{L} \) di simboli detti \textbf{variabili proposizionali}, tipicamente denotato come \( \{p_i : i \in I\} \) {\color{gray} (con \( I \) "insieme di indici")}.
-\end{defbox}
+\end{defframe}
 
-\begin{defbox}{Proposizione}{}
+\begin{defframe}{Proposizione}{}
     Una \textbf{proposizione} in un linguaggio proposizionale è un elemento dell'insieme PROP così definito:
     \begin{enumerate}
         \item tutte le variabili appartengono a PROP
@@ -59,7 +62,7 @@ Introduciamo anche il concetto di disgiunzione esclusiva o "XOR" (\( \oplus \)),
         \item se \( A, B \in \) PROP, allora \( (A \land B), (A \lor B), (A \to B) \in \) PROP
         \item nient'altro appartiene a PROP {\color{gray}(PROP è il più piccolo insieme che contiene le variabili e soddisfa le proprietà di chiusura sui connettivi 1 e 2)}
     \end{enumerate}
-\end{defbox}
+\end{defframe}
 
 Per facilitare la leggibilità delle formule, definiamo le seguenti regole di \textit{precedenza}: \( \neg \) ha precedenza su \( \land, \lor \), e questi ultimi hanno precedenza su \( \to \).
 
@@ -101,9 +104,9 @@ Estendiamo \( \alpha \) ad \( \hat{\alpha} : \text{PROP} \to \{0,1\} \) in quest
 
 \end{itemize}
 
-\begin{gbox}{notazione}
+\begin{gframe}{notazione}
     Utilizzeremo \( \alpha \) al posto di \( \hat{\alpha} \) per comodità di notazione.
-\end{gbox}
+\end{gframe}
 
 Osserviamo che è possibile rappresentare gli assegnamenti in modo compatto utilizzando le \textbf{tavole di verità}, una presentazione tabulare della funzione di assegnamento.
 
@@ -150,20 +153,20 @@ Osserviamo che, data \( A = p_1, p_2, \dots, p_k \) e due assegnamenti \( \alpha
 
 allora necessariamente \( \alpha(A) = \alpha(B) \). 
 
-\begin{gbox}[colframe=PineGreen]{soddisfacibilità}
+\begin{gframe}[colframe=PineGreen]{soddisfacibilità}
     Se per una formula \( A \) e un assegnamento \( \alpha \) si ha \( \alpha (A) = 1 \), si dice che ``\(A \) soddisfa \( \alpha \)'' (o ``\( A \) è vera sotto \( \alpha \)'').
     \begin{itemize}
         \item Se \( A \) ha almeno un assegnamento che la soddisfa, si dice \textbf{soddisfacibile} (\( A \in \texttt{SAT} \)).
         \item Se non esiste un assegnamento che la soddisfa, \( A \) si dice \textbf{insoddisfacibile} (\( A \in \texttt{UNSAT} \)).
         \item Se \( A \) è soddisfatta da tutti i possibili assegnamenti, si dice \textbf{tautologia} (o "verità logica") (\( A \in \texttt{TAUT} \)).
     \end{itemize}
-\end{gbox}
+\end{gframe}
 
 Introduciamo anche alcune regole che 
 
 \section{Conseguenza logica}
 
-\begin{defbox}{Conseguenza logica}{}
+\begin{defframe}{Conseguenza logica}{}
     Sia \( T \) una \textit{teoria}, ossia un insieme  \( \{A_1, \dots, A_n\} \) proposizioni in un dato linguaggio proposizionale, e sia \( A \in \text{PROP}\) .
 
     Diciamo che \( A \) è \textbf{conseguenza logica} di \( T\) se 
@@ -171,7 +174,7 @@ Introduciamo anche alcune regole che
     ovvero se ogni assegnamento che soddisfa \(T\) soddisfa anche \( A_{n+1} \).
 
     Scriviamo in tal caso \(  T \vDash A_{n+1} \), oppure \( A_1, \dots, A_n \vDash A \).
-\end{defbox}
+\end{defframe}
 
 Si ha che:
 \begin{itemize}
@@ -179,7 +182,7 @@ Si ha che:
     \item \( \emptyset \vDash A \) \ o, equivalentemente \ \( \vDash A \iff A\) è una tautologia
 \end{itemize}
 
-\begin{lemmabox}{Equivalenze}{}
+\begin{lemmaframe}{Equivalenze}{}
     \begin{enumerate}
         \item \( T \vDash A \)
         \item \( \vDash (A_1 \land \dots \land A_n) \to A \)
@@ -188,19 +191,19 @@ Si ha che:
 
     sono equivalenti.
 
-\end{lemmabox}
+\end{lemmaframe}
 
 \section{Completezza funzionale}
 \textit{Data una tavola di verità arbitraria con \( n \) argomenti, esiste una proposizione \( A \) che ha esattamente quella tavola di verità?}
 
 Una proposizione \( A \) contenente le \( n \) variabili proposizionali \( a_1, a_2, \dots, a_n \) determina una funzione di \( n \) argomenti \( f: \{0, 1\}^n \to \{0,1\} \) ("\textbf{funzione di verità}"), tale che il valore di \( f_A \) su un argomento \ \( (x_1, x_2, \dots, x_n) \in \{0,1\}^n\) \ sia dato da un arbitrario assegnamento \( \alpha \) tale che \( \alpha(p_k) = x_k\) \ per \ \(k \in [1,n] \).
 
-\begin{thmbox}{Teorema}{}
+\begin{thmframe}{Teorema}{}
     Sia \( f: \{0, 1\}^n \to \{0,1\} \) una funzione di verità. Esiste una proposizione \( A \) con \( n \) variabili proposizionali tale che, per ogni assegnamento \( \alpha \):
     \[ \alpha(A) = f(\alpha(a_1), \alpha(a_2), \dots, \alpha(a_n)) \]
-\end{thmbox}
+\end{thmframe}
 
-\begin{proofbox}[title=dimostrazione]           
+\begin{proofframe}[title=dimostrazione]           
     Si dimostra per induzione su \( n \).
 
     \begin{itemize}
@@ -290,7 +293,7 @@ Una proposizione \( A \) contenente le \( n \) variabili proposizionali \( a_1, 
 
             Quindi si può fare lo stesso ragionamento di sopra, ma per \( A_1 \) e \( f_0 \).
 
-            \begin{gbox}{}
+            \begin{gframe}{}
                 Potremmo anche costruire una funzione \( f \) che rappresenta il comportamento di \( A \):
 
                 \[ f(x_1, x_2, \ldots, x_n) =
@@ -299,41 +302,41 @@ Una proposizione \( A \) contenente le \( n \) variabili proposizionali \( a_1, 
                         f_0(x_2, \ldots, x_n) & \text{se } x_1 = 0.
                     \end{cases}
                 \]
-            \end{gbox}
+            \end{gframe}
 
     \end{itemize}
 
 \end{itemize}
 
-\end{proofbox}
+\end{proofframe}
 
 \section{Forme normali}
 
-\begin{gbox}{notazione}
+\begin{gframe}{notazione}
     Chiamiamo "letterale" una variabile proposizionale o una negazione di una variabile proposizionale
-\end{gbox}
+\end{gframe}
 
 È utile individuare alcune forme normali canoniche.
 
-\begin{defbox}{Forma Normale Disgiuntiva}{}
+\begin{defframe}{Forma Normale Disgiuntiva}{}
     Diciamo che \( A \) è in Forma Normale Disgiuntiva (\textbf{DNF}, \textit{Disjunctive Normal Form}) se \( A \) è una disgiunzione di congiunzioni di letterali, ossia è nella forma seguente:
 
     \[ \bigvee_{i\leq n} \bigwedge_{j\leq m_i} A_{ij} = (A_{1,1} \land \dots \land A_{1, m_1}) \lor \dots \lor (A_{n,1} \land \dots \land A_{n, m_n}) \]
 
-\end{defbox}
+\end{defframe}
 
-\begin{defbox}{Forma Normale Congiuntiva}{}
+\begin{defframe}{Forma Normale Congiuntiva}{}
     Diciamo che \( A \) è in Forma Normale Congiuntiva (\textbf{CNF}, \textit{Conjunctive Normal Form}) se \( A \) è una disgiunzione di congiunzioni di letterali, ossia è nella forma seguente:
 
     \[ \bigwedge_{i\leq n} \bigvee_{j\leq m_i} A_{ij} = (A_{1,1} \lor \dots \lor A_{1, m_1}) \land \dots \land (A_{n,1} \lor \dots \lor A_{n, m_n}) \]
 
-\end{defbox}
+\end{defframe}
 
 \section{Equivalenza Logica}
 
-\begin{cdefbox}{DeepGreenLight}{PineGreen}{Equivalenza logica}{}
+\begin{cdefframe}{DeepGreenLight}{PineGreen}{Equivalenza logica}{}
     Due formule \( A, B \in \text{PROP} \) sono logicamente equivalenti (\( A \equiv B \)) quando, per ogni assegnamento \( \alpha \) si ha \( \alpha(A) = \alpha(B) \).
-\end{cdefbox}
+\end{cdefframe}
 
 
 Introduciamo alcune regole utili per verificare l'equivalenza tra proposizioni.
@@ -419,43 +422,43 @@ Si ha che, per ogni ordine totale stretto \( \prec \) su \(X \), l'assegnamento 
 
 Ovvero, un assegnamento \( \alpha \) soddisfa la teoria \( T_X \) se e solo se l'ordine indotto da \( \alpha \) su \( X \) è un ordine totale.
 
-\begin{gbox}{Colorabilità}
+\begin{gframe}{Colorabilità}
 
-\end{gbox}
+\end{gframe}
 
 \section{Teorema di compattezza}
 
-\begin{defbox}{Monotonia della conseguenza logica}{}
+\begin{defframe}{Monotonia della conseguenza logica}{}
     Si dice che la nozione di conseguenza logica è \textbf{monotona}, ovvero che \[T' \vDash A \land T' \subseteq T \implies T \vDash A\]
     (se \( A_1, A_2, \dots, A_k \vDash A \), allora \( T \vDash A \) per ogni teoria \( T \) contenente \( A_1, A_2, \dots, A_k \))
-\end{defbox}
+\end{defframe}
 
 Nonostante non sembri intuitivamente vero, vale anche il viceversa:
 
-\begin{thmbox}{Teorema di compattezza v.1}{}
+\begin{thmframe}{Teorema di compattezza v.1}{}
     Se \( T \vDash A \), esiste un sottoinsieme finito \( T_0 \) di \( T \) tale che \( T_0 \vDash A \)
-\end{thmbox}
+\end{thmframe}
 
 Introduciamo il concetto di una teoria finitamente soddisfacibile:
 
-\begin{defbox}{\texttt{FINSAT}}{}
+\begin{defframe}{\texttt{FINSAT}}{}
     Una teoria si dice \textbf{finitamente soddisfacibile} (\( \in \texttt{FINSAT} \)) se \textit{ogni} suo sottoinsieme finito è soddisfacibile.
-\end{defbox}
+\end{defframe}
 
 Possiamo quindi introdurre una nuova versione del teorema di compattezza:
 
-\begin{thmbox}{Teorema di compattezza v.2}{}
+\begin{thmframe}{Teorema di compattezza v.2}{}
     \( \texttt{FINSAT}\implies \texttt{SAT} \), ovvero se ogni sottoinsieme di \( T \) è soddisfacibile, anche \( T \) è soddisfacibile.
-\end{thmbox}
+\end{thmframe}
 
-\begin{lemmabox}{Teorema di compattezza v.1 \( \equiv \) v.2}{}
+\begin{lemmaframe}{Teorema di compattezza v.1 \( \equiv \) v.2}{}
     I due punti seguenti (le due versioni del teorema di compattezza) sono equivalenti:
     \begin{enumerate}
         \item \( T \vDash A \iff \exists \ T_0 \overset{fin}{\subseteq} T \ t.c. \  T_0 \vDash A\)
         \item \( T \in \texttt{SAT} \iff T \in \texttt{FINSAT} \)
     \end{enumerate}
 
-    \begin{pbox}{}
+    \begin{pframe}{}
         \begin{itemize}
             \item \textcircled{1} \( \implies \) \textcircled{2}
 
@@ -473,26 +476,26 @@ Possiamo quindi introdurre una nuova versione del teorema di compattezza:
                 Per \textcircled{2}, quindi, \( \exists T_0 \ t.c, \ T_0 \overset{fin}{\subseteq } T \vDash p \land \neg p \), il che va in contraddizione con \( T \in \texttt{FINSAT} \).\qed
         \end{itemize}
 
-    \end{pbox}
+    \end{pframe}
 
-\end{lemmabox}
+\end{lemmaframe}
 
-\begin{thmbox}{Estendibilità di \texttt{SAT}}{}
+\begin{thmframe}{Estendibilità di \texttt{SAT}}{}
     Se \( T \) è soddisfacibile, allora \( T \cup \{A\} \) è soddisfacibile oppure \( T \cup \{\neg A\} \) è soddisfacibile.
 
-    \begin{proofbox}[title=dimostrazione dalle dispense]{}
+    \begin{proofframe}[title=dimostrazione dalle dispense]{}
         Sia \( \alpha \) un assegnamento che soddisfa \( T \). Se \( \alpha(A)=1 \) allora \( T \cup \{A\} \) è soddisfacibile. Se \( \alpha(A) = 0 \),  \( T \cup \{\neg A\} \) è soddisfacibile.
-    \end{proofbox}
-    \begin{proofbox}[title=dimostrazione vista in classe]{}
+    \end{proofframe}
+    \begin{proofframe}[title=dimostrazione vista in classe]{}
         Supponiamo \( T \in \texttt{SAT} \), \ \( T \cup \{A\} \in \texttt{UNSAT}\) \ e \ \( T \cup \{\neg A\} \in \texttt{UNSAT}\). Avremmo entrambi \( T \vDash \{\neg A\}\) e \( T \vDash A \), il che è impossibile se \( T\in \texttt{SAT} \).
-    \end{proofbox}
-\end{thmbox}
+    \end{proofframe}
+\end{thmframe}
 
 Un concetto analogo vale per \texttt{FINSAT}.
 
-\begin{thmbox}{Estendibilità di \texttt{FINSAT}}{}
+\begin{thmframe}{Estendibilità di \texttt{FINSAT}}{}
     Sia \( T \in \texttt{FINSAT} \). Per ogni formula \( A, \  T \cup \{A\} \in \texttt{FINSAT}\)  \ o \( \ T \cup \{\neg A\} \in \texttt{FINSAT}\)
-    \begin{pbox}{}
+    \begin{pframe}{}
         Supponiamo per assurdo che \( T \cup \{A\} \not\in \texttt{FINSAT}\) e \( T \cup \{\neg A\} \not\in \texttt{FINSAT}\).
 
         Vuol dire che esistono \( B \ \overset{fin}{\subseteq} T \cup \{A\}\) \ e \ \( C \ \overset{fin}{\subseteq} T \cup \{\neg A\}\) insoddisfacibili.
@@ -503,15 +506,15 @@ Un concetto analogo vale per \texttt{FINSAT}.
 
         Sia \( \alpha \) un assegnamento che lo soddisfa. Se \( \alpha(A)=1 \), allora soddisfa anche \( B \). Se \( \alpha(A) = 0 \), soddisfa anche \( C \). In entrambi i casi abbiamo una contraddizione.
 
-    \end{pbox}
+    \end{pframe}
 
-\end{thmbox}
+\end{thmframe}
 
 \subsection{Dimostrazione per i linguaggi numerabili}
 
-\begin{gbox}[colframe=DeepGreen, colback=DeepGreenLight]{}
+\begin{gframe}[colframe=DeepGreen, colback=DeepGreenLight]{}
     Sia \( T\) in un linguaggio numerabile. \( T \in \texttt{FINSAT} \implies T\in \texttt{SAT}\).
-\end{gbox}
+\end{gframe}
 
 Supponiamo \( \mathcal{L}=\{p_1, p_2, \dots\}\) numerabile. 
 
@@ -533,9 +536,9 @@ Definiamo una ``catena'' di teorie come segue:
 
 (aggiungiamo quindi proposizioni una alla volta in modo che \( T_i \) resti \texttt{FINSAT})
 
-\begin{gbox}{}
+\begin{gframe}{}
     (la definizione è ben posta per l'estendibilità di \texttt{FINSAT} )
-\end{gbox}
+\end{gframe}
 
 Avremo quindi \( {\color{gray} T = }\ T_0 \subseteq T_1 \subseteq T_2 \subseteq \dots \)
 
@@ -552,11 +555,11 @@ Visto che, per costruzione, \( \forall p_n \) vale \( ( p_n \in T^* \oplus \neg 
     0 & p_n \not\in T^* \\
 \end{cases} \]
 
-\begin{gbox}[colframe=DeepTeal, colback=DeepTealLight]{}
+\begin{gframe}[colframe=DeepTeal, colback=DeepTealLight]{}
     \textbf{Claim}: \( \alpha^*(T) = 1 \)
     
     {\small\color{gray}(avremmo \( T\in \texttt{SAT} \), quindi avremmo finito)}
-\end{gbox}
+\end{gframe}
 
 Dobbiamo quindi dimostrare che \( \forall A \in T, \alpha^*(A) = 1 \).
 
@@ -581,7 +584,7 @@ Ma \( \beta(A) = 1 \) per scelta di \( \beta \), quindi \( \alpha^*(A) = 1 \). V
 
 \subsection{Dimostrazione per i linguaggi arbitrari}
 
-\begin{lemmabox}{Lemma di Zorn}{}
+\begin{lemmaframe}{Lemma di Zorn}{}
     Sia \( X \) un insieme, e \( \leq \ \subseteq X^2 \) una relazione di \textbf{ordine parziale} (riflessiva, antisimmetrica e transitiva) su \( X \). 
     Definiamo, in \( X \), i concetti di:
     \begin{itemize}
@@ -589,7 +592,7 @@ Ma \( \beta(A) = 1 \) per scelta di \( \beta \), quindi \( \alpha^*(A) = 1 \). V
         \item maggiorante = elemento \( x \in X \) t.c. \( \forall y \in C, \ y\leq x \)
     \end{itemize}
     Il \textbf{lemma di Zorn} afferma che, se per ogni catena \( C \) in \( X \) esiste un \textbf{maggiorante} in \( X \), allora esiste un elemento \( m \in X \) \textbf{massimale}.
-\end{lemmabox}
+\end{lemmaframe}
 
 Il Lemma di Zorn è una forma dell'Assioma della Scelta (che, informalmente, afferma che quando viene data una collezione di insiemi non vuoti si può sempre costruire un nuovo insieme ``scegliendo'' un singolo elemento da ciascuno di quelli di partenza).
 
@@ -597,7 +600,7 @@ A noi basta considerare come relazione d'ordine l'inclusione insiemistica \( \su
 
 Usiamo il Lemma di Zorn per dimostrare (il verso non banale de) il Teorema di Compattezza.
 
-\begin{lemmabox}{Lemma di Zorn per famiglie di insiemi}{}
+\begin{lemmaframe}{Lemma di Zorn per famiglie di insiemi}{}
 
 Sia $A$ un insieme e $\mathcal{P}(A)$ il suo insieme delle parti. 
 
@@ -605,12 +608,12 @@ Sia $\mathcal{F} \subseteq \mathcal{P}(A)$ una famiglia di sottinsiemi di $A$.
 
 Se per ogni \textbf{catena} $\mathcal{C}$ in $\mathcal{F}$ (i.e., per ogni famiglia di sottinsiemi di $A$ appartenenti a $\mathcal{F}$ i cui elementi sono due a due confrontabili via $\subseteq$) esiste un \textbf{maggiorante} in $\mathcal{F}$ (ossia un sottinsieme $S$ di $A$ in $\mathcal{F}$ tale che per ogni $S' \in \mathcal{C}$ vale $S' \subseteq S$), allora esiste un sottinsieme \textbf{massimale} $M$ di $A$ in $\mathcal{F}$ (ossia $M \in \mathcal{F}$ tale che per ogni $S \in \mathcal{F}$, se $M \subseteq S$ allora $S = M$).
 
-\begin{gbox}{}
+\begin{gframe}{}
     Si osserva facilmente che se $\mathcal{F}$ contiene l'\textbf{unione} di ogni sua catena allora soddisfa le condizioni di applicabilità del lemma, in quanto l'unione risulta un maggiorante della catena.
 
-\end{gbox}
+\end{gframe}
 
-\end{lemmabox}
+\end{lemmaframe}
 
 Data \( T \in \texttt{FINSAT} \), definiamo \( \mathcal{T} = \{\hat T \mid T \subseteq \hat T \ \land \  \hat T \in \texttt{FINSAT}\} \), la famiglia di teorie \texttt{FINSAT} che estendono \( T \). Sappiamo che \( \mathcal{T}\neq \emptyset \), in quanto contiene almeno \( T \).
 
@@ -673,11 +676,11 @@ Dato il potere espressivo della logica proposizionale, è naturale chiedersi se 
 
 Se \( T = \{A_1, \dots, A_n\} \) è una \textbf{teoria finita}, la risposta è banalmente ``sì'', in quanto sappiamo che \( T\vDash A \iff (A_1 \land \dots \land A_n) \to A \in \texttt{TAUT} \) (il che è facilmente verificabile tramite tavole di verità).
 
-\begin{defbox}{Decidibilità}{}
+\begin{defframe}{Decidibilità}{}
         Dato uno spazio \( X \) di possibili input, chiamiamo un \textit{problema} un qualsiasi sottoinsieme \( S \subseteq X\). 
 
     Diciamo che \( S \) è \textbf{algoritmicamente decidibile} se esiste un algoritmo tale che \( \forall \ x \in X \), se \( x \in S \), l'algoritmo su input \( x \) termina in tempo finito e risponde ``sì'', e se \( x \in S \), l'algoritmo su input \( x \) termina in tempo finito e risponde ``no''.
-\end{defbox}
+\end{defframe}
 
 Se invece \( T \) è una teoria \textbf{infinita numerabile}, potremmo usare il \textit{teorema di compattezza} per fare un ragionamento del genere:
 \begin{itemize}
@@ -691,19 +694,19 @@ Se l'enumerazione di \( Fin(T) \) si può produrre algoritmicamente, allora tutt
 
 Chiamiamo questo tipo di problema semi-decidibile.
 
-\begin{defbox}{Problema semi-decidibile}{}
+\begin{defframe}{Problema semi-decidibile}{}
     Dato uno spazio ambiente \( X \) e un problema \( S \subseteq X\), diciamo che \( S \) è \textbf{semi-decidibile} se esiste un algoritmo tale che \( \forall \ x \in X \), se \( x\in S \), l'algoritmo (su input \( x \)) termina e risponde ``sì''; se invece \( x \not\in S \), l'algoritmo (su input \( x \)) continua all'infinito (\textit{diverge}).
-\end{defbox}
+\end{defframe}
 
-\begin{defbox}{Problema computabilmente enumerabile}{}
+\begin{defframe}{Problema computabilmente enumerabile}{}
     Un insieme infinito per cui esiste una procedura algoritmica di enumerazione di tutti e soli i suoi elementi è detto \textbf{computabilmente enumerabile}.
-\end{defbox}
+\end{defframe}
 
 (Notiamo che \( \neg(\text{numerabile}\to \text{computabilmente enumerabile}) \))
 
-\begin{thmbox}{}{}
+\begin{thmframe}{}{}
     Se \( T \) è computabilmente enumerabile, allora il problema \( T\vDash A \) è semi-decidibile.
-\end{thmbox}
+\end{thmframe}
 
 Notiamo quindi che, se lo spazio \( X \) dei possibili input è computabilmente enumerabile, allora:
     \begin{itemize}
@@ -733,18 +736,18 @@ Ci restano quindi tre casi:
     \item \textbf{Caso 3}: \(T \not\models A\) e \(T \not\models \neg A\): La procedura diverge quando viene applicata sia ad \(A\) che a \(\neg A\). Questo caso esiste, ma vogliamo escluderlo.
 \end{enumerate}
 
-\begin{defbox}{Teoria semanticamente completa}{}
+\begin{defframe}{Teoria semanticamente completa}{}
     Una teoria \( T \) è detta \textbf{semanticamente completa} se \( \forall \ A \) nel linguaggio di \( T \), vale esattamente una tra \( T \vDash A \) e \( T \vDash \neg A \).
-\end{defbox}
+\end{defframe}
 
 Da questo possiamo derivare che:
-\begin{thmbox}{}{}
+\begin{thmframe}{}{}
     Se \( T \) è computabilmente enumerabile e semanticamente completa, allora \( T \vDash A ?\) è decidibile algoritmicamente \( \forall \ A \).
-\end{thmbox}
+\end{thmframe}
 
 \vspace{1em}
 
-\begin{gbox}{}{}
+\begin{gframe}{}{}
     Notiamo che le proprietà seguenti sono equivalenti:
     \vspace{-1em}
     \begin{enumerate}
@@ -755,7 +758,7 @@ Da questo possiamo derivare che:
         \item Per ogni formula \(A, B\) vale \(T \models A \lor B\) se e solo se \(T \models A\) oppure \(T \models B\).
         \item Per ogni formula \(A, B\) vale \(T \not\models A \to B\) se e solo se \(T \models A\) e \(T \models \neg B\).
     \end{enumerate}
-\end{gbox}
+\end{gframe}
 
 \pagebreak
 
@@ -770,17 +773,17 @@ Lo scriviamo in questo modo:
     \BinaryInfC{Y}
     \DisplayProof
 
-\begin{defbox}{Dimostrazione}{}
+\begin{defframe}{Dimostrazione}{}
     Una \textbf{dimostrazione} / deduzione è una \textit{successione finita} \( F_1, \dots, F_k \) di proposizioni t.c., \( \forall \ i \in [k] \):
     \begin{itemize}
         \item \( F_i \) è un'istanza di un assioma, oppure
         \item \( F_i \) si ottiene da due formule precedenti tramite regole di inferenza
     \end{itemize}
-\end{defbox}
+\end{defframe}
 
 Nel nostro sistema (in cui limitiamo il linguaggio ai connettivi \( \neg \) e \( \to \)), scegliamo come assiomi:
 
-\begin{gbox}{}
+\begin{gframe}{}
     \begin{enumerate}
         \item \( X \to (Y\to X) \)
         \item \( (X \to (Y \to Z)) \to\)
@@ -788,12 +791,12 @@ Nel nostro sistema (in cui limitiamo il linguaggio ai connettivi \( \neg \) e \(
             \subitem {\color{gray}(se \( X \) implica \( Y \to Z \), allora \( X\to Y \) implica \( X\to Z \) (una sorta di transitività))}
         \item \( (\neg Y \to \neg X) \to (X \to Y) \)
     \end{enumerate}
-\end{gbox}
+\end{gframe}
 
 Abbiamo scelto questo sistema perché vogliamo la completezza rispetto alla conseguenza logica.
 Vogliamo quindi che \( \vDash A \iff A \) è dimostrabile da queste regole di inferenza e ipotesi in \( T \).
 
-\begin{defbox}{Dimostrazione nel calcolo proposizionale}{}
+\begin{defframe}{Dimostrazione nel calcolo proposizionale}{}
 Una \textbf{dimostrazione} / deduzione di \( A \) da \( T \) nel C.P. è una \textit{successione finita} \( F_1, \dots, F_k \) di proposizioni t.c.:
 \begin{itemize}
     \item \( F_k = A\)
@@ -809,18 +812,18 @@ Una \textbf{dimostrazione} / deduzione di \( A \) da \( T \) nel C.P. è una \te
                 \subitem (è un'istanza del M.P.)
         \end{itemize}
 \end{itemize}
-\end{defbox}
+\end{defframe}
 
-\begin{defbox}{Teorema}{}
+\begin{defframe}{Teorema}{}
     \( A \) è un teorema se:
     \[ \vdash A \]
     ovvero \( A \) è dimostrabile a partire ``semplicemente'' dagli assiomi.
-\end{defbox}
+\end{defframe}
 
-\begin{thmbox}{Correttezza}{}
+\begin{thmframe}{Correttezza}{}
     \[ \vdash A \implies \vDash A \]
     \[ T \vdash A \implies T \vDash A \]
-\end{thmbox}
+\end{thmframe}
 
 La dimostrazione è semplice: \( \vdash A \) significa che \( A \) è dimostrabile a partire dagli assiomi logici (che sono verità logiche), e il Modus Ponens preserva le verità logiche (e il discorso è facilmente estendibile per \( T \vdash A \implies T \vDash A\)).
 
@@ -828,12 +831,12 @@ La dimostrazione è semplice: \( \vdash A \) significa che \( A \) è dimostrabi
     \[ Teor(T) \subseteq Cons(T) \]
 ovvero, il nostro sistema permette di derivare formalmente dalle ipotesi di \( T \) solo \textit{conseguenze logiche} di \( T \).
 
-\begin{thmbox}{Teorema di completezza}{}
+\begin{thmframe}{Teorema di completezza}{}
     \[ \vdash A \iff \vDash A \]
     \[ T \vdash A \iff T \vDash A \]
-\end{thmbox}
+\end{thmframe}
 
-\begin{gbox}{}
+\begin{gframe}{}
     \textbf{idea di dimostrazione} (\( T\vDash A \implies T\vdash A \)):
 
     Dal teorema di compattezza sappiamo che
@@ -848,7 +851,7 @@ ovvero, il nostro sistema permette di derivare formalmente dalle ipotesi di \( T
 
     Lo faremo verificando che \( \vdash (A_1 \to (A_2 \to \dots (A_n \to A)\dots)) \iff  A_1, \dots, A_n \vdash A \).
 
-\end{gbox}
+\end{gframe}
 
 \subsection{Dimostrazione del teorema di completezza}
 Per dimostrare il teorema, ci saranno utili le seguenti proprietà:
