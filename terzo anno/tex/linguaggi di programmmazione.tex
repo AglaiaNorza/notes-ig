@@ -383,7 +383,6 @@ Possiamo però stipulare che sia induttiva. Ci basta infatti considerare \( +, \
 
 \end{defframe}
 
-\vspace{3em}
 esempi:
 \begin{itemize}
     \item \( let \ x = 3 \ in \ x+x+2 \) viene valutata come \( 8 \)
@@ -1383,7 +1382,7 @@ Oltre alle regole già definite in \( Imp \), il linguaggio \( All \) definisce:
 \begin{prooftree}
     \AxiomC{$E \vdash M, S \stackrel{M}{\leadsto} v$}
     \AxiomC{$E \vdash V, S \stackrel{l}{\leadsto} l$}
-    \BinaryInfC{$E \vdash V := M, S \stackrel{p}{\leadsto} S\{(l, v)\}$}
+    \BinaryInfC{$E \vdash V := M, S \stackrel{p}{\leadsto} S(l, v)$}
 \end{prooftree}
 
 \item Arr:
@@ -1391,7 +1390,7 @@ Oltre alle regole già definite in \( Imp \), il linguaggio \( All \) definisce:
     \AxiomC{$E \vdash M_0, S \stackrel{v}{\leadsto} v_0$}
     \AxiomC{$\ldots$}
     \AxiomC{$E \vdash M_n, S \stackrel{v}{\leadsto} v_n$}
-    \AxiomC{$E\{(x, \langle l_0, \ldots, l_n \rangle)\} \vdash p, S \{(l_i, v_i)\} \stackrel{v}{\leadsto} S'$}
+    \AxiomC{$E(x, \langle l_0, \ldots, l_n \rangle) \vdash p, S (l_i, v_i) \stackrel{v}{\leadsto} S'$}
     \RightLabel{($*$)}
     \QuaternaryInfC{$E \vdash \text{arr } x = [M_0, \ldots, M_n] \text{ in } p, S \stackrel{v}{\leadsto} S'$}
 \end{prooftree}
@@ -1401,14 +1400,14 @@ Oltre alle regole già definite in \( Imp \), il linguaggio \( All \) definisce:
 
 \item Proc:
 \begin{prooftree}
-    \AxiomC{$E\{(y, \langle x, p, E \rangle)\} \vdash q, S \stackrel{v}{\leadsto} S'$}
+    \AxiomC{$E(y, \langle x, p, E \rangle) \vdash q, S \stackrel{v}{\leadsto} S'$}
     \UnaryInfC{$E \vdash \text{proc } y(x) \text{ is } p \text{ in } q, S \stackrel{v}{\leadsto} S'$}
 \end{prooftree}
 
 \item Call by value:
 \begin{prooftree}
     \AxiomC{$E \vdash M, S \stackrel{M}{\leadsto} v$}
-    \AxiomC{$E'\{(x, l)\} \vdash p, S\{(l, v)\} \stackrel{v}{\leadsto} S'$}
+    \AxiomC{$E'(x, l) \vdash p, S(l, v) \stackrel{v}{\leadsto} S'$}
     \RightLabel{($*$)}
     \BinaryInfC{$E \vdash \text{call } y(M), S \stackrel{v}{\leadsto} S'$}
 \end{prooftree}
@@ -1417,5 +1416,269 @@ Oltre alle regole già definite in \( Imp \), il linguaggio \( All \) definisce:
 \end{center}
 
 \end{itemize}
+
+\chapter{Correttezza dei programmi}
+
+\section{Correttezza nei linguaggi imperativi}
+
+\subsection{Metodo delle invarianti}
+La correttezza dei programmi viene spesso definita in realzione al contenuto di determinate variabili (per esempio, il contenuto finale di \texttt{result} è \texttt{x+y}). Questo risulta facile da tracciare se il programma consta di sole assegnazioni, ma più difficile se per esempio contiene loops.
+
+Una possibile soluzione a questo problema è l'utilizzo delle \textbf{invarianti}.
+\begin{defframe}{Invariante}{}
+    Un predicato è detto \textbf{invariante} per una sequenza di operazioni quando il esso risulta vero prima e dopo l'esecuzione della sequenza. 
+\end{defframe}
+
+Una \textbf{loop invariant} è un'invariante (quindi una proprietà, un predicato) per cui si può dimostrare che, data per assunta la sua verità prima dell'inizio del loop, essa rimarrà vera al termine di un'iterazione. Se si può dimostrare che è vera prima di entrare nel loop e rimane vera al termine della prima iterazione, si può dedurre che rimarrà vera anche una volta terminato il loop.
+
+{\color{gray}\small (Si tratta di una semplice dimostrazione per induzione: data \( P \) invariante, dobbiamo dimostrare \( Q(n) \) = ``\( P \) rimane vera dopo \( n \) iterazioni''. \( Q(1) \) è il caso base ed è vera per ipotesi; assumiamo per ipotesi induttiva che \( Q(n-1) \) valga. Visto che sappiamo che il contenuto di un'iterazione non cambia la verità di \( P \), possiamo dedurre che anche \( Q(n) \) valga (e quindi che \( Q \) valga \( \forall n \)))}
+
+\subsubsection{Correttezza della moltiplicazione egizia}
+Il papiro di Rhind (\~1650a.C.) descruve l'algoritmo usato dagli antichi egizi per svolgere la moltiplicazione. 
+
+L'algoritmo della moltiplicazione egizia tra \( x \) e \( y \) in questo modo:
+\begin{enumerate}
+    \item Raddoppio \( x \).
+    \item Se \( y \) è pari, lo divido per due; altrimenti, sottraggo uno e lo divido per due.
+    \item Ripeto i passi (1) e (2) fino a ottenere \( y = 1 \)
+    \item Mantengo solo le coppie in cui \( y \) è dispari, e sommo tra loro tutti i valori \( x \) di quelle coppie.
+    \item Il risultato corrisponderà a \( x \times y \).
+\end{enumerate}
+
+Proviamo con \( 45 \times 138 \).
+Moltiplico e divido per due seguendo l'algoritmo:
+\begin{center}
+    \begin{tabular}{r|l}
+        45 & 138 \\
+        90 & 69 \\
+        180 & 34 \\
+        360 & 17 \\
+        720 & 8 \\
+        1440 & 4 \\
+        2880 & 2 \\
+        5760 & 1 \\
+    \end{tabular}
+\end{center}
+
+Mantengo solo le coppie con \( y \) dispari e sommo le \( x \) corrispondenti:
+\begin{center}
+    \begin{tabular}{r|l}
+        90 & 69 \\
+        360 & 17 \\
+        5760 & 1 \\
+    \end{tabular}
+\end{center}
+
+\[ 90 + 360 + 5760 = 6210 = 45 \times 138 \]
+
+Definiamo l'algoritmo sotto forma di codice Java:
+
+\begin{lstlisting}[language=Java]
+public class Aegypt {
+    public static void main(String[] args) {
+        int a = 45;
+        int b = 138;
+        int x = a, y = b, res = 0;
+
+        while (y >= 1) { 
+            if (y % 2 == 0) {
+                x = x + x;
+                y = y/2;
+            }
+            else {
+                res = res + x;
+                y = y - 1;
+            } 
+        } 
+        System.out.println(a + " times " + b + " is " + res);
+    }
+}
+\end{lstlisting}
+
+L'invariante di questo programma è:
+\begin{center}
+    \texttt{y>=0 \&\& a*b = x*y + res}
+\end{center}
+
+Infatti:
+\begin{itemize}
+    \item vale pre-loop: 
+        \subitem abbiamo \texttt{x=a, y=b, res=0}, quindi (sostituendo) \texttt{a*b = a*b + 0} (e \texttt{y=b=45>=0})
+    \item vale anche dopo una prima iterazione; abbiamo due casi:
+        \begin{enumerate}
+            \item \texttt{y\%2 == 0} - entro nell'\texttt{if}:
+                \subitem \texttt{res} non cambia, e, se avevo \texttt{y>=0} prima, sicuramente anche \texttt{y/2 >= 0}
+            \item \texttt{y\%2 != 0} - non entro nell'\texttt{if}:
+                \begin{itemize}
+                    \item il ``caso peggiore'' per \texttt{y} è \texttt{y = 1} (ultima iterazione del loop) - anche in quel caso, \texttt{y = 1 - 1 = 0}, e la proprietà \texttt{y>=0} rimane vera.
+                    \item per \texttt{a*b = x*y + res}, invece: avendo \texttt{y-=1}, stiamo moltiplicando \texttt{x} per un valore più piccolo di 1 (quindi stiamo essenzialmente sottraendo una \texttt{x}); questa sottrazione viene però compensata da \texttt{res += x} (quello che viene tolto da \texttt{x*y} viene riaggiunto a \texttt{res}).
+
+                \end{itemize}
+        \end{enumerate}
+
+\end{itemize}
+
+Abbiamo quindi che \texttt{y>=0 \&\& a*b = x*y + res} vale prima del loop, e dopo una qualsiasi iterazione del loop. Possiamo quindi concludere che è un'invariante per questo programma !
+
+\section{Logica di Hoare}
+(introdotta nel 1969 da C.A.R. Hoare (inventore del quicksort !))
+
+La \textbf{logica di Hoare} è un sistema formale che rientra tra le semantiche assiomatiche e permette di valutare la correttezza di programmi utilizzando formalismi matematici.
+
+\begin{defframe}{Semantica della logica di Hoare}{}
+    \[
+        M, N ::= k \mid x \mid M + N
+    \]  
+    \[
+        A, B ::= true \mid false \mid A \supset B \mid M < N \mid M = N
+    \]    
+    \[
+        p, q ::= skip \mid p;q \mid x := M \supset N \mid if \ B \ then \ p \ else \ q \mid while \ B \ do p 
+    \]
+
+    dove:
+    \begin{itemize}
+        \item \( M, N \) sono \textbf{espressioni numeriche}
+        \item \( A, B \) sono \textbf{espressioni booleane}
+        \item \( p, q\) sono \textbf{programmi}
+        \item introduciamo il simbolo \( \supset \) per indicare l'\textbf{implicazione logica} \( \implies \) (Peano–Russell notation)
+    \end{itemize}
+    (usiamo una versione minimalista delle operazioni booleane - gli altri simboli si possono derivare (per esempio, \( \neg A \equiv A \supset false \)))
+\end{defframe}
+
+\begin{defframe}{Tripla di Hoare}{}
+    Siano \( A \) e \( B \) due espressioni booleane e \( p \) un programma.\\
+    La tripla:
+    \[ \{A\} \ p \ \{B\} \]
+
+    significa ``se \( A \) è soddisfatto prima dell'esecuzione di \( p \), allora \( B \) è soddisfatto dopo la terminazione di \( p \), se questa avviene.''
+
+    {\small \color{gray}(essenzialmente, se eseguo \( p \) in uno ``stato'' che soddisfa \( A \), ottengo uno ``stato'' che soddisfa \( B \).)}
+
+    \( A \) viene chiamata \textit{precondizione}, e \( B \) \textit{postcondizione}.
+
+    \begin{gframe}{}
+        \begin{itemize}
+            \item nota bene ! questa interpretazione della tripla di Hoare si chiama \textbf{correttezza parziale}: la postcondizione vale infatti \textbf{a condizione che \textit{p} termini}.
+        \end{itemize}
+    \end{gframe}
+
+Quindi, definiamo come \textbf{formula} un'espressione che appartiene alla grammatica:
+\[ \varphi ::= \{A\} \ p \ \{B\} \]
+
+\end{defframe}
+
+\begin{cdefframe}{DeepGreenLight}{DeepGreen}{Regole di inferenza generali}
+\begin{itemize}
+    \item regola del \textbf{true}:
+\[
+\AxiomC{}
+\RightLabel{$(true)$}
+\UnaryInfC{$\{P\} \ C \ \{true\}$}
+\DisplayProof
+\]
+
+\item regola del \textbf{false}:
+\[
+\AxiomC{}
+\RightLabel{$(false)$}
+\UnaryInfC{$\{false\} \ C \ \{P\}$}
+\DisplayProof
+\]
+
+    \item regola dello \textbf{strengthening}, ovvero rafforzamento della precondizione:
+
+\[
+\AxiomC{$P \supset Q$}
+\AxiomC{$\{Q\} \ C \ \{R\}$}
+\RightLabel{$(str)$}
+\BinaryInfC{$\{P\} \ C \ \{R\}$}
+\DisplayProof
+\]
+
+    \item regola dello \textbf{weakening}, ovvero indebolimento della postcondizione:
+\[
+\AxiomC{$\{P\} \ C \ \{Q\}$}
+\AxiomC{$Q \supset R$}
+\RightLabel{$(weak)$}
+\BinaryInfC{$\{P\} \ C \ \{R\}$}
+\DisplayProof
+\]
+    \item regola dell'\textbf{and}:
+
+\[
+\AxiomC{$\{P\} \ C \ \{Q_0\}$}
+\AxiomC{$\dots$}
+\AxiomC{$\{P\} \ C \ \{Q_n\}$}
+\RightLabel{$(and)$}
+\TrinaryInfC{$\{P\} \ C \ \{Q_0 \wedge \dots \wedge Q_n\}$}
+\DisplayProof
+\]
+
+    \item regola dell'\textbf{or}:
+\[
+\AxiomC{$\{P_0\} \ C \ \{Q\}$}
+\AxiomC{$\dots$}
+\AxiomC{$\{P_n\} \ C \ \{Q\}$}
+\RightLabel{$(or)$}
+\TrinaryInfC{$\{P_0 \vee \dots \vee P_n\} \ C \ \{Q\}$}
+\DisplayProof
+\]
+
+
+\end{itemize}
+\end{cdefframe}
+
+
+\begin{cdefframe}{BrightGreenLight}{BrightGreen}{Regole di inferenza per i programmi}
+\begin{itemize}
+    \item regola dello \textbf{skip}:
+\[
+\AxiomC{}
+\RightLabel{$(skip)$}
+\UnaryInfC{$\{P\} \ skip \ \{P\}$}
+\DisplayProof
+\]
+
+
+    \item regola dell'\textbf{assign}:
+\[
+\AxiomC{}
+\RightLabel{$(assign)$}
+\UnaryInfC{$\{[E/x]P\} \ x := E \ \{P\}$}
+\DisplayProof
+\]
+
+    \item regola dell'\textbf{if-then-else}:
+
+\[
+\AxiomC{$\{P \wedge Q\} \ C_1 \ \{R\}$}
+\AxiomC{$\{P \wedge \neg Q\} \ C_2 \ \{R\}$}
+\RightLabel{$(if)$}
+\BinaryInfC{$\{P\} \ if \ Q \ then \ C_1 \ else \ C_2 \ \{R\}$}
+\DisplayProof
+\]
+
+    \item regola del \textbf{while}:
+\[
+\AxiomC{$\{P \wedge Q\} \ C \ \{P\}$}
+\RightLabel{$(while)$}
+\UnaryInfC{$\{P\} \ while \ Q \ do \ C \ \{P \wedge \neg Q\}$}
+\DisplayProof
+\]
+
+    \item regola della \textbf{concatenazione}:
+
+\[
+\AxiomC{$\{P\} \ C_1 \ \{Q\}$}
+\AxiomC{$\{Q\} \ C_2 \ \{R\}$}
+\RightLabel{$(comp)$}
+\BinaryInfC{$\{P\} \ C_1 ; C_2 \ \{R\}$}
+\DisplayProof
+\]
+\end{itemize}
+
+\end{cdefframe}
+
 
 \end{document}
