@@ -14,7 +14,16 @@
 \usepackage{enumitem}
 \usepackage{bussproofs}
 
-\newcommand*\xor{\oplus}
+\newcommand{\Ra}{R^{\mathcal{A}}}
+\newcommand{\fa}{f^{\mathcal{A}}}
+\newcommand{\ca}{c^{\mathcal{A}}}
+\newcommand{\mc}[1]{\mathcal{#1}}
+\newcommand{\Aa}{\mathcal{A}}
+\newcommand{\Ll}{\mathcal{L}}
+
+\newcommand{\ass}[2]{%
+    \left( \begin{smallmatrix} #1 \\ #2 \end{smallmatrix} \right)
+}
 
 \setcoursename{Logica Matematica}
 \setcoursebook{tbd}
@@ -862,5 +871,145 @@ Per dimostrare il teorema, ci saranno utili le seguenti proprietà:
     \item \( T \vdash A \ \land \ (\forall  B \in T, \ \  S \vdash B) \implies S \vdash A \)
 \end{enumerate}
 
-\end{document}
+\chapter{Logica Predicativa}
 
+\section{Introduzione}
+
+Abbiamo visto come la logica proposizionale ci permette di modellare alcuni tipi di problemi facilmente. Tuttavia, per altri tipi di problemi è necessario un maggiore potere espressivo.
+
+\begin{defframe}{Struttura relazionale}{}
+Una struttura relazionale è una tupla \( \mathcal{A} = (A, \ R_1, \dots, R_n, \ f_1, \dots, f_n, \ c_1, \dots, c_n) \), dove:
+\begin{itemize}
+    \item \( A \) rappresenta un insieme di elementi (tipicamente non vuoto) (\textit{dominio})
+    \item \(R_1, \dots, R_n \) sono \textit{relazioni} su \( A \) (anche unarie), ossia suoi sottoinsiemi 
+    \item \( f_1, \dots, f_n \) sono \textit{funzioni} su \( A \)
+    \item \( c_1, \dots, c_k \) sono \textit{costanti} su \( A \)
+\end{itemize}
+\end{defframe}
+
+\textbf{Esempio}:
+un esempio di struttura è quella di gruppo.
+
+Un gruppo è definito da un insieme $A$ (di elementi del gruppo), un elemento $e \in A$ (l'elemento neutro) e un'operazione binaria $\circ : A \times A \to A$, che soddisfa le seguenti proprietà:
+\begin{enumerate}
+    \item Per ogni $a \in A$, $a \circ e = e \circ a = a$
+    \item Per ogni $a \in A$ esiste un $b \in A$ tale che $a \circ b = b \circ a = e$
+    \item Per ogni $a, b, c \in A$: $a \circ (b \circ c) = (a \circ b) \circ c$.
+\end{enumerate}
+{\small (Un gruppo è inoltre abeliano se soddisfa: per ogni $a, b \in A$ si ha $a \circ b = b \circ a$.)}
+
+\begin{defframe}{Linguaggio predicativo}{}
+    Un \textbf{linguagggio predicativo} \( \mathcal{L} \) è una collezione (finita o infinita) di simboli di tre tipi:
+    \begin{itemize}
+        \item simboli di \textit{relazioni}, con la loro arietà
+        \item simboli di \textit{funzioni}, con la loro arietà
+        \item simboli di \textit{costanti} (di arietà 0)
+    \end{itemize}
+    
+    Inoltre, assumiamo sempre un insieme numerabile di \textit{variabili} \( v_1, v_2, \dots \)
+\end{defframe}
+
+\textbf{Esempio}: per continuare con l'esempio di sopra, un linguaggio adeguato per la teoria dei ruppi è \( \mathcal{L}_G = \{\cdot, e\} \), dove \( \cdot \) è un simbolo di funzione binaria per l'operazione di gruppo, e \( e \) è una costante per l'elemento neutro.
+
+\begin{gframe}{Nota bene}
+  Nella logica dei predicati, si può quantificare solo sugli \textit{elementi} delle strutture e non sulle strutture stesse (si chiama, per questo, Logica di Primo Ordine o FOL, First-Order Logic). 
+
+  Per quantificare sulle strutture, esiste la Logica di Secondo Ordine (non trattata in questo corso).
+\end{gframe}
+
+
+\begin{defframe}{Termini}{}
+    I \textbf{termini} sono ottenuti partendo dalle variabili e dalle costanti e chiudendo sotto applicazione dei simboli di funzione.
+
+    Un termine che non contiene variabili è un \textbf{termine chiuso}.
+\end{defframe}
+
+Per formulare proposizioni nel linguaggio \( \mathcal{L} \), si usano i seguenti simboli logici:
+\begin{itemize}
+    \item \textbf{connettivi}: \( \land, \lor, \to, \neg \)
+    \item \textbf{quantificatori}:  \( \exists, \forall \)
+    \item il simbolo di \textbf{eguaglianza}:  \( = \)
+\end{itemize}
+
+\vspace{1em}
+
+\begin{defframe}{Formule}{}
+    
+Una \textbf{formula atomica} è una stringa del tipo \( R(t_1, \dots, t_k) \), dove \( R \) è un simbolo di relazione di arità \( k \) e \( t_1, \dots, t_k \) sono termini, oppure una stringa del tipo \( t = s \), dove \( t \) e \( s \) sono termini.
+
+Le \textbf{formule} sono ottenute partendo dalle formule atomiche e chiudendo sotto connettivi proposizionali e quantificatori universali ed esistenziali. 
+\end{defframe}
+
+Nelle formule \( (\forall v)F \) e \((\exists v)F\), \( F \) è detto il \textbf{dominio} (o \textit{scope}) del quantificatore e \( v \) la variabile quantificata. Se \( v \) non occorre in \( F \), possiamo identificare le due formule quantificate con \( F \). 
+
+Un'occorrenza di una variabile \( x \) in una formula \( F \) è \textbf{vincolata} se e solo se:
+\begin{itemize}
+    \item l'occorrenza di \( x \) è la variabile quantificata di un quantificatore, oppure
+    \item l'occorrenza di \( x \) è nel dominio di un quantificatore con variabile quantificata
+\end{itemize}
+
+Tutte le altre occorrenze di \( x \) sono dette \textbf{libere}.
+
+Un \textbf{enunciato} è una formula senza variabili libere.
+
+\begin{defframe}{Termine libero}{}
+    Un termine \( t \) è \textbf{libero per una variabile} \( v \) in una formula \( F \) se nessuna occorrenza libera di \( v \) in \( F \) è nel dominio di un quantificatore \( \forall y \) o \( \exists y \) con \( y \) una variabile in \( t\).
+\end{defframe}
+
+Per esempio, se \( F \) è \( \exists y (x = y + y) \), nessun termine contenente \( y \) è libero per \( x \) in \( F \).
+
+Se \( F \) è una formula e \( x_1, \dots, x_n \) sono variabili distinte, indichiamo con \( F(x_1, \dots, x_n) \) il fatto che le variabili libere di \( F \) sono contenute nell'insieme \( \{x_1, \dots, x_n\} \).
+
+\section{Semantica}
+Vogliamo poter definire il concetto di \textbf{verità logica} nella logica dei predicati (analogo a quello di tautologia nella logica proposizionale). A tale scopo, ci serve definire la nozione di verità di una formula della logica predicativa.
+
+La verità di una formula della logica predicativa dipende dalla scelta dell'ambiente in cui decidiamo di interpretare i simboli del linguaggio. Un tale ambiente è detto \textbf{struttura}.
+
+\begin{defframe}{Struttura per un linguaggio \( \Ll \)}{}
+    Dato un linguaggio \( \Ll\), una \textbf{struttura} (o interpretazione) \(\mathcal{A}\) per il linguaggio \( \Ll \) consiste di:
+    \begin{itemize}
+        \item un insieme \( A \) non vuoto, detto \textbf{dominio}
+        \item per ogni simbolo \( R_i \) di arietà \( d \), una relazione di arietà \( d \) sul dominio \( A \), che denotiamo con \(\Ra_i \) dove \( \Ra_i \subseteq A^d \)
+        \item per ogni simbolo \( f_j \) di arietà \( d \), una funzione a \( d \) argomenti sul dominio \( A \), che denotiamo con \(\fa_i \) dove \( \fa_j : A^d \to A \)
+        \item per ogni \( k \in K \), un elemento di \( A \) che denotiamo con \( \ca_k\)
+    \end{itemize}
+    
+\end{defframe}
+
+Un \textbf{assegnamento} \( \alpha \) in \( \Aa \) è una mappa che associa ad ogni variabile un elemento di \( A \), i.e.:
+\[ \alpha : \{v_n : n \in \N \} \to A\]
+
+Un assegnamento si estende in modo univoco ai termini ponendo:
+\begin{itemize}
+    \item \( \alpha(c) = c^{\Aa} \) 
+    \item \( \alpha(f(t_1, \dots, t_k)) = f^{\Aa}(\alpha(t_1), \dots, \alpha(t_k))\).
+\end{itemize}
+
+\begin{gframe}{}
+    Indichiamo con \( \alpha\ass{x}{a} \) l'assegnamento che differisce da \( \alpha \) solo perché associa l'elemento \( a \) alla variabile \( x \).
+\end{gframe}
+
+\begin{defframe}{Soddisfazione}{}
+    Definiamo la relazione \( \Aa \vDash F[\alpha] \), che significa ``la formula \( F \) è soddisfatta nella struttura \( \Aa \) relativamente all'assegnamento \( \alpha \)''
+
+    La definiamo per induzione sulla complessità di \( F \) (semantica Tarskyana):
+
+    \begin{itemize}
+    \item $\Aa \vDash R(t_1, \dots, t_k)[\alpha]$ se e solo se $(\alpha(t_1), \dots, \alpha(t_k)) \in R^{\Aa}$, dove $t_1, \dots, t_k$ sono termini e $R$ è un simbolo di relazione di varietà $k$.
+    \item $\Aa \vDash (t = s)[\alpha]$ se e solo se $\alpha(t) = \alpha(s)$, dove $t$ e $s$ sono termini.
+    \item $\Aa \vDash \neg G[\alpha]$ se e solo se non vale $\Aa \vDash G[\alpha]$.
+    \item $\Aa \vDash (G \land H)[\alpha]$ se e solo se $\Aa \vDash G[\alpha]$ e $\Aa \vDash H[\alpha]$.
+    \item $\Aa \vDash (G \lor H)[\alpha]$ se e solo se $\Aa \vDash G[\alpha]$ o $\Aa \vDash H[\alpha]$.
+    \item $\Aa \vDash (G \to H)[\alpha]$ se e solo se: se $\Aa \vDash G[\alpha]$ allora $\Aa \vDash H[\alpha]$.
+    \item $\Aa \vDash (\exists x G)[\alpha]$ se e solo se esiste $a \in \Aa$ tale che $\Aa \vDash G[\alpha(x/a)]$.
+    \item $\Aa \vDash (\forall x G)[\alpha]$ se e solo se per ogni $a \in \Aa$ vale $\Aa \vDash G[\alpha(x/a)]$.
+\end{itemize}
+\end{defframe}
+
+\begin{gframe}{Osservazione}
+    Il fatto che valga \( \Aa \vDash F[\alpha] \) dipende solo dai valori di \( \alpha \) sulle variabili libere che appaiono in \( F \). Quindi, come già visto in maniera simile per la logica proposizionale, se \( \alpha \) e \( \beta \) sono due assegnamenti che coincidono sui valori assegnati alle variabili \( x_1, \dots, x_n \), allora \( \Aa \vDash F[\alpha] \iff \Aa \vDash F[\beta]\).
+
+    Da questo segue che, se \( F \) è un \textbf{enunciato}, allora \( \Aa \vDash F[\alpha]\) vale \textbf{per tutti gli assegnamenti o per nessuno}.
+\end{gframe}
+
+\end{document}
