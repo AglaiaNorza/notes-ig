@@ -1012,4 +1012,32 @@ Un assegnamento si estende in modo univoco ai termini ponendo:
     Da questo segue che, se \( F \) è un \textbf{enunciato}, allora \( \Aa \vDash F[\alpha]\) vale \textbf{per tutti gli assegnamenti o per nessuno}.
 \end{gframe}
 
+\begin{defframe}{Soddisfacibilità, Validità}{}
+    Se \( \exists \alpha \ \ t.c. \ \ \Aa \vDash F[\alpha] \), diciamo che \( \alpha \) \textit{soddisfa} un enunciato \( E \) in \( \Aa \). In questo caso, \( E \) è detto \textbf{soddisfacibile} in \( \Aa \).
+
+    Diciamo che una formula \( F \) è \textbf{vera} in una struttura se \textit{è soddisfatta da tutti gli assegnamenti} in quella struttura.
+
+    \begin{gframe}{}
+        Una formula \( F \) è vera in una struttura se e solo se l'enunciato
+        \[ \forall x_1, \dots \forall x_n \ F(x_1, \dots, x_n) \] 
+        (dove \( x_1, \dots, x_n \) sono tutte e sole le variabili libere di \( F \)) è vero nella struttura.
+    \end{gframe}
+
+    Un enunciato \( E \) è \textbf{valido} se è vero in tutte le strutture (ossia se \( \forall \Aa, \ \Aa \vDash E \)). In tal caso, scriviamo \( \vDash E \).
+
+    Dualmente, \( E \) è \textit{insoddisfacibile} se non esiste una struttura in cui è vero.
+\end{defframe}
+
+\section{Teorie}
+
+Dato un linguaggio \( \Ll \), ci interessa introdurre questi insiemi degni di nota:
+\begin{itemize}
+    \item \textbf{Teoria} - una teoria è un insieme \( T \) di enunciati in \( \Ll \)
+    \item \textbf{Modello} - un modello di una teoria è una struttura per \( \Ll \) che \textit{soddisfa tutti gli elementi di \( T \)}.
+        \subitem scriviamo \( \Aa \vDash T \)
+        \subitem e definiamo quindi \( Mod(T)=\{\Aa : \Aa \vDash T\} \)
+    \item 
+\end{itemize}
+
+
 \end{document}
