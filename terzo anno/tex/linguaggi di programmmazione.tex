@@ -1125,6 +1125,23 @@ fun due x y = x (x y);
     val times = fn u => fn v => (u (fn z => (plus z v)) zero);
 \end{lstlisting}
 
+\section{Ricorsione nel paradigma funzionale: combinatore di punto fisso}
+\begin{defframe}{Punto fisso di una funzione}{}
+    Un punto fisso per una funzione \( f: A\to A \) (endofunzione) è un elemento \( x \in A \) t.c. \( f(x) = x \).
+\end{defframe}
+
+\textbf{Esempio 1}: In un anello \( (A, +, \cdot) \), l'elemento neutro della somma \( 0_A \) è un punto fisso per l'operazione di opposto (l'opposto dell'elemento neutro è se stesso).
+
+\textbf{Esempio 2}: 
+
+\begin{defframe}{Combinatore di punto fisso F}{}
+    (``combinatore paradossale Y'' di Haskel Curry)
+    Nel lambda calcolo, definiamo come \textbf{combinatore di punto fisso} la seguente funzione F:
+    
+\end{defframe}
+\todo{fine}
+
+
 \chapter{Paradigma imperativo}
 
 \begin{gframe}{}
@@ -1680,5 +1697,179 @@ Quindi, definiamo come \textbf{formula} un'espressione che appartiene alla gramm
 
 \end{cdefframe}
 
+\subsection{Correttezza della divisione intera}
+
+Il seguente programma calcola la divisione intera di \( x \div y \).
+
+\begin{lstlisting}[language=C]
+b := x;
+a := 0;
+while (b >= y) do
+    b = b-y;
+    a = a+1;
+\end{lstlisting}
+(il resto si trova in \( b \))
+
+Vogliamo trovare la \textbf{tripla di Hoare} per questo programma, e dimostrare la sua correttezza.
+
+Notiamo che una tripla adatta sarebbe:
+\[ \{x \geq 0\} \ p \ \{ay+b=x \ \land \ b\geq 0 \ \land b < y\} \]
+
+(Analizziamola:
+\begin{itemize}
+    \item il programma va in loop quando \( y \leq 0 \leq x \), ma controllare \( y\geq 0 \) non ci interessa perché ne stiamo dimostrando la \textit{correttezza parziale}. Ci basta quindi \( x \geq 0 \), per assicurarci che si entri nel \( while \).
+    \item \( ay + b = x \) indica la corretta esecuzione della divisione
+    \item \( b \geq 0 \) è necessario, in quanto il resto non può essere negativo (non possiamo dividere una o più volte di troppo)
+    \item \( b < y \) ci assicura che la divisione sia finita (che non avremmo potuto dividere una volta in più)
+\end{itemize})
+
+\begin{gframe}{}
+    Notiamo che anche un programma come 
+    \begin{lstlisting}[language=C]
+        a := 0;
+        b := 0;
+        y := 1;
+        x := 0;
+    \end{lstlisting}
+    rispetterebbe la tripla di Hoare (senza però eseguire la divisione intera tra \( x \) e \( y \)).
+    
+    Per impedire una situazione come questa dovremmo usare il simbolo \( ' \) per riferirci, nella postcondizione, ai valori che le variabili avevano ad inizio programma. 
+    \\ La tripla diventerebbe quindi \( ay'+b=x' \land b\geq 0 \land b<y \).
+    (Alternativamente, potremmo far sì che i programmi non possano modificare i valori di input).
+
+    In ogni caso, prenderemo come buona la specifica senza apici.
+\end{gframe}
+
+Passiamo ora a dimostrare la correttezza della tripla tramite le regole di inferenza della logica di Hoare.
+
+Dividiamo il programma in sezioni per semplificarne la dimostrazione.
+
+\begin{itemize}
+    \item \texttt{b := x;}
+\end{itemize}
+
+{\color{gray}
+
+Dobbiamo avere \( b = x \land b\geq 0 \) (per la precondizione della tripla di Hoare).
+
+\begin{prooftree}
+\AxiomC{??}
+\AxiomC{\( b := x \)}
+\AxiomC{\( \{b = x \land b \geq 0\} \)}
+\TrinaryInfC{\( \{x \geq 0\} \ b := x \ \{b = x \land b>= 0\}\)}
+\end{prooftree}
+
+Qual è la più debole precondizione che, dato \( b := x \), ci permette di affermare che sicuramente \( \{ b=x \land b\geq 0 \}\) sarà soddisfatta?
+}
+
+La weakest precondition ci viene data dalla regola dell'\textbf{assign}, \( \{[\sfrac{M}{x}]A\} \ x:= M \ \{A\}\).
+{\color{gray}\small (la precondizione è la postcondizione, in cui si sostituisce \( x \) con \( 
+M \))}
+
+\begin{prooftree}
+    \AxiomC{\( \{ x = x \land x\geq 0 \}\)}
+\AxiomC{\( b := x \)}
+\AxiomC{\( \{b = x \land b \geq 0\} \)}
+\TrinaryInfC{\( \{x \geq 0\} \ b := x \ \{b = x \land b>= 0\}\)}
+\end{prooftree}
+
+Notiamo però che la precondizione della regola dell'assign non corrisponde a quella della tripla di Hoare che stiamo cercando di dimostrare. Ci serve un altro passaggio per determinare la sua correttezza. Usiamo la regola dello \textbf{strengthening} per arrivare dalla premessa che vogliamo dimostrare a quella che abbiamo.
+
+\begin{prooftree}
+    \AxiomC{\( (x\geq 0) \supset (x = x \land x\geq 0) \)}
+    \AxiomC{\( \{ x = x \land x\geq 0 \} \ \ b := x \ \  \{b = x \land b \geq 0\} \)}
+    \BinaryInfC{\( \{x \geq 0\} \ b := x \ \{b = x \land b \geq  0\}\)}
+\end{prooftree}
+
+Non ci serve dimostrare la correttezza dell'implicazione \( (x\geq 0) \supset (x = x \land x\geq 0) \), in quanto presumiamo che nella nostra logica le verità dell'aritmetica (come \( x = x \)) e i teoremi della logica classica (come \( a \land b \supset a \)) siano già dimostrati.
+
+Ci interessa ora continuare la composizione della dimostrazione passando alla prossima sezione del programma, e utilizzando la post-condizione appena dimostrata come pre-condizione.
+
+\begin{itemize}
+    \item \texttt{a := 0}
+\end{itemize}
+
+Usiamo lo stesso ragionamento visto sopra (assign + strengthening).
+
+\begin{prooftree}
+    \AxiomC{\( (b = x \land b \geq 0) \supset (0y + b = y \land b\geq 0) \)}
+    \AxiomC{\( \{ 0y + b = x \land b>= 0  \} \ \ a := 0 \ \ \{ ay + b = x \land b \geq 0 \} \)}
+    \BinaryInfC{\( \{b = x \land b \geq 0\} \ a := 0 \ \{ay + b = x \land b \geq  0\}\)}
+\end{prooftree}
+
+\begin{itemize}
+    \item \texttt{b := x; a := 0;}
+\end{itemize}
+
+Ora dobbiamo mettere insieme le due dimostrazioni. Visto che la pre-condizione della seconda corrisponde alla post-condizione della prima, possiamo usare la regola della \textbf{concatenazione}:
+
+\begin{prooftree}
+    \AxiomC{\( \{x \geq 0\} \ b := x \ \{b = x \land b\geq  0\}\)}
+    \AxiomC{\( \{b = x \land b \geq 0\} \ a := 0 \ \{ay + b = x \land b >= 0\}\)}
+    \BinaryInfC{\( \{x \geq 0\} \ b := x ; \ a := 0 \ \{ay + b = x \land b >= 0\}\)}
+\end{prooftree}
+
+Sappiamo quindi che, prima di entrare nel \( while \), la condizione \( \{ay + b = x \land b >= 0\} \), che da ora in poi chiameremo \( A \), è soddisfatta.
+
+\begin{itemize}
+    \item \texttt{while (b >= y) do b := b-y; a := a+1;}
+\end{itemize}
+
+Dobbiamo quindi applicare la regola del \textbf{while} 
+{\color{gray}
+    \(\left(
+\AxiomC{$\{P \wedge Q\} \ C \ \{P\}$}
+\RightLabel{$(while)$}
+\UnaryInfC{$\{P\} \ while \ Q \ do \ C \ \{P \wedge \neg Q\}$}
+\DisplayProof
+\right)
+\)
+}
+
+La situazione è quindi:
+
+\begin{prooftree}
+    \AxiomC{\( \{A \land b \geq y\} \ \ b:= b-y; \ a:= a+1; \ \ \{A\} \)}
+    \UnaryInfC{\( \{ay + b = x \land b \geq 0\}  \ \ while \ (b \geq y) \ do \ b:= b-y; \ a:=a+1 \ \ \{A \land \neg (b < y)\}\)}
+\end{prooftree}
+
+Per sviluppare la dimostrazione di \( \{A \land b \geq y\} \ \ b:= b-y; \ a:= a+1; \ \ \{A\} \), possiamo usare una strategia analoga a quella vista sopra.
+
+Dobbiamo trovare una ``condizione ponte'' per poter utilizzare la regola della concatenazione. Ci conviene partire dalla destra e applicare la regola dell'assegnamento per trovare la weakest precondition.
+
+Otteniamo quindi: 
+\[ \{(a+1)y + b = x \land b>= 0 \land b < y\}  \ \ a:= a+1; \ \ \{A\} \]
+
+Usiamo la pre-condizione appena trovata come post-condizione per applicare la regola dell'assign su \( b := b-y; \).
+\[ \{(a+1)y + (b-y) = x \land b-y>= 0 \land b < y\}  \ \ b:= b-y; \ \ \{(a+1)y + b = x \land b\geq 0\} \]
+
+Abbiamo in questo modo trovato una condizione che faccia da ``ponte'' tra i due assegnamenti e ci permetta di utilizzare la regola della concatenazione. 
+
+Ma notiamo che, anche in questo caso, la nostra premessa \( \{(a+1)y + (b-y) = x \land b-y>= 0 \land b < y\}  \) non coincide con \( A \land b\geq y\), pre-condizione da cui partiamo per la regola del while. Applichiamo quindi anche in questo caso lo strengthening:
+\[ \{A \land b\geq y\} \supset \{(a+1)y + (b-y) = x \land b-y \geq 0\} \]
+{\color{gray}(ovvero \((ay + b = x \land b \geq y) \supset (ay + b = x \land b-y \geq 0) \), evidentemente vero nell'aritmetica). }
+
+\vspace{1em}
+(Il tutto, in un unico albero di inferenza:
+{\tiny
+\begin{prooftree}
+  \AxiomC{\(\{(a+1)y + b = x \land b \ge 0\}\; a := a+1\; \{ay + b = x \land b \ge 0\}\)}
+  \UnaryInfC{\(\{(a+1)y + b = x \land b \ge 0\}\; a := a+1\; \{A\}\)}
+
+  \AxiomC{\(\{(a+1)y + (b - y) = x \land (b - y) \ge 0\}\; b := b - y\; \{(a+1)y + b = x \land b \ge 0\}\)}
+  \UnaryInfC{\(\{(a+1)y + (b - y) = x \land b - y \ge 0\}\; b := b - y\; \{(a+1)y + b = x \land b \ge 0\}\)}
+
+  \BinaryInfC{\(\{(a+1)y + (b - y) = x \land b - y \ge 0\}\;
+                 b := b - y;\; a := a+1\;
+                 \{A\}\)}
+
+  \UnaryInfC{\(\{ay + b = x \land b \ge y\}\;
+                 b := b - y;\; a := a+1\;
+                 \{A\}\)}
+
+  \UnaryInfC{\(\{A\}\; \textbf{while } (b \ge y) \; \textbf{do}\; b := b - y;\; a := a+1\; \{A \land \neg(b \ge y)\}\)}
+\end{prooftree}
+}
+)
 
 \end{document}
