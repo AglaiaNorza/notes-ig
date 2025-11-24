@@ -38,6 +38,7 @@
 }
 
 \newcommand{\farrow}{\overset{fin}{\rightharpoonup}}
+\newcommand{\brule}{\overset{\beta}{\longrightarrow}}
 
 \begin{document}
 
@@ -1132,14 +1133,47 @@ fun due x y = x (x y);
 
 \textbf{Esempio 1}: In un anello \( (A, +, \cdot) \), l'elemento neutro della somma \( 0_A \) è un punto fisso per l'operazione di opposto (l'opposto dell'elemento neutro è se stesso).
 
-\textbf{Esempio 2}: 
+\textbf{Esempio 2}: data la funzione \texttt{F} definita in questo modo: 
 
-\begin{defframe}{Combinatore di punto fisso F}{}
-    (``combinatore paradossale Y'' di Haskel Curry)
-    Nel lambda calcolo, definiamo come \textbf{combinatore di punto fisso} la seguente funzione F:
+\texttt{F f \(\equiv \) if (n>0) then 1 else n*f(n-1)}
+
+(funzione che prende in input un'altra funzione \texttt{g} e ritorna la funzione \texttt{if (n>0) then 1 else n*g(n-1)})
+{\color{gray}(quindi, se le passiamo in input la funzione ``\texttt{72}'', abbiamo ``\texttt{F 72 \(\equiv \) if (n>0) then 1 else n*72(n-1)}'')}
+
+Qual è il suo punto fisso? Notiamo che è la funzione fattoriale.
+
+Infatti, \texttt{F fact \(\equiv \) if (n>0) then 1 else n*fact(n-1) \( \equiv \) fact} stessa!
+
+\begin{defframe}{Combinatore di punto fisso Y}{}
+    (``combinatore paradossale Y'' di Haskell Curry)
+
+    Definiamo come \textbf{combinatore di punto fisso} una funzione che, data una funzione \( F \), trova il suo punto fisso \( YF \).
+
+    Quindi una funzione per cui si ha che \( F(YF) = F \).
+
+    Nel \textit{lambda calcolo},
+    \[ Y \equiv fn \ F \implies \bigl[ \left(fn \ x \implies F(xx)\right)\left(fn \ x \implies F(xx)\right) \bigr] \]
     
 \end{defframe}
-\todo{fine}
+
+Applichiamo \( Y \) ad una funzione \( F \):
+\begin{align*}
+    YF \equiv& \bigl((fn \ x \implies F(xx)) (Fn \ x \implies F(xx))\bigr) F  \\
+       &\text{sostituiamo il parametro \( F \)} \\
+       \brule& \ (fn \ x \implies F(xx) (fn \ x \implies F(xx)) \\
+        &(\text{notiamo che abbiamo ottenuto nuovamente } YF) \\
+        &\text{sostituiamo il parametro \((fn \ x \implies F(xx))\)} \\
+       \brule& \ F\bigl((fn \ x \implies F(xx) (fn \ x \implies F(xx))\bigr) \\
+       \equiv&\ F(YF)
+  \end{align*}
+
+  Otteniamo quindi che \( YF \equiv F(YF) \).
+
+  Possiamo continuare all'infinito: \( YF = F(YF) = F(F(YF)) = \dots \): abbiamo introdotto la \textbf{ricorsione} nel lambda calcolo.
+
+\begin{thmframe}{Ricorsione nel lambda calcolo}{}
+    Grazie al combinatore di punto fisso \( Y \), possiamo ottenere la ricorsione nel lambda calcolo. Infatti, data una funzione \( F \), l'espressione \( YF \) applica \( F \) ricorsivamente.
+\end{thmframe}
 
 
 \chapter{Paradigma imperativo}
@@ -1867,9 +1901,11 @@ Ma notiamo che, anche in questo caso, la nostra premessa \( \{(a+1)y + (b-y) = x
                  b := b - y;\; a := a+1\;
                  \{A\}\)}
 
-  \UnaryInfC{\(\{A\}\; \textbf{while } (b \ge y) \; \textbf{do}\; b := b - y;\; a := a+1\; \{A \land \neg(b \ge y)\}\)}
+  \UnaryInfC{\(\{A\}\; while \ (b \ge y) \ do \ \ b := b - y;\; a := a+1\; \{A \land \neg(b \ge y)\}\)}
 \end{prooftree}
 }
 )
+\section{Correttezza nei linguaggi funzionali}
+Per dimostrare la correttezza dei programmi funzionali, adottiamo una \textbf{logica equazionale}
 
 \end{document}
