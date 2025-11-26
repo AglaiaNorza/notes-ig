@@ -1036,8 +1036,29 @@ Dato un linguaggio \( \Ll \), ci interessa introdurre questi insiemi degni di no
     \item \textbf{Modello} - un modello di una teoria è una struttura per \( \Ll \) che \textit{soddisfa tutti gli elementi di \( T \)}.
         \subitem scriviamo \( \Aa \vDash T \)
         \subitem e definiamo quindi \( Mod(T)=\{\Aa : \Aa \vDash T\} \)
-    \item 
+        \subitem (nota: una teoria si dice \textit{soddisfacibile} se ha un modello)
+    \item \textbf{Conseguenza logica di una teoria} - \( E \) \ t.c. \(E \) è vero in tutti i modelli di \( T \) (diciamo che \( T \) \textit{implica logicamente} \( E \))
+        \subitem definiamo coerentemente \( Conseq(T) = \{E : T\vDash E\} \)
 \end{itemize}
 
+\begin{gframe}{Esempio: teoria dei gruppi}
+Un esempio è la teoria formata dagli assiomi di gruppo scritti in un linguaggio predicativo\\ \( \Ll_G = \Ll_{\text{Gruppi}}\{\circ, e\} \), dove \( \circ \) è un simbolo di funzione di arietà due ed \( e \) è un simbolo di costante.
+
+Gli assiomi della teoria di gruppo si esprimono con i seguenti enunciati:
+\begin{align*}
+\forall v_1 \forall v_2 \forall v_3 ((v_1 \circ v_2) \circ v_3 &= v_1 \circ (v_2 \circ v_3)). \\
+\forall v_1 ((v_1 \circ e = v_1) &\wedge (e \circ v_1 = v_1)) \\
+\forall v_1 \exists v_2 ((v_1 \circ v_2 = e) &\wedge (v_2 \circ v_1 = e))
+\end{align*}
+che formano la teoria dei gruppi \( T_G \).
+
+I modelli della teoria dei gruppi sono le strutture che chiamiamo gruppi, quindi si ha che \( Mod(T_G)= \) insieme di tutti e soli i gruppi.
+
+Gli enunciati che sono veri in qualunque gruppo formano l'insieme delle conseguenze logiche della teoria \(T_{\text{Gruppi}}\); ossia \(\{E : T_{\text{Gruppi}} \models E\}\). Le proprietà di un singolo gruppo \( G \) formano la ``teoria di \( G \)'' \(\{E : \mathcal{G} \models E\}\).
+
+Si osserva facilmente che la teoria di una singola struttura \(\mathcal{M}\) è sempre completa. D'altra parte, l'insieme delle conseguenze logiche di una teoria $T$ non è necessariamente completo (nel senso di contenere \(E$ o $\neg E\) per ogni possibile enunciato $E$). Per esempio, è facile vedere che le conseguenze degli assiomi di gruppo (ossia la teoria $T_{\text{Gruppi}}$) non è un insieme completo: dato che esistono gruppi abeliani e gruppi non-abeliani e dato che la proprietà di essere abeliano è agevolmente esprimibile nel linguaggio dei gruppi con un enunciato predicativo ($C = \forall v_1 \forall v_2 (v_1 \circ v_2 = v_2 \circ v_1)$), esistono modelli di $T_{\text{Gruppi}}$ che soddisfano $C$ e modelli di $T_{\text{Gruppi}}$ che non soddisfano $C$ (ossia soddisfano $\neg C$). Dunque né $C$ né $\neg C$ sono in $\text{Conseq}(T_{\text{Gruppi}})$ (né l'essere abeliano né l'essere non abeliano sono conseguenze degli assiomi di gruppo). La teoria $T_{\text{Gruppi}}$ è dunque incompleta.
+\end{gframe}
+
+\section{La teoria DLO}
 
 \end{document}
