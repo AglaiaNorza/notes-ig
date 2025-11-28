@@ -13,6 +13,7 @@
 \usepackage{float}
 \usepackage{enumitem}
 \usepackage{bussproofs}
+\usepackage{mdframed}
 
 \newcommand{\Ra}{R^{\mathcal{A}}}
 \newcommand{\fa}{f^{\mathcal{A}}}
@@ -1061,4 +1062,28 @@ Si osserva facilmente che la teoria di una singola struttura \(\mathcal{M}\) è 
 
 \section{La teoria DLO}
 
+\subsection{Numeri razionali}
+Prendiamo la struttura \( (\Q, \leq ) \). Le proprietà di questa struttura si possono esprimere in enunciati predicativi nel linguaggio \( \Ll = \{\leq (x,y)\}\), per il quale, per comodità, usiamo la notazione infissa \( x \leq y \). Aggiungiamo \( x < y \) come abbreviazione di \( (x \leq y) \land \neg(x = y)\). 
+
+Le proprietà di \( Q, \leq \) sono le seguenti:
+
+\begin{mdframed}
+\begin{enumerate}
+    \item (A1 - Riflessività) $\forall x(x \leq x),$
+    \item (A2 - Transitività) $\forall x\forall y\forall z((x \leq y \land y \leq z \to x \leq z),$
+    \item (A3 - Antisimmmetria) $\forall x\forall y((x \leq y \land y \leq x) \to y = x),$
+    \item (A4 - Totalità) $\forall x\forall y(x \leq y \lor x \leq y),$
+    \item (A4 - Illimitato a destra) $\forall x\exists y(x < y),$
+    \item (A5 - Illimitato a sinistra) $\forall x\exists y(y < x),$
+    \item (A6 - Densità) $\forall x\forall y(x < y \to \exists z(x < z \land z < y)).$
+\end{enumerate}
+\end{mdframed}
+
+Chiamiamo questa teoria \textbf{DLO} (\textit{Dense Linear Order}).
+
+\begin{thmframe}{\( Q \) e DLO}{}
+    \( Q \) è l'\textit{unico ordine lineare denso numerabile senza estremi} a meno di isomorfismi.
+\end{thmframe}
+
+Quindi, è corretto dire che ogni struttura \( B, \leq_B \) DLO sia isomorfa a \( \Q, \leq  \)?
 \end{document}
