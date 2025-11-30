@@ -18,12 +18,17 @@
 \newcommand{\Ra}{R^{\mathcal{A}}}
 \newcommand{\fa}{f^{\mathcal{A}}}
 \newcommand{\ca}{c^{\mathcal{A}}}
-\newcommand{\mc}[1]{\mathcal{#1}}
-\newcommand{\Aa}{\mathcal{A}}
-\newcommand{\Ll}{\mathcal{L}}
 
 \newcommand{\ass}[2]{%
     \left( \begin{smallmatrix} #1 \\ #2 \end{smallmatrix} \right)
+}
+
+% usage: \tworowmatrix{a & b & c}{1 & 2 & 3}
+\NewDocumentCommand{\tworowmatrix}{ m m }{
+    \begin{bmatrix}
+        #1 \\
+        #2
+    \end{bmatrix}
 }
 
 \setcoursename{Logica Matematica}
@@ -841,6 +846,8 @@ La dimostrazione è semplice: \( \vdash A \) significa che \( A \) è dimostrabi
     \[ Teor(T) \subseteq Cons(T) \]
 ovvero, il nostro sistema permette di derivare formalmente dalle ipotesi di \( T \) solo \textit{conseguenze logiche} di \( T \).
 
+\section{Teorema di completezza}
+
 \begin{thmframe}{Teorema di completezza}{}
     \[ \vdash A \iff \vDash A \]
     \[ T \vdash A \iff T \vDash A \]
@@ -863,7 +870,7 @@ ovvero, il nostro sistema permette di derivare formalmente dalle ipotesi di \( T
 
 \end{gframe}
 
-\subsection{Dimostrazione del teorema di completezza}
+\subsection{Dimostrazione del teorema di completezza (WIP)}
 Per dimostrare il teorema, ci saranno utili le seguenti proprietà:
 
 \begin{enumerate}
@@ -1055,15 +1062,154 @@ che formano la teoria dei gruppi \( T_G \).
 
 I modelli della teoria dei gruppi sono le strutture che chiamiamo gruppi, quindi si ha che \( Mod(T_G)= \) insieme di tutti e soli i gruppi.
 
-Gli enunciati che sono veri in qualunque gruppo formano l'insieme delle conseguenze logiche della teoria \(T_{\text{Gruppi}}\); ossia \(\{E : T_{\text{Gruppi}} \models E\}\). Le proprietà di un singolo gruppo \( G \) formano la ``teoria di \( G \)'' \(\{E : \mathcal{G} \models E\}\).
+Gli enunciati che sono veri in qualunque gruppo formano l'insieme delle conseguenze logiche della teoria \(T_{\text{Gruppi}}\), ossia \(\{E : T_{\text{Gruppi}} \models E\}\). Le proprietà di un singolo gruppo \( G \) formano la ``teoria di \( G \)'' \(\{E : G \models E\}\).
 
-Si osserva facilmente che la teoria di una singola struttura \(\mathcal{M}\) è sempre completa. D'altra parte, l'insieme delle conseguenze logiche di una teoria $T$ non è necessariamente completo (nel senso di contenere \(E$ o $\neg E\) per ogni possibile enunciato $E$). Per esempio, è facile vedere che le conseguenze degli assiomi di gruppo (ossia la teoria $T_{\text{Gruppi}}$) non è un insieme completo: dato che esistono gruppi abeliani e gruppi non-abeliani e dato che la proprietà di essere abeliano è agevolmente esprimibile nel linguaggio dei gruppi con un enunciato predicativo ($C = \forall v_1 \forall v_2 (v_1 \circ v_2 = v_2 \circ v_1)$), esistono modelli di $T_{\text{Gruppi}}$ che soddisfano $C$ e modelli di $T_{\text{Gruppi}}$ che non soddisfano $C$ (ossia soddisfano $\neg C$). Dunque né $C$ né $\neg C$ sono in $\text{Conseq}(T_{\text{Gruppi}})$ (né l'essere abeliano né l'essere non abeliano sono conseguenze degli assiomi di gruppo). La teoria $T_{\text{Gruppi}}$ è dunque incompleta.
+Si osserva facilmente che la teoria di una singola struttura \(\mathcal{M}\) è sempre completa. 
+
+D'altra parte, l'insieme delle conseguenze logiche di una teoria $T$ non è necessariamente completo (nel senso di contenere \(E$ o $\neg E\) per ogni possibile enunciato $E$). Per esempio, le conseguenze degli assiomi di gruppo (ossia la teoria $T_{\text{Gruppi}}$) non formano un insieme completo: dato che esistono gruppi abeliani e gruppi non-abeliani e dato che la proprietà di essere abeliano è esprimibile nel linguaggio dei gruppi con un enunciato predicativo ($C = \forall v_1 \forall v_2 (v_1 \circ v_2 = v_2 \circ v_1)$), esistono modelli di $T_{\text{Gruppi}}$ che soddisfano $C$ e modelli di $T_{\text{Gruppi}}$ che non soddisfano $C$ (ossia soddisfano $\neg C$). Dunque né $C$ né $\neg C$ sono in $\text{Conseq}(T_{\text{Gruppi}})$ (né l'essere abeliano né l'essere non abeliano sono conseguenze degli assiomi di gruppo). 
+
+La teoria $T_{\text{Gruppi}}$ è dunque incompleta.
 \end{gframe}
+
+\section{Isomorfismi tra strutture}
+Se esiste un isomorfismo tra due strutture \( \Aa \) e \( \Bb \), significa che queste sono ``indistinguibili'', ovvero che hanno le stesse proprietà. È dunque vero che \( \Aa \iso \Bb \implies \Aa \text{ e } \Bb \) soddisfano gli stessi enunciati? La risposta è sì (nel linguaggio per cui sono isomorfe).
+
+\begin{thmframe}{Isomorfismo tra due strutture}{}
+    \( \Aa \iso \Bb \implies \Aa \text{ e } \Bb \) \textbf{soddisfano le stesse formule}.
+
+    Sia \( h \) l'isomorfismo. Si ha quindi \( \forall F(x_1, \dots, x_n), \ \forall (a_1, \dots, a_n) \in A^n \)
+    \[ \Aa \vDash F(x_1, \dots, x_n)[a_1, \dots, a_n] \iff  \Bb \vDash F(x_1, \dots, x_n)[h(a_1), \dots, h(a_n)]\]
+\end{thmframe}
+
+Lo dimostriamo per le formule, che sono una struttura induttiva (così che valga anche per gli enunciati).
+
+\begin{pframe}
+    \begin{itemize}
+        \item \textbf{caso base}:
+            \begin{enumerate}
+                \item \( t_1 \leq t_2 \)
+                    \begin{align*}
+                        \Aa \vDash (x \leq y)[a_1, a_2] &\iff \Bb \vDash (x\leq y)[h(a_1), h(a_2)]\\
+                        (a_1, a_2)\in \leq_A &\iff (h(a_1), h(a_2)) \in \leq_B \\
+                    \text{vero per }& \text{def. di isomorfismo}
+                    \end{align*}
+
+                \item \( t_1 = t_2 \)
+                    \begin{align*}
+                        \Aa \vDash (x = y)[a_1, a_2] &\iff \Bb \vDash (x = y)[h(a_1), h(a_2)]\\
+                        a_1 = a_2 &\iff h(a_1) = h(a_2) \\
+                    \text{vero per }& \text{def. di isomorfismo}
+                    \end{align*}
+
+    \end{enumerate}
+                    \item \textbf{passo induttivo:}
+    Assumiamo che la proprietà valga per le formule \(\phi\) e \(\psi\). 
+
+    Sia \(\vec{a} = (a_1, \ldots, a_n)\) la sequenza degli elementi in \(A\) e \(h(\vec{a}) = (h(a_1), \ldots, h(a_n))\) la sequenza in \(B\).
+
+    \begin{enumerate}
+        \item \textbf{negazione ($\neg$)}:
+        \[ \mathcal{A} \models \neg \phi[\vec{a}] \]
+        \[ \iff \mathcal{A} \not\models \phi[\vec{a}] \quad \text{(def. di } \neg) \]
+        \[ \iff \mathcal{B} \not\models \phi[h(\vec{a})] \quad \text{(ip. ind. su } \phi) \]
+        \[ \iff \mathcal{B} \models \neg \phi[h(\vec{a})] \quad \text{(def. di } \neg) \]
+
+        \item \textbf{congiunzione ($\wedge$)}:
+        \[ \mathcal{A} \models (\phi \wedge \psi)[\vec{a}] \]
+        \[ \iff \mathcal{A} \models \phi[\vec{a}] \text{ e } \mathcal{A} \models \psi[\vec{a}] \quad \text{(def. di } \wedge) \]
+        \[ \iff \mathcal{B} \models \phi[h(\vec{a})] \text{ e } \mathcal{B} \models \psi[h(\vec{a})] \quad \text{(ip. ind. su } \phi \text{ e } \psi) \]
+        \[ \iff \mathcal{B} \models (\phi \wedge \psi)[h(\vec{a})] \quad \text{(def. di } \wedge) \]
+
+        \item \textbf{quantificazione ($\exists$)}:
+        Sia \(\phi\) con variabile libera \(y\) in aggiunta a \(x_1, \ldots, x_n\).
+        \[ \mathcal{A} \models (\exists y \phi)[\vec{a}] \]
+        \[ \iff \exists c \in A \text{ tale che } \mathcal{A} \models \phi[\vec{a}, c] \quad \text{(def. di } \exists) \]
+        \[ \iff \exists c \in A \text{ tale che } \mathcal{B} \models \phi[h(\vec{a}), h(c)] \quad \text{(ip. ind. su } \phi) \]
+        Poiché \(h\) è suriettiva, l'insieme \(\{h(c) \mid c \in A\}\) è uguale all'insieme base \(B\). Posto \(b = h(c)\):
+        \[ \iff \exists b \in B \text{ tale che } \mathcal{B} \models \phi[h(\vec{a}), b] \]
+        \[ \iff \mathcal{B} \models (\exists y \phi)[h(\vec{a})] \quad \text{(def. di } \exists) \]
+        (Il caso per \(\forall\) segue da \(\forall y \phi \equiv \neg \exists y \neg \phi\)).
+            \end{enumerate}
+    \end{itemize} \qed
+\end{pframe}
+
+Passiamo ad un caso ancora più generale. Vogliamo mostrare che un isomorfismo tra due strutture 
+\begin{align*}
+    \Aa &= (A, \{R_i^A\}_{i\in I}, \{f_j^A\}_{j\in J},\{c_k^A\}_{k\in K} ) \\
+    \Bb &= (B, \{R_i^B\}_{i\in I}, \{f_j^B\}_{j\in J},\{c_k^B\}_{k\in K} ) 
+\end{align*}
+preserva \textit{l'intera struttura}.
+
+Quindi
+\begin{align*}
+    \Aa \iso \Bb &\iff \exists h: A \bij B \text{ t.c. } \\
+    \color{gray}\forall i \in I, j \in J &, \color{gray}\ \ \forall (a_1, \dots, a_t)\in A^t \\
+    \forall (a_1, \dots, a_t)\in A^t, \ \ (a_1, \dots, a_t) \in R_i^A &\iff (h(a_1), \dots, h(a_t)) \in R_i^B \\
+    h(f_j^A(a_1, \dots, a_t &)) = f_j^B(h(a_1), \dots, h(a_t))
+\end{align*}
+
+
+Vogliamo dimostrare che, per ogni termine $t$ e ogni assegnazione $\alpha$,
+il valore del termine \(t\) in \(\Aa\) con assegnazione \(\alpha\), quando mappato dall'isomorfismo \(h\), è uguale
+al valore del termine \(t\) in \(\Bb\) con assegnazione \(h(\alpha)\):
+\[ h(t^{\Aa, \alpha}) = t^{\Bb, h(\alpha)} \]
+Si dimostra per induzione sulla struttura del termine \(t\).
+
+\begin{proofframe}
+    
+\begin{enumerate}
+    \item \textbf{Caso 1: $t$ è una variabile ($t = x$)}
+    \begin{align*}
+    h(x^{\Aa, \alpha}) &= h(\alpha(x)) & \text{(per def. di valutazione: } x^{\Aa, \alpha} = \alpha(x)\text{)} \\
+    x^{\Bb, h(\alpha)} &= h(\alpha)(x) & \text{(per def. di valutazione in } \Bb \text{ con assegnazione } h(\alpha)\text{)}
+    \end{align*}
+    Per definizione dell'assegnazione $h(\alpha)$, si ha $h(\alpha)(x) = h(\alpha(x))$.
+    Quindi, l'uguaglianza è soddisfatta:
+    \[ h(x^{\Aa, \alpha}) = h(\alpha(x)) = h(\alpha)(x) = x^{\Bb, h(\alpha)} \]
+
+    \item \textbf{Caso 2: $t$ è una costante ($t = c$)}
+
+        (in questo caso \( \alpha \) non ha impatto - non ci sono assegnazioni) 
+    \begin{align*}
+    h(c^{\Aa, \alpha}) &= h(c^\Aa) & \text{(la valutazione di } c \text{ è l'interpretazione } c^\Aa \text{)} \\
+    &= c^\Bb & \text{(poiché } h \text{ è un isomorfismo, preserva le costanti)} \\
+    c^{\Bb, h(\alpha)} &= c^\Bb & \text{(la valutazione di } c \text{ è l'interpretazione } c^\Bb \text{)}
+    \end{align*}
+    Quindi, l'uguaglianza è soddisfatta:
+    \[ h(c^{\Aa, \alpha}) = c^\Bb = c^{\Bb, h(\alpha)} \]
+
+\item \textbf{Caso 3: $t$ è una funzione ($t = f(t_1, \ldots, t_p)$)}
+\begin{align*}
+h(t^{\Aa, \alpha}) &= h(f(t_1, \ldots, t_p)^{\Aa, \alpha}) \\
+&= h(f^\Aa(t_1^{\Aa, \alpha}, \ldots, t_p^{\Aa, \alpha})) & \text{(def. di valutazione di termine funzione)} \\
+&= f^\Bb(h(t_1^{\Aa, \alpha}), \ldots, h(t_p^{\Aa, \alpha})) & h \text{ isomorfismo, preserva la funzione } f) \\
+&= f^\Bb(t_1^{\Bb, h(\alpha)}, \ldots, t_p^{\Bb, h(\alpha)})\\
+&= f(t_1, \ldots, t_p)^{\Bb, h(\alpha)} & \text{(def. di valutazione di termine funzione in } \Bb) \\
+&= t^{\Bb, h(\alpha)}
+\end{align*}
+
+\end{enumerate}
+La proprietà è dimostrata per tutti i termini. \qed
+\end{proofframe}
+
+
+\begin{corframe}{Equivalenza elementare}
+    Si ha quindi che \( \Aa \iso \Bb \implies \Aa \equiv \Bb \) (``elementarmente equivalenti'')
+
+    ovvero, \( \Aa \) e \( \Bb \) soddisfano gli stessi enunciati.
+
+\end{corframe}
+
+\begin{thmframe}{Equivalenza elementare su domini finiti}{}
+    In generale, non vale \( \Aa \equiv \Bb \implies \Aa \iso \Bb \). Vale però se \( \Aa \) e \( \Bb \) finite e \( \Ll \) ha solo simboli di relazione.
+\end{thmframe}
+
+\todo{dim grafi}
 
 \section{La teoria DLO}
 
 \subsection{Numeri razionali}
-Prendiamo la struttura \( (\Q, \leq ) \). Le proprietà di questa struttura si possono esprimere in enunciati predicativi nel linguaggio \( \Ll = \{\leq (x,y)\}\), per il quale, per comodità, usiamo la notazione infissa \( x \leq y \). Aggiungiamo \( x < y \) come abbreviazione di \( (x \leq y) \land \neg(x = y)\). 
+Prendiamo la struttura \( \Qq = (\Q, \leq ) \). Le proprietà di questa struttura si possono esprimere in enunciati predicativi nel linguaggio \( \Ll = \{\leq (x,y)\}\), per il quale, per comodità, usiamo la notazione infissa \( x \leq y \). Aggiungiamo \( x < y \) come abbreviazione di \( (x \leq y) \land \neg(x = y)\). 
 
 Le proprietà di \( Q, \leq \) sono le seguenti:
 
@@ -1082,8 +1228,252 @@ Le proprietà di \( Q, \leq \) sono le seguenti:
 Chiamiamo questa teoria \textbf{DLO} (\textit{Dense Linear Order}).
 
 \begin{thmframe}{\( Q \) e DLO}{}
-    \( Q \) è l'\textit{unico ordine lineare denso numerabile senza estremi} a meno di isomorfismi.
+    \( \Q \) è l'\textit{unico ordine lineare denso numerabile senza estremi} a meno di isomorfismi.
 \end{thmframe}
 
-Quindi, è corretto dire che ogni struttura \( B, \leq_B \) DLO sia isomorfa a \( \Q, \leq  \)?
+\subsubsection{Isomorfismo: caso numerabile}
+
+\begin{thmframe}{Isomorfismo: caso numerabile}{}
+    Sia \( \Bb = (B, \leq_B) \) una struttura con dominio \( B \) numerabile e \( \leq_B \) un ordine totale denso senza estremi su \( B \). Allora esiste un isomorfismo tra \( \Bb\) e \(\Qq \).
+\end{thmframe}
+
+Vogliamo dimostrare che \textit{ogni struttura} dove \( B \) è numerabile e \( \preceq \) un ordine totale denso senza estremi su \( A \) è isomorfa a \( \Q, \leq  \).
+
+\begin{gframe}{}
+    È naturale definire l'isomorfismo così: \(\Bb \cong \Qq \iff \exists h : \Q \bij B \ \text{ t.c. } \ \forall q, q' \in \Q\)
+    \[ q \leq q' \iff h(q) \leq_B h(q')\]
+    \[ q = q' \iff h(q) = h(q')\]
+\end{gframe}
+
+La dimostrazione usa un metodo chiamato \textit{Back-and-Forth}.
+
+\begin{proofframe}
+    Vogliamo costruire un isomorfismo tra \( \Bb \) e \( \Qq \). 
+    
+    Entrambe hanno un dominio numerabile, quindi fissiamo una enumerazione di \( B \) \( (b_0, b_1, b_2, \dots) \) e una enumerazione di \( \Q \) \( (q_0, q_1, q_2, \dots) \).
+
+    Definiremo ricorsivamente una enumerazione \( p_1, p_2, p_3, \dots \) e una enumerazione \( d_1, d_2, d_3, \dots \) in modo tale che la mappa \( p_i \mapsto d_i \) sia un isomorfismo tra \( \Bb \) e \( \Qq \).
+
+    Per induzione:
+    \begin{itemize}
+        \item Poniamo \( p_0 = b_0 \) e \( d_0 = q_0 \).
+        \item Consideriamo un \( n \) generico e assumiamo che \( p_0, \dots, p_n \) e \( d_0, \dots, d_n \) siano definiti.
+
+            Distinguiamo due casi:
+
+            \begin{enumerate}
+                \item Caso \textbf{pari}: scegliamo un elemento \(p_{n+1}\) in \(B \setminus \{p_0, \dots, p_n\}\) con indice minimo in \(\{b_0, b_1, b_2, \dots\}\). Compariamo questo elemento agli elementi già scelti. 
+
+                    Abbiamo tre casi.
+
+                    \begin{itemize}
+                        \item {\color{gray}(Prima di tutti gli altri elementi)}
+
+                            Per ogni \(m \le n\), \(p_{n+1} < p_m\). In questo caso scelgo un \(q_{n+1}\) in \( \Q\) tale che per ogni \(m \le n\) abbiamo \(d_{n+1} < d_m\). Questo elemento esiste perché \( \Q \) soddisfa gli assiomi che asseriscono la non esistenza di estremi nell'ordine. 
+
+                            {\color{gray}(Scelgo un elemento da \( \Q \) che sia anch'esso prima di tutti gli altri)}
+
+                        \item {\color{gray}(Dopo tutti gli altri elementi)}
+
+                            Per ogni \(m \le n\), \(d_{n+1} > d_m\). In questo caso scelgo un \(q_{n+1}\) in \(\Q \) tale che per ogni \(m \le n\) valga \(d_{n+1} > d_m\). Questo elemento esiste perché \( \Q \) soddisfa l'assioma che esclude l'esistenza di un estremo destro nell'ordine.
+                            
+                            {\color{gray}(Scelgo un elemento da \( \Q \) che sia anch'esso dopo tutti gli altri)}
+
+                        \item {\color{gray}(Da qualche parte nel mezzo)}
+
+                            Nessuno dei primi due casi. Allora esistono \(m_0, m_1 \le n\) tali che \(p_{m_0} < p_{n+1} < p_{m_1}\) e nessun altro elemento di \(\{p_0, p_1, \dots, p_n\}\) è nell'intervallo \([p_{m_0}, d_{m_1}]\). In questo caso scelgo un elemento \(d_{n+1}\) in \(\Q\) tale che \(d_{m_0} < d_{n+1} < d_{m_1}\). Questo elemento esiste perché \(\Q\) soddisfa l'assioma di densità.
+                            
+                            {\color{gray}(Scelgo un elemento da \( \Q \) che sia anch'esso in mezzo agli altri)}
+
+                    \end{itemize}
+
+                \item Caso \textbf{dispari}: procediamo allo stesso modo, ma partendo da un elemento \(q_{n+1} \in \Q \setminus \{q_0, \dots, q_n\}\).
+
+            \end{enumerate}
+
+    \end{itemize}
+
+    Grazie alla separazione in passi pari e dispari (poiché scegliamo sia a partire da \( B \) che da \( \Q\)), non ci saranno ``buchi'' nelle nostre scelte di elementi. 
+\end{proofframe}
+
+Notiamo che nella dimostrazione non servono proprietà di \( \Q \) se non quelle di DLO (e l'ipotesi di numerabilità del dominio). Il teorema si può quindi generalizzare.
+
+\begin{thmframe}{Teorema di isomorfismo di Cantor}{}
+        \label{thm:Cantor}
+    Siano \( \Aa = (A, \leq_A) \) e \( \Bb = (B, \leq_B) \) t.c. \( A, B \) sono entrambi numerabili e \( \Aa \vDash \text{DLO} \) e \( \Bb \vDash \text{DLO} \). Allora, \( \Aa \iso \Bb \).
+\end{thmframe}
+
+
+\section{DLO: caso generale}
+Ci chiediamo: data una struttura \( \Dd = (D, \leq_D) \vDash \text{DLO}\) con \( D \) più che numerabile, \( \Dd \isit{\equiv} \Qq \) - ovvero, per esempio, esiste un enunciato nel linguaggio degli ordini vero in \( \Q \) e falso in \( \R \)? (Se potessimo scrivere la completezza di \( \R \) in lingaggio degli ordini, allora questo sarebbe sicuramente vero (in quanto \(\Q\) non è completo) - ma non è possibile farlo).
+
+Vogliamo quindi individuare un \textbf{criterio sufficiente} a concludere \( \Qq \equiv \Rr\).
+
+\subsection{Sottostrutture, proprietà del testimone}
+
+Introduciamo come prima cosa il concetto di sottostruttura:
+
+\begin{defframe}{Sottostruttura}{}
+    Date due strutture \( \Aa \) e \( \Bb \), \( \Aa \) si dice \textbf{sottostruttura} di \( \Bb \) (\( \Aa \subseteq  \Bb \)) se e solo se si ha:
+    \begin{itemize}
+        \item \( A \subseteq B \)
+        \item per ogni simbolo \( R \) di relazione, \( R^\Aa = R^\Bb \cap A^n \) (dove \( n \) arità di \( R \))
+        \item per ogni simbolo di costante, \( c^\Bb \in A \) e \( c^\Aa = c^\Bb \)
+        \item per ogni simbolo di funzione, \(f^\Aa = f^\Bb \vert_A^n \) (con \( n \) arietà di \( f \))
+    \end{itemize}
+
+\end{defframe}
+
+
+\begin{defframe}{Sottostruttura elementare}{}
+    Date due strutture \( \Aa \) e \( \Bb \), \( \Aa \) si dice \textbf{sottostruttura elementare} di \( \Bb \) (\( \Aa \prec \Bb \)) se e solo se si ha:
+    \[ A \subseteq B \  \land \ \forall F, \ \forall \vec{a}\in A, \ \ \Aa \vDash F[\vec{a}] \iff \Bb \vDash F[\vec{a}] \]
+
+    (ovvero \( \Aa \subseteq \Bb \) e \( \Aa \equiv \Bb \)).
+    
+\end{defframe}
+
+Notiamo che \( \Qq \subseteq \Rr \).
+
+Data una formula \( F \), è naturale che se \( \alpha \)  è un assegnamento in \( \Q \) e \( \Qq \vDash \exists x F[\alpha] \), allora \( \Rr \vDash \exists x F[\alpha] \).
+
+Non è però detto che valga l'inverso, ossia:
+\begin{thmframe}{Proprietà del testimone tra \( \Rr \) e \( \Qq \)}{}
+    Per ogni formula \( F \) con \( x \) variabile libera, \textit{per ogni assegnamento} \( \alpha \) in \( \Q \), se
+    \[ \Rr \vDash \exists x \ F(x)[\alpha] \]
+allora \( \exists q \in \Q \) tale che:
+\[ \Rr \vDash F(x)[\alpha \ass{x}{q}] \]
+
+(quindi, abbiamo una formula \( F \) con tutte le variabili in \( \Q \) tranne una; presumiamo che sia vera con l'ultima variabile assegnata in \( \R \) - allora vogliamo che \(\exists q \in \Q \) (da assegnare all'ultima variabile) che la soddisfi)
+
+\end{thmframe}
+
+La proprietà del testimone è la condizione sufficiente per dedurre \( \Qq \equiv \Rr \).
+
+Come già visto, conviene dimostrare la proprietà per le formule (così che valga anche per gli enunciati).
+
+\begin{corframe}{Conseguenza della proprietà del testimone}{}
+    Se vale la proprietà del testimone tra \( \Rr \) e \( \Qq \), allora \( \forall F, \forall \alpha \) su \( Q \),
+    \[ \Qq \vDash F[\alpha] \iff \Rr \vDash F[\alpha] \]
+\end{corframe}
+
+\begin{proofframe}{}{}
+    Si dimostra per induzione su \( F \).
+
+    \begin{itemize}
+        \item \textbf{caso base}: \( F \) è di tipo \( (x \leq y) \).
+            \begin{align*}
+                \Qq \vDash (x\leq y)[\alpha] &\iff \Rr \vDash (x\leq y)[\alpha] \\
+                 \alpha(x) \leq_\Q \alpha(y) &\iff \alpha(x) \leq_\R \alpha(y) 
+            \end{align*}
+
+            (argomento analogo per \( (x = y) \))
+
+        \item \textbf{booleani}:
+            \begin{align*}
+                \Qq \vDash A \land B [\alpha] &\iff \Rr \vDash A \land B[\alpha] \\
+                \Qq \vDash A[\alpha] \land \Qq \vDash B[\alpha] &\iff \Rr \vDash A[\alpha] \land \Rr \vDash B[\alpha]
+            \end{align*}
+            Vero per ipotesi induttiva su $A$ e $B$:
+\[
+\Q \models A[\alpha] \iff \R \models A[\alpha] \quad \text{e} \quad \Q \models B[\alpha] \iff \R \models B[\alpha]
+\]
+
+(argomento analogo per gli altri connettivi booleani)
+
+\item \textbf{esistenziale}:
+
+Sia \(F \equiv \exists x \, F(x)\). Assumiamo che la tesi valga per la formula \(F(x)\) (I.I.). Dobbiamo mostrare che:
+\[
+\Q \vDash \exists x \, F(x)[\alpha] \iff \R \vDash \exists x \, F(x)[\alpha]
+\]
+
+\textit{Direzione \(\implies\):}
+Assumiamo \(\Q \vDash \exists x \, F(x)[\alpha]\).
+Per definizione, vale sse esiste un elemento \(q \in \Q\) tale che \(\Q \vDash F(x)[\alpha\ass{x}{q}]\).
+Poiché l'assegnazione \(\alpha\ass{x}{q}\) è in \(\Q\), per I.I. applicata a \(F(x)\):
+\[
+    \Q \vDash F(x)[\alpha \ass{x}{q}] \iff \R \vDash F(x)[\alpha \ass{x}{q}]
+\]
+ Poiché \(q \in \Q\) e \(\Q \subseteq \R\), \(q\) è un elemento di \(\R\).
+Per definizione di soddisfacibilità in \(\R\):
+\[
+    \R \vDash \exists x \, F(x)[\alpha]
+\]
+
+\textit{Direzione \(\impliedby\):}
+Assumiamo \(\R \vDash \exists x \, F(x)[\alpha]\), con \( \alpha \) assegnamento in \( \Q \). Per definizione, vale sse \( \exists r \in \R \) t.c. \( \Rr\vDash F(x)\ass{x}{r} \)
+Per la \textit{proprietà del testimone}, se \(\R \vDash \exists x \, F(x)[\alpha]\), allora esiste un testimone \(q \in \Q\) tale che \(\R \vDash F(x)[\alpha \ass{x}{q}]\).
+Per ipotesi induttiva su \( F \), questo vale sse \( \exists q \in \Q \) t.c. \( \Qq \vDash F(x)[\alpha\ass{x}{q}] \).
+Ovvero:
+\[
+    \R \vDash F(x)[\alpha\ass{x}{q}] \iff \Q \vDash F(x)[\alpha\ass{x}{q}]
+\]
+Quindi \(\Q \vDash F(x)[\alpha\ass{x}{q}]\). Poiché esiste un \(q \in \Q\) che soddisfa \(F(x)\) in \(\Q\), per definizione (di soddisfacibilità):
+\[
+    \Q \vDash \exists x \, F(x)[\alpha]
+\]
+
+    \end{itemize}
+    \qed
+\end{proofframe}
+
+\begin{corframe}{Altra conseguenza della proprietà del testimone}
+    Quindi, se vale la proprietà del testimone tra \( \Qq \) e \( \Rr \), per ogni enunciato \( E \) nel linguaggio degli ordini si ha:
+    \[ \Qq \vDash E \iff \Rr \vDash E \]
+
+    ovvero \( \Qq \equiv \Rr \), e quindi \( \Qq \prec \Rr \).
+\end{corframe}
+
+\subsection{Equivalenza tra \( \Rr \) e \( \Qq \)}
+
+Per dimostrare \( \Qq \equiv \Rr \), definiamo \( \Aa = (A, \leq_A) \) t.c. \( \Qq \subseteq \Aa \subseteq \Rr \) e \( A \) numerabile. 
+
+Seguiremo quindi questi passi:
+\vspace{-0.5em}
+\begin{enumerate}
+    \item dimostreremo la proprietà del testimone tra \( \Aa \) e \( \Rr \), ottenendo \( \Aa \equiv \Rr \)
+    \item visto che \( \Rr \vDash\) DLO e (1), si ha \( \Aa \vDash \) DLO
+    \item da (2) e \( A \) numerabile, applicando il Teorema di Cantor (p.\pageref{thm:Cantor}) si ottiene \( \Aa \iso \Qq \)
+    \item visto che \( \iso \implies \equiv \), si ha \( \Aa \equiv \Qq \)
+    \item per transitività, \( \Rr \equiv \Qq \).
+\end{enumerate}
+
+Costruiamo quindi \( \Aa \) partendo da \( \Qq \).
+
+Sia \( F \) una formula del linguaggio DLO e siano \( x_1, x_2, y \) le sue variabili libere.
+
+Se \( \Rr \vDash \exists y F(x_1, x_2, y) \tworowmatrix{x_1 & x_2}{q_1 & q_2} \), per definizione di soddisfacibilità sappiamo che 
+\\\( \exists r \in \R\) \ t.c. \ \( \Rr \vDash F(x_1, x_2, y) \tworowmatrix{x_1 & x_2 & y}{q_1 & q_2 & r} \). Ne scegliamo uno in modo canonico {\color{gray}(assioma della scelta)}.
+
+\begin{defframe}{Funzione di Skolem}{}
+    Chiamiamo \textbf{funzione di Skolem} (da Thoralf Skolem) della formula \( F \) relativamente ad \( y \) la funzione 
+    \[ f_{F, y} : \Qq^n \to \Rr \]
+    che associa ad ogni scelta di \( (q_1, \dots, q_n) \) un tale \( r \in \R \) in modo canonico.
+\end{defframe}
+
+Dato \( \Ff = \{ \text{funzioni di Skolem}\} \), chiudiamo \( \Q \) sotto \( \Ff \).
+
+Otteniamo \( A_1 = \Q \cup \{b \in \R \mid b = f(q_1, \dots, q_n) \text{ con } f\in \Ff, \ (q_1, \dots, q_n) \in Q^n\} \).
+
+Sappiamo che \( \Qq \subseteq \Aa_1 = (A_1, \leq_A) \subseteq \Rr\).
+
+È però vero che se \( x_1, x_2 \) sono assegnati in \( A_1 \) come \( a_1, a_2 \) allora esiste un \( a \in A_1\) t.c. \\ \( \Rr \vDash F(x_1, x_2, y) \tworowmatrix{x_1 & x_2 & y}{a_1 & a_2 & a}  \)? Non necessariamente. Infatti, se \( a_1, a_2 \in \Q \), sicuramente sì. 
+
+Ma, se \( a_1, a_2 \in \Aa_1 \setminus \Qq \), non possiamo saperlo per certo. Dobbiamo quindi chiudere nuovamente sotto \( \Ff \).
+
+Non ci basta però chiudere un'altra volta, in quanto il problema si ripropone. Dobbiamo ripetere l'operazione \( \forall i \geq 0\).
+
+Abbiamo quindi
+\[ A_{i+1} = A_i \cup \Ff(A_i) \]
+{\color{gray}(utilizziamo la notazione \( \Ff(A) \) per indicare la chiusura di \( A \) su \( F \))}
+
+Definiamo 
+\[ A = \bigcup_{i\in \N} A_i \]
+
+\( \Aa = ( A =\bigcup_{i\in \N} A_i, \leq_A) \) ha la proprietà del testimone relativamente ad \( \Rr \).
+
+
+
+
 \end{document}
