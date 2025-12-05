@@ -799,6 +799,7 @@ Lo scriviamo in questo modo:
 Nel nostro sistema (in cui limitiamo il linguaggio ai connettivi \( \neg \) e \( \to \)), scegliamo come assiomi:
 
 \begin{gframe}{}
+    \label{assprop}
     \begin{enumerate}
         \item \( X \to (Y\to X) \)
         \item \( (X \to (Y \to Z)) \to\)
@@ -960,13 +961,17 @@ Tutte le altre occorrenze di \( x \) sono dette \textbf{libere}.
 
 Un \textbf{enunciato} è una formula senza variabili libere.
 
+Se \( F \) è una formula e \( x_1, \dots, x_n \) sono variabili distinte, indichiamo con \( F(x_1, \dots, x_n) \) il fatto che le variabili libere di \( F \) sono contenute nell'insieme \( \{x_1, \dots, x_n\} \).
+
 \begin{defframe}{Termine libero}{}
+    \label{terlib}
     Un termine \( t \) è \textbf{libero per una variabile} \( v \) in una formula \( F \) se nessuna occorrenza libera di \( v \) in \( F \) è nel dominio di un quantificatore \( \forall y \) o \( \exists y \) con \( y \) una variabile in \( t\).
+
+    (ovvero, se si sostituisce \( v \) con \( t \) nella formula, nessuna delle variabili di \( t \) viene legata da un quantificatore presente in \( F \) )
 \end{defframe}
 
 Per esempio, se \( F \) è \( \exists y (x = y + y) \), nessun termine contenente \( y \) è libero per \( x \) in \( F \).
 
-Se \( F \) è una formula e \( x_1, \dots, x_n \) sono variabili distinte, indichiamo con \( F(x_1, \dots, x_n) \) il fatto che le variabili libere di \( F \) sono contenute nell'insieme \( \{x_1, \dots, x_n\} \).
 
 \section{Semantica}
 Vogliamo poter definire il concetto di \textbf{verità logica} nella logica dei predicati (analogo a quello di tautologia nella logica proposizionale). A tale scopo, ci serve definire la nozione di verità di una formula della logica predicativa.
@@ -1472,8 +1477,89 @@ Definiamo
 \[ A = \bigcup_{i\in \N} A_i \]
 
 \( \Aa = ( A =\bigcup_{i\in \N} A_i, \leq_A) \) ha la proprietà del testimone relativamente ad \( \Rr \).
+\todo{fine}
 
+\section{Calcolo dei Predicati}
+Introduciamo ora il calcolo dei predicati (con identità) ``alla Hilbert''. Ad ogni linguaggio \( \Ll \) possiamo associare un calcolo dei predicati del I ordine.
 
+\begin{defframe}{Dimostrabilità}{}
+    Si ha \( T\vdash A \) se e solo se esiste una sequenza \( (A_1, A_2, \dots, A_n) \) di formule tali che:
+    \begin{itemize}
+        \item \( A_n = A \)
+        \item \( \forall 1\leq i \leq n \):
+            \begin{itemize}
+                \item \( A_i \in T \), oppure
+                \item \( A_i \) assioma, oppure
+                \item \( A_i \) segue dai precedenti per regole di inferenza
+            \end{itemize}
+    \end{itemize}
+\end{defframe}
 
+Gli assiomi logici sono i seguenti:
+\begin{gframe}{}
+    \begin{enumerate}
+        \item Tutti gli assiomi proposizionali (illustrati a p.\pageref{assprop})\\[1em]
+            Gli assiomi predicativi:
+        \item \( \forall x F\to F [x/t] \) con \( t \) termine libero per \( x \) in \( F \) {\small \color{gray} (per ``libero'' vedi p.\pageref{terlib})}
+            \subitem da questa regola deriva anche:
+            \AxiomC{\( F[x/t] \)}
+            \UnaryInfC{\( \exists x \ F\)}
+            \DisplayProof
+        \item \( \forall x (F\to G)\to (F \to \forall x \ G) \), con \( F \) senza occorrenze libere di \( x \) {\small \color{gray} (si dice ``\( F \) non parla di \( x \)'')}\\[1em]
+            Gli assiomi dell'identità:
+        \item Per ogni simbolo di relazione \( R \):
+            \[ \forall x_1 \dots x_n, \ \forall y_1, \dots y_n, \ \left(\bigwedge_{i=1}^{n} (x_i = y_i)\right) \to \bigl(R(x_1, \dots, x_n)\leftrightarrow R(y_1, \dots, y_n)\bigr) \]
+        \item Per ogni simbolo di funzione \( f \):
+            \[ \forall x_1 \dots x_n, \ \forall y_1, \dots y_n, \ \left(\bigwedge_{i=1}^{n} (x_i = y_i)\right) \to \bigl(f(x_1, \dots, x_n) = f(y_1, \dots, y_n)\bigr) \]
+        \item (uguaglianza e transitività)
+            \[ \forall x \ y \ z \Bigl( (x = x) \land \bigl((x = y) \to (y = x)\bigr) \land \bigl( (\left(x = y) \land (y = z) \right) \to (x = z)\bigr) \Bigr)\]
+            {\small \color{gray}(valgono \( (x = x) \) e \( (x = y \to y = x) \) e \( ((x = y \land y = z) \to x = z) \))}
+    \end{enumerate}
+\end{gframe}
+
+Le \textbf{regole di inferenza} che utilizziamo nel calcolo predicativo sono:
+\begin{enumerate}
+    \item \textit{Modus Ponens}:
+        \AxiomC{\( X \)}
+        \AxiomC{\( X \to Y \)}
+        \BinaryInfC{\( Y \)}
+        \DisplayProof
+    \item \textit{Generalizzazione}:
+        {\large \AxiomC{\( F \)}
+        \UnaryInfC{\( \forall x \ F \)}
+        \DisplayProof}
+        \subitem {\small \color{gray}(attenzione ! non è come dire che se una formula \( F\) vale in un caso, allora vale \( \forall x \) - stiamo dicendo che, se ho \textit{dimostrato in maniera generica} \( F \), allora essa è vera \( \forall x \))}
+\end{enumerate}
+
+Il calcolo dei predicati mantiene molte delle proprietà del calcolo proposizionale, come:
+\begin{itemize}
+    \item il \textbf{teorema di correttezza}: \( T \vdash A \implies T \vDash A \) (anche qui tutti gli assiomi sono verità logiche e le regole di inferenza preservano le verità logiche)
+    \item \( T\vdash A \land T \subseteq S \implies S \vdash A  \)
+    \item se \( \vdash A \), \( A \) è detto ``teorema''
+    \item 
+        \AxiomC{\( T \vdash A \)}
+        \AxiomC{\( A \vdash B \)}
+        \BinaryInfC{\( T \vdash B \)}
+        \DisplayProof
+    \item         
+        \AxiomC{\( T \vdash A \)}
+        \AxiomC{\( S \vdash B \)}
+        \BinaryInfC{\( T \cup S \vdash A \land B \)}
+        \DisplayProof
+\end{itemize}
+
+\vspace{1em}
+
+\begin{thmframe}{Teorema di deduzione per il calcolo predicativo}{}
+    Sia \( E \) un enunciato, \( A \) una formula e \( \Gamma \) un insieme di formule.
+    Vale:
+    \[ \Gamma, E \vdash A \iff T\vdash (E \to A) \]
+\end{thmframe}
+
+\subsection{Teorema di completezza per la logica predicativa}
+Come per la logica proposizionale, vogliamo dimostrare \( T\vDash A \iff T \vdash A \).
+
+\begin{defframe}{Coerenza}{}
+\end{defframe}
 
 \end{document}
