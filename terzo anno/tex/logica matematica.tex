@@ -1531,6 +1531,8 @@ Le \textbf{regole di inferenza} che utilizziamo nel calcolo predicativo sono:
         \subitem {\small \color{gray}(attenzione ! non è come dire che se una formula \( F\) vale in un caso, allora vale \( \forall x \) - stiamo dicendo che, se ho \textit{dimostrato in maniera generica} \( F \), allora essa è vera \( \forall x \))}
 \end{enumerate}
 
+\subsection{Proprietà fondamentali del Calcolo dei Predicati}
+
 Il calcolo dei predicati mantiene molte delle proprietà del calcolo proposizionale, come:
 \begin{itemize}
     \item il \textbf{teorema di correttezza}: \( T \vdash A \implies T \vDash A \) (anche qui tutti gli assiomi sono verità logiche e le regole di inferenza preservano le verità logiche)
@@ -1556,10 +1558,44 @@ Il calcolo dei predicati mantiene molte delle proprietà del calcolo proposizion
     \[ \Gamma, E \vdash A \iff T\vdash (E \to A) \]
 \end{thmframe}
 
+\textbf{Altre proprietà}:
+\begin{itemize}
+    \item  Ogni istanza di tautologia proposizionale è una verità nel Calcolo dei Predicati
+\end{itemize}
+
 \subsection{Teorema di completezza per la logica predicativa}
 Come per la logica proposizionale, vogliamo dimostrare \( T\vDash A \iff T \vdash A \).
 
+Esiste però un'altra definizione equivalente per il teorema di completezza.
+
 \begin{defframe}{Coerenza}{}
+    Una teoria \( T \) è \textbf{coerente} (o non-contraddittoria) \(\iff \neg \exists \) enunciato \( A \) t.c. \( T \vdash A \land T\vdash \neg A \)
 \end{defframe}
+
+\begin{gframe}{}
+    Il Calcolo dei Predicati è coerente, ossia per nessuna formula vale \( \vdash F \land \vdash \neg F \).
+\end{gframe}
+
+\begin{defframe}{Teorema di completezza v.2}{}
+    \vspace{-1em}
+    \[ T \text{ coerente } \iff T \text{ ha un modello } (\in \texttt{SAT}) \]
+\end{defframe}
+
+Notiamo facilmente che \( T \) incoerente come testimoniato da \( A \) (ovvero \( T \vdash A \land T \vdash \neg A \)) implica necessariamente \( T \) insoddisfacibile.
+
+Infatti, \( T\vdash A \implies T\vDash A \) \ e \ \( T\vdash \neg A \implies T\vDash \neg A \), e se valgono sia \( T \vDash A\) che \(T \vDash \neg A \) sappiamo che \( T \) è insoddisfacibile (\( Mod(T) = \emptyset \)).
+
+Ci manca da dimostrare \( T \) coerente \( \implies Mod(T) \neq \emptyset\).
+
+\begin{thmframe}{Equivalenza tra le due forme di teorema di completezza}{}
+    Si ha che \( T \vDash A \iff T \vdash A \ \equiv \ T \text{ coerente } \iff T \text{ ha un modello } (\in \texttt{SAT})\)
+\end{thmframe}
+
+\begin{proofframe}
+    Sappiamo che \( T \vDash A \). Ci sono due opzioni:
+    \begin{itemize}
+        \item \( T \in \texttt{UNSAT} \) - \( T\vDash A \) è vera \( \forall A \), quindi \( T \) incoerente ()
+    \end{itemize}
+\end{proofframe}
 
 \end{document}
