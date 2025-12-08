@@ -19,6 +19,10 @@
 \newcommand{\fa}{f^{\mathcal{A}}}
 \newcommand{\ca}{c^{\mathcal{A}}}
 
+\newcommand{\SAT}{\texttt{SAT}}
+\newcommand{\UNSAT}{\texttt{UNSAT}}
+\newcommand{\TAUT}{\texttt{TAUT}}
+
 \newcommand{\ass}[2]{%
     \left( \begin{smallmatrix} #1 \\ #2 \end{smallmatrix} \right)
 }
@@ -1588,14 +1592,100 @@ Infatti, \( T\vdash A \implies T\vDash A \) \ e \ \( T\vdash \neg A \implies T\v
 Ci manca da dimostrare \( T \) coerente \( \implies Mod(T) \neq \emptyset\).
 
 \begin{thmframe}{Equivalenza tra le due forme di teorema di completezza}{}
-    Si ha che \( T \vDash A \iff T \vdash A \ \equiv \ T \text{ coerente } \iff T \text{ ha un modello } (\in \texttt{SAT})\)
+    Si ha che {\color{Blue}(1)} \ \( T \vDash A \iff T \vdash A \ \equiv \ T \text{ coerente} \iff T \text{ ha un modello } (\in \SAT)\) {\color{purple}(2)}
+    
 \end{thmframe}
 
 \begin{proofframe}
+\begin{enumerate}
+    \item Assumiamo {\color{purple}(2)} e dimostriamo \( T \vDash A \implies T \vdash A \) 
+
     Sappiamo che \( T \vDash A \). Ci sono due opzioni:
     \begin{itemize}
-        \item \( T \in \texttt{UNSAT} \) - \( T\vDash A \) è vera \( \forall A \), quindi \( T \) incoerente ()
+        \item \( T \in \UNSAT \): \( T\vDash A \) è vera \( \forall A \), quindi \( T \) incoerente 
+
+            \subitem(se \( \exists B \ \text{ t.c. } \ T\vdash B \ \land \ T \vdash \neg B \), possiamo dimostrare una qualsiasi affermazione \( A \) in questo modo: \( \vdash B\to(\neg B \to A) \))
+
+            quindi \( T \vdash A \)
+
+        \item \( T \in \texttt{SAT} \): se \( T\in \SAT \) e \( T\vDash A \), sappiamo che \( T \cup \neg A \in \UNSAT \). 
+            \subitem Per (2), quindi, \( T \cup \neg A \) è incoerente, quindi \( T \vdash A \)
+
+            {\color{CadetBlue}\( T\cup \neg A  \) incoerente significa \( T \cup \neg A \vdash \bot\), quindi (x deduzione) \( T \vdash \neg A \to \bot \); \\
+            per reductio ad absurdum ( \((\neg A \to \bot) \vdash A \)), si ha quindi \( T \vdash A \).}
     \end{itemize}
+
+\item Assumiamo {\color{blue}(1)} e dimostriamo \( T \) coerente \(\implies T \) ha un modello
+
+    Presumiamo che \( T \) non abbia un modello. Questo implica logicamente qualsiasi cosa (\( T \vdash A \) e \( T\vdash \neg A \)). Per {\color{blue}(1)}, quindi, \( T\vDash A \) e \(  T\vDash \neg A\), quindi \( T \) incoerente (per contrapposizione, otteniamo l'implicazione originale).
+
+\end{enumerate}
 \end{proofframe}
+
+\subsection{Estensioni di teorie}
+Vogliamo dimostrare coerenza \( \implies \) soddisfacibilità. Per farlo, introduciamo il concetto di \textit{estensione}.
+
+\begin{defframe}{Estensione}{}
+    Diciamo che una teoria \( T' \) \textbf{estende} una teoria \( T \) se \( T \subseteq T' \).
+\end{defframe}
+
+\begin{defframe}{Teoria sintatticamente completa}{}
+        Una teoria \( T \) si dice \textbf{sintatticamente completa} se per ogni enunciato \( E \) nel linguaggio di \( T \), vale \( T \vdash E \) oppure \( T \vdash \neg E \).
+\end{defframe}
+
+\begin{lemmaframe}{Lemma di  Lindenbaum}{}
+    Ogni teoria coerente (in un linguaggio numerabile) ammette un'estensione coerente e completa.
+
+    (Sia \( T \) coerente. Allora \( \exists S\) teoria nel linguaggio di \( T \) t.c.:
+\begin{itemize}
+    \item \( T \subseteq S \)
+    \item \(S  \) è coerente
+    \item \( S \) è sintatticamente completa
+\end{itemize}
+    )
+\end{lemmaframe}
+
+\begin{proofframe}{}{}
+Fissiamo un'enumerazione \( \{ E_1, E_2, \dots \} \) di tutti gli enunciati di \( T \).
+
+Definiamo una successione di teorie in quessto modo:
+\begin{itemize}
+    \item \( S_0 = T \)
+    \item \( S_{n+1} = \begin{cases}
+            S_n \cup \{ E_{n+1}\} & \text{se } S_n \cup \{E_{n+1}\} \text{ coerente (ovvero } S_n \not\vdash \neg E_{n+1} \text{)} \\
+            S_n  & \text{altrimenti (ovvero } S_n \vdash \neg E_{n+1} \text{)} 
+
+    \end{cases} \)
+
+    {\color{gray} \small nel secondo caso non serve aggiungere \( \{\neg E_{n+1}\} \) perché si ha già \( S_n \vdash \neg E_{n+1} \) (sarebbe superfluo)}
+\end{itemize}
+Sia \( S = \bigcup_{n\in \N} S_n \).
+\begin{enumerate}
+    \item \( S \) è \textbf{coerente}
+
+        \( S \) è coerente significa che \( \not \exists E \) per cui \( \exists \{A_1, A_2, \dots, A_t\} , \{B_1, B_2, \dots, B_t\} \subseteq S\) t.c.\\ \(  A_1, A_2, \dots, A_t\vdash E\) e \(  B_1, B_2, \dots, B_t\vdash \neg E\).
+
+        Si nota facilmente che questo è impossibile, in quanto, per costruzione, entrambi gli insiemi di enunciati apparterrebbero a un \( S_m \) per qualche \( m \) (vista la costruzione ``a catena'' di \( S \)), e si avrebbe \( S_m \vdash E \) e \( S_m \vdash \neg E \), quindi \( S_m \) incoerente (ma per costruzione, \( \forall i\ S_i \) è coerente).
+        
+
+    \item \( S \) è sintatticamente \textbf{completa}
+
+        Scegliamo di dimostrarlo nella forma \( S\not\vdash \neg E \implies S \vdash E \)
+
+        Sia \( E = E_{n+1} \) per un qualche \( n \). Sappiamo che \( \forall i\) e in particolare per \( n, \ S_n\not\vdash \neg E_{n+1}\). 
+
+        Quindi, per costruzione \( S_{n+1} = S_n \cup \{E_{n+1}\} \implies S_{n+1} \vdash E_{n+1} \overset{{\color{gray}S_{n+1}\subseteq S}}{\implies}  S \vdash E_{n+1} \).
+\end{enumerate}
+
+\end{proofframe}
+
+Se invece di \( T \) coerente avessimo ipotizzato \( T \) soddisfacibile, la conclusione sarebbe stata banale perché si sarebbe definita \( S \) facilmente come (dato \( \Aa \) modello di \( T \)) \( S = Th(\Aa) = \{E \mid \Aa \vDash E\}\), evidentemente coerente e completo.
+
+Il teorema di completezza mostra che le due cose sono equivalenti.
+
+Abbiamo quindi dimostrato che \( T \) coerente \( \implies \exists S \supseteq T\) coerente e completa. \\Vogliamo però \( T \) coerente \( \implies T \) soddisfacibile.
+
+Il passo successivo è dimostrare che \( S \) è già quasi un modello.
+
 
 \end{document}
