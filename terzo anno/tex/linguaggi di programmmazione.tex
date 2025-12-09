@@ -2188,7 +2188,7 @@ Introduciamo ora le regole di un sistema logico per la verifica formale dei prog
     \[
     \AxiomC{$M = N$}
     \AxiomC{$M = N'$}
-    \RightLabel{$[Eq]$}
+    \RightLabel{$[Cong]$}
     \BinaryInfC{$N = N'$}
     \DisplayProof
     \]
@@ -2197,7 +2197,7 @@ Introduciamo ora le regole di un sistema logico per la verifica formale dei prog
     \[
     \AxiomC{$M = M'$}
     \AxiomC{$N = N'$}
-    \RightLabel{$[Cong_{\text{app}}]$}
+    \RightLabel{$[Cont]$}
     \BinaryInfC{$M N = M' N'$}
     \DisplayProof
     \]
@@ -2205,7 +2205,7 @@ Introduciamo ora le regole di un sistema logico per la verifica formale dei prog
     \item regola di $\lambda$-astrazione:
     \[
     \AxiomC{$M = N$}
-    \RightLabel{$[Cong_{\text{fn}}]$}
+    \RightLabel{$[\lambda_{Astr}]$}
     \UnaryInfC{$fn\ x \implies M = fn \ x \implies N$}
     \DisplayProof
     \]
