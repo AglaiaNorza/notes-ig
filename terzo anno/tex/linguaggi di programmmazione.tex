@@ -11,9 +11,10 @@
 
 \usepackage{graphicx}
 \usepackage{bussproofs}
+\usetikzlibrary{arrows.meta, positioning, calc}
 
 \setcoursename{Linguaggi di Programmazione}
-\setcoursebook{non usato,\\ integrati con le dispense del professor Cenciarelli}
+\setcoursebook{non usato,\\ integrati con le \href{http://wwwusers.di.uniroma1.it/~lpara/DISPENSE/note.pdf}{\underline{dispense}} del professor Cenciarelli}
 \setauthorname{aglaia norza}
 \setauthoremail{thisisaglaia@gmail.com}
 \setauthorgithub{AglaiaNorza}
@@ -221,6 +222,7 @@ Per dimostrare che  questa tupla sia un'algebra induttiva, dobbiamo ora verifica
 \end{gframe}
 
 \begin{gframe}{liste finite come algebra induttiva}
+    \label{alist}
     Dato un insieme \( A \), indichiamo con \( A-list \) l'insieme delle liste finite di elementi di \( A \).
 
     La tupla \( (A-list,\text{ empty, cons}) \) è un'algebra induttiva, dove:
@@ -237,6 +239,7 @@ Per dimostrare che  questa tupla sia un'algebra induttiva, dobbiamo ora verifica
 \end{gframe}
 
 \begin{gframe}[colframe=Orchid, colbacktitle=Orchid]{i booleani come algebra non induttiva}
+    \label{Bool}
     Consideriamo l'algebra \( (B, \text{not}) \), dove \( B = \{0, 1\} \) e not: \(B \to B : b\to \neg b\).
 
     Notiamo che not è sicuramente iniettiva, e che, poiché è l'unico costruttore, anche la seconda caratteristica delle algebre induttive è rispettata.
@@ -303,14 +306,15 @@ Per dimostrare che  questa tupla sia un'algebra induttiva, dobbiamo ora verifica
     (Due algebre sono isomorfe (\( \cong \)) quando esiste un isomorfismo tra loro)
 \end{defframe}
 
-\begin{thmframe}{Omomorfismo tra algebre con stessa segnatura}{teo-om}
+\begin{thmframe}{Omomorfismo tra algebre con stessa segnatura}{}
+    \label{teo-om}
     Sia \( A \) un'algebra induttiva. Per ogni algebra \( B \) (non necessariamente induttiva) con la stessa segnatura, esiste un \textbf{unico omoformismo} \( A \to B \).
 
 \end{thmframe}
 
 \begin{thmframe}{Lemma di Lambek}{}
     Due algebre induttive \( A \) e \( B \) con la \textbf{stessa segnatura} sono necessariamente \textbf{isomorfe}.
-
+\end{thmframe}
     \begin{proofframe}{}
         \begin{itemize}
             \item Siccome \( A \) è un'algebra induttiva, \( \exists! \text{ omomorfismo } f : A \to B \). 
@@ -326,8 +330,7 @@ Per dimostrare che  questa tupla sia un'algebra induttiva, dobbiamo ora verifica
         \end{itemize}
 
     \end{proofframe}
-
-\end{thmframe}
+l
 
 
 \chapter{Paradigma funzionale}
@@ -1906,6 +1909,228 @@ Ma notiamo che, anche in questo caso, la nostra premessa \( \{(a+1)y + (b-y) = x
 }
 )
 \section{Correttezza nei linguaggi funzionali}
-Per dimostrare la correttezza dei programmi funzionali, adottiamo una \textbf{logica equazionale}
+Per dimostrare la correttezza dei programmi funzionali, adottiamo una \textbf{logica equazionale}.
+
+Prima di definire le regole di questa logica, ci è utile re-introdurre una proposizione trattata all'inizio del corso (``omomorfismo tra algebre con la stessa segnatura'', p.\pageref{teo-om}). 
+
+\begin{propframe}{Omomorfismi e numeri naturali}{}
+    \label{prop1}
+    Dati un insieme \( A \), un elemento \( a \in A \) ed una funzione \( h: A\to A \), esiste \textbf{una sola} \( f:\N \to A \) (omomorfismo) tale che \( f(0)=a \) e \( f(succ \ n) = h(f(n))\)
+\end{propframe}
+
+\begin{gframe}{}
+Notiamo che l'algebra fornita non deve essere necessariamente induttiva (è \( \N \) ad esserlo).
+\end{gframe}
+
+Prendiamo per esempio \( Bool \), l'algebra (non induttiva) dei booleani (definita a p. \pageref{Bool})
+
+Le due algebre \( \N \) e \( Bool \) hanno la stessa segnatura. Per il teorema, esiste quindi un unico omomorfismo (chiamiamolo \( f \)) tra di loro, tale che:
+\begin{itemize}
+    \item \( f(zero) = true \)
+    \item \( f(succ \ x ) = not(f(x)) \)
+\end{itemize}
+
+%\[
+%\begin{tikzcd}
+%& 1 \arrow[dl] \arrow[dr] & \\
+%Nat \arrow[loop left, "Succ"] \arrow[rr, "f"] & & Bool \arrow[loop right, "not"]
+%\end{tikzcd}
+%\]
+\begin{centering}
+    
+\begin{tikzpicture}[
+    node distance=3.5cm,
+    auto,
+    >=Latex,
+    thick,
+    scale=1.3,
+    every node/.style={transform shape}
+]
+  \node[circle, draw, thick, minimum size=1.2cm] (Nat) {Nat};
+  \node[circle, draw, thick, minimum size=1.2cm, right of=Nat] (Bool) {Bool};
+  \node[above right=1.2cm and 1cm of Nat] (One) {\( \mathbb{1} \)};
+
+  \draw[->] (Nat) to node[below] {f} (Bool);
+  \draw[->] (One) -- node[left] {zero} (Nat);
+  \draw[->] (One) -- node[right] {true} (Bool);
+  \draw[->] (Nat) to[loop left] node[left] {succ} ();
+  \draw[->] (Bool) to[loop right] node[right] {not} ();
+\end{tikzpicture}
+
+\end{centering}
+
+Notiamo che questa funzione corrisponde perfettamente alla funzione \texttt{is\_even} precedentemente definita in SML in questo modo:
+\begin{lstlisting}
+    fun is_even 0 = true
+        | is_even(succ n) = not(is_even n);
+\end{lstlisting}
+
+\texttt{is\_even} è quindi l'unico omomorfismo tra \( \N \) e \(Bool\).
+
+\begin{defframe}{Operatore \( \rho \)}{}
+Indichiamo con \( \rho \) la funzione che, dati \( a \) e \( h \) (``costruttori'') come nella proposizione 1,  ci restituisce l'omorfismo \( f \). 
+
+Si ha dunque:
+\begin{itemize}
+    \item \( f = \rho \ a \ h \)
+    \item \( \rho \ a \ h \ zero = a \)
+    \item \( \rho \ a \ h \ (succ \ n) = h(\rho \ a \ h \ n) \).
+\end{itemize}
+
+        Applicando ricorsivamente queste equazioni, si ottiene:
+        \[ \rho a h n = \rho a h \underbrace{(succ(\ldots(succ\ 0)\ldots))}_{n \text{ volte}} = h(\ldots(h\ a)\ldots) \]
+        
+Ovvero, \(  \rho a h n \) itera \( n \) volte \( h \) a partire da \( a \). Viene per questo chiamato \textit{iteratore}.
+\begin{gframe}{}
+Possiamo anche usare \( \rho \) per definire i numeri di Church:
+\[ c_n \ h \ a = \rho \ a \ h \ n \]
+{\color{gray}(visto che un numero di Church è definito come un applicare \( n \) volte \( h \) a partire da \( a \))}
+\end{gframe}
+\end{defframe}
+
+{\color{CadetBlue}\small Quindi, essenzialmente, \( \rho \) prende gli equivalenti di ``zero'' e ``succ'' e restituisce l'omomorfismo da \( \N \) all'insieme che è definito dai costruttori forniti.}
+
+\begin{centering}
+Si ha quindi questa situazione:
+
+\begin{tikzpicture}[
+    node distance=3.5cm,
+    auto,
+    >=Latex,
+    thick,
+    scale=1.3,
+    every node/.style={transform shape}
+]
+  \node[circle, draw, thick, minimum size=1.2cm] (Nat) {Nat};
+  \node[circle, draw, thick, minimum size=1.2cm, right of=Nat] (A) {A};
+  \node[above right=1.2cm and 1cm of Nat] (One) {\( \mathbb{1} \)};
+
+  \draw[->] (Nat) to node[below] {\( \rho \ a \ h \)} (A);
+  \draw[->] (One) -- node[left] {zero} (Nat);
+  \draw[->] (One) -- node[right] {\( a \)} (A);
+  \draw[->] (Nat) to[loop left] node[left] {succ} ();
+  \draw[->] (A) to[loop right] node[right] {\( h \)} ();
+\end{tikzpicture}
+
+\end{centering}
+
+\vspace{1em}
+Definiamo quindi un primo linguaggio funzionale che contenga quanto introdotto.
+
+\begin{defframe}{\( Fun_{\rho} \)}{}
+    La grammatica di questo linguaggio è:
+        \[
+        M, N ::= zero \mid x \mid fn \ x \implies M \mid MN \mid succ(M) \mid \rho(M, N)
+    \]
+
+    e deve essere vero che:
+    \begin{itemize}
+        \item \( \rho(M, N)zero = M \) 
+            \subitem {\color{gray} (l'omomorfismo, applicato su \( zero \), deve portare al costruttore unario dell'altra algebra, ovvero \( M \) (come l'elemento neutro))}
+        \item \( \rho(M, N)(succ \ L) = N\bigl(\rho(M, N)L\bigr) \)  
+            \subitem {\color{gray} (l'omomorfismo, applicato su \( succ \ L \), deve portare all'operazione di \( A \) applicata su \( L \), ma nell'altro insieme, ovvero \( \rho(M, N)L \))}
+
+    \end{itemize}
+\end{defframe}
+
+Possiamo, per esempio, usare i costrutti di questo linguaggio per definire \( is\_even \) tramite \( \rho \).
+\[ is\_even \equiv \rho \ true \ not \]
+Notiamo però che questo linguaggio non è ancora perfetto.
+
+Consideriamo per esempio l'algebra induttiva delle liste finite di numeri naturali definita dai costruttori \( empty: \mathbb{1}\to N-List \) \ e \ \( cons: (N-List \times \N) \to N-List \) (definita a come a p.\pageref{alist}).
+
+Possiamo definirla in SML in questo modo:
+\begin{lstlisting}
+    datatype N-list = empty of Unit 
+        | cons of (N-list * N);
+\end{lstlisting}
+
+Introduciamo anche una funzione \texttt{nicelist}:
+\begin{lstlisting}
+    fun nicelist(0) = empty()
+        | nicelist(succ n) = cons(nicelist n, succ n);
+\end{lstlisting}
+
+\begin{gframe}{}
+    Per capire meglio come funzionino i costruttori ricorsivi, ci può essere utile simulare il costruttore \texttt{cons}.
+
+    Vediamo cosa succede se costruiamo \texttt{nicelist(succ 2)}
+
+    \texttt{nicelist(succ 2) = cons(nicelist 2, succ 2)}
+
+\(
+\begin{array}{rcl}
+\langle 3, & \underbrace{ \phantom{0000000000} }_{\text{\footnotesize nicelist 2}} \ \rangle & = \langle 3,2,1 \rangle \\[1em]
+\langle 2, & \underbrace{ \phantom{000000} }_{\text{\footnotesize nicelist 1}} \ \rangle & \\[1em]
+\langle 1, & \underbrace{ \phantom{0000} }_{\text{\footnotesize nicelist 0 = \(\emptyset\)}} \rangle & \\[1em]
+\end{array}
+\)
+\end{gframe}
+
+Contrariamente a quanto avveniva prima, per calcolare \( nicelist(succ \ n) \) non ci basta \( nicelist(n) \), ma ci serve anche \( n \) stesso (l'equivalente di \( succ \) non è più una endofunzione, prende anche da un altro dominio).
+
+Dobbiamo quindi introdurre una nuova versione della \hyperref[prop1]{Proposizione 1}.
+
+\begin{propframe}{Omomorfismi e numeri naturali (v. 2)}{}
+    Dati un insieme \( A \), un elemento \( a \in A \) e una funzione \( h: A \to (\N \to A) \), esiste una sola funzione \( f: \N \to A \) tale che \( f(0) = a \) \ e \ \( f(succ \ n) = h(f(n), n) \).
+\end{propframe}
+
+Definiamo quindi un equivalente di \( \rho \) che restituisca questo omomorfismo. Lo chiamiamo \( rec \).
+
+\begin{defframe}{Operatore \( rec \)}{}
+    L'operatore \( rec \), dato un elemento \( a \in A \) e una funzione \( A \to (\N \to A) \), restituisce l'unico omomorfismo \( \N \to A \).
+\end{defframe}
+
+L'operatore \( rec \) appartiene al \textit{System-T} di Gödel.
+
+Introduciamo quindi un linguaggio funzionale che contenga \( rec \).
+
+\begin{defframe}{\( Fun_{rec} \)}{}
+    La grammatica di questo linguaggio è:
+    \[
+        M, N ::= zero \mid x \mid fn \ x \implies M \mid MN \mid succ(M) \mid rec(M, N)
+    \]
+    dove:
+    \begin{itemize}
+        \item \( rec \ MN \ zero = M \)
+        \item \( rec \ MN \ succ(L) = N((rec \ M,N)L)L \) \quad {\color{gray}\( h(f(n), n) \)}
+    \end{itemize}
+\end{defframe}
+
+Possiamo usare \( rec \) anche per fare tutto ciò che faceva \( \rho \) (ci basta ``ignorare'' il secondo argomento della funzione \( N\) fornita). 
+
+Per esempio, la funzione \( is\_even \) si può definire tramite \( rec \) in questo modo:
+\[ is\_even \equiv rec(true, fn \ y z \implies not \ y) \]
+{\color{gray}(\( rec \) vuole una funzione a due argomenti, ma noi ne utilizziamo semplicemente uno solo (ignoriamo \( z \)))}
+
+Possiamo definire anche altre funzioni a noi note tramite \( rec \):
+\[ fact \equiv rec(1, fn \ yz \implies y * (succ \ z)) \]
+\[ plus \equiv fn \ x y \implies rec(y, fn \ w \ z \implies succ \ w) x\]
+
+\begin{gframe}{}
+Proviamo a calcolare $plus(2, 3)$, dove $x=2$ e $y=3$.
+
+Sia $R = rec(3,\ fn\ w\ z \Rightarrow succ(w))$ (l'omomorfismo). Dunque $plus(x, y) = R(x)$.
+
+Abbiamo \( R(x) = \begin{cases}
+    y & \text{se } x = zero \\
+    succ(R(L)) & \text{se } x = succ(L) \\
+\end{cases} \)
+
+Simuliamo quindi una possibile esecuzione:
+
+\begin{displaymath}
+\begin{array}{rll}
+plus(2, 3) & \equiv R(2) \\
+& \equiv R(succ(1)) & 2 = succ(1) \\
+& \equiv succ(R(1)) & x = 2 = succ(1) \text{ quindi } R(x) = succ(R(1))\\
+& \equiv succ(R(succ(0))) & 1 = succ(0) \\
+& \equiv succ(succ(R(0))) & \text{stesso passo ricorsivo }(succ(R(0))) \\
+& \equiv succ(succ(3)) & \text{caso base \( M \): } rec\ M\ N\ zero = M = 3. \\
+& \equiv succ(4) & \\
+& \equiv 5 & \\
+\end{array}
+\end{displaymath}
+\end{gframe}
 
 \end{document}
