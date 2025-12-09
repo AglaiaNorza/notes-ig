@@ -1911,6 +1911,7 @@ Ma notiamo che, anche in questo caso, la nostra premessa \( \{(a+1)y + (b-y) = x
 \section{Correttezza nei linguaggi funzionali}
 Per dimostrare la correttezza dei programmi funzionali, adottiamo una \textbf{logica equazionale}.
 
+\subsection{Omomorfismi e operatori di ricorsione}
 Prima di definire le regole di questa logica, ci è utile re-introdurre una proposizione trattata all'inizio del corso (``omomorfismo tra algebre con la stessa segnatura'', p.\pageref{teo-om}). 
 
 \begin{propframe}{Omomorfismi e numeri naturali}{}
@@ -2107,10 +2108,14 @@ Possiamo definire anche altre funzioni a noi note tramite \( rec \):
 \[ fact \equiv rec(1, fn \ yz \implies y * (succ \ z)) \]
 \[ plus \equiv fn \ x y \implies rec(y, fn \ w \ z \implies succ \ w) x\]
 
-\begin{gframe}{}
+\begin{gframe}{Simulazione \( rec \)}
+    Per capire meglio come funzioni \( rec \), facciamo una simulazione su \( plus \).
+
 Proviamo a calcolare $plus(2, 3)$, dove $x=2$ e $y=3$.
 
-Sia $R = rec(3,\ fn\ w\ z \Rightarrow succ(w))$ (l'omomorfismo). Dunque $plus(x, y) = R(x)$.
+Sia $R = rec(3,\ fn\ w\ z \Rightarrow succ(w))$ (l'omomorfismo). 
+
+Dunque $plus(x, y) = R(x)$.
 
 Abbiamo \( R(x) = \begin{cases}
     y & \text{se } x = zero \\
@@ -2133,4 +2138,81 @@ plus(2, 3) & \equiv R(2) \\
 \end{displaymath}
 \end{gframe}
 
+\subsection{Logica equazionale}
+Introduciamo ora le regole di un sistema logico per la verifica formale dei programmi di \( Fun_{rec} \). Si tratta di un sistema equazionale, che ha come unico predicato l'uguaglianza: \( M = N \).
+
+\begin{cdefframe}{BrightGreenLight}{BrightGreen}{Regole di inferenza per i programmi}
+\begin{itemize}
+    \item regola di \( \alpha \)-equivalenza:
+    \[
+    \AxiomC{}
+    \RightLabel{$[\alpha]$}
+    \UnaryInfC{$fn \ x \implies M = fn \ y \implies [y/x]M$}
+    \DisplayProof
+    \]
+
+    \item regola \( \beta \) (come nel lambda calcolo):
+    \[
+    \AxiomC{}
+    \RightLabel{$[\beta]$}
+    \UnaryInfC{$(fn \ x \implies M) N = [N/x]M$}
+    \DisplayProof
+    \]
+
+    \item regola di ricorsione (caso base):
+    \[
+    \AxiomC{}
+    \RightLabel{$[rec_0]$}
+    \UnaryInfC{$rec(M, N) 0 = M$}
+    \DisplayProof
+    \]
+
+    \item regola di ricorsione (passo induttivo):
+    \[
+    \AxiomC{}
+    \RightLabel{$[rec_{succ}]$}
+    \UnaryInfC{$rec(M, N) (\text{succ } L) = N(rec(M, N) L) L$}
+    \DisplayProof
+    \]
+
+    \item principio di induzione:
+    \[
+    \AxiomC{$P(0)$}
+    \AxiomC{$P(x) \implies P(succ\ x)$}
+    \RightLabel{$[Ind]$}
+    \BinaryInfC{$\forall n . P(n)$}
+    \DisplayProof
+    \]
+
+    \item regola di congruenza:
+    \[
+    \AxiomC{$M = N$}
+    \AxiomC{$M = N'$}
+    \RightLabel{$[Eq]$}
+    \BinaryInfC{$N = N'$}
+    \DisplayProof
+    \]
+
+    \item regola del contesto:
+    \[
+    \AxiomC{$M = M'$}
+    \AxiomC{$N = N'$}
+    \RightLabel{$[Cong_{\text{app}}]$}
+    \BinaryInfC{$M N = M' N'$}
+    \DisplayProof
+    \]
+
+    \item regola di $\lambda$-astrazione:
+    \[
+    \AxiomC{$M = N$}
+    \RightLabel{$[Cong_{\text{fn}}]$}
+    \UnaryInfC{$fn\ x \implies M = fn \ x \implies N$}
+    \DisplayProof
+    \]
+\end{itemize}
+
+\end{cdefframe}
+
+
 \end{document}
+
