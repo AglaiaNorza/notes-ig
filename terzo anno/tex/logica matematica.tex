@@ -1687,6 +1687,66 @@ Abbiamo quindi dimostrato che \( T \) coerente \( \implies \exists S \supseteq T
 
 Il passo successivo è dimostrare che \( S \) è già quasi un modello.
 
+Cerchiamo quindi un modello \( \Mm = (M, \Rr^\Mm, f_j^\Mm, c_i^\Mm) \)
+
+Per definirlo, facciamo alcune assunzioni.
+
+Assumiamo di lavorare con un linguaggio \( \Ll = \{R_i, f_j, c_k\} \) che contenga almeno una costante e una funzione (nota bene: se ci sono una costante e una funzione, ci sono infiniti termini chiusi).
+
+Definiamo \( \Mm \) (detto \textbf{modello di Henkin} dei termini di \( S \)):
+\begin{itemize}
+    \item \( M = \{\text{termini chiusi di } \Ll \}\)
+        \subitem {\color{gray}es. \( \Ll_1 = \{0, 1, +\}, \ M = \{0, 1, 0+0, 0+1, 1+0, \dots\} \)} 
+    \item \( c_k^\Mm = c_k \in M \) 
+        \subitem l'interpretazione della costante \( c \) è data dalla costante \( c \) stessa
+        \subitem {\color{gray} es. \( \Ll_2 = \{e, *\}, M_2 = \{e, e*e, \dots\} \) - come interpretazione di \( c_0 = e \) prendo \( e\in M_2 \)}
+    \item l'interpretazione di un simbolo di relazione \( \Rr \) è data dall'insieme dei termini chiusi di cui \( S \) dimostra che soddisfano la relazione - ovvero \( (\Mm_1, \dots, \Mm_n) \in \Rr^\Mm_i \iff  S \vdash \Rr_i(t_1, \dots, t_n)\)
+    \item l'interpretazione di un simbolo di funzione \( f \) è l'associazione \( t_1, \dots, t_n \mapsto f(t_1, \dots, t_n) \) - \( f^\Mm_j : M^n \to M \) è t.c. \( f^\Mm_j (t_1, \dots, t_n) := f_j(t_1, \dots, t_n) \)
+        \subitem {\color{gray}es. \( +^\Mm(0,1) = \underbracket{+(0,1)}_{t} \)}
+
+\end{itemize}
+
+Osserviamo che l'interpretazione in \( \Mm \) di un termine chiuso \( t \) coincide con il termine stesso (\( t^\Mm = t \)).
+
+Vogliamo dimostrare \( \Mm \vDash S \). Per farlo (come spesso accade) ci è più comodo dimostrare un'affermazione più forte: \( \forall E \ \Mm \vDash E \iff S \vdash E \).
+
+\begin{proofframe}{}
+    Dimostriamo per casi (su \( E \)):
+    \begin{itemize}
+        \item \( E \)  è \( \neg G \)
+
+            \subitem se \(\Mm \not \vDash E\), per ipotesi induttiva si ha \( S \not \vdash G \) e da \( S \) completa segue \( S \vdash \neg G \).
+
+            \subitem se \( \Mm \vDash E \), allora per ipotesi induttiva \( S \vdash G \) e da \( S \) coerente segue \( S \not\vdash \neg G \)
+
+
+        \item \( \Mm \vDash G \land H \) {\color{CadetBlue}\( \iff S\vdash G \land H \)}
+
+            (\( \implies \)) {\color{CadetBlue}supponiamo \( \Mm \vDash G\land H \);}
+            \subitem allora, \( \Mm \vDash G \ \land \Mm \vDash H\) 
+
+            \subitem per ipotesi induttiva, abbiamo \( S \vdash G \ \land S \vdash H \), e usando la tautologia \( G\to (H \to (G \land H)) \) ottengo \( S\vdash G\land H \) 
+
+            (\( \impliedby \)) {\color{CadetBlue}supponiamo \( S \vdash G \land H \);}
+            \subitem per la tautologia \( G\land H \to G \), otteniamo \( S\vdash G \ \land \ S \vdash H \)
+
+            \subitem per ipotesi induttiva, segue \( S\vDash G \ \land \ S \vDash H \), da cui \( S\vDash G \land H \)
+            
+        \item se \(E\) è un enunciato atomico \( R(t_1, \dots, t_k) \), abbiamo che \( \Mm \vDash R(t_1, \dots, t_n) \) per definizione \(\iff (t^\Mm_1, \dots t^\Mm_n)\in \R^\Mm \) e, per l'osservazione sui termini, \( \iff (t, \dots, t_n)\in R^\Mm \), il che per definizione equivale a \( S\vdash R(t_1, \dots, t_n) \)
+
+        \item se \( E \) è del tipo \( \forall x F \)
+
+            sappiamo \( \iff \forall m \in M \Mm \vDash F \tworowmatrix{x}{m}\)
+
+            {\color{CadetBlue}e qui vale \( \Mm \vDash F \tworowmatrix{x}{m} \iff \Mm \vDash F[x/m]\)}
+
+            \subitem per ipotesi induttiva, abbiamo che \( \forall m \in M, \ S\vdash F[x/m] \), ma non abbiamo il \( \iff \). 
+
+            sappiamo \( S \vdash \forall x F \implies S\vdash F[x/t] \), ma non l'altro verso {\color{gray}\small (è come dire che sappiamo che per ogni numero c'è una dimostrazione, ma vogliamo che ci sia una dimostrazione per ogni numero)}
+
+
+    \end{itemize}
+\end{proofframe}
 
 
 \end{document}
