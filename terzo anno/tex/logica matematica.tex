@@ -1743,10 +1743,108 @@ Vogliamo dimostrare \( \Mm \vDash S \). Per farlo (come spesso accade) ci è pi�
             \subitem per ipotesi induttiva, abbiamo che \( \forall m \in M, \ S\vdash F[x/m] \), ma non abbiamo il \( \iff \). 
 
             sappiamo \( S \vdash \forall x F \implies S\vdash F[x/t] \), ma non l'altro verso {\color{gray}\small (è come dire che sappiamo che per ogni numero c'è una dimostrazione, ma vogliamo che ci sia una dimostrazione per ogni numero)}
-
-
     \end{itemize}
 \end{proofframe}
 
+Possiamo definire una teoria che ci aiuta nella dimostrazione.
+
+\begin{defframe}{Teoria con testimoni}{}
+    Una \textbf{teoria con testimoni}, o \textbf{teoria di Henkin} (o ``scapegoat theory'')  soddisfa la seguente proprietà:
+    \begin{itemize}
+        \item \( \forall \) formula \( F \) con un'unica variabile libera \( x \), \( \exists \) un  termine chiuso \( t \) t.c.
+            \[ T \vdash \exists x \neg F(x) \to \neg F(t) \]
+
+            \subitem (\( t \) è un testimone dell'enunciato \( \exists x \neg F(x) \))
+    \end{itemize}
+
+    {\color{CadetBlue}(un testimone è un termine specifico (\( t \)) che la teoria ``nomina'' per concretizzare un'affermazione esistenziale - normalmente, se diciamo \( \exists x P(x) \), non sappiamo chi sia \( x \) per cui \( P \) vale; se siamo in una teoria con testimoni, invece, abbiamo \( \exists x P(x) \to P(t) \), sappiamo esattamente chi sia \( t \))}
+\end{defframe}
+
+Vediamo come una teoria con testimoni ci aiuta a dimostrare il caso \( \forall x F(x) \) con \( F(x) \) aperta.
+
+\begin{pframe}
+(Dimostriamo che, se \( \Mm \vDash \forall x F \) allora \(T \vdash \forall x F\))
+
+Per assurdo, supponiamo \( \Mm \vDash \forall x F \) e \( T \not\vdash \forall x F \).
+
+Per completezza di \( T \) vale \( T \vdash \neg E \), ovvero \( T \vdash \exists x \neg F(x) \). Dato che \( T \) è una teoria con testimoni, esiste un termine chiuso \( t \) tale che \( T \vdash \exists x \neg F(x) \to \neg F (t) \). 
+
+Dunque \( T\vdash \neg F(t) \).
+
+Per ipotesi induttiva, \( \Mm \vDash \neg F(t)\). Ma da \( \Mm \vDash \forall x F(x) \), e da \( \Mm \vDash \forall x F(x)\), vale, per qualsiasi termine chiuso \( \Mm \vDash F(x) \to F(t)\).
+
+Dunque, \( \Mm \vDash F(t)\), il che contraddice \( \Mm \vDash \neg F(t) \). \qed
+
+\end{pframe}
+
+Se \( T \) coerente, \( T \) si può estendere a \( T^* \supseteq T\) che sia coerente e con testimoni (in un \( \Ll \) che estende \( \Ll_T \) con un insieme numerabile di costanti.
+
+\begin{thmframe}{}{}
+    Per ogni teoria \( T \) coerente esiste una teoria  \( T' \) tale che:
+    \begin{itemize}
+        \item \( T' \) è un'estensione di \( T \)
+        \item \( T' \) è una teoria con testimoni
+        \item il linguaggio di \( T' \) è numerabile ed estende quello di \( T \)
+        \item \( T' \) è coerente
+    \end{itemize}
+    
+\end{thmframe}
+
+\begin{proofframe}{}{}
+    Sia \( T \) coerente. 
+
+    Sia \( T_0  = T \ \cup \ \{\text{istanze degli assiomi logici nel linguaggio esteso}\}\).
+
+    Fissiamo un'enumerazione delle formule in \( \Ll \) con una variabile libera: \( F_1(x_1), F_2(x_2), \dots \)
+
+    Sia \( B = \{b_1, b_2, b_3, \dots\} \) un insieme di nuovi simboli di costante. Fissiamone un'enumerazione \( b_{j1}, b_{j2}, \dots \), in cui \( b_{jk} \) è il primo (per indice) t.c.
+    \begin{itemize}
+        \item \( b_{jk} \) non appare in \( F_1(x_1), \dots, F_k(x_k) \)
+        \item \( b_{jk} \) è diverso da \( b_{j1}, \dots, b_{j_{k-1}} \)
+    \end{itemize}
+
+    {\small \color{gray} quindi \( b_{j1} \) è la prima costante \( \not \in F_1\), \( b_{j2} \) la prima che non compare in \( F_2 \) e non è già stata usata (quindi \( \neq b_{j1} \)), ecc}
+
+    Sia \( W_k \) il seguente enunciato:
+    \[ \exists x_k \neg F_k(x_k) \to \neg F_k(b_{jk})\]
+
+    Sia \( T_n = T_0 \cup \{W_1, \dots, W_n\} \), e sia \( T_{\infty} = \bigcup_n T_n \).
+
+    \begin{itemize}
+        \item Dimostriamo che \( T_\infty \) è coerente (basta dimostrare che \( \forall n \ T_n \) coerente)
+    \end{itemize}
+
+    per induzione:
+
+    \begin{itemize}
+        \item \textbf{C.B.}: \( T_0 \) è coerente
+            \subitem {\color{gray} ``banale'', \( T \) coerente e abbiamo aggiunto a \( T \) solo assiomi}
+
+            \subitem {\color{gray}\( T_0 \vdash \bot \implies T \cup \underset{\text{assiomi}}{A = \{A_1, \dots, A_t\}} \vdash \bot \implies T \vdash A \to \bot\) - visto che \( A \) assiomi, \( T \vdash  A \) e per MP, \( T\vdash \bot \) - ma questo è impossibile perché \( T \) coerente)}
+
+        \item \textbf{P.I.}: assumiamo \( T_{n-1} \) coerente
+
+            per assurdo, sia \( T_n \) incoerente;
+
+        
+    \end{itemize}
+
+
+\end{proofframe}
+            \todo{FINIRE}
+\textbf{claim}: \( T^* = \bigcup_{n\in \N} T \) è di Henkin, coerente ed estende \( T \).
+
+\section{Teorema di compattezza}
+La compattezza aiuta con dimostrazioni del tipo:
+
+\( P = \) ``avere dominio finito'';
+\( \Cc =  \) tutte le strutture
+
+Partiamo da \( P_n = \) ``avere dominio di cardinalità \( \geq n \)''.
+
+Possiamo assiomatizzare questa proposizione con un linguaggio \( \Ll \) ``vuoto'' (senza relazioni specifiche) in questo modo:
+\[ 
+    \exists x_1, \dots, x_n \bigl( \bigwedge_{i \neq j, 1\leq i\leq } \bigr)
+\]
 
 \end{document}
