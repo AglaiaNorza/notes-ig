@@ -1810,6 +1810,10 @@ Se \( T \) coerente, \( T \) si può estendere a \( T^* \supseteq T\) che sia co
 
     Sia \( T_n = T_0 \cup \{W_1, \dots, W_n\} \), e sia \( T_{\infty} = \bigcup_n T_n \).
 
+\textbf{claim}: \( T^* = \bigcup_{n\in \N} T \) è di Henkin, coerente ed estende \( T \).
+
+{\color{CadetBlue} di Henkin: \( \forall n \exists t = b_{j_n} \) t.c. \( T^* \ni \exists x_n \neg F_n(x_n) \to \neg F_n (b_{j_n})\) è vero per costruzione}
+
     \begin{itemize}
         \item Dimostriamo che \( T_\infty \) è coerente (basta dimostrare che \( \forall n \ T_n \) coerente)
     \end{itemize}
@@ -1826,25 +1830,186 @@ Se \( T \) coerente, \( T \) si può estendere a \( T^* \supseteq T\) che sia co
 
             per assurdo, sia \( T_n \) incoerente;
 
-        
+            allora, si ha \( T_n \vdash \bot \), e \( \bot \to B \implies T_n \vdash B \ \forall B \); quindi \( T_n \vdash \neg W_n \);
+
+            ma \( T_n = T_{n-1} \cup \{W_n\} \), quindi (per deduzione) \( T_{n-1} \vdash W_n \to \neg W_n \);
+
+            {\color{gray}\small \( \neg W_n \) è una negazione di un'implicazione (quindi verifica la premessa \( \exists x_n \neg F_n (x_n) \) e falsifica la conseguenza \( \neg F_n (b_{j_n}) \))} quindi \( T_{n-1} \vdash \exists x_n \neg F)n (x_n)\) e \( T_{n-1} \vdash F_n (b_{j_n})  \).
+
+        Per costruzione, sappiamo che \( T_{n-1} = T_0 \) {\color{gray}\small \( (= T \ \cup\ \) assiomi) } \( \cup \ \{W_1, \dots, W_{n-1}\} \); abbiamo scelto \( b_{j_n} \) e quindi sappiamo che:
+        \begin{itemize}
+            \item esso non compare in \( W_1, \dots, W_{n-1} \);
+            \item per definizione, non compare in \( T \);
+        \end{itemize}
+            Dovrà quindi far parte degli assiomi logici.
+
+            Notiamo che quindi, sostituendo \( b_{j_n} \) con una nuova variabile, la formula restante rimarrà un assioma logico.
+
+            Sia quindi \( y \) una variabile che non compare nella dimostrazione \( \delta \) (di \( F_n(b_{j_n}) \)). 
+
+            \textbf{claim}: \( \delta^y = \delta [b_{j_n}/y] = (D^y_1, \dots, D^y_n) \) è ancora una dimostrazione.
+
+            Infatti:
+            \begin{itemize}
+                \item gli assiomi rimangono tali (o non dicono niente su \( b_{j_n} \)) o dicono cose sempre vere, quindi sostituendo non cambia nulla
+                \item le ipotesi \( T_{n-1}, W_1, \dots, W_n \) non cambiano, in quanto \( \not \ni b_{j_n} \)
+                \item il Modus Ponens è preservato
+                \item la Generalizzazione non viene mai applicata su \( b_{j_n} \) (vorrebbe dire che una formula \( \forall y H(y) \) sarebbe stata ottenuta da una formula \( H(b_{j_n}) \) (ricordiamo che \( b_{j_n} \) è una costante specifica), il che è impossibile)
+            \end{itemize}
+
+            Ora - se è vero \( T_{n-1} \vdash F_n(y) \), per Generalizzazione si ha anche \( T_{n-1} \vdash \forall y F_n(y) \). Ma abbiamo anche \( T_{n-1} \vdash \exists x \neg F_n(x) \). Le due cose sono chiaramente contraddittorie, quindi \( T_{n-1} \) è incoerente. \qed
     \end{itemize}
-
-
 \end{proofframe}
-            \todo{FINIRE}
-\textbf{claim}: \( T^* = \bigcup_{n\in \N} T \) è di Henkin, coerente ed estende \( T \).
+
+Quindi, possiamo formalizzare i seguenti teoremi:
+
+\begin{thmframe}{}{}
+    Sia \( T \) una teoria con testimoni e coerente in un linguaggio numerabile. Allora, \( T \) ha un modello numerabile.
+\end{thmframe}
+
+\begin{thmframe}{Esistenza del modello}{}
+    Ogni teoria coerente (in un linguaggio numerabile) ha un modello numerabile.
+\end{thmframe}
+
+\begin{proofframe}
+    Partiamo da \( T \) coerente \  {\color{CadetBlue}(in \( \Ll) \)}
+    \begin{itemize}
+        \item \( \overset{\text{Henkin}}{\implies} \ T^* \supseteq T \) coerente con testimoni \  {\color{CadetBlue}(in \( \Ll^* \text{ numerabile } \supseteq \Ll) \)}
+
+        \item \( \overset{\text{Lindenbaum}}{\implies} \ \hat T \supseteq T^*\) coerente e completa con testimoni \ {\color{CadetBlue}(in \( \Ll^*)\)
+            \subitem (la proprietà di essere con testimoni è preservata perché il lemma di Lindenbaum non cambia il linguaggio)}
+        \item \( \implies \ \Mm_{\hat T} \vDash  T \)  (il modello dei termini di \( \hat T \) è un modello numerabile di \( T \))
+
+    \end{itemize}
+    
+\end{proofframe}
+
+\textbf{nota bene} ! 
+
+\textbf{logica con identità}
+
+La dimostrazione sopra descritta si limita alla logica di primo ordine senza identità.
+
+Per il modello sopra definito, \( \Mm \vDash (t_1 = t_2) \iff \) \( t \) ed \( s \) sono esattamente lo stesso termine {\color{gray}(quindi, per esempio, \( (1+1) \neq 2 \))}.
+
+Per risolvere questo problema, basta quozientare sulla seguente relazione:
+\[ t \sim s \iff T\vdash(t = s) \]
+
+\begin{itemize}
+    \item notiamo che \( \sim \) è una relazione di equivalenza
+\end{itemize}
+
+Definiamo quindi il modello dei termini \( \Mm/\sim \) in questo modo:
+\begin{itemize}
+    \item il dominio è \( M/\sim = \{[t]_\sim \mid t \text{ termine chiuso}\}\)
+    \item \( c^{\Mm/\sim} = [c]_\sim\)
+    \item \( f^{\Mm/\sim}([t_1]_{\sim}, \dots, [t_n]_{\sim}) = [f(t_1, \dots, t_n)]_{\sim} \)
+    \item \(([t_1]_{\sim}, \dots, [t_n]_{\sim}) \in R^{\Mm/\sim}\) se e solo se \(T \vdash R(t_1, \dots, t_n)\)
+\end{itemize}
+
+La dimostrazione \( \Mm/\sim \vDash E \iff T\vdash E \) procede esattamente come quella di \( \Mm \). Inoltre, se \( \Mm \) ha cardinalità numerabile, anche \( \Mm/\sim \) ha cardinalità numerabile.
 
 \section{Teorema di compattezza}
-La compattezza aiuta con dimostrazioni del tipo:
+Il teorema di compattezza si può riformulare in diversi modi:
 
-\( P = \) ``avere dominio finito'';
-\( \Cc =  \) tutte le strutture
+\begin{thmframe}{Teorema di compattezza, versioni equivalenti}{}
+
+    \begin{itemize}
+        \item Un insieme di enunciati è coerente se e solo se ogni suo sottinsieme finito è coerente.
+
+        \item Un insieme di enunciati ha un modello se e soltanto se ogni suo sottoinsieme finito ha un modello.
+
+        \item \( T\vDash E \) se e solo se esiste un sottoinsieme finito \( T_0 \subseteq T \) tale che \( T_0 \vDash E \).
+    \end{itemize}
+    
+\end{thmframe}
+
+\subsection{Applicazione: (non) assiomatizzabilità}
+
+Data una proprietà \( P \) di strutture, è utile chiedersi se possa essere espressa da enunciati del primo ordine, ovvero se esista un insieme di enunciati \( T \) che soddisfa, per ogni struttura \( \Aa \), la seguente equivalenza:
+\[ \Aa \vDash T \iff \Aa \text{ ha la proprietà }  P \]
+
+Se un tale \( T \) esiste, diciamo che \textbf{assiomatizza} o \textit{definisce} la proprietà \( P \).
+
+Ha ancora più senso chiedersi, nello specifico, data una classe di strutture \( \Cc \) e un linguaggio predicativo \( \Ll \), se esista una teoria in \(\Ll \) tale che la proprietà s opra sia soddisfatta.
+
+Se esiste una teoria \( T \) che assiomatizza una proprietà \( P \), ci si può chiedere se esiste un \textit{insieme finito di enunciati} che assiomatizza \( P \). Questo è equivalente a chiedersi se esiste un singolo enunciato \( E \) {\color{gray} (l'AND tra tutti gli enunciati)} tale che, per ogni struttura \( \Aa \) nella classe \( \Cc \),
+\[ A \vDash E \iff \Aa \text{ ha la proprietà } P\]
+
+
+In questo caso, diciamo che \( P \) è \textbf{finitamente assiomatizzabile} relativamente alla classe \( \Cc \).
+
+\textbf{Esempio 1: finitezza}
+
+\begin{itemize}
+    \item \( P = \) ``avere dominio finito'';
+    \item \( \Cc =  \) tutte le strutture;
+\end{itemize}
+
 
 Partiamo da \( P_n = \) ``avere dominio di cardinalità \( \geq n \)''.
 
 Possiamo assiomatizzare questa proposizione con un linguaggio \( \Ll \) ``vuoto'' (senza relazioni specifiche) in questo modo:
 \[ 
-    \exists x_1, \dots, x_n \bigl( \bigwedge_{i \neq j, 1\leq i\leq } \bigr)
+    \exists x_1, \dots, x_n \left( \ \bigwedge_{i \neq j, \ 1\leq i\leq n} \neg (x_i = x_j)\ \right)
 \]
+
+
+{\color{CadetBlue}Possiamo assiomatizzare anche la proprietà ``avere dominio di cardinalità \( n \)'' in questo modo:
+\[  
+    \exists x_1, \dots, x_n \left( \ \bigwedge_{i \neq j, \ 1\leq i\leq n} \neg (x_i = x_j) \land \forall y \left( \bigvee_{i=1}^n (y = x_i)\right)\ \right)
+\]
+}
+
+\begin{propframe}{Assiomatizzazione di ``avere un dominio finito / infinito''}{}
+    La proprietà ``avere dominio infinito'' è assiomatizzabile ma non finitamente assiomatizzabile.
+
+    La proprietà ``avere dominio finito'' non è assiomatizzabile.
+\end{propframe}
+
+\begin{pframe}
+Consideriamo \( T = \{P_n \mid n \in \N\} \) (``avere dominio di cardinalità almeno \( n \)'' per ogni \( n \)). La teoria \( T \) assiomatizza ``avere un dominio infinito'' {\color{gray}\small (se si ha dominio almeno \( n \) per ogni \( n \))}
+
+Sia per assurdo \( F \) una teoria che assiomatizza \( P = \) ``avere dominio finito''.
+
+Consideriamo \( F \cup T \). \( F\cup T \) non può avere modelli (in quanto parla di essere finito e infinito allo stesso tempo).
+
+Se ne prendo un qualsiasi pezzo finito \( T_0 \subseteq F \cup T \), noto però che esso ha un modello (in quanto descrive, ``alla peggio'', l'avere dominio finito (da \( F \)) e l'avere almeno \( n \) elementi (da \( T \))).
+
+Visto che \( T_0 \) ha un modello, per compattezza tutta la teoria dovrebbe avere un modello \( (\texttt{FINSAT}\implies \texttt{SAT}) \), il che è impossibile. \qed
+
+Vediamo anche che è impossibile che ``avere dominio infinito'' sia \textit{finitamente} assiomatizzabile.
+
+Infatti, se esistesse \( S \) finita t.c. \( \Aa \vDash S \iff \Aa  \) ha dominio infinito, avremmo che \( \neg S \) assiomatizzerebbe ``avere dominio finito'' (impossibile). \qed
+\end{pframe}
+
+\begin{lemmaframe}{}{}
+    Sia \( P \) assiomatizzabile. Se \( \neg P \) non è assiomatizzabile, allora \( P \) non è finitamente assiomatizzabile.
+
+    Per contrapposizione, se \( P, \neg P \) sono assiomatizzabili, allora P è finitamente assiomatizzabile.
+\end{lemmaframe}
+
+\begin{lemmaframe}{}{}
+    Se \( P \) è assiomatizzabile da \( T \) e \( P \) è finitamente assiomatizzabile, allora \( \exists T_0 \subseteq T \) che assiomatizza \( P \).
+\end{lemmaframe}
+
+\begin{lemmaframe}{}{}
+    Se \( T \) ha modelli finiti arbitrariamente grandi (per ogni \( n \) c'è un modello con almeno \( n \) elementi), allora \( T \) ha anche modelli infiniti.
+\end{lemmaframe}
+
+\begin{gframe}{(Non) assiomatizzazione di ``essere un grafo connesso``}
+    Consideriamo i grafi, con linguaggio \( \Ll = \{E(x,y)\} \), e la proprietà \( P = \) ``essere un grafo connesso''.
+
+    Possiamo scrivere la proprietà \( D_n = \) ``essere a distanza \( \geq n \)'' in questo modo:
+    \[ \neg (\exists x_1, \dots, x_n \left(\bigwedge_{i \neq j}\neg (x_i = x_j) \land E(c, x_1)\land E(x_1, x_2) \land \dots \land E(x_n, d)\right))\]
+
+    Supponiamo che \( P \) sia assiomatizzabile da una teoria \( C \).
+
+    Consideriamo \( C \cup \{D_n \mid n\geq 0\} \) - questa teoria non può avere un modello.
+
+    Come prima, consideriamo un pezzo finito \( T_0 \subseteq C \cup \{D_n \mid n\geq 0\} \). 
+
+    Come prima, questo sottoinsieme ha un modello (un grafo connesso con vertici a distanza \( > \) del massimo \( n \)). Come prima, avremmo \(\texttt{FINSAT} \implies \texttt{SAT} \), e per questo si ha che \( P \) non è assiomatizzabile. \qed
+\end{gframe}
 
 \end{document}
