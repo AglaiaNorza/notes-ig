@@ -2012,4 +2012,35 @@ Infatti, se esistesse \( S \) finita t.c. \( \Aa \vDash S \iff \Aa  \) ha domini
     Come prima, questo sottoinsieme ha un modello (un grafo connesso con vertici a distanza \( > \) del massimo \( n \)). Come prima, avremmo \(\texttt{FINSAT} \implies \texttt{SAT} \), e per questo si ha che \( P \) non è assiomatizzabile. \qed
 \end{gframe}
 
+\subsection{Modelli non standard dell'aritmetica}
+
+Dato \( \Nn = (\N, 0, 1, +, *, \leq ) \), possiamo definire la sua teoria \( T = Th(\Nn) = \{E \mid \N \vDash E\} \).
+
+Sia \( \Aa \vDash Th(\Nn) \). Quanto assomiglia \( \Aa \) ad \( \N \)?
+
+Noi vorremmo \( \Aa \iso \Nn \), ma in realtà esistono molti modelli di \( \Nn \) molto differenti dai numeri naturali che conosciamo.
+
+Consideriamo per esempio una nuova costante \( c \) e la teoria:
+\[ T \cup \{A_n \mid n\in \N\} \]
+con \( A_n = \underbracket{1 + \dots + 1}_{n} < c \).
+
+Un sottooinsieme qualsiasi \( T_0 \subseteq T \cup \{A_n \mid n\in \N\} \) ha un modello - basta dare un'interpretazione alla costante \( c \).
+
+Per esempio, \( \Aa = (\N, +^\Nn, x^\Nn, 0^\Nn, 1^\Nn, c^\Aa = max(a_1, \dots, a_k)+1)\) è un modello di \( T_0 \).
+
+Per compattezza, quindi, \(T\cup \{A_n \mid n \in \N\}  \) ha un modello.
+
+Ma come interpretiamo \( c^\Aa \) in questo modello? Deve esserci un unico \( c \) tale che, \( \forall n, \underbracket{1 + \dots + 1}_{n} <^\Aa c^\Aa  \).
+
+Deve quindi esserci un \( c \) maggior di tutti gli elementi di \( \N \). 
+
+Questo modello è molto diverso da \( \N \).\( \Aa \) è quello che si dice \textbf{modello non-standard} dell'aritmetica, e \( c^\Aa \) è un \textit{naturale non-standard}.
+
+Inizia infatti con \( \N \), ma contiene almeno un elemento maggiore di tutti i numeri standard. Inoltre, se \( a\in \Aa \)  è un numero non-standard, allora anche il suo predecessore è un numero non-standard. Un elemento non-standard ha quindi infiniti predecessori e successori, nessuno dei quali può essere standard. 
+
+Intorno a \( c^\Aa \) si sviluppa quindi una copia isomorfa a \( \Z \).
+
+Si esclude quindi che si possa definire una teoria \( T \) che assiomatizzi \( Th(\Nn) \) in modo che valga, come per DLO< che tutti i modelli numerabili di \( T \) sono isomorfi. Resta aperta però la possibilità di trovare un insieme di assiomi \( T \) con insieme di teoremi computabilmente enumerabili che coincida con la ``vera'' Teoria dei Numeri \( Th(\Nn) \).Una tale teoria sarebbe completa e dunque decidibile e fornirebbe un algoritmo per decidere automaticamente se un enunciato \( E \) è un teorema della Teoria dei Numeri o no.
+
+
 \end{document}
