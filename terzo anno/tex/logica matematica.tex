@@ -2042,5 +2042,82 @@ Intorno a \( c^\Aa \) si sviluppa quindi una copia isomorfa a \( \Z \).
 
 Si esclude quindi che si possa definire una teoria \( T \) che assiomatizzi \( Th(\Nn) \) in modo che valga, come per DLO< che tutti i modelli numerabili di \( T \) sono isomorfi. Resta aperta però la possibilità di trovare un insieme di assiomi \( T \) con insieme di teoremi computabilmente enumerabili che coincida con la ``vera'' Teoria dei Numeri \( Th(\Nn) \).Una tale teoria sarebbe completa e dunque decidibile e fornirebbe un algoritmo per decidere automaticamente se un enunciato \( E \) è un teorema della Teoria dei Numeri o no.
 
+\chapter{I teoremi di Gödel}
+\section{Funzioni calcolabili (algoritmiche)}
+Esistono diverse definizioni di algoritmo. Le principali ci vengono date da Gödel, Herbrand e Kleene (in chiave matematica), da Turing (attraverso le TM), e da Church (nel \( \lambda \)-calcolo).
 
+\begin{defframe}{Funzioni calcolabili}{}
+    La classe \( \Cc \) delle funzioni parziali calcolabili è la minima classe di funzioni del tipo \( \N^k \to \N \) (con \( k\in N \)) t.c.:
+    \begin{itemize}
+        \item \( +, * \in \Cc \)
+        \item \( i(x, y) = \begin{cases}
+                1 & \text{se } x = y\\
+                0 & \text{se } x \neq y
+        \end{cases} \)
+    \item \( \prod_i^n (x_1, \dots, x_n) = x_i \) \ {\color{CadetBlue}(proiezione)}
+    \end{itemize}
+    e \( \Cc \) chiusa sotto composizione -
+    date \( \theta_1, \dots, \theta_n: \N^k \to \N, \psi:\N^m \to \N \), la composta \( \phi \) è definita come segue:
+    \[ \phi(x_1, \dots, x_n) = \psi(\theta_1(x_1, \dots, x_n), \dots, \theta_n(x_1, \dots, x_k)) \]
+
+    \( \Cc \) è chiusa anche sotto \textit{minimalizzazione}:
+    data \( g(\vec{x}, y)\), la funzione \( h(\vec{x}) \) è definita come \( h(\vec{x}) = min \ z\) t.c. 
+\begin{itemize}
+    \item i valori \( g(\vec{x}, 0 ), g(\vec{x}, 1), \dots, g(\vec{x}, z-1)\) sono definiti e \( \neq 0 \)
+    \item \(g(\vec{x}, z ) = 0 \)
+    \item (se un tale \( z \) non esiste, la funzione non è definita)
+\end{itemize}
+
+\end{defframe}
+
+\begin{propframe}{}{}
+    Si ha che \( f\in \Cc \implies f  \) calcolabile.
+\end{propframe}
+
+\begin{itemize}
+    \item Nella composizione di funzioni $h(g_1, \dots, g_m)$:
+    \begin{itemize}
+        \item Se tutte le $g_i$ e $h$ fossero totali, si applicherebbero semplicemente le $g_i$ e poi $h$ sul risultato.
+        \item Se una delle $g_i$ è indefinita, il calcolo procede comunque secondo la logica algoritmica: il programma semplicemente non termina (non si arriva mai ad applicare $h$).
+            \subitem (anche se il risultato è indefinito, il processo rimane algoritmico).
+    \end{itemize}
+\end{itemize}
+
+Per calcolare una composizione come $h(g_1(\vec{x}), g_2(\vec{x}), \dots)$, è necessario stabilire un ordine di esecuzione:
+\begin{itemize}
+    \item Non si possono far partire le funzioni in parallelo; devono essere eseguite in ordine sequenziale.
+    \subitem se si procedesse in parallelo, si potrebbe trovare un risultato per $g_2$ mentre $g_1$ sta ancora calcolando (o è in loop infinito).
+    \item Per definizione, se un argomento è indefinito, l'intera composizione deve esserlo. Procedendo in ordine, se ci si ``ferma'' su $g_1$, il calcolo si arresta correttamente senza produrre risultati parziali o errati basati sugli altri argomenti.
+\end{itemize}
+
+(Anche \( g(\vec{x}, y) \) è algoritmica perché lo è \( h(\vec{x}) \))
+
+\begin{propframe}{Calcolabilità}{}
+    
+
+\begin{itemize}
+    \item Una funzione $\varphi: \mathbb{N}^k \rightarrow \mathbb{N}$ è calcolabile $\iff \varphi \in \mathcal{C}$.
+    \item  $R \subseteq \mathbb{N}^k$ si dice calcolabile se la sua \textbf{funzione caratteristica} $\varphi_R$ è calcolabile.
+    \subitem 
+    \(
+    \varphi_R(\vec{x}) = \begin{cases} 
+    1 & \text{se } \vec{x} \in R \\ 
+    0 & \text{se } \vec{x} \notin R 
+    \end{cases}
+    \)
+\end{itemize}
+\end{propframe}
+
+\section{Teorema di Definibilità}
+Tutte le funzioni appartenenti alla classe $\mathcal{C}$ sono rappresentabili in $\mathcal{N}$ (il modello standard dell'aritmetica).
+
+\begin{itemize}
+    \item Data una funzione $\varphi: \mathbb{N}^k \rightarrow \mathbb{N}$ con $\varphi \in \mathcal{C}$.
+    \item esiste una formula $F(x_1, \dots, x_k, y)$ nel linguaggio dell'aritmetica tale che:
+    \item per ogni tupla di numeri naturali $(a_1, \dots, a_k, b) \subseteq \mathbb{N}^{k+1}$, vale l'equivalenza:
+    \[
+    \varphi(a_1, \dots, a_k) = b \iff \mathcal{N} \models F(x_1, \dots, x_k, y)[a_1, \dots, a_k, b]
+    \]
+\end{itemize}
+  (la formula è vera nel modello standard $\mathcal{N}$ se e solo se la funzione, calcolata sugli input $a_i$, restituisce $b$).
 \end{document}
