@@ -2097,10 +2097,10 @@ Per calcolare una composizione come $h(g_1(\vec{x}), g_2(\vec{x}), \dots)$, è n
 
 \begin{itemize}
     \item Una funzione $\varphi: \mathbb{N}^k \rightarrow \mathbb{N}$ è calcolabile $\iff \varphi \in \mathcal{C}$.
-    \item  $R \subseteq \mathbb{N}^k$ si dice calcolabile se la sua \textbf{funzione caratteristica} $\varphi_R$ è calcolabile.
+    \item  $R \subseteq \mathbb{N}^k$ si dice calcolabile se la sua \textbf{funzione caratteristica} $\chi_R$ è calcolabile.
     \subitem 
     \(
-    \varphi_R(\vec{x}) = \begin{cases} 
+    \chi_R(\vec{x}) = \begin{cases} 
     1 & \text{se } \vec{x} \in R \\ 
     0 & \text{se } \vec{x} \notin R 
     \end{cases}
@@ -2109,15 +2109,120 @@ Per calcolare una composizione come $h(g_1(\vec{x}), g_2(\vec{x}), \dots)$, è n
 \end{propframe}
 
 \section{Teorema di Definibilità}
-Tutte le funzioni appartenenti alla classe $\mathcal{C}$ sono rappresentabili in $\mathcal{N}$ (il modello standard dell'aritmetica).
-
-\begin{itemize}
-    \item Data una funzione $\varphi: \mathbb{N}^k \rightarrow \mathbb{N}$ con $\varphi \in \mathcal{C}$.
-    \item esiste una formula $F(x_1, \dots, x_k, y)$ nel linguaggio dell'aritmetica tale che:
-    \item per ogni tupla di numeri naturali $(a_1, \dots, a_k, b) \subseteq \mathbb{N}^{k+1}$, vale l'equivalenza:
+\begin{defframe}{Definibilità}{}
+    Diciamo che \( \varphi \) è \textbf{rappresentabile} in \( \Nn \) da una formula \( F(x_1, \dots, x_k, y) \) se per ogni tupla di numeri naturali \((a_1, \dots, a_k, b) \subseteq \mathbb{N}^{k+1}\), vale l'equivalenza:
     \[
-    \varphi(a_1, \dots, a_k) = b \iff \mathcal{N} \models F(x_1, \dots, x_k, y)[a_1, \dots, a_k, b]
+        \varphi(a_1, \dots, a_k) = b \iff \Nn \models F \left[\ass{x_1, \dots, x_k, y}{a_1, \dots, a_k, b}\right]
     \]
+i.e. se le k+1-ple \( (a_1, \dots, a_k, b) \) appartententi al grafo di \( \varphi \) sono esattamente quelle che soddisfano in \( \Nn \) la formula \( F(x_1, \dots, x_k, y) \) assegnando \( a_i \) a \( x_i \) e \( b \) a \( y \).
+
+{\color{Gray}\small(la formula è vera nel modello standard \(\mathcal{N}\) se e solo se la funzione, calcolata sugli input \(a_i\), restituisce \(b\)).}
+
+Nel linguaggio dell'aritmetica, ogni numero naturale \( n\in \N \) ha un nome canonico (\textbf{numerale}) costituito dalla somma di \( n \) volte la costante \( 1 \).
+
+Quindi, vale che:
+\[  \Nn \models F \left[\ass{x_1, \dots, x_k, y}{a_1, \dots, a_k, b}\right] \iff \Nn \vDash F(\bar{a_1}, \dots, \bar{a_k}, \bar{b})\]
+\end{defframe}
+
+\begin{thmframe}{Teorema di Definibilità}{}
+    Le funzioni calcolabili sono definibili in \( \Nn \).
+\end{thmframe}
+
+\begin{proofframe}[title=per induzione]
+    \begin{itemize}
+        \item \textbf{C.B.}: le funzioni di base sono definibili in \( \Nn \)
+
+            \subitem L'addizione è definita dalla formula \( F(x, y, z) := ((x + y) = z) \), la moltiplicazione dalla formula \( G(x, y, z) := ((x \times y) = z) \), la proiezione \( \pi_{i}^{n}(x_1, \dots, x_n) = x_i \) (dove \( i \in [1, n] \)) è definibile dalla formula \( H(x_1, \dots, x_n, z) := (x_1 = x_1 \wedge \dots \wedge x_i = z \wedge \dots \wedge x_n = x_n) \), la funzione caratteristica dell'uguaglianza dalla formula \( I(x, y, z) := (x = y \wedge z = 1) \vee (x \neq y \wedge z = 0) \). \hfill \(\square\)
+
+        \item \textbf{chiusura per composizione}: le funzioni definibili in \( \Nn \) sono chiuse per composizione
+
+Siano:
+\begin{align*}
+    H_1(x_1, \dots, x_k, y_1) & \quad \text{che rappresenta } \vartheta_1 \\
+    H_2(x_1, \dots, x_k, y_2) & \quad \text{che rappresenta } \vartheta_2 \\
+    \vdots & \\
+    H_m(x_1, \dots, x_k, y_m) & \quad \text{che rappresenta } \vartheta_m
+\end{align*}
+
+E sia:
+\[
+G(y_1, \dots, y_m, z) \quad \text{che rappresenta } \Psi
+\]
+
+Voglio una formula $F(x_1, \dots, x_k, w)$ che rappresenti la funzione composta $\Psi(\vartheta_1, \dots, \vartheta_m)$.
+
+Quand'è che \((x_1, \dots, x_k, w) \in \text{grafico composta}(\Psi, \vartheta_1, \dots, \vartheta_m)$? Se $W$ è il valore di $\Psi$ con argomenti = $m$ valori di $\vartheta_1, \dots, \vartheta_m$ applicate a $(x_1, \dots, x_k)\).
+
+La formula è:
+\[
+\exists y_1 \dots y_m \quad (\text{se esistono gli } m \text{ valori intermedi})
+\]
+tale che:
+\[
+H_1(x_1 \dots x_k, y_1) \land H_2(x_1 \dots x_k, y_2) \land \dots \land H_m(x_1 \dots x_k, y_m)
+\]
+\[
+\land \quad G(y_1, \dots, y_m, W) \quad (\text{valore } G(y_1 \dots y_m))
+\]
+
+\textit{NB:} Questo finisce nel grafico della composta se \(\exists y_1 \dots\) (se le intermedie sono indefinite, anche la composta lo è).
+
+Si vede che questa formula è soddisfatta $\iff$ l'elemento appartiene al grafico della composta.
+        \subitem siano 
+        
+        \item \textbf{chiusura per minimo}: le funzioni definibili in \( \Nn \) sono chiuse per minimo
+
+Sia \(H(x_1, \dots, x_k, y, z)\) una formula che rappresenta \(\vartheta(x_1, \dots, x_k, y)\).
+
+Voglio \(G\) con variabili \((x_1, \dots, x_k, S)\) dove \(S\) è il minimo tale che:
+\[
+\vartheta(x_1, \dots, x_k, S) \downarrow = 0 \quad
+\land \quad \forall w \ (0 \le w < S, \ \vartheta(x_1, \dots, x_k, w) \downarrow \neq 0)
+\]
+
+La formula risultante è:
+\[
+H(x_1, \dots, x_k, S, 0) \land \forall w (w < S \to \exists z (H(x_1, \dots, x_k, w, z) \land z \neq 0))
+\]
+    \end{itemize}
+\end{proofframe}
+
+\begin{defframe}{Calcolabilità e rappresentabilità di una relazione}{}
+    Una relazione \( R \subseteq N^n \) è calcolabile se e solo se la sua funzione caratteristica è calcolabile.
+
+    Una relazione \( R \) è rappresentabile in \( \Nn \) se e solo se \( \exists F(x_1, \dots, x_k) \) t.c. \( \forall n_1, \dots, n_k \in \N\):
+    \begin{align*}
+        (n_1, \dots, n_k) \in R &\implies \Nn \vDash F(\bar{n_1}, \dots, \bar{n_k}) \\
+        (n_1, \dots, n_k) \not\in R &\implies \Nn \vDash \neg F(\bar{n_1}, \dots, \bar{n_k})
+    \end{align*}
+\end{defframe}
+\begin{thmframe}{Rappresentabilità di relazioni}{}
+     Tutte le relazioni calcolabili sono rappresentabili in \( \Nn \)
+\end{thmframe}
+\begin{pframe}
+    \( R \) è calcolabile se e solo se \( \chi_R \in \Cc \).
+
+    Sia \( F(x_1, \dots, x_k, y) \) che rappresenta \( \chi_R \).
+
+    Questo significa che \( \chi_R(n_1, \dots, n_k)=b \iff \Nn \vDash F(\bar{n_1}, \dots, \bar{n_k}, \bar{b}) \). Abbiamo che \( b\in \{0,1\} \).
+
+    I vettori che appartengono a \( R \) sono quelli che danno \( 1 \) (per come definiamo \( \chi_R \)), quindi \( F(x_1, \dots, x_k, 1)\) rappresenta \( R \).
+
+    Ovvero, presi \((n_1, \dots, n_k) \in R, \ \ \chi_R(n_1, \dots, n_k) = 1  \implies \mathcal{N} \models F(\bar{n}_1, \dots, \bar{n}_k, 1) \)
+
+Se invece $(n_1, \dots, n_k) \notin R, \ \ \chi_R(n_1, \dots, n_k) = 0 \implies \mathcal{N} \models F(\bar{n}_1, \dots, \bar{n}_k, 0)  \implies \mathcal{N} \models \neg F(\bar{n}_1, \dots, \bar{n}_k, 1)$
+
+\begin{gframe}{}
+L'implicazione finale vale perché:
+\begin{itemize}
+    \item \(\mathcal{N} \models \neg(0=1)\)
+
+    \item \(\mathcal{N} \models \text{``}F \text{ è funzionale''}\)
+    \subitem (dato che \(F\) rappresenta una funzione, non ci possono essere 2 valori diversi per cui sia vera "sullo stesso input")
 \end{itemize}
-  (la formula è vera nel modello standard $\mathcal{N}$ se e solo se la funzione, calcolata sugli input $a_i$, restituisce $b$).
+
+\end{gframe}
+\end{pframe}
+
+
 \end{document}
