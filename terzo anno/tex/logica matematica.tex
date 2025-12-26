@@ -2218,85 +2218,11 @@ L'implicazione finale vale perché:
     \item \(\mathcal{N} \models \neg(0=1)\)
 
     \item \(\mathcal{N} \models \text{``}F \text{ è funzionale''}\)
-    \subitem (dato che \(F\) rappresenta una funzione, non ci possono essere 2 valori diversi per cui sia vera sullo stesso parametro)
+    \subitem (dato che \(F\) rappresenta una funzione, non ci possono essere 2 valori diversi per cui sia vera "sullo stesso input")
 \end{itemize}
 
 \end{gframe}
 \end{pframe}
-
-
-\textbf{Osservazione}: notiamo che tutte le funzioni calcolabili hanno una simile struttuta sintattica: sono formate da quantificatori esistenziali seguiti da una formula in cui non compaiono quantificatori o essi appaiono solo "limitati" ( es. \( \forall x (x\leq 7 \to \dots) \)) - queste formule vengono dette \( \sum_1^0 \).
-
-\section{I numeri di Gödel}
-{\color{gray} \small Vogliamo mostrare che \( Th(\Nn) \) non è calcolabile mostrando che non è rappresentabile in \( \Nn \).}
-
-Funzioni e relazioni calcolabili hanno come argomenti numeri naturali. Ci serve quindi poter codificare funzioni e relazioni su altri tipi di oggetti.
-
-Gödel inventa una codifica \( code: \{\text{enunciati aritmetici}\} \to \N \) tale che:
-\begin{itemize}
-    \item ad ogni simbolo di base del linguaggio (parentesi, connettivi, variabili, simboli di funzione/relazione, costanti) viene associato un \textbf{intero positivo dispari}
-    \item ogni formula ben formata è una sequenza \( u_0, u_1, \dots, u_n \) di simboli di base, che viene codificata in questo modo:
-        \subitem \( code(u_0, u_1, \dots, u_n) = 2^{code(u_0)} \cdot 3^{code(u_1)} \cdot \ldots \cdot p_n^{code(u_n)} \)
-    \item ogni derivazione è una sequenza \( e_0, e_1, \dots, e_n \) di formule, che viene codificata in questo modo:
-        \subitem \( code(e_0, e_1, \dots, e_n) = 2^{code(e_0)} \cdot 3^{code(e_1)} \cdot \ldots \cdot p_n^{code(e_n)} \)
-\end{itemize}
-
-La funzione \( code \) è iniettiva e permette di distinguere algoritmicamente tra codici di simboli di base (pari), ``formule'' (pari con primo esponene dispari) e ``derivazioni'' (pari con primo esponente pari).
-
-Quando si parla dell'esprimibilità di un insieme di enunciati in una teoria, si intende l'esprimibilità dell'insieme dei codici numerici enunciati.
-
-Ci chiediamo quindi se \( \{cod(E) \mid \Nn \vDash E\} \) sia rappresentabile in \( \Nn \) {\color{gray}\small (non lo è)}.
-
-\subsection{Indecidibilità algoritmica dell'aritmetica (Tarski)}
-
-\begin{thmframe}{Teorema di indefinibilità di Tarski}{}
-\textit{La verità aritmetica non può essere definita all'interno dell'aritmetica.}
-
-(L'insieme delle verità aritmetiche \( Th(\Nn) = \{E \mid \Nn \vDash E\} \) non è rappresentabile in \( \Nn \).)
-\end{thmframe}
-
-Supponiamo per assurdo che \( Th(\Nn) \) sia rappresentabile.
-Si tratta di un insieme, quindi è descritto da una formula con una variabile libera.
-
-Sia \( T(x) \) la formula che lo rappresenta.
-\begin{itemize}
-    \item \( E \in Th(\Nn) \implies \Nn \vDash T(\overline{code(E)})\)
-    \item \( E \not\in Th(\Nn) \implies \Nn \vDash \neg T(\overline{code(E)})\)
-\end{itemize}
-
-Introduciamo una nuova funzione \( \delta : \N \to \N \).
-Dato \( p\in \N \), \( \delta \) controlla se \( p \) è il codice numerico di una formula \( A(x) \) una variabile libera. Se lo è, \( \delta(p) =  \) codice di \( A(x/\bar{p}) \).
-
-{\color{CadetBlue}(dato \( p\), controllo se codifica una FML \( A(x) \) - se sì, scrivo \( A(p) \) (metto il numerale \( p \) al posto della variabile {\small(quindi do alla formula il suo stesso codice)}), codifico la nuova stringa e restituisco il suo codice numerico \( q \))}
-
-\( \delta \) è evidentemente calcolabile (uso la tesi di Church-Turing {\color{gray} - ogni funzione descrivibile tramite un algoritmo è calcolabile da una TM - } per non doverlo dimostrare esplicitamente). In quanto calcolabile, \( \delta\in\Cc \), e quindi \( \delta \) rappresentabile.
-
-Quindi, sia \( D(x, y) \) una formula che rappresenta \( \delta \) in \( \Nn \), ovvero tale che:
-\[ \delta(a) = b \iff \Nn \vDash D(\bar{a}, \bar{b})\]
-
-Consideriamo la formula
-\[ \forall y (D(x, y)\to \neg T(y)) \]
-(che dichiara ``per ogni \( y \) valore di \( \delta(x) \) {\color{gray}\small(quindi formula \( A(y/\bar{x}) \) in cui \( x = code(A)\))}, \( y \) non è un enunciato vero in \( \Nn \))
-
-Questa formula è una formula con una variabile libera \( x \) (chiamiamola \( A(x) \)). (In quanto tale può essere codificata). 
-
-Sia \( p \) il codice di \( A(x) \).
-
-Consideriamo \( A(x/\bar{p}) \), ovvero
-\[ \forall y (D(\bar{p}, y)\to \neg T(y)) \]
-(che dichiara che ogni \( y \) valore di \( \delta(p)\) non è un enunciato vero in \(\Nn \))
-
-Sia \( q \) il suo codice (quindi \( \delta(p) = q  \)).
-
-Notiamo subito che la formula genera una contraddizione: la formula dichiara che ogni numero che sia \( = \delta(p) \) non è vero in \( \Nn \), ma essa stessa è uno di quei numeri (quindi sta dichiarando di ``mentire'' (di non essere vera)).
-
-
-
-
-
-
-
-
 
 
 \end{document}
