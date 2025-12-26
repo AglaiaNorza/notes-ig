@@ -14,6 +14,8 @@ elif ! mount | grep "gdrive" > /dev/null; then
     echo "checking drive"
     rclone mount --daemon gdrive:GoodNotes/ ~/Documents/gdrive
     notes["$drive/automi/automi.pdf"]="terzo anno/automi, calcolabilità e complessità.pdf"
+else
+    notes["$drive/automi/automi.pdf"]="terzo anno/automi, calcolabilità e complessità.pdf"
 fi
 
 # did not need to declare a fancy array for this but i've never used bash arrays before so i wanted to try !
