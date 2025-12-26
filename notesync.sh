@@ -11,10 +11,11 @@ hname="PC"
 if [ "$(uname -n )" = "aglaia-otg" ]; then
     hname="portatile"
 elif ! mount | grep "gdrive" > /dev/null; then
-    echo "checking drive"
+    echo "mounting drive"
     rclone mount --daemon gdrive:GoodNotes/ ~/Documents/gdrive
     notes["$drive/automi/automi.pdf"]="terzo anno/automi, calcolabilità e complessità.pdf"
 else
+    echo "drive is mounted"
     notes["$drive/automi/automi.pdf"]="terzo anno/automi, calcolabilità e complessità.pdf"
 fi
 
