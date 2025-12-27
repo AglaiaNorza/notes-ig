@@ -1063,7 +1063,7 @@ Un esempio è la teoria formata dagli assiomi di gruppo scritti in un linguaggio
 
 Gli assiomi della teoria di gruppo si esprimono con i seguenti enunciati:
 \begin{align*}
-\forall v_1 \forall v_2 \forall v_3 ((v_1 \circ v_2) \circ v_3 &= v_1 \circ (v_2 \circ v_3)). \\
+\forall v_1 \forall v_2 \forall v_3 ((v_1 \circ v_2) \circ v_3 &= v_1 \circ (v_2 \circ v_3)) \\
 \forall v_1 ((v_1 \circ e = v_1) &\wedge (e \circ v_1 = v_1)) \\
 \forall v_1 \exists v_2 ((v_1 \circ v_2 = e) &\wedge (v_2 \circ v_1 = e))
 \end{align*}
@@ -1191,7 +1191,7 @@ Si dimostra per induzione sulla struttura del termine \(t\).
 \begin{align*}
 h(t^{\Aa, \alpha}) &= h(f(t_1, \ldots, t_p)^{\Aa, \alpha}) \\
 &= h(f^\Aa(t_1^{\Aa, \alpha}, \ldots, t_p^{\Aa, \alpha})) & \text{(def. di valutazione di termine funzione)} \\
-&= f^\Bb(h(t_1^{\Aa, \alpha}), \ldots, h(t_p^{\Aa, \alpha})) & h \text{ isomorfismo, preserva la funzione } f) \\
+&= f^\Bb(h(t_1^{\Aa, \alpha}), \ldots, h(t_p^{\Aa, \alpha})) & (h \text{ isomorfismo, preserva la funzione } f) \\
 &= f^\Bb(t_1^{\Bb, h(\alpha)}, \ldots, t_p^{\Bb, h(\alpha)})\\
 &= f(t_1, \ldots, t_p)^{\Bb, h(\alpha)} & \text{(def. di valutazione di termine funzione in } \Bb) \\
 &= t^{\Bb, h(\alpha)}
@@ -1218,18 +1218,20 @@ La proprietà è dimostrata per tutti i termini. \qed
 \section{La teoria DLO}
 
 \subsection{Numeri razionali}
-Prendiamo la struttura \( \Qq = (\Q, \leq ) \). Le proprietà di questa struttura si possono esprimere in enunciati predicativi nel linguaggio \( \Ll = \{\leq (x,y)\}\), per il quale, per comodità, usiamo la notazione infissa \( x \leq y \). Aggiungiamo \( x < y \) come abbreviazione di \( (x \leq y) \land \neg(x = y)\). 
+Prendiamo la struttura \( \Qq = (\Q, \leq ) \). Le proprietà di questa struttura si possono esprimere in enunciati predicativi nel linguaggio \( \Ll = \{\leq (x,y)\}\), per il quale, per comodità, usiamo la notazione infissa \( x \leq y \). 
+
+Aggiungiamo anche \( x < y \) come abbreviazione di \( (x \leq y) \land \neg(x = y)\). 
 
 Le proprietà di \( Q, \leq \) sono le seguenti:
 
 \begin{mdframed}
 \begin{enumerate}
-    \item (A1 - Riflessività) $\forall x(x \leq x),$
-    \item (A2 - Transitività) $\forall x\forall y\forall z((x \leq y \land y \leq z \to x \leq z),$
-    \item (A3 - Antisimmmetria) $\forall x\forall y((x \leq y \land y \leq x) \to y = x),$
-    \item (A4 - Totalità) $\forall x\forall y(x \leq y \lor x \leq y),$
-    \item (A4 - Illimitato a destra) $\forall x\exists y(x < y),$
-    \item (A5 - Illimitato a sinistra) $\forall x\exists y(y < x),$
+    \item (A1 - Riflessività) $\forall x\ (x \leq x),$
+    \item (A2 - Transitività) $\forall x\forall y\forall z \ ((x \leq y \land y \leq z \to x \leq z),$
+    \item (A3 - Antisimmmetria) $\forall x\forall y\ ((x \leq y \land y \leq x) \to y = x),$
+    \item (A4 - Totalità) $\forall x\forall y\ (x \leq y \lor x \leq y),$
+    \item (A4 - Illimitato a destra) $\forall x\exists y\ (x < y),$
+    \item (A5 - Illimitato a sinistra) $\forall x\exists y\ (y < x),$
     \item (A6 - Densità) $\forall x\forall y(x < y \to \exists z(x < z \land z < y)).$
 \end{enumerate}
 \end{mdframed}
@@ -1246,7 +1248,7 @@ Chiamiamo questa teoria \textbf{DLO} (\textit{Dense Linear Order}).
     Sia \( \Bb = (B, \leq_B) \) una struttura con dominio \( B \) numerabile e \( \leq_B \) un ordine totale denso senza estremi su \( B \). Allora esiste un isomorfismo tra \( \Bb\) e \(\Qq \).
 \end{thmframe}
 
-Vogliamo dimostrare che \textit{ogni struttura} dove \( B \) è numerabile e \( \preceq \) un ordine totale denso senza estremi su \( A \) è isomorfa a \( \Q, \leq  \).
+Vogliamo dimostrare che \textit{ogni struttura} dove \( B \) è numerabile e \( \preceq \) è un ordine totale denso senza estremi su \( A \) è isomorfa a \( (\Q, \leq)  \).
 
 \begin{gframe}{}
     È naturale definire l'isomorfismo così: \(\Bb \cong \Qq \iff \exists h : \Q \bij B \ \text{ t.c. } \ \forall q, q' \in \Q\)
@@ -1271,26 +1273,26 @@ La dimostrazione usa un metodo chiamato \textit{Back-and-Forth}.
             Distinguiamo due casi:
 
             \begin{enumerate}
-                \item Caso \textbf{pari}: scegliamo un elemento \(p_{n+1}\) in \(B \setminus \{p_0, \dots, p_n\}\) con indice minimo in \(\{b_0, b_1, b_2, \dots\}\). Compariamo questo elemento agli elementi già scelti. 
+                \item Caso \textbf{pari}: scegliamo un elemento \(p_{n+1}\) in \(B \setminus \{p_0, \dots, p_n\}\) con indice minimo in \((b_0, b_1, b_2, \dots)\). Compariamo questo elemento agli elementi già scelti. 
 
-                    Abbiamo tre casi.
+                    Abbiamo tre casi:
 
                     \begin{itemize}
                         \item {\color{gray}(Prima di tutti gli altri elementi)}
 
-                            Per ogni \(m \le n\), \(p_{n+1} < p_m\). In questo caso scelgo un \(q_{n+1}\) in \( \Q\) tale che per ogni \(m \le n\) abbiamo \(d_{n+1} < d_m\). Questo elemento esiste perché \( \Q \) soddisfa gli assiomi che asseriscono la non esistenza di estremi nell'ordine. 
+                            Per ogni \(m \le n\), \(p_{n+1} < p_m\). In questo caso scelgo un \(q_{n+1}\) in \( \Q\) tale che per ogni \(m \le n\) abbiamo \(d_{n+1} < d_m\). Questo elemento esiste perché \( \Q \) soddisfa gli assiomi che asseriscono la \textit{non esistenza di estremi} nell'ordine. 
 
                             {\color{gray}(Scelgo un elemento da \( \Q \) che sia anch'esso prima di tutti gli altri)}
 
                         \item {\color{gray}(Dopo tutti gli altri elementi)}
 
-                            Per ogni \(m \le n\), \(d_{n+1} > d_m\). In questo caso scelgo un \(q_{n+1}\) in \(\Q \) tale che per ogni \(m \le n\) valga \(d_{n+1} > d_m\). Questo elemento esiste perché \( \Q \) soddisfa l'assioma che esclude l'esistenza di un estremo destro nell'ordine.
+                            Per ogni \(m \le n\), \(d_{n+1} > d_m\). In questo caso scelgo un \(q_{n+1}\) in \(\Q \) tale che per ogni \(m \le n\) valga \(d_{n+1} > d_m\). Questo elemento esiste perché \( \Q \) soddisfa l'assioma che \textit{esclude l'esistenza di un estremo destro} nell'ordine.
                             
                             {\color{gray}(Scelgo un elemento da \( \Q \) che sia anch'esso dopo tutti gli altri)}
 
                         \item {\color{gray}(Da qualche parte nel mezzo)}
 
-                            Nessuno dei primi due casi. Allora esistono \(m_0, m_1 \le n\) tali che \(p_{m_0} < p_{n+1} < p_{m_1}\) e nessun altro elemento di \(\{p_0, p_1, \dots, p_n\}\) è nell'intervallo \([p_{m_0}, d_{m_1}]\). In questo caso scelgo un elemento \(d_{n+1}\) in \(\Q\) tale che \(d_{m_0} < d_{n+1} < d_{m_1}\). Questo elemento esiste perché \(\Q\) soddisfa l'assioma di densità.
+                            Nessuno dei primi due casi. Allora esistono \(m_0, m_1 \le n\) tali che \(p_{m_0} < p_{n+1} < p_{m_1}\) e nessun altro elemento di \(\{p_0, p_1, \dots, p_n\}\) è nell'intervallo \([p_{m_0}, d_{m_1}]\). In questo caso scelgo un elemento \(d_{n+1}\) in \(\Q\) tale che \(d_{m_0} < d_{n+1} < d_{m_1}\). Questo elemento esiste perché \(\Q\) soddisfa l'assioma di \textit{densità}.
                             
                             {\color{gray}(Scelgo un elemento da \( \Q \) che sia anch'esso in mezzo agli altri)}
 
@@ -1314,7 +1316,7 @@ Notiamo che nella dimostrazione non servono proprietà di \( \Q \) se non quelle
 
 
 \section{DLO: caso generale}
-Ci chiediamo: data una struttura \( \Dd = (D, \leq_D) \vDash \text{DLO}\) con \( D \) più che numerabile, \( \Dd \isit{\equiv} \Qq \) - ovvero, per esempio, esiste un enunciato nel linguaggio degli ordini vero in \( \Q \) e falso in \( \R \)? (Se potessimo scrivere la completezza di \( \R \) in lingaggio degli ordini, allora questo sarebbe sicuramente vero (in quanto \(\Q\) non è completo) - ma non è possibile farlo).
+Ci chiediamo: data una struttura \( \Dd = (D, \leq_D) \vDash \text{DLO}\) con \( D \) più che numerabile, \( \Dd \isit{\equiv} \Qq \) - ovvero, per esempio, esiste un enunciato nel linguaggio degli ordini vero in \( \Q \) e falso in \( \R \)? (Se potessimo scrivere la completezza di \( \R \) in linguaggio degli ordini, allora questo sarebbe sicuramente vero (in quanto \(\Q\) non è completo) - ma non è possibile farlo).
 
 Vogliamo quindi individuare un \textbf{criterio sufficiente} a concludere \( \Qq \equiv \Rr\).
 
@@ -1354,7 +1356,6 @@ allora \( \exists q \in \Q \) tale che:
 \[ \Rr \vDash F(x)[\alpha \ass{x}{q}] \]
 
 (quindi, abbiamo una formula \( F \) con tutte le variabili in \( \Q \) tranne una; presumiamo che sia vera con l'ultima variabile assegnata in \( \R \) - allora vogliamo che \(\exists q \in \Q \) (da assegnare all'ultima variabile) che la soddisfi)
-
 \end{thmframe}
 
 La proprietà del testimone è la condizione sufficiente per dedurre \( \Qq \equiv \Rr \).
@@ -1453,10 +1454,10 @@ Costruiamo quindi \( \Aa \) partendo da \( \Qq \).
 Sia \( F \) una formula del linguaggio DLO e siano \( x_1, x_2, y \) le sue variabili libere.
 
 Se \( \Rr \vDash \exists y F(x_1, x_2, y) \tworowmatrix{x_1 & x_2}{q_1 & q_2} \), per definizione di soddisfacibilità sappiamo che 
-\\\( \exists r \in \R\) \ t.c. \ \( \Rr \vDash F(x_1, x_2, y) \tworowmatrix{x_1 & x_2 & y}{q_1 & q_2 & r} \). Ne scegliamo uno in modo canonico {\color{gray}(assioma della scelta)}.
+\\\( \exists r \in \R\) \ t.c. \ \( \Rr \vDash F(x_1, x_2, y) \tworowmatrix{x_1 & x_2 & y}{q_1 & q_2 & r} \). Ne scegliamo uno in modo canonico {\color{gray}(usiamo implicitamente l'assioma della scelta)}.
 
 \begin{defframe}{Funzione di Skolem}{}
-    Chiamiamo \textbf{funzione di Skolem} (da Thoralf Skolem) della formula \( F \) relativamente ad \( y \) la funzione 
+    Chiamiamo \textbf{funzione di Skolem} (da \href{https://en.wikipedia.org/wiki/Thoralf_Skolem}{Thoralf Skolem}) della formula \( F \) relativamente ad \( y \) la funzione 
     \[ f_{F, y} : \Qq^n \to \Rr \]
     che associa ad ogni scelta di \( (q_1, \dots, q_n) \) un tale \( r \in \R \) in modo canonico.
 \end{defframe}
@@ -1480,8 +1481,218 @@ Abbiamo quindi
 Definiamo 
 \[ A = \bigcup_{i\in \N} A_i \]
 
-\( \Aa = ( A =\bigcup_{i\in \N} A_i, \leq_A) \) ha la proprietà del testimone relativamente ad \( \Rr \).
-\todo{fine}
+Si vede che \( A \) è chiuso sotto funzione di Skolem. \\Infatti, se \( a_1, \dots, a_n \in A_k \) e \( f\in \Ff \) allora \( f(a_1, \dots, a_n) \in A_{k+1} \).
+
+\( \Aa = ( A =\bigcup_{i\in \N} A_i, \leq_A) \) ha anche la Proprietà del Testimone relativamente ad \( \Rr \).
+
+Ovvero, se 
+\[ \Rr \vDash \exists y F(x_1, x_2, y)\tworowmatrix{x1 & x2}{a_1 & a_2} \quad a_1, a_2 \in A\]
+allora \( \exists a \in A \) t.c.
+\[ \Rr \vDash F(x_1, x_2, y)\tworowmatrix{x1 & x2 & y}{a_1 & a_2 & a} \]
+
+{\color{CadetBlue}[caso generale: \( \forall F, \forall \alpha \in A \), se:
+    \[ \Rr\vDash \exists x F(x)[a] \]
+    allora \( \exists a \in A \) t.c.:
+    \[ \Aa \vDash F(x)\left[\alpha \ass{x}{a}\right] \]
+]}
+
+Possiamo quindi concludere che \( \Aa \equiv \Rr \).
+
+Possiamo anche verificare che \( \Aa \) è numerabile:
+\begin{itemize}
+    \item \( \Ff \) è numerabile (perché esiste una funzione per ogni scelta di formula del linguaggio e di variabile libera, entrambe da insiemi numerabili)
+    \item ogni \( A_k \) è numerabile (\( A_1 = \Q \) è numerabile, e ogni \( A_{k+1} \) è l'unione di un \( A_k \) numerabile con la sua chiusura sotto un altro insieme numerabile)
+\end{itemize}
+
+Abbiamo quindi dimostrato la seguente proposizione
+\begin{propframe}{}{}
+    Esiste una sottostruttura numerabile \( \Aa \) di \( \Rr \) che contiene \( \Q \) e soddisfa esattamente gli stessi enunciati di \( \Rr \) nel linguaggio degli ordini.
+\end{propframe}
+
+\( \Aa \) è anche un modello numerabile di DLO, perché \( \Rr \vDash  \)DLO.
+
+Dunque \( \Aa \iso \Qq \). Dunque \( \Qq \equiv \Rr \) (nel linguaggio degli ordini).
+
+\subsection{Generalizzazione della dimostrazione}
+    La dimostrazione è generale - si può ricostruire in maniera equivalente partendo non da \( \Rr \) ma da un qualunque \( \Bb \) modello non-numerabile di DLO.
+
+    La Proprietà del Testimone si esprime non relativamente a \( \Qq \) ma ad una sottostruttura numerabile \( \Xx \) di \( \Bb \) del tipo \( (X, \leq^\Xx ) \) con \( X \subseteq B \) e \( \leq^\Aa = \leq^\Bb \cap (A \times A)\).
+
+    Si parte da un sottoinsieme numerabile \( X \) di \( \Bb \) (che ha sicuramente), e si procede per chiusura sotto funzioni di Skolem allo stesso modo.
+
+    Si costruisce così \( \Xx = \bigcup_{i\in \N} X_i \). Si ha \( \Xx \vDash  \)DLO, e quindi \( \iso  \) e \( \equiv \Qq\).
+
+    \begin{thmframe}{}{}
+        Si ha quindi che \textbf{tutti i modelli di DLO} (numerabili o meno) soddisfano esattamente gli stessi enunciati di \( \Qq \).
+
+        i.e. \( \Bb \vDash \text{DLO} \implies \Bb \equiv \Qq \)
+    
+        DLO ``identifica'' quindi \( (\Qq, \leq ): Th(\Qq) = Th(\Bb) \)
+    \end{thmframe}
+
+    \begin{corframe}{}
+        DLO è una teoria completa.
+
+        (ossia, \( \forall \text{ enunciato } E, \text{DLO}\vDash E \text{ oppure DLO} \vDash \neg E \) {\color{gray}(e DLO ha almeno un modello)}).
+
+        \begin{pframe}{}{}
+            Un modello di DLO soddisfa esattamente gli stessi enunciati di \( \Qq \). Dunque, \( Cons(\text{DLO}) \) sono esattamente gli enunciati veri nella singola struttura di \( \Qq \), che è una teoria completa.
+        \end{pframe}
+    \end{corframe}
+
+
+\subsection{Criterio di Tarski-Vaught}
+
+Per stabilire se una sottostruttura è anche una \textbf{sottostruttura elementare} (\(\mathcal{A} \preceq \mathcal{B}\)), possiamo quindi utilizzare la \textit{Proprietà del Testimone}, che chiamiamo anche ``criterio di Tarski-Vaught''.
+
+\begin{defframe}{Proprietà del Testimone (generale)}{}
+    
+Sia \(\mathcal{A} \subseteq \mathcal{B}\). Diciamo che \(\mathcal{A}\) soddisfa la \textbf{Proprietà del Testimone} rispetto a \(\mathcal{B}\) se, per ogni formula del tipo \(\exists x F(x)\) e per ogni assegnamento \(\alpha\) in \(A\), se
+\[
+\mathcal{B} \models \exists x F(x)[\alpha]
+\]
+allora  \(\exists a \in A\) tale che:
+\[
+    \mathcal{B} \models F(x)\left[\alpha\ass{x}{a}\right]
+\]
+
+{\color{gray}\small(se in \(\mathcal{B}\) esiste una soluzione (un testimone) per una certa proprietà parametrizzata da elementi di \(A\), dobbiamo essere in grado di trovare quel testimone già dentro \(A\))}
+\end{defframe}
+
+\begin{thmframe}{}{}
+    
+    Sa \(\mathcal{A}\) è una sottostruttura di \(\mathcal{B}\) che \textbf{soddisfa la Proprietà del Testimone} rispetto a \(\mathcal{B}\), allora \(\mathcal{A}\) è una \textbf{sottostruttura elementare} di \(\mathcal{B}\).
+\[
+    \mathcal{A} \subseteq \mathcal{B} \text{ e Testimone} \implies \mathcal{A} \preceq \mathcal{B} \ \color{gray}(\implies \mathcal{A} \equiv \mathcal{B})
+\]
+\end{thmframe}
+
+
+Quindi, iniziamo a vedere che partendo da un arbitrario modello \(\mathcal{B}\) infinito, ne esiste sempre uno numerabile (purché il linguaggio sia numerabile).
+
+\begin{pframe}
+Prendiamo \(\mathcal{B} \models T\) con \(|\mathcal{B}| = \infty\) e \(X \subseteq B\) con \(X\) numerabile.
+
+Facciamo la solita chiusura per funzioni di Skolem. 
+
+Immaginiamo una successione di insiemi \(X_0 \subseteq  X_1 \subseteq X_2 \dots\).
+
+Definiamo:
+\[
+A = \bigcup_{i \in \mathbb{N}} X_i
+\]
+
+Definiamo la struttura \(\mathcal{A}\) in questo modo:
+\begin{itemize}
+    \item Per ogni simbolo di relazione: \(R^\mathcal{A} = R^\mathcal{B} \cap A^n\)
+    \item Per ogni funzione: \(f^\mathcal{A} = f^\mathcal{B} \big|_{A^n}\)
+\end{itemize}
+
+\textbf{NB:} Ci manca la proprietà sulle costanti. Dobbiamo avere \(c^\mathcal{B} \in A\). Potremmo far sì che le costanti siano ``teste'' di funzioni 0-arie di Skolem, garantendo la loro inclusione nella chiusura.
+
+La struttura risultante è:
+\[
+\mathcal{A} = \left( \bigcup_{i \in \mathbb{N}} X_i, \{c_i^\mathcal{A}\}, \{R_j^\mathcal{A}\}, \{f_k^\mathcal{A}\} \right)
+\]
+\(\mathcal{A}\) è una sottostruttura per definizione e ha la proprietà del test (Tarski-Vaught).
+\[
+\implies \mathcal{A} \equiv \mathcal{B} \quad (\text{elementarmente equivalenti})
+\]
+Quindi, \(\mathcal{A} \models T\).
+\end{pframe}
+
+
+\section{Teorema di Löwenheim-Skolem (All'in giù)}
+
+\begin{thmframe}{Teorema di Löwenheim-Skolem all'in giù}{}
+Sia \(\mathcal{B}\) una struttura infinita adeguata per un linguaggio numerabile \(\mathcal{L}\). Sia \(X \subseteq B\) un sottoinsieme del suo dominio. Esiste una struttura \(\mathcal{A}\) tale che:
+\begin{enumerate}
+    \item \(X \subseteq A\)
+    \item \(\mathcal{A} \preceq \mathcal{B}\) (è sottostruttura elementare)
+    \item Se il linguaggio \(\mathcal{L}\) e l'insieme \(X\) sono numerabili, allora \(\textbf{A}\) è numerabile.
+\end{enumerate}
+
+Essenzialmente, \textbf{ogni teoria in un linguaggio numerabile che ammette un modello infinito (\(\mathcal{B}\)), ammette un ``sotto-modello'' numerabile} (\(\mathcal{A}\)) che è una sottostruttura elementare di \(\mathcal{B}\).
+
+\end{thmframe}
+
+La dimostrazione procede quasi analogamente a quella vista sopra.
+
+\begin{corframe}{}{}
+Non esiste una teoria \(T\) in un linguaggio \(\mathcal{L}\) numerabile (predicativo) che possa forzare i suoi modelli ad essere ``più che numerabili''.
+\[
+\mathcal{B} \models T \implies |B| > \aleph_0 \quad \text{(Falso in generale)}
+\]
+\end{corframe}
+
+\begin{corframe}{``Paradosso'' di Skolem}
+    La teoria assiomatica degli insiemi (ZFC) (se ha un modello) ha modelli numerabili.
+
+    (Il linguaggio ha un solo simbolo di relazione binaria (\(\in\)) ed è numerabile).
+
+    Il ``paradosso'' (non un vero paradosso) nasce dal fatto che:
+\begin{itemize}
+    \item In ZFC si dimostra l'esistenza di insiemi non numerabili (es. l'insieme dei reali \(\mathbb{R}\)). Formalmente:
+    \[
+    \text{ZFC} \vdash \exists x (\text{``}x \text{ è non numerabile''})
+    \]
+    \item Se ZFC ha un modello \(\mathcal{V}\), allora per il Teorema di Löwenheim-Skolem deve averne anche un modello numerabile \(\mathcal{M}\).
+    \item Quindi esiste una struttura numerabile in cui è soddisfatto l'enunciato ``esiste un insieme non-numerabile''.
+\end{itemize}
+
+\end{corframe}
+
+\section{Teorie categoriche (\(\omega\)-categoricità)}
+
+L'argomento usato per dimostrare la completezza di DLO si può generalizzare.
+
+\begin{defframe}{\(\omega\)-categoricità)}{}
+Una teoria \(T\) si dice \textbf{\(\omega\)-categorica} se tutti i suoi modelli \textbf{numerabili} sono isomorfi tra loro.
+
+\textit{(ricordiamo che se due modelli sono isomorfi, allora sono necessariamente elementarmente equivalenti)}
+\end{defframe}
+
+Sia \(T\) una teoria in un linguaggio numerabile che soddisfa le seguenti tre proprietà:
+\begin{enumerate}
+    \item \(T\) è \textbf{soddisfacibile} (ha almeno un modello).
+    \item \(T\) \textbf{non ha modelli finiti} (ha solo modelli infiniti).
+    \item \(T\) è \textbf{\(\omega\)-categorica} (ha un solo modello numerabile a meno di isomorfismo).
+\end{enumerate}
+Possiamo concludere che \(T\) è una teoria \textbf{completa}.
+
+\begin{proofframe}{}{}
+Supponiamo che \(T\) non sia completa.
+
+1.  Se \(T\) non è completa, esiste un enunciato \(E\) nel linguaggio tale che \(T\) non dimostra né \(E\) né \(\neg E\).    
+\[
+    T \not\vdash E \quad \text{e} \quad T \not\vdash \neg E
+    \]
+    
+2.  Questo implica che esistono due modelli \(\mathcal{B}\) e \(\mathcal{C}\) tali che:
+    \[
+    \mathcal{B} \models T \cup \{\neg E\} \quad \text{e} \quad \mathcal{C} \models T \cup \{E\}
+    \]
+    
+3.  Per l'ipotesi (2), \(T\) non ha modelli finiti, quindi \(\mathcal{B}\) e \(\mathcal{C}\) sono entrambi infiniti.
+
+4.  Applichiamo il Teorema di Löwenheim-Skolem a entrambi i modelli:
+    \begin{itemize}
+        \item Esiste \(\mathcal{B}_0 \preceq \mathcal{B}\) con \(\mathcal{B}_0\) numerabile. Poiché \(\mathcal{B} \models \neg E\), allora \(\mathcal{B}_0 \models \neg E\).
+        \item Esiste \(\mathcal{C}_0 \preceq \mathcal{C}\) con \(\mathcal{C}_0\) numerabile. Poiché \(\mathcal{C} \models E\), allora \(\mathcal{C}_0 \models E\).
+    \end{itemize}
+
+5.  Ora abbiamo due modelli numerabili di \(T\), \(\mathcal{B}_0\) e \(\mathcal{C}_0\).
+    Per l'ipotesi (3) di \textbf{\(\omega\)-categoricità}, tutti i modelli numerabili sono isomorfi:
+    \[
+    \mathcal{B}_0 \cong \mathcal{C}_0
+    \]
+
+6.  Se due strutture sono isomorfe, soddisfano gli stessi enunciati:
+    \[
+    \mathcal{B}_0 \equiv \mathcal{C}_0
+    \]
+    Tuttavia, abbiamo stabilito al punto 4 che \(\mathcal{B}_0 \models \neg E\) e \(\mathcal{C}_0 \models E\) (contraddizione) \qed
+\end{proofframe}
 
 \section{Calcolo dei Predicati}
 Introduciamo ora il calcolo dei predicati (con identità) ``alla Hilbert''. Ad ogni linguaggio \( \Ll \) possiamo associare un calcolo dei predicati del I ordine.
