@@ -170,7 +170,7 @@ Osserviamo che, data \( A = p_1, p_2, \dots, p_k \) e due assegnamenti \( \alpha
     \alpha(p_k) &= \beta(p_k)
 \end{align*}
 
-allora necessariamente \( \alpha(A) = \alpha(B) \). 
+allora necessariamente \( \alpha(A) = \beta(A) \). 
 
 \begin{gframe}[colframe=PineGreen]{soddisfacibilità}
     Se per una formula \( A \) e un assegnamento \( \alpha \) si ha \( \alpha (A) = 1 \), si dice che ``\(A \) soddisfa \( \alpha \)'' (o ``\( A \) è vera sotto \( \alpha \)'').
@@ -199,13 +199,18 @@ Si ha che:
 \begin{itemize}
     \item \(T \not\vDash A\) \ significa che \ \( \exists \alpha \) \ t.c. \ \( \alpha(T) = 1 \land \alpha(A) = 0 \)
     \item \( \emptyset \vDash A \) \ o, equivalentemente \ \( \vDash A \iff A\) è una tautologia
+    \item se \( T \vDash A \), allora \( T \cup \neg A \)è insoddisfacibile
+    \item la conseguenza logica ha la proprietà di \textbf{monotonia}: se \( T \vDash A \), allora anche \( T \cup B \vDash A \)
+    \item ha anche la proprietà di transitività: se \( T \vDash A \) e \( A \vDash B \) allora \( T\vDash B \)
 \end{itemize}
+
+\newpage
 
 \begin{lemmaframe}{Equivalenze}{}
     \begin{enumerate}
         \item \( T \vDash A \)
         \item \( \vDash (A_1 \land \dots \land A_n) \to A \)
-        \item \( (A_1 \land \dots \land A_n) \in \texttt{UNSAT}\) 
+        \item \( (A_1 \land \dots \land A_n \land \neg A) \in \texttt{UNSAT}\) 
     \end{enumerate}
 
     sono equivalenti.
@@ -215,11 +220,12 @@ Si ha che:
 \section{Completezza funzionale}
 \textit{Data una tavola di verità arbitraria con \( n \) argomenti, esiste una proposizione \( A \) che ha esattamente quella tavola di verità?}
 
-Una proposizione \( A \) contenente le \( n \) variabili proposizionali \( a_1, a_2, \dots, a_n \) determina una funzione di \( n \) argomenti \( f: \{0, 1\}^n \to \{0,1\} \) ("\textbf{funzione di verità}"), tale che il valore di \( f_A \) su un argomento \ \( (x_1, x_2, \dots, x_n) \in \{0,1\}^n\) \ sia dato da un arbitrario assegnamento \( \alpha \) tale che \( \alpha(p_k) = x_k\) \ per \ \(k \in [1,n] \).
+Una proposizione \( A \) contenente le \( n \) variabili proposizionali \( a_1, a_2, \dots, a_n \) determina una funzione di \( n \) argomenti \( f: \{0, 1\}^n \to \{0,1\} \) (``\textbf{funzione di verità}''), tale che il valore di \( f_A \) su un argomento \ \( (x_1, x_2, \dots, x_n) \in \{0,1\}^n\) \ sia dato da un arbitrario assegnamento \( \alpha \) tale che \( \alpha(p_k) = x_k\) \ per \ \(k \in [1,n] \).
 
 \begin{thmframe}{Teorema}{}
     Sia \( f: \{0, 1\}^n \to \{0,1\} \) una funzione di verità. Esiste una proposizione \( A \) con \( n \) variabili proposizionali tale che, per ogni assegnamento \( \alpha \):
     \[ \alpha(A) = f(\alpha(a_1), \alpha(a_2), \dots, \alpha(a_n)) \]
+    (per qualsiasi funzione di verità, esiste sempre una proposizione che si comporta esattamente come essa {\small\color{gray}(il valore di verità di \( A \), \( \alpha(A) \) è uguale al risultato della funzione \( f \) a parità di input)})
 \end{thmframe}
 
 \begin{proofframe}[title=dimostrazione]           
@@ -332,7 +338,7 @@ Una proposizione \( A \) contenente le \( n \) variabili proposizionali \( a_1, 
 \section{Forme normali}
 
 \begin{gframe}{notazione}
-    Chiamiamo "letterale" una variabile proposizionale o una negazione di una variabile proposizionale
+    Chiamiamo ``letterale'' una variabile proposizionale o una negazione di una variabile proposizionale
 \end{gframe}
 
 È utile individuare alcune forme normali canoniche.
@@ -351,6 +357,7 @@ Una proposizione \( A \) contenente le \( n \) variabili proposizionali \( a_1, 
 
 \end{defframe}
 
+\newpage
 \section{Equivalenza Logica}
 
 \begin{cdefframe}{DeepGreenLight}{PineGreen}{Equivalenza logica}{}
@@ -432,7 +439,7 @@ L'insieme \( T = T_X \) esprime il concetto di \textbf{ordine totale stretto} su
 Se \( \alpha \) è un assegnamento, definiamo la relazione \( \prec_{\alpha} \) su \( X \) come segue:
 \[ x \prec_\alpha y \leftrightarrow \alpha(p_{x,y})=1 \]
 
-Si ha che per ogni assegnamento \( \alpha \) che soddisfca \( T_X \), l'ordine \( \prec_\alpha \) indotto da \( \alpha \) è un ordine totale stretto su \( X \).
+Si ha che per ogni assegnamento \( \alpha \) che soddisfa \( T_X \), l'ordine \( \prec_\alpha \) indotto da \( \alpha \) è un ordine totale stretto su \( X \).
 
 Dall'altra parte, se \( \prec \) è un ordine totale stretto su \( X \), e \( \alpha_\prec \) è l'assegnamento indotto da \( \prec \) così definito:
 \[ \alpha_\prec (p_{x,y}) = 1 \leftrightarrow (x \prec y) \]
@@ -441,9 +448,119 @@ Si ha che, per ogni ordine totale stretto \( \prec \) su \(X \), l'assegnamento 
 
 Ovvero, un assegnamento \( \alpha \) soddisfa la teoria \( T_X \) se e solo se l'ordine indotto da \( \alpha \) su \( X \) è un ordine totale.
 
+\subsection{Esempi di formalizzazioni di problemi noti in Logica Proposizionale}
+
 \begin{gframe}{Colorabilità}
+    \vspace{-1.5em}
+\subsection*{Esempio: 2-colorabilità}
+
+Consideriamo il problema di colorare una mappa (grafo) con due colori (Rosso e Blu) in modo che nazioni confinanti abbiano colori diversi.
+
+Per esempio:
+\begin{itemize}
+    \item  mappa \( M \): Italia (\( I \)), Austria (\( A \)), Ungheria (\( U \)).
+    \item variabili proposizionali: \( X_C \) indica che la nazione \( X \) ha il colore \( C \). 
+\end{itemize}
+
+Per modellare il problema in logica proposizionale, definiamo tre tipi di formule:
+
+\begin{enumerate}
+    \item \textit{Ogni nazione ha almeno un colore:}
+    \[ (I_R \lor I_B) \land (A_R \lor A_B) \land (U_R \lor U_B) \]
+    
+    \item \textit{Ogni nazione ha al più un colore (unicità):}
+    \[ (I_R \to \neg I_B) \land (A_R \to \neg A_B) \land (U_R \to \neg U_B) \]
+    
+    \item \textit{Nazioni confinanti hanno colori diversi:}
+    \[ (I_R \to \neg A_R) \land (I_B \to \neg A_B) \land   (A_R \to \neg U_R) \land (A_B \to \neg U_B)  \]
+\end{enumerate}
+
+Esiste una corrispondenza biunivoca tra una colorazione valida e un assegnamento di verità che soddisfa la teoria:
+\begin{itemize}
+    \item Una colorazione valida \( f \) induce un assegnamento \( \alpha \) che soddisfa le formule (es. se \( I \) è rossa, \( \alpha(I_R)=1, \alpha(I_B)=0 \)).
+    \item Un assegnamento \( \alpha \) che soddisfa le formule permette di ricostruire una colorazione valida.
+\end{itemize}
+
+La mappa \( M \) è quindi \textit{2-colorabile} se e soltanto se l'insieme delle proposizioni è soddisfacibile.
+
+La formalizzazione completa non è però la più ``economica''. Il vincolo di unicità del colore (punto 2 sopra) è conseguenza logica degli altri vincoli (punto 1 e punto 3).
+\[ \text{Vincolo (1)} \land \text{Vincolo (3)} \models \text{Vincolo (2)} \]
+È quindi possibile omettere il secondo gruppo di formule senza alterare la soddisfacibilità.
+
+Considerando Slovenia (\( S \)), Austria (\( A \)) e Ungheria (\( U \)):
+\begin{itemize}
+    \item Queste tre nazioni sono tutte confinanti tra loro (formano un triangolo nel grafo).
+    \item L'insieme delle proposizioni risulta \textit{insoddisfacibile}.
+     \subitem Infatti, se \( S \) è Rossa (\( S_R=1 \)), allora i vicini devono essere non-rossi (\( A_R=0, U_R=0 \)). Poiché devono avere un colore, allora devono essere Blu (\( A_B=1, U_B=1 \)). Ma \( A \) e \( U \) confinano, quindi non possono essere entrambi Blu. Contraddizione.
+\end{itemize}
+
+\subsection*{Formalizzazione della colorabilità di grafi}
+
+Sia \( G = (V, E) \) un grafo e \( k \) il numero di colori disponibili (\( 1, \dots, k \)).
+Definiamo le variabili \( P_{v,i} \) che significano "il vertice \( v \) ha colore \( i \)".
+
+L'insieme \( T \) di formule che formalizza il problema è:
+
+\begin{enumerate}
+    \item \textbf{Almeno un colore per ogni vertice:}
+    \[ \bigvee_{i=1}^{k} P_{v,i} \quad \text{per ogni } v \in V \]
+    
+    \item \textbf{Al più un colore per ogni vertice (mutua esclusione):}
+    \[ \neg(P_{v,i} \land P_{v,j}) \quad \text{per ogni } v \in V, \text{ con } i \neq j \]
+    
+    \item \textbf{Vincolo di adiacenza (colori diversi per archi):}
+    \[ \neg(P_{v,i} \land P_{w,i}) \quad \text{per ogni arco } \{v, w\} \in E, \text{ per ogni colore } i \]
+\end{enumerate}
+
+\textbf{Teorema:} Il grafo \( G \) ammette una \( k \)-colorazione se e solo se l'insieme di formule \( T \) è soddisfacibile. La colorazione è data da \( c(v) = i \iff \alpha(P_{v,i}) = 1 \).
 
 \end{gframe}
+
+\begin{gframe}{Pigeonhole Principle}
+Il Principio dei Cassetti (Pigeonhole Principle, \( PHP(m, n) \)) afferma che se inseriamo \( m \) oggetti (piccioni) in \( n \) cassetti, con \( m > n \), allora almeno un cassetto deve contenere più di un oggetto.
+
+Consideriamo il caso con \( m \) piccioni e \( n \) cassetti.
+Definiamo le variabili proposizionali:
+\[ p_{i,j} \quad \text{con } i \in \{1, \dots, m\} \text{ e } j \in \{1, \dots, n\} \]
+Il significato intuitivo di \( p_{i,j} \) è: ``l'oggetto \( i \) è nel cassetto \( j \)''.
+
+Per formalizzare il problema, costruiamo due tipi di proposizioni:
+
+\begin{enumerate}
+    \item \textbf{Ogni oggetto è in almeno un cassetto (Totalità)}
+
+        Per un singolo oggetto \( i \), la disgiunzione di tutti i possibili cassetti deve essere vera:
+\[ (p_{i,1} \lor p_{i,2} \lor \dots \lor p_{i,n}) \]
+Per tutti gli \( m \) oggetti, prendiamo la congiunzione:
+\[ A = \bigwedge_{i=1}^{m} \left( \bigvee_{j=1}^{n} p_{i,j} \right) \]
+
+
+\item \textbf{Ogni cassetto contiene al più un oggetto (Iniettività)}
+
+    Questa condizione esprime che non ci sono collisioni. Se questa condizione è vera, la funzione è iniettiva.
+Per ogni cassetto \( k \), e per ogni coppia di oggetti distinti \( i \) e \( j \), non è possibile che entrambi siano in \( k \):
+\[ \neg(p_{i,k} \land p_{j,k}) \quad \text{equivalente a} \quad (\neg p_{i,k} \lor \neg p_{j,k}) \]
+Formalizziamo l'iniettività su tutto il dominio come la congiunzione di questi vincoli:
+\[ B = \bigwedge_{k=1}^{n} \bigwedge_{1 \le i < j \le m} (\neg p_{i,k} \lor \neg p_{j,k}) \]
+
+
+\item \textbf{Il teorema}
+
+Il principio afferma che se ogni oggetto è assegnato a un cassetto (formula \( A \)), allora l'assegnamento \textit{non} può essere iniettivo (non \( B \)), dato che \( m > n \).
+La formula che esprime il \( PHP(m, n) \) è quindi:
+\[ A \to \neg B \]
+(tautologia)
+
+\end{enumerate}
+
+Spesso, nel contesto SAT, si cerca di dimostrare il principio per assurdo, cercando un assegnamento che renda vera la sua negazione. Cerchiamo cioè una situazione in cui tutti i piccioni sono assegnati (\( A \)) \textbf{e} l'assegnamento è iniettivo (\( B \)):
+\[ A \land B \]
+In forma estesa:
+\[ \left( \bigwedge_{i=1}^{m} \bigvee_{j=1}^{n} p_{i,j} \right) \land \left( \bigwedge_{k=1}^{n} \bigwedge_{i \neq j} (\neg p_{i,k} \lor \neg p_{j,k}) \right) \]
+Se \( m > n \), questo insieme di formule è una  insoddisfacibile, poiché non esiste alcun modo di mettere \( m \) piccioni in \( n \) cassetti senza collisioni.
+\end{gframe}
+
+\newpage
 
 \section{Teorema di compattezza}
 
@@ -477,6 +594,7 @@ Possiamo quindi introdurre una nuova versione del teorema di compattezza:
         \item \( T \in \texttt{SAT} \iff T \in \texttt{FINSAT} \)
     \end{enumerate}
 
+\end{lemmaframe}
     \begin{pframe}{}
         \begin{itemize}
             \item \textcircled{1} \( \implies \) \textcircled{2}
@@ -497,7 +615,6 @@ Possiamo quindi introdurre una nuova versione del teorema di compattezza:
 
     \end{pframe}
 
-\end{lemmaframe}
 
 \begin{thmframe}{Estendibilità di \texttt{SAT}}{}
     Se \( T \) è soddisfacibile, allora \( T \cup \{A\} \) è soddisfacibile oppure \( T \cup \{\neg A\} \) è soddisfacibile.
