@@ -599,18 +599,19 @@ Possiamo quindi introdurre una nuova versione del teorema di compattezza:
         \begin{itemize}
             \item \textcircled{1} \( \implies \) \textcircled{2}
 
-                Supponiamo per assurdo che \( T \in \texttt{FINSAT} \implies T \in \texttt{SAT} \), e che \( T \vDash A \) ma che \( \forall T_0 \overset{fin}{\subseteq } T, \ T_0 \not\vDash A \).
-
-                \( T \not\vDash A \) significa \( T \cup \{\neg A\} \in \texttt{SAT} \).
-                
-                Quindi, visto che \( \texttt{FINSAT} \implies \texttt{SAT} \), \( T \cup \{ \neg A\} \in \texttt{SAT}\), il che va in contraddizione con l'ipotesi \( T \vDash A \).
-            \item \textcircled{2} \( \implies \) \textcircled{1}
-
                 Supponiamo per assurdo che \( T\vDash A \implies \exists T_0  \overset{fin}{\subseteq } T \ t.c. \ T_0 \vDash A\), che \( T\in \texttt{FINSAT} \), ma che \( T\not \in \texttt{SAT} \) (\( T\in \texttt{UNSAT} \)).
 
                 Se \( T \in \texttt{UNSAT} \), possiamo dire che \( T \vDash p \land \neg p \) {\small \color{gray} (tutto è conseguenza logica di una teoria insoddisfacibile)}.
 
-                Per \textcircled{2}, quindi, \( \exists T_0 \ t.c, \ T_0 \overset{fin}{\subseteq } T \vDash p \land \neg p \), il che va in contraddizione con \( T \in \texttt{FINSAT} \).\qed
+                Per \textcircled{2}, quindi, \( \exists T_0 \ t.c, \ T_0 \overset{fin}{\subseteq } T \vDash p \land \neg p \), il che va in contraddizione con \( T \in \texttt{FINSAT} \).
+
+            \item \textcircled{2} \( \implies \) \textcircled{1}
+
+                Supponiamo per assurdo che \( T \in \texttt{FINSAT} \implies T \in \texttt{SAT} \), e che \( T \vDash A \) ma che \( \forall T_0 \overset{fin}{\subseteq } T, \ T_0 \not\vDash A \).
+
+                \( T \not\vDash A \) significa \( T \cup \{\neg A\} \in \texttt{SAT} \).
+                
+                Quindi, visto che \( \texttt{FINSAT} \implies \texttt{SAT} \), \( T \cup \{ \neg A\} \in \texttt{SAT}\), il che va in contraddizione con l'ipotesi \( T \vDash A \). \qed
         \end{itemize}
 
     \end{pframe}
