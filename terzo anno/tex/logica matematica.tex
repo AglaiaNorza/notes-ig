@@ -20,6 +20,7 @@
 \newcommand{\ca}{c^{\mathcal{A}}}
 
 \newcommand{\SAT}{\texttt{SAT}}
+\newcommand{\FINSAT}{\texttt{FINSAT}}
 \newcommand{\UNSAT}{\texttt{UNSAT}}
 \newcommand{\TAUT}{\texttt{TAUT}}
 
@@ -609,7 +610,9 @@ Possiamo quindi introdurre una nuova versione del teorema di compattezza:
 
                 Supponiamo per assurdo che \( T \in \texttt{FINSAT} \implies T \in \texttt{SAT} \), e che \( T \vDash A \) ma che \( \forall T_0 \overset{fin}{\subseteq } T, \ T_0 \not\vDash A \).
 
-                \( T \not\vDash A \) significa \( T \cup \{\neg A\} \in \texttt{SAT} \).
+                \( T_0 \not\vDash A \) significa \( T_0 \cup \{\neg A\} \in \texttt{SAT} \).
+
+                Preso un qualsiasi sottoinsieme finito \( S \subseteq (T \cup \{\neg A\}) \), questo sarà contenuto in un qualche \( T_0 \cup \{\neg A\} \). Dato che ogni \( T_0 \cup \{A\} \in \SAT\), anche \( S \in \SAT \). Dunque, \( T \cup \{\neg A\} \in \FINSAT \).
                 
                 Quindi, visto che \( \texttt{FINSAT} \implies \texttt{SAT} \), \( T \cup \{ \neg A\} \in \texttt{SAT}\), il che va in contraddizione con l'ipotesi \( T \vDash A \). \qed
         \end{itemize}
