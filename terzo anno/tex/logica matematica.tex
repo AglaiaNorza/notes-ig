@@ -692,7 +692,7 @@ per esempio, se \( X = \{A_1, A_2\} \) con \( A_1 = \{p_1\}, \ A_2 = \{p_3, p_5\
 Visto che, per costruzione, \( \forall p_n \) vale \( ( p_n \in T^* \oplus \neg p_n \in T^* )\), possiamo definire un assegnamento:
 \[ \alpha^*(p_n) = \begin{cases}
     1 & p_n \in T^* \\
-    0 & p_n \not\in T^* \\
+    0 & p_n \not\in T^* \ {\color{gray} (\neg p_n \in T^*)}\\
 \end{cases} \]
 
 \begin{gframe}[colframe=DeepTeal, colback=DeepTealLight]{}
@@ -710,13 +710,13 @@ Introduciamo la notazione: \( p_n^* = \begin{cases}
     \neg p_n & \neg p_n \in T^* \  \ {\color{gray} (\alpha^*(p_n)=0)} \\
 \end{cases} \)
 
-Poiché \( A\in T \subseteq T^* \) e \( \{p^*_{i1}, \dots, p^*_{ik}\} \), abbiamo \( A^* = A \cup \{p^*_{i1}, \dots, p^*_{ik}\} {\color{gray}= \{A, p^*_{i1}, \dots, p^*_{ik}\}} \overset{fin}{\subseteq } T^*\).
+Poiché \( A\in T \subseteq T^* \) e \( \{p^*_{i1}, \dots, p^*_{ik}\} \subseteq T^*\), abbiamo \( A^* = A \cup \{p^*_{i1}, \dots, p^*_{ik}\} {\color{gray}= \{A, p^*_{i1}, \dots, p^*_{ik}\}} \overset{fin}{\subseteq } T^*\).
 
 Dato che \( T^* \in \texttt{FINSAT}, \ \exists \beta \) t.c. \( \beta(A^*)=1 \) (il che può succedere solo se \( \beta(A) = 1 \ \land \ \beta(p^*_{ij}) = 1 \ \forall j \in [k] \)).
 
-Ma, poiché \( \beta(p^*_{ij}) = 1 \ \forall j \in [k]  \), notiamo che necessariamente \( \beta(p_j) = 1  \) se \( p_j \in T^* \) e \( \beta(p_j) = 0  \) se \( p_j \neg\in T^* \). Dunque, notiamo che \( \beta \) e \( \alpha^* \) si comportano allo stesso modo per ogni variabile \( p_{i1}, \dots, p_{ik} \).
+Ma, poiché \( \beta(p^*_{ij}) = 1 \ \forall j \in [k]  \), notiamo che necessariamente \( \beta(p_j) = 1  \) se \( p_j \in T^* \) e \( \beta(p_j) = 0  \) se \( p_j \not\in T^* \). Dunque, notiamo che \( \beta \) e \( \alpha^* \) si comportano allo stesso modo per ogni variabile \( p_{i1}, \dots, p_{ik} \).
 
-Da questo (e dall'osservazione a fine pagina \pageref{asseq}), poiché \( p_{i1}, \dots, p_{ik} \) sono le variabili che compongono \( A \), segue che \( \alpha(A) = \alpha(B) \).
+Da questo (e dall'osservazione a fine pagina \pageref{asseq}), poiché \( p_{i1}, \dots, p_{ik} \) sono le variabili che compongono \( A \), segue che \( \beta(A) = \alpha^*(A) \).
 
 Ma \( \beta(A) = 1 \) per scelta di \( \beta \), quindi \( \alpha^*(A) = 1 \). Visto che possiamo applicare lo stesso ragionamento ad ogni \( A \in T \), si ha che \( \alpha^*(T) = 1 \), ovvero \( T \in \texttt{SAT} \) \qed
 
