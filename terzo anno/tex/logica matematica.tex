@@ -640,7 +640,7 @@ Un concetto analogo vale per \texttt{FINSAT}.
 
         Vuol dire che esistono \( B \ \overset{fin}{\subseteq} T \cup \{A\}\) \ e \ \( C \ \overset{fin}{\subseteq} T \cup \{\neg A\}\) insoddisfacibili.
 
-        Dato che per ipotesi \( T \in \texttt{FINSAT} \), sappiamo che \( A \in B, C \). Possiamo quindi introdurre \( \hat B = B \setminus \{A\}\) e \( \hat C = C \setminus \{A\}\).
+        Dato che per ipotesi \( T \in \texttt{FINSAT} \), sappiamo che \( A \in B, \ \neg A \in C \) {\small\color{gray}(altrimenti non potrebbero essere \( \UNSAT \), in quanto sarebbero solo \( \subseteq T \in \FINSAT \))}. Possiamo quindi introdurre \( \hat B = B \setminus \{A\}\) e \( \hat C = C \setminus \{\neg A\}\).
 
         Sappiamo che l'insieme \( \hat B \cup \hat C  \in \texttt{FINSAT}\), in quanto sottoinsieme finito di \( T \).
 
