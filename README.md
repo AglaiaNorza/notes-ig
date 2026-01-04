@@ -37,7 +37,7 @@ alcuni appunti sono presi a mano (su tablet), alcuni sono pdf scritti con LaTeX 
 | corso |  |
 |---| ---|
 | **1o sem:**|
-|[automi, calcolabilità e complessità](../../raw/main/terzo%20anno/automi%2C%20calcolabilit%C3%A0%20e%20complessit%C3%A0.pdf)| scritti a mano (pdf) (wip) |
+|[automi, calcolabilità e complessità](../../raw/main/terzo%20anno/automi%2C%20calcolabilit%C3%A0%20e%20complessit%C3%A0.pdf)| scritti a mano (pdf) |
 | [linguaggi di programmazione](../../raw/main/terzo%20anno/linguaggi%20di%20programmmazione.pdf) | pdf (o .tex) (wip) |
 | [logica matematica](../../raw/main/terzo%20anno/logica%20matematica.pdf) (1022365) |  pdf (o .tex) (wip) |
 | [programmazione (embedded e) multicore](https://aglaianorza.github.io/notesig/vault/multicore/multicore) (🇬🇧) | quartz, wip |
