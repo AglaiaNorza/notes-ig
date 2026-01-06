@@ -10,6 +10,9 @@
 
 \usepackage[italian]{babel}
 
+\usepackage[autostyle=false]{csquotes}
+\MakeOuterQuote{"}
+
 \usepackage{float}
 \usepackage{enumitem}
 \usepackage{bussproofs}
@@ -734,7 +737,7 @@ Ma \( \beta(A) = 1 \) per scelta di \( \beta \), quindi \( \alpha^*(A) = 1 \). V
     Il \textbf{lemma di Zorn} afferma che, se per ogni catena \( C \) in \( X \) esiste un \textbf{maggiorante} in \( X \), allora esiste un elemento \( m \in X \) \textbf{massimale}.
 \end{lemmaframe}
 
-Il Lemma di Zorn è una forma dell'Assioma della Scelta (che, informalmente, afferma che quando viene data una collezione di insiemi non vuoti si può sempre costruire un nuovo insieme ``scegliendo'' un singolo elemento da ciascuno di quelli di partenza).
+{\color{CadetBlue}Il Lemma di Zorn è una forma dell'Assioma della Scelta (che, informalmente, afferma che quando viene data una collezione di insiemi non vuoti si può sempre costruire un nuovo insieme ``scegliendo'' un singolo elemento da ciascuno di quelli di partenza).}
 
 A noi basta considerare come relazione d'ordine l'inclusione insiemistica \( \subseteq \) per la quale l'\textbf{unione è un maggiorante}.
 
@@ -793,17 +796,101 @@ Lavoriamo per induzione sulla struttura di \( A \):
     \item \textbf{caso base}: \( A = p_n \) \ \ - \ \ si ha \( \alpha^*(p_n) = 1 \iff p_n \in T^* \)
     \item \textbf{casi induttivi}:
         \begin{enumerate}
-            \item \( A = \neg B \)
+            \item \textbf{NOT: \( A = \neg B \)}
+\[
+\alpha^*(\neg B) = 1 \iff \alpha^*(B) = 0
+\]
+
+Per l'ipotesi induttiva su \( B \), sappiamo che \( \alpha^*(B) = 0 \iff B \notin T^* \).
+Sfruttando la proprietà di massimalità di \( T^* \) {\color{gray}\small(ogni formula o la sua negazione deve appartenere all'insieme)}:
+
+
+\[
+B \notin T^* \iff \neg B \in T^*
+\]
+
+Pertanto, \( \alpha^*(\neg B) = 1 \iff \neg B \in T^* \).
+
+
                 \subitem 
-            \item \( A = B \land C \)
-                \subitem
-            \item \( A = B \lor C \)
-                \subitem
-            \item \( A = B \to C\)
-                \subitem TODO
+            \item \textbf{AND: } \( A = B \land C \)
+
+
+\vspace{0.5em}
+Dobbiamo mostrare che \( \alpha^*(B \land C) = 1 \iff (B \wedge C) \in T^* \).
+\vspace{0.5em}
+
+\subitem \textbf{(\(\Rightarrow\))} \ Sia \( \alpha^*(B \land C) = 1 \).
+Per definizione di valutazione, questo implica \( \alpha^*(B) = 1 \) e \( \alpha^*(C) = 1 \).
+Per l'ipotesi induttiva, abbiamo \( B \in T^* \) e \( C \in T^* \).
+Supponiamo per assurdo che \( (B \land C) \notin T^* \). Per la massimalità, allora \( \neg(B \wedge C) \in T^* \).
+Consideriamo l'insieme finito \( \{B, C, \neg(B \land C)\} \subseteq T^* \). Questo insieme è insoddisfacibile (UNSAT), il che contraddice il fatto che \( T^* \) sia FINSAT (finitamente soddisfacibile).
+Quindi deve essere \( (B \land C) \in T^* \).
+
+\vspace{0.5em}
+
+\subitem 
+\textbf{(\(\Leftarrow\))} Sia \( (B \land C) \in T^* \).
+Dobbiamo mostrare che \( B \in T^* \) e \( C \in T^* \).
+Se \( B \notin T^* \), allora \( \neg B \in T^* \). L'insieme \( \{B \land C, \neg B\} \subseteq T^* \) sarebbe UNSAT, impossibile. Quindi \( B \in T^* \). Analogamente \( C \in T^* \).
+Per ipotesi induttiva, \( \alpha^*(B)=1 \) e \( \alpha^*(C)=1 \), quindi \( \alpha^*(B \land C) = 1 \).
+
+\subitem
+
+            \item \textbf{OR: }\( A = B \lor C \)
+
+\vspace{0.5em}
+Dobbiamo mostrare che \( \alpha^*(B \lor C) = 1 \iff (B \vee C) \in T^* \).
+
+\vspace{0.5em}
+\subitem \textbf{(\(\Rightarrow\))} Sia \( \alpha^*(B \lor C) = 1 \).
+Allora \( \alpha^*(B) = 1 \) oppure \( \alpha^*(C) = 1 \).
+Per ipotesi induttiva, \( B \in T^* \) oppure \( C \in T^* \).
+Supponiamo WLOG che \( B \in T^* \). L'insieme \( \{B, \neg(B \lor C)\} \) è insoddisfacibile. Poiché \( T^* \) è FINSAT e \( B \in T^* \), non può contenere \( \neg(B \lor C) \). Per massimalità, deve contenere \( (B \vee C) \).
+
+\vspace{0.5em}
+
+\subitem \textbf{(\(\Leftarrow\))} Sia \( (B \lor C) \in T^* \).
+Supponiamo per assurdo che \( \alpha^*(B \lor C) = 0 \). Questo implicherebbe \( \alpha^*(B)=0 \) e \( \alpha^*(C)=0 \).
+Per ipotesi induttiva, \( B \notin T^* \) e \( C \notin T^* \).
+Per massimalità, \( \neg B \in T^* \) e \( \neg C \in T^* \).
+Consideriamo l'insieme finito \( \{(B \lor C), \neg B, \neg C\} \subseteq T^* \). Questo insieme è chiaramente insoddisfacibile, contraddicendo la proprietà \FINSAT di \( T^* \).
+Quindi l'ipotesi che la valutazione sia 0 è falsa, pertanto \( \alpha^*(B \lor C) = 1 \).
+
+\subitem
+
+            \item \textbf{IMPLICAZIONE: }\( A = B \to C\)
+
+\vspace{0.5em}
+Dobbiamo mostrare che \( \alpha^*(B \rightarrow C) = 1 \iff (B \rightarrow C) \in T^* \).
+
+\vspace{0.5em}
+\subitem \textbf{(\(\Leftarrow\))} Sia \( (B \rightarrow C) \in T^* \).
+Se \( \alpha^*(B \rightarrow C) = 0 \), allora \( \alpha^*(B)=1 \) e \( \alpha^*(C)=0 \).
+Per ipotesi induttiva, \( B \in T^* \) e \( C \notin T^* \) (quindi \( \neg C \in T^* \)).
+Consideriamo l'insieme finito \( \{(B \rightarrow C), B, \neg C\} \subseteq T^* \). Questo insieme è \UNSAT {\color{CadetBlue}(Modus Ponens contraddetto)}.
+Poiché \( T^* \) è \FINSAT, non possiamo avere questa configurazione. Quindi \( \alpha^*(B \rightarrow C) \) deve essere 1.
+
+\vspace{0.5em}
+
+\subitem \textbf{(\(\Rightarrow\))} Sia \( \alpha^*(B \rightarrow C) = 1 \).
+Questo accade se \( \alpha^*(B)=0 \) oppure \( \alpha^*(C)=1 \).
+
+\begin{itemize}
+    \item Se \( \alpha^*(B)=0 \implies B \notin T^* \implies \neg B \in T^* \). L'insieme \( \{\neg B, \neg(B \rightarrow C)\} \) è  \UNSAT. Quindi \( (B \rightarrow C) \in T^* \).
+    \item Se \( \alpha^*(C)=1 \implies C \in T^* \). L'insieme \( \{C, \neg(B \rightarrow C)\} \) è  \UNSAT. Quindi \( (B \rightarrow C) \in T^* \).
+\end{itemize}
+
         \end{enumerate}
 \end{itemize}
-\qed
+
+
+\subsubsection*{Conclusione}
+Abbiamo mostrato che per ogni \( A \), \( \alpha^*(A)=1 \iff A \in T^* \).
+Poiché \( T \subseteq T^* \) e per ogni \( A \in T^* \) vale \( \alpha^*(A)=1 \), ne consegue che \( \alpha^* \) soddisfa tutte le formule in \( T \).
+Dunque \( T \) è soddisfacibile (\( \SAT \)).
+
+
 
 \section{Applicazioni del teorema di compattezza}
 
@@ -996,14 +1083,152 @@ ovvero, il nostro sistema permette di derivare formalmente dalle ipotesi di \( T
 
 \end{gframe}
 
-\subsection{Dimostrazione del teorema di completezza (WIP)}
-Per dimostrare il teorema, ci saranno utili le seguenti proprietà:
+\subsection{Completezza Semplice}
+
+L'obiettivo di questa sezione è dimostrare che le verità logiche (tautologie) sono dimostrabili nel calcolo proposizionale.
+\[ \vDash B \implies \vdash B \]
+
+Per farlo, utilizziamo un lemma fondamentale che collega la verità semantica (valutazioni $\alpha$) alla dimostrabilità sintattica.
+
+\begin{lemmaframe}{Lemma principale}{}
+    Sia \( B \) una formula contenente le variabili proposizionali \( p_1, \dots, p_k \).
+    Sia \( \alpha \) un assegnamento di verità. Definiamo la formula \( B^\alpha \) come:
+    \[
+    B^\alpha = \begin{cases}
+    B & \text{se } \alpha(B) = 1 \\
+    \neg B & \text{se } \alpha(B) = 0
+    \end{cases}
+    \]
+    (e analogamente per le variabili \( p_j^\alpha \)).
+    Allora vale sempre:
+    \[ p_1^\alpha, \dots, p_k^\alpha \vdash B^\alpha \]
+
+\begin{pframe}
+    Si procede per \textbf{induzione} sul numero \( n \) di connettivi logici (\(\neg, \to\)) in \( B \).
+
+    \textbf{Base (\(n=0\)):} \( B \) è una variabile atomica \( p_i \).
+    La tesi diventa \( p_i \vdash p_i \) (se \(\alpha(p_i)=1\)) oppure \( \neg p_i \vdash \neg p_i \) (se \(\alpha(p_i)=0\)). Entrambe sono banalmente vere.
+
+    \textbf{Passo Induttivo (\(n>0\)):}
+    Supponiamo il lemma vero per formule con meno connettivi. Analizziamo la forma di \( B \):
+
+    \begin{itemize}
+        \item \textbf{Caso \( B = \neg C \):}
+        \begin{itemize}
+            \item Se \(\alpha(C)=0\), allora \(\alpha(B)=1\). Per ipotesi induttiva \( \Gamma \vdash C^\alpha \) cioè \( \Gamma \vdash \neg C \). Ma \( B^\alpha \) è \( B \) (cioè \( \neg C \)). Quindi \( \Gamma \vdash B^\alpha \).
+            \item Se \(\alpha(C)=1\), allora \(\alpha(B)=0\). Per ipotesi induttiva \( \Gamma \vdash C \). Dobbiamo dimostrare \( \Gamma \vdash \neg B \) (cioè \( \neg\neg C \)). Usiamo il teorema \( \vdash C \to \neg\neg C \).
+        \end{itemize}
+
+        \item \textbf{Caso \( B = C \to D \):}
+        Si analizzano i valori di verità di \( C \) e \( D \). Ad esempio, se \(\alpha(C)=1\) e \(\alpha(D)=0\), allora \(\alpha(B)=0\).
+        Per ipotesi induttiva abbiamo \( \Gamma \vdash C \) e \( \Gamma \vdash \neg D \).
+        Dobbiamo dimostrare \( \Gamma \vdash \neg(C \to D) \). Questo segue dal teorema \( C \to (\neg D \to \neg(C \to D)) \).
+    \end{itemize}
+\end{pframe}
+\end{lemmaframe}
+
+
+\begin{thmframe}{Teorema di Completezza Semplice}{}
+    Se \( B \) è una tautologia, allora \( \vdash B \).
+
+\end{thmframe}
+\begin{pframe}
+    Sia \( B \) una tautologia con variabili \( p_1, \dots, p_k \).
+    Poiché è una tautologia, per \textit{ogni} assegnamento \( \alpha \) vale \( \alpha(B)=1 \), quindi \( B^\alpha = B \).
+    Dal Lemma precedente segue che per ogni assegnamento \( \alpha \):
+    \[ p_1^\alpha, \dots, p_k^\alpha \vdash B \]
+
+    Consideriamo due assegnamenti \( \alpha \) e \( \beta \) che differiscono solo per il valore di \( p_k \):
+    \begin{itemize}
+        \item \( \alpha(p_k)=1 \implies p_1^\alpha, \dots, p_{k-1}^\alpha, p_k \vdash B \)
+        \item \( \beta(p_k)=0 \implies p_1^\alpha, \dots, p_{k-1}^\alpha, \neg p_k \vdash B \)
+    \end{itemize}
+    Applicando il Teorema di Deduzione a entrambi:
+    \[ \Gamma \vdash p_k \to B \quad \text{e} \quad \Gamma \vdash \neg p_k \to B \]
+    (dove \( \Gamma = \{p_1^\alpha, \dots, p_{k-1}^\alpha\} \)).
+
+    Utilizzando il teorema noto \( (A \to B) \to ((\neg A \to B) \to B) \), otteniamo:
+    \[ p_1^\alpha, \dots, p_{k-1}^\alpha \vdash B \]
+    Abbiamo eliminato la dipendenza da \( p_k \). Iterando il procedimento per \( k-1, k-2, \dots, 1 \), eliminiamo tutte le premesse e otteniamo infine:
+    \[ \vdash B \]
+\end{pframe}
+
+
+\subsection{Teorema di Deduzione}
+
+Il passaggio chiave per collegare la soddisfacibilità alla dimostrabilità è il Teorema di Deduzione, che ci permette di spostare le premesse all'interno della formula sotto forma di implicazione.
+
+\begin{thmframe}{Teorema di Deduzione [Herbrand, 1930]}{}
+    Sia \( T \) un insieme di formule e \( A, B \) due formule. Allora:
+    \[ T, B \vdash A \iff T \vdash (B \to A) \]
+\end{thmframe}
+
+\begin{proofframe}[title=dim]
+    Dobbiamo dimostrare la doppia implicazione.
+
+    \textbf{Direzione 1:} \( T \vdash (B \to A) \implies T, B \vdash A \) \\
+    Questa direzione è immediata.
+    \begin{enumerate}
+        \item Sia \( (G_1, \dots, G_m) \) una derivazione di \( B \to A \) a partire da \( T \).
+        \item Aggiungiamo \( B \) come nuova ipotesi (poiché ora lavoriamo in \( T \cup \{B\} \)).
+        \item Avendo \( B \) e \( B \to A \), per Modus Ponens otteniamo \( A \).
+        \item Dunque \( T, B \vdash A \).
+    \end{enumerate}
+
+    \textbf{Direzione 2:} \( T, B \vdash A \implies T \vdash (B \to A) \) \\
+    Sia \( (F_1, \dots, F_n) \) una derivazione di \( A \) (quindi \( F_n = A \)) a partire dalle premesse \( T \cup \{B\} \).
+    Dobbiamo dimostrare per induzione sull'indice \( i \) (lunghezza della derivazione) che \( T \vdash (B \to F_i) \) per ogni \( i = 1, \dots, n \).
+
+    \textit{Base dell'induzione (\(i=1\)):} \( F_1 \) è l'inizio della derivazione. Ci sono tre casi:
+    \begin{itemize}
+        \item \textbf{Caso 1:} \( F_1 \) è un assioma logico oppure \( F_1 \in T \). \\
+        In questo caso \( T \vdash F_1 \) (senza bisogno di \( B \)).
+        Utilizziamo l'assioma logico \( F_1 \to (B \to F_1) \).
+        Per Modus Ponens, otteniamo \( T \vdash B \to F_1 \).
+
+        \item \textbf{Caso 2:} \( F_1 \) è proprio la formula \( B \). \\
+        Dobbiamo dimostrare \( T \vdash B \to B \).
+        Sappiamo che \( \vdash B \to B \) è un teorema logico (già dimostrato precedentemente o verificabile dagli assiomi).
+        Quindi a maggior ragione \( T \vdash B \to B \).
+    \end{itemize}
+
+    \textit{Passo induttivo (\(i > 1\)):}
+    Supponiamo che la tesi valga per tutti i passi \( k < i \). Analizziamo \( F_i \):
+    \begin{itemize}
+        \item Se \( F_i \) è un assioma, un elemento di \( T \) o \( B \), si procede come nel caso base.
+        \item \textbf{Caso 3:} \( F_i \) è ottenuto per \textbf{Modus Ponens}. \\
+        Significa che esistono \( m, l < i \) tali che \( F_l \) è la formula \( F_m \to F_i \).
+        Per \textbf{ipotesi induttiva} sappiamo che:
+        \begin{align*}
+            1) \ & T \vdash B \to F_m \\
+            2) \ & T \vdash B \to (F_m \to F_i) \quad (\text{poiché } F_l = F_m \to F_i)
+        \end{align*}
+        Utilizziamo l'Assioma 2 (distributività dell'implicazione):
+        \[ (B \to (F_m \to F_i)) \to ((B \to F_m) \to (B \to F_i)) \]
+        Applicando il Modus Ponens due volte (usando le ipotesi induttive 1 e 2), concludiamo:
+        \[ T \vdash B \to F_i \]
+    \end{itemize}
+    Poiché \( F_n = A \), l'induzione prova che \( T \vdash B \to A \).
+\end{proofframe}
+
+\subsection{Conclusione del Teorema di Completezza}
+
+Grazie al Teorema di Deduzione, possiamo ora completare la strategia descritta all'inizio:
 
 \begin{enumerate}
-    \item \( T \vdash A \land T \subseteq S \implies S \vdash A\)
-    \item \( T\vdash A \iff \exists S \overset{fin}{\subseteq} T \ \ t.c. \ \ S \vdash A \)
-    \item \( T \vdash A \ \land \ (\forall  B \in T, \ \  S \vdash B) \implies S \vdash A \)
+    \item Dal Teorema di Compattezza: \( T \vDash A \implies \exists \{A_1, \dots, A_n\} \subseteq T \) tale che \( A_1, \dots, A_n \vDash A \).
+    \item Questo equivale a dire che \( \vDash (A_1 \to (\dots \to A)\dots) \) è una tautologia.
+    \item Per la \textbf{Completezza Semplice} (le tautologie sono teoremi), abbiamo:
+    \[ \vdash (A_1 \to (A_2 \to \dots (A_n \to A)\dots)) \]
+    \item Applicando \( n \) volte il \textbf{Teorema di Deduzione} (nella direzione \( \Longleftarrow \)), ``scarichiamo'' le premesse una alla volta:
+    \[ A_1, A_2, \dots, A_n \vdash A \]
+    \item Poiché \( \{A_1, \dots, A_n\} \subseteq T \), per la proprietà di monotonia concludiamo:
+    \[ T \vdash A \]
 \end{enumerate}
+
+
+
+
 
 \chapter{Logica Predicativa}
 
@@ -1185,8 +1410,8 @@ Un esempio è la teoria formata dagli assiomi di gruppo scritti in un linguaggio
 Gli assiomi della teoria di gruppo si esprimono con i seguenti enunciati:
 \begin{align*}
 \forall v_1 \forall v_2 \forall v_3 ((v_1 \circ v_2) \circ v_3 &= v_1 \circ (v_2 \circ v_3)) \\
-\forall v_1 ((v_1 \circ e = v_1) &\wedge (e \circ v_1 = v_1)) \\
-\forall v_1 \exists v_2 ((v_1 \circ v_2 = e) &\wedge (v_2 \circ v_1 = e))
+\forall v_1 ((v_1 \circ e = v_1) &\land (e \circ v_1 = v_1)) \\
+\forall v_1 \exists v_2 ((v_1 \circ v_2 = e) &\land (v_2 \circ v_1 = e))
 \end{align*}
 che formano la teoria dei gruppi \( T_G \).
 
@@ -1244,11 +1469,11 @@ Lo dimostriamo per le formule, che sono una struttura induttiva (così che valga
         \[ \iff \mathcal{B} \not\models \phi[h(\vec{a})] \quad \text{(ip. ind. su } \phi) \]
         \[ \iff \mathcal{B} \models \neg \phi[h(\vec{a})] \quad \text{(def. di } \neg) \]
 
-        \item \textbf{congiunzione ($\wedge$)}:
-        \[ \mathcal{A} \models (\phi \wedge \psi)[\vec{a}] \]
-        \[ \iff \mathcal{A} \models \phi[\vec{a}] \text{ e } \mathcal{A} \models \psi[\vec{a}] \quad \text{(def. di } \wedge) \]
+        \item \textbf{congiunzione ($\land$)}:
+        \[ \mathcal{A} \models (\phi \land \psi)[\vec{a}] \]
+        \[ \iff \mathcal{A} \models \phi[\vec{a}] \text{ e } \mathcal{A} \models \psi[\vec{a}] \quad \text{(def. di } \land) \]
         \[ \iff \mathcal{B} \models \phi[h(\vec{a})] \text{ e } \mathcal{B} \models \psi[h(\vec{a})] \quad \text{(ip. ind. su } \phi \text{ e } \psi) \]
-        \[ \iff \mathcal{B} \models (\phi \wedge \psi)[h(\vec{a})] \quad \text{(def. di } \wedge) \]
+        \[ \iff \mathcal{B} \models (\phi \land \psi)[h(\vec{a})] \quad \text{(def. di } \wedge) \]
 
         \item \textbf{quantificazione ($\exists$)}:
         Sia \(\phi\) con variabile libera \(y\) in aggiunta a \(x_1, \ldots, x_n\).
@@ -2464,7 +2689,7 @@ Quindi, vale che:
     \begin{itemize}
         \item \textbf{C.B.}: le funzioni di base sono definibili in \( \Nn \)
 
-            \subitem L'addizione è definita dalla formula \( F(x, y, z) := ((x + y) = z) \), la moltiplicazione dalla formula \( G(x, y, z) := ((x \times y) = z) \), la proiezione \( \pi_{i}^{n}(x_1, \dots, x_n) = x_i \) (dove \( i \in [1, n] \)) è definibile dalla formula \( H(x_1, \dots, x_n, z) := (x_1 = x_1 \wedge \dots \wedge x_i = z \wedge \dots \wedge x_n = x_n) \), la funzione caratteristica dell'uguaglianza dalla formula \( I(x, y, z) := (x = y \wedge z = 1) \vee (x \neq y \wedge z = 0) \). \hfill \(\square\)
+            \subitem L'addizione è definita dalla formula \( F(x, y, z) := ((x + y) = z) \), la moltiplicazione dalla formula \( G(x, y, z) := ((x \times y) = z) \), la proiezione \( \pi_{i}^{n}(x_1, \dots, x_n) = x_i \) (dove \( i \in [1, n] \)) è definibile dalla formula \( H(x_1, \dots, x_n, z) := (x_1 = x_1 \land \dots \wedge x_i = z \wedge \dots \wedge x_n = x_n) \), la funzione caratteristica dell'uguaglianza dalla formula \( I(x, y, z) := (x = y \wedge z = 1) \lor (x \neq y \wedge z = 0) \). \hfill \(\square\)
 
         \item \textbf{chiusura per composizione}: le funzioni definibili in \( \Nn \) sono chiuse per composizione
 
@@ -2621,13 +2846,6 @@ Consideriamo \( A(x/\bar{p}) \), ovvero
 Sia \( q \) il suo codice (quindi \( \delta(p) = q  \)).
 
 Notiamo subito che la formula genera una contraddizione: la formula dichiara che ogni numero che sia \( = \delta(p) \) non è vero in \( \Nn \), ma essa stessa è uno di quei numeri (quindi sta dichiarando di ``mentire'' (di non essere vera)).
-
-
-
-
-
-
-
 
 
 
