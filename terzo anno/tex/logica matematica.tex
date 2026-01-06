@@ -1083,6 +1083,66 @@ ovvero, il nostro sistema permette di derivare formalmente dalle ipotesi di \( T
 
 \end{gframe}
 
+\subsection{Teorema di Deduzione}
+
+Il passaggio chiave per collegare la soddisfacibilità alla dimostrabilità è il Teorema di Deduzione, che ci permette di spostare le premesse all'interno della formula sotto forma di implicazione.
+
+\begin{thmframe}{Teorema di Deduzione [Herbrand, 1930]}{}
+    Sia \( T \) un insieme di formule e \( A, B \) due formule. Allora:
+    \[ T, B \vdash A \iff T \vdash (B \to A) \]
+\end{thmframe}
+
+\begin{proofframe}[title=dim]
+    Dobbiamo dimostrare la doppia implicazione.
+
+    \textbf{Direzione 1:} \( T \vdash (B \to A) \implies T, B \vdash A \) \\
+    Questa direzione è immediata.
+    \begin{enumerate}
+        \item Sia \( (G_1, \dots, G_m) \) una derivazione di \( B \to A \) a partire da \( T \).
+        \item Aggiungiamo \( B \) come nuova ipotesi (poiché ora lavoriamo in \( T \cup \{B\} \)).
+        \item Avendo \( B \) e \( B \to A \), per Modus Ponens otteniamo \( A \).
+        \item Dunque \( T, B \vdash A \).
+    \end{enumerate}
+
+    \textbf{Direzione 2:} \( T, B \vdash A \implies T \vdash (B \to A) \) \\
+    Sia \( (F_1, \dots, F_n) \) una derivazione di \( A \) (quindi \( F_n = A \)) a partire dalle premesse \( T \cup \{B\} \).
+    Dobbiamo dimostrare per induzione sull'indice \( i \) (lunghezza della derivazione) che \( T \vdash (B \to F_i) \) per ogni \( i = 1, \dots, n \).
+
+    \textit{Base dell'induzione (\(i=1\)):} \( F_1 \) è l'inizio della derivazione. Ci sono tre casi:
+    \begin{itemize}
+        \item \textbf{Caso 1:} \( F_1 \) è un assioma logico oppure \( F_1 \in T \). \\
+        In questo caso \( T \vdash F_1 \) (senza bisogno di \( B \)).
+        Utilizziamo l'assioma logico \( F_1 \to (B \to F_1) \).
+        Per Modus Ponens, otteniamo \( T \vdash B \to F_1 \).
+
+        \item \textbf{Caso 2:} \( F_1 \) è proprio la formula \( B \). \\
+        Dobbiamo dimostrare \( T \vdash B \to B \).
+        Sappiamo che \( \vdash B \to B \) è un teorema logico (già dimostrato precedentemente o verificabile dagli assiomi).
+        Quindi a maggior ragione \( T \vdash B \to B \).
+    \end{itemize}
+
+    \textit{Passo induttivo (\(i > 1\)):}
+    Supponiamo che la tesi valga per tutti i passi \( k < i \). Analizziamo \( F_i \):
+    \begin{itemize}
+        \item Se \( F_i \) è un assioma, un elemento di \( T \) o \( B \), si procede come nel caso base.
+        \item \textbf{Caso 3:} \( F_i \) è ottenuto per \textbf{Modus Ponens}. \\
+        Significa che esistono \( m, l < i \) tali che \( F_l \) è la formula \( F_m \to F_i \).
+        Per \textbf{ipotesi induttiva} sappiamo che:
+        \begin{align*}
+            1) \ & T \vdash B \to F_m \\
+            2) \ & T \vdash B \to (F_m \to F_i) \quad (\text{poiché } F_l = F_m \to F_i)
+        \end{align*}
+        Utilizziamo l'Assioma 2 (distributività dell'implicazione):
+        \[ (B \to (F_m \to F_i)) \to ((B \to F_m) \to (B \to F_i)) \]
+        Applicando il Modus Ponens due volte (usando le ipotesi induttive 1 e 2), concludiamo:
+        \[ T \vdash B \to F_i \]
+    \end{itemize}
+    Poiché \( F_n = A \), l'induzione prova che \( T \vdash B \to A \).
+\end{proofframe}
+
+
+
+
 \subsection{Completezza Semplice}
 
 L'obiettivo di questa sezione è dimostrare che le verità logiche (tautologie) sono dimostrabili nel calcolo proposizionale.
@@ -1152,64 +1212,6 @@ Per farlo, utilizziamo un lemma fondamentale che collega la verità semantica (v
     Abbiamo eliminato la dipendenza da \( p_k \). Iterando il procedimento per \( k-1, k-2, \dots, 1 \), eliminiamo tutte le premesse e otteniamo infine:
     \[ \vdash B \]
 \end{pframe}
-
-
-\subsection{Teorema di Deduzione}
-
-Il passaggio chiave per collegare la soddisfacibilità alla dimostrabilità è il Teorema di Deduzione, che ci permette di spostare le premesse all'interno della formula sotto forma di implicazione.
-
-\begin{thmframe}{Teorema di Deduzione [Herbrand, 1930]}{}
-    Sia \( T \) un insieme di formule e \( A, B \) due formule. Allora:
-    \[ T, B \vdash A \iff T \vdash (B \to A) \]
-\end{thmframe}
-
-\begin{proofframe}[title=dim]
-    Dobbiamo dimostrare la doppia implicazione.
-
-    \textbf{Direzione 1:} \( T \vdash (B \to A) \implies T, B \vdash A \) \\
-    Questa direzione è immediata.
-    \begin{enumerate}
-        \item Sia \( (G_1, \dots, G_m) \) una derivazione di \( B \to A \) a partire da \( T \).
-        \item Aggiungiamo \( B \) come nuova ipotesi (poiché ora lavoriamo in \( T \cup \{B\} \)).
-        \item Avendo \( B \) e \( B \to A \), per Modus Ponens otteniamo \( A \).
-        \item Dunque \( T, B \vdash A \).
-    \end{enumerate}
-
-    \textbf{Direzione 2:} \( T, B \vdash A \implies T \vdash (B \to A) \) \\
-    Sia \( (F_1, \dots, F_n) \) una derivazione di \( A \) (quindi \( F_n = A \)) a partire dalle premesse \( T \cup \{B\} \).
-    Dobbiamo dimostrare per induzione sull'indice \( i \) (lunghezza della derivazione) che \( T \vdash (B \to F_i) \) per ogni \( i = 1, \dots, n \).
-
-    \textit{Base dell'induzione (\(i=1\)):} \( F_1 \) è l'inizio della derivazione. Ci sono tre casi:
-    \begin{itemize}
-        \item \textbf{Caso 1:} \( F_1 \) è un assioma logico oppure \( F_1 \in T \). \\
-        In questo caso \( T \vdash F_1 \) (senza bisogno di \( B \)).
-        Utilizziamo l'assioma logico \( F_1 \to (B \to F_1) \).
-        Per Modus Ponens, otteniamo \( T \vdash B \to F_1 \).
-
-        \item \textbf{Caso 2:} \( F_1 \) è proprio la formula \( B \). \\
-        Dobbiamo dimostrare \( T \vdash B \to B \).
-        Sappiamo che \( \vdash B \to B \) è un teorema logico (già dimostrato precedentemente o verificabile dagli assiomi).
-        Quindi a maggior ragione \( T \vdash B \to B \).
-    \end{itemize}
-
-    \textit{Passo induttivo (\(i > 1\)):}
-    Supponiamo che la tesi valga per tutti i passi \( k < i \). Analizziamo \( F_i \):
-    \begin{itemize}
-        \item Se \( F_i \) è un assioma, un elemento di \( T \) o \( B \), si procede come nel caso base.
-        \item \textbf{Caso 3:} \( F_i \) è ottenuto per \textbf{Modus Ponens}. \\
-        Significa che esistono \( m, l < i \) tali che \( F_l \) è la formula \( F_m \to F_i \).
-        Per \textbf{ipotesi induttiva} sappiamo che:
-        \begin{align*}
-            1) \ & T \vdash B \to F_m \\
-            2) \ & T \vdash B \to (F_m \to F_i) \quad (\text{poiché } F_l = F_m \to F_i)
-        \end{align*}
-        Utilizziamo l'Assioma 2 (distributività dell'implicazione):
-        \[ (B \to (F_m \to F_i)) \to ((B \to F_m) \to (B \to F_i)) \]
-        Applicando il Modus Ponens due volte (usando le ipotesi induttive 1 e 2), concludiamo:
-        \[ T \vdash B \to F_i \]
-    \end{itemize}
-    Poiché \( F_n = A \), l'induzione prova che \( T \vdash B \to A \).
-\end{proofframe}
 
 \subsection{Conclusione del Teorema di Completezza}
 
