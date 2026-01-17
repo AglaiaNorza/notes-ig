@@ -221,6 +221,54 @@ Si ha che:
 
 \end{lemmaframe}
 
+
+\subsection*{Operazioni sulle teorie (utili per esercizi)}
+
+Vediamo come si comportano le teorie in base a operatori noti:
+
+\textbf{Unione di teorie} (\( T \cup S \)):
+
+L'unione rappresenta una sorta di "aggiunta di vincoli": si sta chiedendo che valgano sia le proposizioni di \( T \) che quelle di \( S \).
+\begin{itemize}
+    \item monotonia - se una formula è conseguenza logica di una teoria, lo è anche dell'unione
+        \subitem \( T\vDash A \implies T\cup S \vDash A \)
+
+    \item modus ponens - se una teoria fornisce la premessa ed un'altra l'implicazione, la loro unione deriva la conclusione
+        \subitem \( T \vDash A \land S \vDash A \to B \implies S \cup T \vDash B \)
+
+    \item "restringimento" dei modelli - i modelli dell'unione sono l'intersezione dei modelli
+        \subitem \( Mod(T \cup S) = Mod(T)\cap Mod(S) \)
+
+    \item "incoerenza" - se sia \( T \) che \( S \) sono coerenti, non è detto che la loro unione lo sia
+        \subitem esempio: \( T = \{p\}, \ S = \{\neg p\} \)
+\end{itemize}
+
+\textbf{Intersezione di teorie} (\( T \cap S \)):
+L'intersezione tra teorie è "debole", in quanto contiene solo le proposizioni che appartengono ad entrambi gli insiemi.
+
+\begin{itemize}
+    \item "perdita di informazioni" - l'intersezione tra teorie è sempre un sottoinsieme delle teorie originali (banale)
+        \subitem \( T\cap S \subseteq T, S \)
+    \item coerenza - se \( T \) è coerente, allora \( T \cap S \) è necessariamente coerente (non stiamo aggiungendo informazioni)
+\end{itemize}
+
+\textbf{Esempio}:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|c|l|}
+\hline
+\textit{premesse} & \textit{derivano dalle premesse?} & \textit{sì/no} & \textit{motivo} \\ \hline
+$T \models A$ & $T \cup S \models A$ & V & Monotonia \\ \hline
+$T \models A$ & $T \cap S \models A$ & F & Serve che anche $S \models A$ \\ \hline
+$T \models A \text{ e } S \models \neg A$ & $T \cup S$ è insoddisfacibile & V & Contraddizione ($A \wedge \neg A$) \\ \hline
+$T \models A \text{ e } S \models \neg A$ & $T \cap S \models A \leftrightarrow \neg A$ & F & $T \cap S$ è coerente \\ \hline
+$A \text{ sat } \iff B \text{ sat }$ & $T \cap S \models (A \leftrightarrow B)$ & F & Sat $\neq$ Equivalenza \\ \hline
+$T, A \lor B \models C \text{ e } S \models B$ & $T \cup S \models A \rightarrow C$ & F & $A$ potrebbe non implicare $C$ \\ \hline
+\end{tabular}
+\label{tab:teorie}
+\end{table}
+
 \section{Completezza funzionale}
 \textit{Data una tavola di verità arbitraria con \( n \) argomenti, esiste una proposizione \( A \) che ha esattamente quella tavola di verità?}
 
@@ -422,6 +470,8 @@ In questo modo, abbiamo:
     \end{tabular}
     \caption{Principali leggi di equivalenza logica}
 \end{table}
+
+{\color{gray}Nota Bene: soddisfacibilità ed equivalenza logica non sono interscambiabili - una frase del tipo "Se \( A \) è soddisfacibile se e solo se \( B \) è soddisfacibile, allora \( A \leftrightarrow B \)" non è vera in assoluto (se entrambe possono essere vere non significa che lo siano nello stesso momento)}
 
 \section{Formalizzazioni in logica proposizionale}
 
@@ -1108,16 +1158,16 @@ Il passaggio chiave per collegare la soddisfacibilità alla dimostrabilità è i
     Sia \( (F_1, \dots, F_n) \) una derivazione di \( A \) (quindi \( F_n = A \)) a partire dalle premesse \( T \cup \{B\} \).
     Dobbiamo dimostrare per induzione sull'indice \( i \) (lunghezza della derivazione) che \( T \vdash (B \to F_i) \) per ogni \( i = 1, \dots, n \).
 
-    \textit{Base dell'induzione (\(i=1\)):} \( F_1 \) è l'inizio della derivazione. Ci sono tre casi:
+    \textit{Caso base (\(i=1\)):} \( F_1 \) è l'inizio della derivazione. Ci sono tre casi:
     \begin{itemize}
         \item \textbf{Caso 1:} \( F_1 \) è un assioma logico oppure \( F_1 \in T \). \\
         In questo caso \( T \vdash F_1 \) (senza bisogno di \( B \)).
         Utilizziamo l'assioma logico \( F_1 \to (B \to F_1) \).
         Per Modus Ponens, otteniamo \( T \vdash B \to F_1 \).
 
-        \item \textbf{Caso 2:} \( F_1 \) è proprio la formula \( B \). \\
+        \item \textbf{Caso 2:} \( F_1 \) è la formula \( B \). \\
         Dobbiamo dimostrare \( T \vdash B \to B \).
-        Sappiamo che \( \vdash B \to B \) è un teorema logico (già dimostrato precedentemente o verificabile dagli assiomi).
+        Sappiamo che \( \vdash B \to B \) è un teorema logico.
         Quindi a maggior ragione \( T \vdash B \to B \).
     \end{itemize}
 
@@ -1127,7 +1177,7 @@ Il passaggio chiave per collegare la soddisfacibilità alla dimostrabilità è i
         \item Se \( F_i \) è un assioma, un elemento di \( T \) o \( B \), si procede come nel caso base.
         \item \textbf{Caso 3:} \( F_i \) è ottenuto per \textbf{Modus Ponens}. \\
         Significa che esistono \( m, l < i \) tali che \( F_l \) è la formula \( F_m \to F_i \).
-        Per \textbf{ipotesi induttiva} sappiamo che:
+        Per ipotesi induttiva sappiamo che:
         \begin{align*}
             1) \ & T \vdash B \to F_m \\
             2) \ & T \vdash B \to (F_m \to F_i) \quad (\text{poiché } F_l = F_m \to F_i)
@@ -1218,13 +1268,13 @@ Per farlo, utilizziamo un lemma fondamentale che collega la verità semantica (v
 Grazie al Teorema di Deduzione, possiamo ora completare la strategia descritta all'inizio:
 
 \begin{enumerate}
-    \item Dal Teorema di Compattezza: \( T \vDash A \implies \exists \{A_1, \dots, A_n\} \subseteq T \) tale che \( A_1, \dots, A_n \vDash A \).
+    \item Dal \textbf{Teorema di Compattezza}: \( T \vDash A \implies \exists \{A_1, \dots, A_n\} \subseteq T \) tale che \( A_1, \dots, A_n \vDash A \).
     \item Questo equivale a dire che \( \vDash (A_1 \to (\dots \to A)\dots) \) è una tautologia.
     \item Per la \textbf{Completezza Semplice} (le tautologie sono teoremi), abbiamo:
     \[ \vdash (A_1 \to (A_2 \to \dots (A_n \to A)\dots)) \]
     \item Applicando \( n \) volte il \textbf{Teorema di Deduzione} (nella direzione \( \Longleftarrow \)), ``scarichiamo'' le premesse una alla volta:
     \[ A_1, A_2, \dots, A_n \vdash A \]
-    \item Poiché \( \{A_1, \dots, A_n\} \subseteq T \), per la proprietà di monotonia concludiamo:
+\item Poiché \( \{A_1, \dots, A_n\} \subseteq T \), per la proprietà di \textbf{monotonia} concludiamo:
     \[ T \vdash A \]
 \end{enumerate}
 
@@ -1427,6 +1477,36 @@ D'altra parte, l'insieme delle conseguenze logiche di una teoria $T$ non è nece
 
 La teoria $T_{\text{Gruppi}}$ è dunque incompleta.
 \end{gframe}
+
+\subsection*{Relazioni tra teorie e coerenza}
+Siano \( T \) e \( S \) due teorie sullo stesso linguaggio tali che \( T \subseteq S \).
+
+Valgono le seguenti proprietà:
+\begin{itemize}
+    \item monotonia - \( T\vDash \varphi \implies S \vDash \varphi \)
+
+    \item "ereditarietà" dei modelli - ogni modello di \( S \) è anche modello di \( T \) (tutto \( T \) si trova dentro \( S \))
+        \subitem \( Mod(S) \subseteq Mod(T) \)
+
+    \item coerenza - se \( S \) è corente, allora anche \( T \) lo è
+        \subitem (se \( T \) è corente, non è detto che \( S \) lo sia)
+\end{itemize}
+
+\textbf{Esempi utili}
+\begin{table}[h!]
+\centering
+\renewcommand{\arraystretch}{1.3} 
+\begin{tabular}{|l|c|p{7cm}|}
+\hline
+\textbf{affermazione} & \textbf{risp} & \textbf{motivo} \\ \hline
+Se $T \models A$, allora $S \models A$? & VERO & Monotonia \\ \hline
+Se $\mathcal{A} \models S$, allora $\mathcal{A} \models T$? & VERO & Definizione di estensione (i modelli diminuiscono). \\ \hline
+Se $T$ è coerente, allora $S$ è coerente? & FALSO & $S$ potrebbe aggiungere assiomi che contraddicono $T$. \\ \hline
+Se $S$ è coerente, allora $T$ è coerente? & VERO & Se esiste un modello per tutto $S$, quel modello va bene anche per il sottoinsieme $T$. \\ \hline
+Se $T$ è completa, $S$ (propria) è coerente? & FALSO & $T$ ha già deciso tutto - se $S$ aggiunge qualcosa di nuovo (non derivabile da $T$), crea incoerenza. \\ \hline
+\end{tabular}
+\end{table}
+
 
 \section{Isomorfismi tra strutture}
 Se esiste un isomorfismo tra due strutture \( \Aa \) e \( \Bb \), significa che queste sono ``indistinguibili'', ovvero che hanno le stesse proprietà. È dunque vero che \( \Aa \iso \Bb \implies \Aa \text{ e } \Bb \) soddisfano gli stessi enunciati? La risposta è sì (nel linguaggio per cui sono isomorfe).
@@ -1663,6 +1743,7 @@ Notiamo che nella dimostrazione non servono proprietà di \( \Q \) se non quelle
 \end{thmframe}
 
 
+
 \section{DLO: caso generale}
 Ci chiediamo: data una struttura \( \Dd = (D, \leq_D) \vDash \text{DLO}\) con \( D \) più che numerabile, \( \Dd \isit{\equiv} \Qq \) - ovvero, per esempio, esiste un enunciato nel linguaggio degli ordini vero in \( \Q \) e falso in \( \R \)? (Se potessimo scrivere la completezza di \( \R \) in linguaggio degli ordini, allora questo sarebbe sicuramente vero (in quanto \(\Q\) non è completo) - ma non è possibile farlo).
 
@@ -1888,6 +1969,28 @@ Dunque \( \Aa \iso \Qq \). Dunque \( \Qq \equiv \Rr \) (nel linguaggio degli ord
         \end{pframe}
     \end{corframe}
 
+\subsection*{Vademecum per esercizi su DLO}
+Riassumiamo alcune informazioni utili su DLO.
+
+Poiché DLO è completa e \( \Qq \) ne è un modello, e poiché DLO e \( \R \) condividono la stessa teoria nel linguaggio degli ordini, vale:
+\[ \text{DLO} \vDash E \iff \Qq \vDash E \iff \Rr \vDash E \]
+
+Questo significa che (limitatamente al linguaggio degli ordini)
+\begin{itemize}
+    \item se un enunciato \( E \) è vero in \( \R \), DLO \(\vDash E  \)
+    \item se un enunciato \( E \) è falso in \( \Q \), DLO \( \vDash \neg E \)
+\end{itemize}
+
+\vspace{0.5em}
+{\color{CadetBlue}esempio: 
+se sappiamo che \( \Qq \vDash (E \lor F)\land \neg(E \land F) \) e che \( \Rr \vDash F \), è necessariamente vero che DLO \( \vDash \neg E \)?
+\begin{itemize}
+    \item abbiamo che \( \Rr \vDash F \implies \Qq \vDash F \)
+    \item la formula \(  (E \lor F)\land \neg(E \land F)  \) è essenzialmente uno XOR su \( E \) ed \( F \)
+    \item poiché \( \Qq \vDash F \), otteniamo che \( \Qq \vDash \neg E \)
+    \item  quindi, DLO \(\vDash \neg E\)
+\end{itemize}
+}
 
 \section{Criterio di Tarski-Vaught}
 
@@ -2443,9 +2546,7 @@ Quindi, possiamo formalizzare i seguenti teoremi:
     
 \end{proofframe}
 
-\textbf{nota bene} ! 
-
-\textbf{logica con identità}
+\textbf{nota bene ! logica con identità}
 
 La dimostrazione sopra descritta si limita alla logica di primo ordine senza identità.
 
@@ -2600,6 +2701,36 @@ Inizia infatti con \( \N \), ma contiene almeno un elemento maggiore di tutti i 
 Intorno a \( c^\Aa \) si sviluppa quindi una copia isomorfa a \( \Z \).
 
 Si esclude quindi che si possa definire una teoria \( T \) che assiomatizzi \( Th(\Nn) \) in modo che valga, come per DLO< che tutti i modelli numerabili di \( T \) sono isomorfi. Resta aperta però la possibilità di trovare un insieme di assiomi \( T \) con insieme di teoremi computabilmente enumerabili che coincida con la ``vera'' Teoria dei Numeri \( Th(\Nn) \).Una tale teoria sarebbe completa e dunque decidibile e fornirebbe un algoritmo per decidere automaticamente se un enunciato \( E \) è un teorema della Teoria dei Numeri o no.
+
+\subsection*{Vademecum su limiti espressivi e cardinalità}
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{|l|c|p{8cm}|}
+\hline
+\textit{proprietà del Modello} $M$ & \textit{assiom.?} & \textit{causa} \\ \hline
+Essere finito & NO & \textbf{Compattezza.} Se $T$ ha modelli finiti arbitrariamente grandi, ne ha anche uno infinito. \\ \hline
+Essere numerabile (esattamente $\aleph_0$) & NO & \textbf{LS Up.} Se ha un modello infinito numerabile, ne ha anche uno più che numerabile. \\ \hline
+Essere più che numerabile ($>\aleph_0$) & NO & \textbf{LS Down.} Se ha un modello più che numerabile (in ling. numerabile), ne ha anche uno numerabile. \\ \hline
+Essere ben ordinato & NO & \textbf{Compattezza.} I modelli non-standard contengono sempre copie di $\mathbb{Z}$ o parti dense. \\ \hline
+\end{tabular}
+\caption{Proprietà NON Assiomatizzabili (Limiti Espressivi)}
+\end{table}
+
+\begin{table}[h!]
+\centering
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{|l|c|p{8cm}|}
+\hline
+\textit{proprietà del Modello} $M$ & \textit{assiom.?} & \textit{come ?} \\ \hline
+Avere almeno $n$ elementi & SÌ & $\exists x_1 \dots x_n (\bigwedge_{i \neq j} x_i \neq x_j)$ \\ \hline
+Avere al più $n$ elementi & SÌ & $\exists x_1 \dots x_n \forall y (\bigvee_{i=1}^n y=x_i)$ \\ \hline
+Avere esattamente $n$ elementi & SÌ & Congiunzione di ``almeno $n$'' e ``al più $n$''. \\ \hline
+Essere infinito & SÌ & Con una teoria infinita $T_{inf} = \{ \text{``almeno } n \text{''} \mid n \in \mathbb{N} \}$. \\ \hline
+\end{tabular}
+\caption{Proprietà Assiomatizzabili in Logica del Primo Ordine}
+\end{table}
+
 
 \chapter{I teoremi di Gödel}
 \section{Funzioni calcolabili (algoritmiche)}
