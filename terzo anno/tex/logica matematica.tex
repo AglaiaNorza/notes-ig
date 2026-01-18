@@ -944,6 +944,20 @@ Dunque \( T \) è soddisfacibile (\( \SAT \)).
 
 \section{Applicazioni del teorema di compattezza}
 
+\textbf{Assegnamenti soddisfacibili}:
+
+Sia \( T = \{A_1, A_2, \dots\} \) una teoria finita numerabile tale che ogni assegnamento soddisfa qualche proposizione in \( T \). Dimostriamo per compattezza che allora \( \exists k \in \N \) t.c. \( A_1 \lor A_2 \lor \dots \lor A_k \in \TAUT \)
+
+Per assurdo:
+\begin{itemize}
+    \item supponiamo che ogni assegnamento soddisfi qualche proposizione, ma che nessuna \( A_1 \lor \dots \lor A_k \) sia una tautologia
+    \item segue che \( \forall j \in \N \ \exists \alpha \) t.c. \( \alpha(A_0 \lor \dots \lor A_j) = 0 \)
+    \item perciò, \( \forall j \) la teoria \( \{\neg A_0, \neg A_1, \dots, \neg A_j\}\) è soddisfacibile, ovvero \( \hat{T} = \{\neg A_0, \neg A_1, \dots\} \in \FINSAT\)
+    \item per compattezza, \( \hat{T}\in \SAT \), ovvero \( \exists \alpha \) t.c. \( \alpha(\hat{T})=1 \), il che è in contraddizione con l'ipotesi per cui ogni assegnamento soddisfa qualche proposizione. \qed
+\end{itemize}
+
+\textbf{Colorabilità di grafi}
+
 
 \pagebreak
 
@@ -2950,8 +2964,8 @@ Si tratta di un insieme, quindi è descritto da una formula con una variabile li
 
 Sia \( T(x) \) la formula che lo rappresenta.
 \begin{itemize}
-    \item \( E \in Th(\Nn) \implies \Nn \vDash T(\overline{code(E)})\)
-    \item \( E \not\in Th(\Nn) \implies \Nn \vDash \neg T(\overline{code(E)})\)
+    \item \( E \in Th(\Nn) \implies \Nn \vDash V(\overline{code(E)})\)
+    \item \( E \not\in Th(\Nn) \implies \Nn \vDash \neg V(\overline{code(E)})\)
 \end{itemize}
 
 Introduciamo una nuova funzione \( \delta : \N \to \N \).
@@ -2965,7 +2979,7 @@ Quindi, sia \( D(x, y) \) una formula che rappresenta \( \delta \) in \( \Nn \),
 \[ \delta(a) = b \iff \Nn \vDash D(\bar{a}, \bar{b})\]
 
 Consideriamo la formula
-\[ \forall y (D(x, y)\to \neg T(y)) \]
+\[ \forall y (D(x, y)\to \neg V(y)) \]
 (che dichiara ``per ogni \( y \) valore di \( \delta(x) \) {\color{gray}\small(quindi formula \( A(y/\bar{x}) \) in cui \( x = code(A)\))}, \( y \) non è un enunciato vero in \( \Nn \))
 
 Questa formula è una formula con una variabile libera \( x \) (chiamiamola \( A(x) \)). (In quanto tale può essere codificata). 
@@ -2973,12 +2987,26 @@ Questa formula è una formula con una variabile libera \( x \) (chiamiamola \( A
 Sia \( p \) il codice di \( A(x) \).
 
 Consideriamo \( A(x/\bar{p}) \), ovvero
-\[ \forall y (D(\bar{p}, y)\to \neg T(y)) \]
+\[ \forall y (D(\bar{p}, y)\to \neg V(y)) \]
 (che dichiara che ogni \( y \) valore di \( \delta(p)\) non è un enunciato vero in \(\Nn \))
 
 Sia \( q \) il suo codice (quindi \( \delta(p) = q  \)).
 
 Notiamo subito che la formula genera una contraddizione: la formula dichiara che ogni numero che sia \( = \delta(p) \) non è vero in \( \Nn \), ma essa stessa è uno di quei numeri (quindi sta dichiarando di ``mentire'' (di non essere vera)).
+
+Dimostriamolo formalmente, ovvero che l'ipotesi che la verità esprimibile porti alla contraddizione \( \Nn \vDash V(q) \land \Nn \vDash \neg V(q) \).
+
+Dato che la formula \( D\) definisce la funzione \( \delta \) in \( \N \), abbiamo che
+\[ \N \vDash D(p, q) \]
+
+Dimostriamo \( \N \vDash \neg V(q) \):
+\begin{itemize}
+    \item \textbf{caso 1}: \( \N \not\vDash A(p) \) 
+        \subitem \( A(p) \) non è una verità in \( \N \), dunque \( code(A(p)) = q \not\in Th(\N) \), dunque per ipotesi \( \N \vDash \neg V(q) \)
+    \item \textbf{caso 2}: \( \N \vDash A(p) \) 
+       \subitem se \( A(p) \) è vero, è vero per \( y = q \)
+
+\end{itemize}
 
 
 
