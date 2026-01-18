@@ -944,8 +944,7 @@ Dunque \( T \) è soddisfacibile (\( \SAT \)).
 
 \section{Applicazioni del teorema di compattezza}
 
-\textbf{Assegnamenti soddisfacibili}:
-
+\subsection*{Assegnamenti soddisfacibili}
 Sia \( T = \{A_1, A_2, \dots\} \) una teoria finita numerabile tale che ogni assegnamento soddisfa qualche proposizione in \( T \). Dimostriamo per compattezza che allora \( \exists k \in \N \) t.c. \( A_1 \lor A_2 \lor \dots \lor A_k \in \TAUT \)
 
 Per assurdo:
@@ -956,8 +955,127 @@ Per assurdo:
     \item per compattezza, \( \hat{T}\in \SAT \), ovvero \( \exists \alpha \) t.c. \( \alpha(\hat{T})=1 \), il che è in contraddizione con l'ipotesi per cui ogni assegnamento soddisfa qualche proposizione. \qed
 \end{itemize}
 
-\textbf{Colorabilità di grafi}
+\subsection*{Colorabilità di grafi (Erdős-De Bruijn)}
+Un grafo \( G=(V,E) \) è \( k \)-colorabile se esiste una partizione dei vertici in \( k \) classi (colori) tale che non esistono archi tra vertici della stessa classe. In altre parole, è possibile assegnare a ogni vertice un colore in modo che vertici adiacenti abbiano colori diversi.
 
+\begin{thmframe}{Teorema di Erdős-De Bruijn}{}
+Sia \( G \) un grafo infinito. \( G \) è \( k \)-colorabile se e solo se ogni sottografo di \( G \) indotto da un insieme finito di vertici è \( k \)-colorabile.
+\end{thmframe}
+
+\textbf{Dimostrazione (per compattezza)}:
+Vogliamo dimostrare che se la condizione vale per i sottografi finiti, allora vale per il grafo infinito (l'altra implicazione è banale).
+
+Costruiamo una teoria proposizionale \( T \) che descrive la \( k \)-colorazione.
+
+Associamo a ogni vertice \( v \in V \) e ogni colore \( i \in \{1, \dots, k\} \) una variabile \( P_{v,i} \). La teoria \( T \) è composta da:
+
+\begin{itemize}
+    \item \textit{Esistenza del colore}: ogni vertice ha almeno un colore.
+    \[ P_{v,1} \lor P_{v,2} \lor \dots \lor P_{v,k} \quad \forall v \in V \]
+    \item \textit{Unicità del colore}: un vertice non ha più colori contemporaneamente.
+    \[ \neg(P_{v,i} \land P_{v,j}) \quad \forall v \in V, i \neq j \]
+    \item \textit{Vincoli di adiacenza}: vertici collegati hanno colori diversi.
+    \[ \neg(P_{v,i} \land P_{w,i}) \quad \forall \{v,w\} \in E, \forall i \]
+\end{itemize}
+
+Se un assegnamento \( \alpha \) soddisfa \( T \), definisce una colorazione valida ponendo \( c(v)=i \iff \alpha(P_{v,i})=1 \).
+
+Dobbiamo mostrare che \textbf{ogni sottoinsieme finito \( T_0 \subseteq T \) è soddisfacibile}.
+\begin{itemize}
+    \item sia \( T_0 \) un sottoinsieme finito di \( T \).
+    \item sia \( V_0 \) l'insieme dei vertici menzionati nelle formule di \( T_0 \). Poiché \( T_0 \) è finito, \( V_0 \) è finito.
+    \item consideriamo il sottografo indotto da \( V_0 \). Per ipotesi del teorema, esso è \( k \)-colorabile tramite una colorazione \( c \).
+    \item definiamo l'assegnamento \( \alpha \) basato su \( c \):
+    \[ \alpha(P_{v,i}) = 1 \iff v \in V_0 \land c(v) = i \]
+    \item poiché \( c \) è una colorazione valida sul sottografo finito, \( \alpha \) soddisfa tutte le formule in \( T_0 \).
+\end{itemize}
+
+Poiché \( T \in \FINSAT \), per il Teorema di Compattezza \( T \in \SAT \). Esiste quindi un assegnamento che soddisfa \( T \), il quale induce una \( k \)-colorazione valida per tutto \( G \). \qed
+
+\subsection*{Estensione di ordini parziali}
+Ogni ordine parziale può essere esteso a un ordine totale.
+
+\begin{thmframe}{}{}
+Per ogni ordine parziale \( (X, <) \) esiste un ordine totale \( (X, \prec) \) che estende \( < \), ovvero tale che:
+\[ \text{se } x < y \text{ allora } x \prec y \quad \forall x,y \in X \]
+\end{thmframe}
+
+\textbf{Dimostrazione (per compattezza)}:
+Assumiamo come vero il teorema per insiemi finiti e usiamo questo fatto per dimostrare il caso infinito.
+
+Il nostro obiettivo è trovare un assegnamento di verità che descriva la relazione d'ordine totale \( \prec \). Introduciamo le variabili proposizionali \( p_{x,y} \) con il significato di "\( x \prec y \)".
+
+La teoria è composta dalle seguenti formule:
+\begin{itemize}
+    \item Per ogni \( x, y, z \in X \):
+        \begin{itemize}
+            \item \textit{Irriﬂessività}: \( \neg p_{x,x} \)
+            \item \textit{Asimmetria}: \( p_{x,y} \to \neg p_{y,x} \)
+            \item \textit{Transitività}: \( (p_{x,y} \land p_{y,z}) \to p_{x,z} \)
+            \item \textit{Totalità}: \( p_{x,y} \lor p_{y,x} \) (per \( x \neq y \))
+        \end{itemize}
+    \item Dobbiamo garantire che il nuovo ordine rispetti quello vecchio. Per ogni coppia \( x, y \in X \) tale che \( x < y \) nell'ordine originale, aggiungiamo la formula:
+    \[ p_{x,y} \]
+\end{itemize}
+
+Se \( T \) è soddisfacibile, un modello \( \alpha \) definisce l'ordine totale: \( x \prec y \iff \alpha(p_{x,y})=1 \).
+
+Dimostriamo che ogni sottoinsieme finito \( T_0 \subseteq T \) è soddisfacibile.
+\begin{itemize}
+    \item Sia \( T_0 \subseteq T \) un insieme finito di formule.
+    \item Sia \( X_0 \) l'insieme dei vertici \( x,y \in X \) che compaiono come indici nelle variabili \( p_{x,y} \) presenti in \( T_0 \). Poiché \( T_0 \) è finito, anche \( X_0 \) è finito.
+    \item Consideriamo la restrizione dell'ordine parziale originale \( < \) all'insieme \( X_0 \). Otteniamo un ordine parziale finito \( (X_0, <|_{X_0}) \).
+    \item Poiché \( X_0 \) è finito, sappiamo che esiste un ordine totale \( \prec_0 \) su \( X_0 \) che estende \( <|_{X_0} \).
+    \item Usiamo \( \prec_0 \) per definire un assegnamento \( \alpha \) per le variabili in \( T_0 \):
+    \[ \alpha(p_{x,y}) = 1 \iff x \prec_0 y \]
+    \item Questo assegnamento soddisfa \( T_0 \) perché è un ordine totale, e \( \prec_0 \) è un'estensione dell'ordine originale (se \( x < y \) in \( X_0 \), allora \( x \prec_0 y \), quindi \( \alpha(p_{x,y})=1 \)).
+\end{itemize}
+
+Poiché ogni sottoinsieme finito \( T_0 \) è soddisfacibile, per il Teorema di Compattezza l'intera teoria \( T \) è soddisfacibile.
+Esiste dunque un modello globale che definisce un ordine totale \( \prec \) su tutto \( X \) che estende l'ordine parziale di partenza \( < \). \qed
+
+\subsection{Lemma di König}
+
+\begin{thmframe}{Lemma di König}{}
+Ogni albero binario infinito \( A \) contiene un ramo infinito.
+\end{thmframe}
+
+\textbf{Dimostrazione (per compattezza)}:
+Vogliamo dimostrare l'esistenza di un ramo infinito costruendo una teoria proposizionale che lo descriva.
+
+Fissiamo il linguaggio contenente una variabile \( p_\sigma \) per ogni stringa \( \sigma \in A \). L'intuizione è che \( p_\sigma \) è vera se il nodo \( \sigma \) fa parte del ramo infinito.
+La teoria \( T_A \) è composta da tre tipi di formule:
+
+\begin{itemize}
+    \item \textit{Esistenza (il ramo non muore)}: per ogni livello \( n \in \N \), il ramo deve contenere almeno un nodo di quel livello. Se \( \sigma_1, \dots, \sigma_k \) sono tutti i nodi di \( A \) di lunghezza \( n \):
+    \[ p_{\sigma_1} \lor p_{\sigma_2} \lor \dots \lor p_{\sigma_k} \]
+    (poiché l'albero è binario, ogni livello ha un numero finito di nodi, quindi la disgiunzione è finita).
+    
+    \item \textit{Unicità (il ramo non si divide)}: per ogni livello \( n \), il ramo contiene al massimo un nodo.
+    \[ \neg(p_\sigma \land p_\tau) \quad \text{per ogni coppia } \sigma, \tau \in A \text{ di livello } n \text{ con } \sigma \neq \tau \]
+    
+    \item \textit{Connessione (chiusura verso l'alto)}: se un nodo fa parte del ramo, anche il suo predecessore deve farne parte.
+    \[ p_\sigma \to p_\tau \quad \text{se } \tau \text{ è un segmento iniziale (prefisso) di } \sigma \]
+\end{itemize}
+
+Dobbiamo mostrare che ogni sottoinsieme finito \( T_0 \subseteq T_A \) è soddisfacibile.
+
+\begin{itemize}
+    \item Sia \( T_0 \) un sottoinsieme finito di \( T_A \).
+    \item Consideriamo tutte le variabili \( p_\sigma \) che compaiono in \( T_0 \). Poiché sono in numero finito, esiste una lunghezza massima \( N \) tra le stringhe menzionate.
+    \item Poiché l'albero \( A \) è infinito per ipotesi, deve necessariamente contenere nodi di livello \( N \) (altrimenti avrebbe un numero finito totale di nodi).
+    \item Scegliamo un nodo \( \bar{\sigma} \in A \) di livello \( N \).
+    \item Consideriamo il percorso finito dalla radice fino a \( \bar{\sigma} \). Definiamo l'assegnamento \( \alpha \) tale che:
+    \[ \alpha(p_s) = 1 \iff s \text{ è un prefisso di } \bar{\sigma} \]
+    \item Questo assegnamento soddisfa \( T_0 \). Infatti:
+        \begin{itemize}
+            \item Per ogni livello \( n \le N \), c'è esattamente un nodo vero (il prefisso di lunghezza \( n \) di \( \bar{\sigma} \)), soddisfacendo esistenza e unicità.
+            \item Le implicazioni di connessione sono soddisfatte perché stiamo prendendo un ramo dell'albero.
+        \end{itemize}
+\end{itemize}
+
+Poiché \( T_A \in \FINSAT \), allora \( T_A \in \SAT \) per Compattezza.
+Sia \( \alpha \) un modello di \( T_A \). L'insieme \( R = \{ \sigma \in A : \alpha(p_\sigma)=1 \} \) definisce un ramo infinito in \( A \), in quanto interseca ogni livello in un unico punto e rispetta l'ordinamento. \qed
 
 \pagebreak
 
