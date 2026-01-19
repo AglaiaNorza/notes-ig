@@ -1088,7 +1088,7 @@ Se \( T = \{A_1, \dots, A_n\} \) è una \textbf{teoria finita}, la risposta è b
 \begin{defframe}{Decidibilità}{}
         Dato uno spazio \( X \) di possibili input, chiamiamo un \textit{problema} un qualsiasi sottoinsieme \( S \subseteq X\). 
 
-    Diciamo che \( S \) è \textbf{algoritmicamente decidibile} se esiste un algoritmo tale che \( \forall \ x \in X \), se \( x \in S \), l'algoritmo su input \( x \) termina in tempo finito e risponde ``sì'', e se \( x \in S \), l'algoritmo su input \( x \) termina in tempo finito e risponde ``no''.
+    Diciamo che \( S \) è \textbf{algoritmicamente decidibile} se esiste un algoritmo tale che \( \forall \ x \in X \), se \( x \in S \), l'algoritmo su input \( x \) termina in tempo finito e risponde ``sì'', e se \( x \not\in S \), l'algoritmo su input \( x \) termina in tempo finito e risponde ``no''.
 \end{defframe}
 
 Se invece \( T \) è una teoria \textbf{infinita numerabile}, potremmo usare il \textit{teorema di compattezza} per fare un ragionamento del genere:
@@ -1105,6 +1105,10 @@ Chiamiamo questo tipo di problema semi-decidibile.
 
 \begin{defframe}{Problema semi-decidibile}{}
     Dato uno spazio ambiente \( X \) e un problema \( S \subseteq X\), diciamo che \( S \) è \textbf{semi-decidibile} se esiste un algoritmo tale che \( \forall \ x \in X \), se \( x\in S \), l'algoritmo (su input \( x \)) termina e risponde ``sì''; se invece \( x \not\in S \), l'algoritmo (su input \( x \)) continua all'infinito (\textit{diverge}).
+
+    \begin{gframe}{}
+    (equivalente al concetto di "problema Turing-riconoscibile")
+    \end{gframe}
 \end{defframe}
 
 \begin{defframe}{Problema computabilmente enumerabile}{}
@@ -1119,7 +1123,7 @@ Chiamiamo questo tipo di problema semi-decidibile.
 
 Notiamo quindi che, se lo spazio \( X \) dei possibili input è computabilmente enumerabile, allora:
     \begin{itemize}
-        \item ogni problema decidibile è anche semi-decidibile
+        \item ogni problema decidibile è anche semi-decidibile {\small\color{gray}(questo sempre)}
         \item un problema è semi-decidibile se e solo se è computabilmente numerabile
     \end{itemize}
 
@@ -1136,7 +1140,7 @@ Consideriamo la procedura introdutta poco fa ed estendiamola in questo modo:
 Escludiamo le teorie per cui si ha \( T\vDash A \land T \vDash \neg A \), in quanto sono ``\textbf{incoerenti}'' (ed insoddisfacibili).
 
 Ci restano quindi tre casi:
-
+\vspace{-0.5em}
 \begin{enumerate}
     \item \textbf{Caso 1}: \(T \models A\) e \(T \not\models \neg A\): la procedura applicata a \(A\) termina e risponde affermativamente mentre la procedura applicata a \(\neg A\) diverge. Possiamo concludere che \(T \models A\).
 
@@ -1210,7 +1214,7 @@ Vogliamo quindi che \( \vDash A \iff A \) è dimostrabile da queste regole di in
 Una \textbf{dimostrazione} / deduzione di \( A \) da \( T \) nel C.P. è una \textit{successione finita} \( F_1, \dots, F_k \) di proposizioni t.c.:
 \begin{itemize}
     \item \( F_k = A\)
-    \item  \( \forall \ i \in [k] \):
+    \item  \( \forall \ i \in [k] \), si può avere che:
         \begin{itemize}
             \item \( F_i \) è un'istanza di \textbf{assioma}
             \item \( F_i \in T \)
@@ -1230,8 +1234,10 @@ Una \textbf{dimostrazione} / deduzione di \( A \) da \( T \) nel C.P. è una \te
     ovvero \( A \) è dimostrabile a partire ``semplicemente'' dagli assiomi.
 \end{defframe}
 
-\begin{thmframe}{Correttezza}{}
+\begin{thmframe}{Teorema di Correttezza}{}
+    \textit{Tutti i teoremi sono tautologie.}
     \[ \vdash A \implies \vDash A \]
+    Possiamo estendere il teorema facilmente anche a:
     \[ T \vdash A \implies T \vDash A \]
 \end{thmframe}
 
@@ -1244,6 +1250,7 @@ ovvero, il nostro sistema permette di derivare formalmente dalle ipotesi di \( T
 \section{Teorema di completezza}
 
 \begin{thmframe}{Teorema di completezza}{}
+    Il teorema di completezza sancisce l'equivalenza tra la nozione semantica di conseguenza logica e quella sintattica di derivabilità formale:
     \[ \vdash A \iff \vDash A \]
     \[ T \vdash A \iff T \vDash A \]
 \end{thmframe}
@@ -1332,7 +1339,7 @@ L'obiettivo di questa sezione è dimostrare che le verità logiche (tautologie) 
 
 Per farlo, utilizziamo un lemma fondamentale che collega la verità semantica (valutazioni $\alpha$) alla dimostrabilità sintattica.
 
-\begin{lemmaframe}{Lemma principale}{}
+\begin{lemmaframe}{}{}
     Sia \( B \) una formula contenente le variabili proposizionali \( p_1, \dots, p_k \).
     Sia \( \alpha \) un assegnamento di verità. Definiamo la formula \( B^\alpha \) come:
     \[
@@ -1544,13 +1551,19 @@ Un assegnamento si estende in modo univoco ai termini ponendo:
     \begin{itemize}
     \item $\Aa \vDash R(t_1, \dots, t_k)[\alpha]$ se e solo se $(\alpha(t_1), \dots, \alpha(t_k)) \in R^{\Aa}$, dove $t_1, \dots, t_k$ sono termini e $R$ è un simbolo di relazione di varietà $k$.
     \item $\Aa \vDash (t = s)[\alpha]$ se e solo se $\alpha(t) = \alpha(s)$, dove $t$ e $s$ sono termini.
-    \item $\Aa \vDash \neg G[\alpha]$ se e solo se non vale $\Aa \vDash G[\alpha]$.
+    \item $\Aa \vDash \neg G[\alpha]$ se e solo se non vale $\Aa \vDash G[\alpha]$ {\color{gray}\small(\( \Aa \vDash \neg G[\alpha] \iff \Aa \not\vDash G[\alpha]\))}.
     \item $\Aa \vDash (G \land H)[\alpha]$ se e solo se $\Aa \vDash G[\alpha]$ e $\Aa \vDash H[\alpha]$.
     \item $\Aa \vDash (G \lor H)[\alpha]$ se e solo se $\Aa \vDash G[\alpha]$ o $\Aa \vDash H[\alpha]$.
     \item $\Aa \vDash (G \to H)[\alpha]$ se e solo se: se $\Aa \vDash G[\alpha]$ allora $\Aa \vDash H[\alpha]$.
     \item $\Aa \vDash (\exists x G)[\alpha]$ se e solo se esiste $a \in \Aa$ tale che $\Aa \vDash G[\alpha(x/a)]$.
     \item $\Aa \vDash (\forall x G)[\alpha]$ se e solo se per ogni $a \in \Aa$ vale $\Aa \vDash G[\alpha(x/a)]$.
 \end{itemize}
+
+\begin{gframe}{}
+    Notiamo quindi che una struttura decide univocamente lo stato di verità di qualsiasi formula del suo linguaggio.
+
+    Ovvero \( Th(\Aa) \), l'insieme di tutte le frasi vere in una specifica struttura \(\Aa\), è una teoria completa.
+\end{gframe}
 \end{defframe}
 
 \begin{gframe}{Osservazione}
