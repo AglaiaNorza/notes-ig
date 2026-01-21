@@ -1175,7 +1175,7 @@ Da questo possiamo derivare che:
 
 \pagebreak
 
-\section{Calcoli deduttivi formali}
+\chapter{Calcolo Proposizionale}
 Una dimostrazione rigorosa è una successione ordinata e finita di asserzioni, ognuna delle quali può essere giustificata richiamandosi a una verità assunta come ipotesi (assioma), o a una regola di ragionamento corretta che permette di ottenerla da altre proposizioni.
 
 La regola che utilizziamo nel nostro sistema di dimostrazioni (``alla Hilbert'') è il \textbf{Modus Ponens}: da \( X \land (X\to Y) \) segue \( Y \).
@@ -1573,7 +1573,7 @@ Un assegnamento si estende in modo univoco ai termini ponendo:
 \end{gframe}
 
 \begin{defframe}{Soddisfacibilità, Validità}{}
-    Se \( \exists \alpha \ \ t.c. \ \ \Aa \vDash F[\alpha] \), diciamo che \( \alpha \) \textit{soddisfa} un enunciato \( E \) in \( \Aa \). In questo caso, \( E \) è detto \textbf{soddisfacibile} in \( \Aa \).
+    Se \( \exists \alpha \ \ t.c. \ \ \Aa \vDash E[\alpha] \), diciamo che \( \alpha \) \textit{soddisfa} un enunciato \( E \) in \( \Aa \). In questo caso, \( E \) è detto \textbf{soddisfacibile} in \( \Aa \).
 
     Diciamo che una formula \( F \) è \textbf{vera} in una struttura se \textit{è soddisfatta da tutti gli assegnamenti} in quella struttura.
 
@@ -1588,6 +1588,10 @@ Un assegnamento si estende in modo univoco ai termini ponendo:
     Dualmente, \( E \) è \textit{insoddisfacibile} se non esiste una struttura in cui è vero.
 \end{defframe}
 
+Si può estendere il concetto di verità logica anche alle formule predicative. Per esempio, la formula \( \forall x R(x) \lor \neg\forall x R(x)\) (ottenuta da \( p \lor \neg p \) sostituendo \( p \)) è soddisfatta in ogni struttura che possieda un'interpretazione per \( R \).
+
+Questo tipo di formule prendono il nome di \textit{istanze di tautologie proposizionali}.
+
 \section{Teorie}
 
 Dato un linguaggio \( \Ll \), ci interessa introdurre questi insiemi degni di nota:
@@ -1600,6 +1604,8 @@ Dato un linguaggio \( \Ll \), ci interessa introdurre questi insiemi degni di no
     \item \textbf{Conseguenza logica di una teoria} - \( E \) \ t.c. \(E \) è vero in tutti i modelli di \( T \) (diciamo che \( T \) \textit{implica logicamente} \( E \))
         \subitem definiamo coerentemente \( Conseq(T) = \{E : T\vDash E\} \)
 \end{itemize}
+
+Mentre la teoria di una singola struttura è sempre completa, l'insieme delle sue conseguenze logiche non lo è necessariamente
 
 \begin{gframe}{Esempio: teoria dei gruppi}
 Un esempio è la teoria formata dagli assiomi di gruppo scritti in un linguaggio predicativo\\ \( \Ll_G = \Ll_{\text{Gruppi}}\{\circ, e\} \), dove \( \circ \) è un simbolo di funzione di arietà due ed \( e \) è un simbolo di costante.
@@ -1616,28 +1622,14 @@ I modelli della teoria dei gruppi sono le strutture che chiamiamo gruppi, quindi
 
 Gli enunciati che sono veri in qualunque gruppo formano l'insieme delle conseguenze logiche della teoria \(T_{\text{Gruppi}}\), ossia \(\{E : T_{\text{Gruppi}} \models E\}\). Le proprietà di un singolo gruppo \( G \) formano la ``teoria di \( G \)'' \(\{E : G \models E\}\).
 
-Si osserva facilmente che la teoria di una singola struttura \(\mathcal{M}\) è sempre completa. 
-
-D'altra parte, l'insieme delle conseguenze logiche di una teoria $T$ non è necessariamente completo (nel senso di contenere \(E$ o $\neg E\) per ogni possibile enunciato $E$). Per esempio, le conseguenze degli assiomi di gruppo (ossia la teoria $T_{\text{Gruppi}}$) non formano un insieme completo: dato che esistono gruppi abeliani e gruppi non-abeliani e dato che la proprietà di essere abeliano è esprimibile nel linguaggio dei gruppi con un enunciato predicativo ($C = \forall v_1 \forall v_2 (v_1 \circ v_2 = v_2 \circ v_1)$), esistono modelli di $T_{\text{Gruppi}}$ che soddisfano $C$ e modelli di $T_{\text{Gruppi}}$ che non soddisfano $C$ (ossia soddisfano $\neg C$). Dunque né $C$ né $\neg C$ sono in $\text{Conseq}(T_{\text{Gruppi}})$ (né l'essere abeliano né l'essere non abeliano sono conseguenze degli assiomi di gruppo). 
+Un esempio di come invece le conseguenze di una teoria non siano necessariamente complete ci viene dalle conseguenze degli assiomi di gruppo (ossia la teoria $T_{\text{Gruppi}}$): dato che esistono gruppi abeliani e gruppi non-abeliani e dato che la proprietà di essere abeliano è esprimibile nel linguaggio dei gruppi con un enunciato predicativo ($C = \forall v_1 \forall v_2 (v_1 \circ v_2 = v_2 \circ v_1)$), esistono modelli di $T_{\text{Gruppi}}$ che soddisfano $C$ e modelli di $T_{\text{Gruppi}}$ che non soddisfano $C$ (ossia soddisfano $\neg C$). Dunque né $C$ né $\neg C$ sono in $\text{Conseq}(T_{\text{Gruppi}})$ (né l'essere abeliano né l'essere non abeliano sono conseguenze degli assiomi di gruppo). 
 
 La teoria $T_{\text{Gruppi}}$ è dunque incompleta.
 \end{gframe}
 
 \subsection*{Relazioni tra teorie e coerenza}
+
 Siano \( T \) e \( S \) due teorie sullo stesso linguaggio tali che \( T \subseteq S \).
-
-Valgono le seguenti proprietà:
-\begin{itemize}
-    \item monotonia - \( T\vDash \varphi \implies S \vDash \varphi \)
-
-    \item "ereditarietà" dei modelli - ogni modello di \( S \) è anche modello di \( T \) (tutto \( T \) si trova dentro \( S \))
-        \subitem \( Mod(S) \subseteq Mod(T) \)
-
-    \item coerenza - se \( S \) è corente, allora anche \( T \) lo è
-        \subitem (se \( T \) è corente, non è detto che \( S \) lo sia)
-\end{itemize}
-
-\textbf{Esempi utili}
 \begin{table}[h!]
 \centering
 \renewcommand{\arraystretch}{1.3} 
@@ -1653,10 +1645,21 @@ Se $T$ è completa, $S$ (propria) è coerente? & FALSO & $T$ ha già deciso tutt
 \end{table}
 
 
+Valgono le seguenti proprietà:
+\begin{itemize}
+    \item monotonia - \( T\vDash \varphi \implies S \vDash \varphi \)
+
+    \item "ereditarietà" dei modelli - ogni modello di \( S \) è anche modello di \( T \) (tutto \( T \) si trova dentro \( S \))
+        \subitem \( Mod(S) \subseteq Mod(T) \)
+
+    \item coerenza - se \( S \) è corente, allora anche \( T \) lo è
+        \subitem (se \( T \) è corente, non è detto che \( S \) lo sia)
+\end{itemize}
+
 \section{Isomorfismi tra strutture}
 Se esiste un isomorfismo tra due strutture \( \Aa \) e \( \Bb \), significa che queste sono ``indistinguibili'', ovvero che hanno le stesse proprietà. È dunque vero che \( \Aa \iso \Bb \implies \Aa \text{ e } \Bb \) soddisfano gli stessi enunciati? La risposta è sì (nel linguaggio per cui sono isomorfe).
 
-\begin{thmframe}{Isomorfismo tra due strutture}{}
+\begin{thmframe}{Isomorfismo e soddisfacibilità}{}
     \( \Aa \iso \Bb \implies \Aa \text{ e } \Bb \) \textbf{soddisfano le stesse formule}.
 
     Sia \( h \) l'isomorfismo. Si ha quindi \( \forall F(x_1, \dots, x_n), \ \forall (a_1, \dots, a_n) \in A^n \)
@@ -1723,13 +1726,33 @@ Passiamo ad un caso ancora più generale. Vogliamo mostrare che un isomorfismo t
 preserva \textit{l'intera struttura}.
 
 Quindi
-\begin{align*}
-    \Aa \iso \Bb &\iff \exists h: A \bij B \text{ t.c. } \\
-    \color{gray}\forall i \in I, j \in J &, \color{gray}\ \ \forall (a_1, \dots, a_t)\in A^t \\
-    \forall (a_1, \dots, a_t)\in A^t, \ \ (a_1, \dots, a_t) \in R_i^A &\iff (h(a_1), \dots, h(a_t)) \in R_i^B \\
-    h(f_j^A(a_1, \dots, a_t &)) = f_j^B(h(a_1), \dots, h(a_t))
-\end{align*}
 
+\begin{defframe}{Isomorfismo tra due strutture}{}
+    Siano \( \Aa \) e \( \Bb \) due strutture per il linguaggio \( \Ll \). \\
+    \( \Aa \) è isomorfa a \( \Bb \) se e solo se esiste una mappa \( h: \Aa \to \Bb \) biiettiva tale che:
+\begin{enumerate}
+    \item[(1)] Per ogni simbolo di relazione $n$-ario $R$ nel linguaggio, per ogni $(a_1, \dots, a_n) \in A^n$,
+    \[
+    \mathcal{A} \models R(x_1, \dots, x_n)[a_1, \dots, a_n] \text{ se e solo se } \mathcal{B} \models R(x_1, \dots, x_n)[h(a_1), \dots, h(a_n)],
+    \]
+    i.e.
+    \[
+    (a_1, \dots, a_n) \in R^{\mathcal{A}} \iff (h(a_1), \dots, h(a_n)) \in R^{\mathcal{B}}.
+    \]
+    
+    \item[(2)] Per ogni simbolo di costante $c$ nel linguaggio,
+    \[
+    h(c^{\mathcal{A}}) = c^{\mathcal{B}},
+    \]
+    
+    \item[(3)] Per ogni simbolo di funzione $n$-ario $f$ nel linguaggio, per ogni $(a_1, \dots, a_n) \in A^n$,
+    \[
+    h(f^{\mathcal{A}}(a_1, \dots, a_n)) = f^{\mathcal{B}}(h(a_1), \dots, h(a_n)).
+    \]
+    ($h$ "commuta" con il simbolo di funzione $f$).
+\end{enumerate}
+
+\end{defframe}
 
 Vogliamo dimostrare che, per ogni termine $t$ e ogni assegnazione $\alpha$,
 il valore del termine \(t\) in \(\Aa\) con assegnazione \(\alpha\), quando mappato dall'isomorfismo \(h\), è uguale
@@ -1738,7 +1761,6 @@ al valore del termine \(t\) in \(\Bb\) con assegnazione \(h(\alpha)\):
 Si dimostra per induzione sulla struttura del termine \(t\).
 
 \begin{proofframe}
-    
 \begin{enumerate}
     \item \textbf{Caso 1: $t$ è una variabile ($t = x$)}
     \begin{align*}
@@ -1786,8 +1808,45 @@ La proprietà è dimostrata per tutti i termini. \qed
     In generale, non vale \( \Aa \equiv \Bb \implies \Aa \iso \Bb \). Vale però se \( \Aa \) e \( \Bb \) finite e \( \Ll \) ha solo simboli di relazione.
 \end{thmframe}
 
-\todo{dim grafi}
 
+\begin{proof}
+Sia \( \mathcal{A} \) una struttura finita con dominio \( A \) di cardinalità \( n \). Possiamo enumerare gli elementi del dominio come \( A = \{a_1, a_2, \dots, a_n\} \).
+
+L'idea della dimostrazione è costruire un singolo enunciato \( \sigma_{\mathcal{A}} \) che descriva completamente la struttura \( \mathcal{A} \) a meno di isomorfismo.
+
+Costruiamo \( \sigma_{\mathcal{A}} \) come segue:
+\[
+\sigma_{\mathcal{A}} = \exists x_1 \dots \exists x_n \left( \psi_{\text{card}} \land \psi_{\text{strut}} \right)
+\]
+
+\paragraph{1. Fissare la cardinalità}
+La formula \( \psi_{\text{card}} \) assicura che il dominio abbia esattamente \( n \) elementi distinti:
+\[
+\psi_{\text{card}} = \left( \bigwedge_{1 \le i < j \le n} x_i \neq x_j \right) \land \left( \forall y \bigvee_{i=1}^n y = x_i \right)
+\]
+La prima parte afferma che gli \( x_i \) sono tutti diversi tra loro, mentre la seconda afferma che ogni elemento \( y \) del dominio coincide con uno degli \( x_i \).
+
+\paragraph{2. Fissare la struttura}
+La formula \( \psi_{\text{strut}} \) descrive tutte le relazioni che valgono (e non valgono) tra gli elementi. Per ogni simbolo di relazione \( R \) in \( L \) (supponiamo WLOG che \( L \) contenga un solo simbolo di relazione binaria \( E \)):
+\[
+\psi_{\text{strut}} = \left( \bigwedge_{(a_i, a_j) \in E^{\mathcal{A}}} E(x_i, x_j) \right) \land \left( \bigwedge_{(a_i, a_j) \notin E^{\mathcal{A}}} \neg E(x_i, x_j) \right)
+\]
+
+\paragraph{Conclusione}
+Chiaramente \( \mathcal{A} \models \sigma_{\mathcal{A}} \), poiché basta interpretare le variabili \( x_i \) con gli elementi \( a_i \).
+Dato che \( \mathcal{A} \equiv \mathcal{B} \), allora anche \( \mathcal{B} \models \sigma_{\mathcal{A}} \).
+
+Ciò significa che esistono elementi \( b_1, \dots, b_n \) nel dominio di \( \mathcal{B} \) che soddisfano il corpo della formula \( \sigma_{\mathcal{A}} \).
+Definiamo la mappa \( f: A \to B \) ponendo \( f(a_i) = b_i \).
+
+Grazie a \( \psi_{\text{card}} \), sappiamo che i \( b_i \) sono distinti e coprono tutto il dominio di \( \mathcal{B} \), quindi \( f \) è una biiezione.
+Grazie a \( \psi_{\text{strut}} \), la relazione è preservata:
+\[
+(a_i, a_j) \in E^{\mathcal{A}} \iff \mathcal{B} \models E(b_i, b_j) \iff (f(a_i), f(a_j)) \in E^{\mathcal{B}}
+\]
+Pertanto, \( f \) è un isomorfismo e \( \mathcal{A} \cong \mathcal{B} \).
+\end{proof}
+\pagebreak
 \section{La teoria DLO}
 
 \subsection{Numeri razionali}
@@ -2156,7 +2215,6 @@ allora  \(\exists a \in A\) tale che:
 \end{defframe}
 
 \begin{thmframe}{}{}
-    
     Sa \(\mathcal{A}\) è una sottostruttura di \(\mathcal{B}\) che \textbf{soddisfa la Proprietà del Testimone} rispetto a \(\mathcal{B}\), allora \(\mathcal{A}\) è una \textbf{sottostruttura elementare} di \(\mathcal{B}\).
 \[
     \mathcal{A} \subseteq \mathcal{B} \text{ e Testimone} \implies \mathcal{A} \preceq \mathcal{B} \ \color{gray}(\implies \mathcal{A} \equiv \mathcal{B})
@@ -2184,13 +2242,13 @@ Definiamo la struttura \(\mathcal{A}\) in questo modo:
     \item Per ogni funzione: \(f^\mathcal{A} = f^\mathcal{B} \big|_{A^n}\)
 \end{itemize}
 
-\textbf{NB:} Ci manca la proprietà sulle costanti. Dobbiamo avere \(c^\mathcal{B} \in A\). Potremmo far sì che le costanti siano ``teste'' di funzioni 0-arie di Skolem, garantendo la loro inclusione nella chiusura.
+\textbf{NB:} Ci manca la proprietà sulle costanti. Dobbiamo avere \(c^\mathcal{B} \in A\). Possiamo trattare le costanti come funzioni di Skolem 0-arie {\color{gray} \small("casi base" della definizione induttiva)}, garantendo la loro inclusione nella chiusura.
 
 La struttura risultante è:
 \[
 \mathcal{A} = \left( \bigcup_{i \in \mathbb{N}} X_i, \{c_i^\mathcal{A}\}, \{R_j^\mathcal{A}\}, \{f_k^\mathcal{A}\} \right)
 \]
-\(\mathcal{A}\) è una sottostruttura per definizione e ha la proprietà del test (Tarski-Vaught).
+\(\mathcal{A}\) è una sottostruttura per definizione e ha la proprietà del testimone (Tarski-Vaught).
 \[
 \implies \mathcal{A} \equiv \mathcal{B} \quad (\text{elementarmente equivalenti})
 \]
@@ -2205,7 +2263,7 @@ Sia \(\mathcal{B}\) una struttura infinita adeguata per un linguaggio numerabile
 \begin{enumerate}
     \item \(X \subseteq A\)
     \item \(\mathcal{A} \preceq \mathcal{B}\) (è sottostruttura elementare)
-    \item Se il linguaggio \(\mathcal{L}\) e l'insieme \(X\) sono numerabili, allora \(\textbf{A}\) è numerabile.
+    \item Se il linguaggio \(\mathcal{L}\) e l'insieme \(X\) sono numerabili, allora \(A\) è numerabile.
 \end{enumerate}
 
 Essenzialmente, \textbf{ogni teoria in un linguaggio numerabile che ammette un modello infinito (\(\mathcal{B}\)), ammette un ``sotto-modello'' numerabile} (\(\mathcal{A}\)) che è una sottostruttura elementare di \(\mathcal{B}\).
@@ -2290,7 +2348,7 @@ Supponiamo che \(T\) non sia completa.
     Tuttavia, abbiamo stabilito al punto 4 che \(\mathcal{B}_0 \models \neg E\) e \(\mathcal{C}_0 \models E\) (contraddizione) \qed
 \end{proofframe}
 
-\section{Calcolo dei Predicati}
+\chapter{Calcolo dei Predicati}
 Introduciamo ora il calcolo dei predicati (con identità) ``alla Hilbert''. Ad ogni linguaggio \( \Ll \) possiamo associare un calcolo dei predicati del I ordine.
 
 \begin{defframe}{Dimostrabilità}{}
@@ -2347,7 +2405,7 @@ Le \textbf{regole di inferenza} che utilizziamo nel calcolo predicativo sono:
 Il calcolo dei predicati mantiene molte delle proprietà del calcolo proposizionale, come:
 \begin{itemize}
     \item il \textbf{teorema di correttezza}: \( T \vdash A \implies T \vDash A \) (anche qui tutti gli assiomi sono verità logiche e le regole di inferenza preservano le verità logiche)
-    \item \( T\vdash A \land T \subseteq S \implies S \vdash A  \)
+    \item \( T\vdash A \land T \subseteq S \implies S \vdash A  \) \ (monotonia)
     \item se \( \vdash A \), \( A \) è detto ``teorema''
     \item 
         \AxiomC{\( T \vdash A \)}
@@ -2366,7 +2424,7 @@ Il calcolo dei predicati mantiene molte delle proprietà del calcolo proposizion
 \begin{thmframe}{Teorema di deduzione per il calcolo predicativo}{}
     Sia \( E \) un enunciato, \( A \) una formula e \( \Gamma \) un insieme di formule.
     Vale:
-    \[ \Gamma, E \vdash A \iff T\vdash (E \to A) \]
+    \[ \Gamma, E \vdash A \iff \Gamma \vdash (E \to A) \]
 \end{thmframe}
 
 \textbf{Altre proprietà}:
@@ -2399,7 +2457,7 @@ Infatti, \( T\vdash A \implies T\vDash A \) \ e \ \( T\vdash \neg A \implies T\v
 Ci manca da dimostrare \( T \) coerente \( \implies Mod(T) \neq \emptyset\).
 
 \begin{thmframe}{Equivalenza tra le due forme di teorema di completezza}{}
-    Si ha che {\color{Blue}(1)} \ \( T \vDash A \iff T \vdash A \ \equiv \ T \text{ coerente} \iff T \text{ ha un modello } (\in \SAT)\) {\color{purple}(2)}
+    Si ha che \( \underline{T \vDash A \iff T \vdash A}_{\color{Blue}(1)} \ \equiv \ \underline{T \text{ coerente} \iff T \text{ ha un modello } (\in \SAT)}_{\color{purple}(2)}\)
     
 \end{thmframe}
 
@@ -2416,7 +2474,7 @@ Ci manca da dimostrare \( T \) coerente \( \implies Mod(T) \neq \emptyset\).
             quindi \( T \vdash A \)
 
         \item \( T \in \texttt{SAT} \): se \( T\in \SAT \) e \( T\vDash A \), sappiamo che \( T \cup \neg A \in \UNSAT \). 
-            \subitem Per (2), quindi, \( T \cup \neg A \) è incoerente, quindi \( T \vdash A \)
+            \subitem Per {\color{purple}(2)}, quindi, \( T \cup \neg A \) è incoerente, quindi \( T \vdash A \)
 
             {\color{CadetBlue}\( T\cup \neg A  \) incoerente significa \( T \cup \neg A \vdash \bot\), quindi (x deduzione) \( T \vdash \neg A \to \bot \); \\
             per reductio ad absurdum ( \((\neg A \to \bot) \vdash A \)), si ha quindi \( T \vdash A \).}
@@ -2424,8 +2482,7 @@ Ci manca da dimostrare \( T \) coerente \( \implies Mod(T) \neq \emptyset\).
 
 \item Assumiamo {\color{blue}(1)} e dimostriamo \( T \) coerente \(\implies T \) ha un modello
 
-    Presumiamo che \( T \) non abbia un modello. Questo implica logicamente qualsiasi cosa (\( T \vdash A \) e \( T\vdash \neg A \)). Per {\color{blue}(1)}, quindi, \( T\vDash A \) e \(  T\vDash \neg A\), quindi \( T \) incoerente (per contrapposizione, otteniamo l'implicazione originale).
-
+    Presumiamo che \( T \) non abbia un modello. Per definizione di conseguenza logica, abbiamo \( T\vDash \bot \). Per {\color{blue}(1)}, otteniamo \( T\vdash \bot \), ovvero \( T \) incoerente.
 \end{enumerate}
 \end{proofframe}
 
