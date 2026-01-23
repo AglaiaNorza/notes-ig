@@ -3139,12 +3139,12 @@ Quando si parla dell'esprimibilità di un insieme di enunciati in una teoria, si
 
 Ci chiediamo quindi se \( \{cod(E) \mid \Nn \vDash E\} \) sia rappresentabile in \( \Nn \) {\color{gray}\small (non lo è)}.
 
-\subsection{Indecidibilità algoritmica dell'aritmetica (Tarski)}
+\section{Indecidibilità algoritmica dell'aritmetica (Tarski)}
 
 \begin{thmframe}{Teorema di indefinibilità di Tarski}{}
 \textit{La verità aritmetica non può essere definita all'interno dell'aritmetica.}
 
-(L'insieme delle verità aritmetiche \( Th(\Nn) = \{E \mid \Nn \vDash E\} \) non è rappresentabile in \( \Nn \).)
+(L'insieme delle verità aritmetiche \( Th(\Nn) = \{E \mid \Nn \vDash E\} \) non è rappresentabile in \( \Nn \))
 \end{thmframe}
 
 Supponiamo per assurdo che \( Th(\Nn) \) sia rappresentabile.
@@ -3192,10 +3192,50 @@ Dimostriamo \( \N \vDash \neg V(q) \):
     \item \textbf{caso 1}: \( \N \not\vDash A(p) \) 
         \subitem \( A(p) \) non è una verità in \( \N \), dunque \( code(A(p)) = q \not\in Th(\N) \), dunque per ipotesi \( \N \vDash \neg V(q) \)
     \item \textbf{caso 2}: \( \N \vDash A(p) \) 
-       \subitem se \( A(p) \) è vero, è vero per \( y = q \)
-
+        \subitem se \( A(p) \) è vero, è vero per \( y = q \) \ {\color{gray}\small(\( \N \vDash D(p, q)\to \neg V(q) \))},\ \  quindi, dato che \( \N \vDash D(p, q) \) otteniamo \( \N \vDash \neg V(q) \)
 \end{itemize}
 
 
+Dimostriamo ora \( \N \vDash V(q) \):
+
+Da \( \N\vDash D(p,q) \) e dalla funzionalità della formula \( D \) segue \( \N \vDash (p, y ) \to y = q \).
+
+Visto che abbiamo appena dimostrato \( \N \vDash \neg V(q) \), abbiamo {\color{gray}\small(se non vale per \( q \), sicuramente se \( y=q \) non vale per \( y \))}
+\[ \N \vDash y = q \to \neg V(y) \]
+Dunque, {\color{gray}\small(poiché \( \N \vDash (p, y ) \to y = q \))}, abbiamo anche
+\[ \N \vDash D(p, y)\to \neg V(y) \]
+
+Se vale con variabile libera allora vale anche nella forma
+\[ \N \vDash \forall y (D(p, y)\to \neg V(y)) \]
+che è esattamente \( A(p) \).
+
+Dunque, \( A(p)\in Th(\N) \), ovvero \( A(p) \) è una verità aritmetica.
+
+Quindi, dato che \( V \) rappresenta \( Th(\N) \), abbiamo
+\[ \N \vDash V(code(A(p))) = V(q) \]
+il che è impossibile.
+
+Abbiamo quindi:
+\begin{corframe}{}{}
+    L'insieme delle verità aritmetiche \( Th(\N) \) non è algoritmicamente decidibile.
+\end{corframe}
+
+\subsection{Prima forma debole di Incompletezza}
+Otteniamo quindi una prima forma debole del Primo Teorema di Incompletezza di Gödel
+\begin{thmframe}{Primo Teorema di Incompletezza (forma debole)}{}
+    Se \( T \) è una teoria decidibile e tale che \( \N \vDash T \), allora \( T \) non è completa: esiste un enunciato \( G \) tale che \( T\not\vDash G \land T \not\vdash\neg G \)
+\end{thmframe}
+\begin{pframe}
+    Se \( T \) fosse completa, dato che \( \N\vDash T \) seguirebbe che \( \{E \mid T\vdash E\} \subseteq \{E \mid \N \vDash E\} \). In più, per completezza, poiché abbiamo \( T\vdash E \xor T\vdash \neg E \), e poiché, visto che \( \N \vDash T \), \( E \) è o vero o falso in \( \N \), abbiamo
+    \[  \{E \mid T\vdash E\} = \{E \mid \N \vDash E\} =Th(\N)  \]
+    Sapendo che \( Th(\N) \) non è decidibile, otteniamo che:
+    \begin{itemize}
+        \item se \( T \) decidibile e completa, allora i teoremi di \( T \) sono decidibili
+        \item se \( T \) completa e \( \N \vDash T \) allora i teoremi di \( T \) sono indecidibili
+    \end{itemize}
+    ovvero, se \( \N \vDash T \), è impossibile che \( T \) sia sia completa che decidibile.
+\end{pframe}
+
+\section{Primo Teorema di Incompletezza di Gödel}
 
 \end{document}
