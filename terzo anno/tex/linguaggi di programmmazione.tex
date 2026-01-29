@@ -70,7 +70,6 @@
 
 \end{defframe}
 
-
 \begin{defframe}{Principio di Induzione}{}
     L'induzione può essere definita, basandosi sulle ``proprietà'' invece che 
     sull' insiemistica, come segue:
@@ -1587,7 +1586,7 @@ La \textbf{logica di Hoare} è un sistema formale che rientra tra le semantiche 
         A, B ::= true \mid false \mid A \supset B \mid M < N \mid M = N
     \]    
     \[
-        p, q ::= skip \mid p;q \mid x := M \supset N \mid if \ B \ then \ p \ else \ q \mid while \ B \ do p 
+        p, q ::= skip \mid p;q \mid x := M \supset N \mid if \ B \ then \ p \ else \ q \mid while \ B \ do \ p 
     \]
 
     dove:
@@ -2201,17 +2200,232 @@ Introduciamo ora le regole di un sistema logico per la verifica formale dei prog
     \DisplayProof
     \]
 
-    \item regola di $\lambda$-astrazione:
+\item regola di $\lambda$-astrazione:
     \[
     \AxiomC{$M = N$}
-    \RightLabel{$[\lambda_{Astr}]$}
+    \RightLabel{$[\lambda_{Astr} / \xi]$}
     \UnaryInfC{$fn\ x \implies M = fn \ x \implies N$}
     \DisplayProof
     \]
 \end{itemize}
 
+
+\begin{gframe}{}
+    Nota bene: quando applichiamo l'operatore di sostituzione, dobbiamo fare attenzione.
+    Per esempio, se applicassimo \( [y/x] fn \ y \implies x \) senza fare attenzione, otterremmo \( fn \ y \implies y \), che ci permetterebbe di dimostrare affermazioni false.
+
+Se per esempio abbiamo
+\[ fn \ y \implies (fn \ x \implies fn \ y \implies x) \underline{y} \]
+sostituendo ``bovinamente'', l'ultima \( y \), che è legata al \( fn \) più esterno, entra nello scope del \( fn \) più interno (si dice che ``viene catturata'').
+
+Per evitarlo, ci è utile la \( \alpha-regola \). Possiamo assumere che l'operatore di sostituzione rinomini eventuali variabili legate per evitarne la cattura.
+
+Per esempio, visto che \( fn \ y \implies x \) è \( \alpha\)-equivalente a \( fn \ z \implies x \), otteniamo:
+\[ (fn \ x \implies fn \ y \implies x) y = [y/x] fn \ y \implies  x = [y/x] fn \ z \implies x = fn \ z \implies y \]
+\end{gframe}
+
 \end{cdefframe}
 
+Il predicato di uguaglianza \( M = N \) rappresenta una \textbf{relazione di equivalenza}, in quanto gode delle tre proprietà di:
+\begin{itemize}
+    \item riflessività:
+        \[ \frac{M}{M = M} \]
+
+        \begin{pframe}{}
+            ottenuta da:
+\[
+\AxiomC{$M$}
+\UnaryInfC{$(rec\ M\ N)\ 0 = M \quad (rec\ M\ N)\ 0 = M$}
+\UnaryInfC{$M = M$}
+\DisplayProof
+\]
+        \end{pframe}
+
+    \item simmetria:
+        \[ \frac{M = N}{N = M} \]
+
+        \begin{pframe}{}
+            ottenuta da:
+\[
+\AxiomC{$M = N$}
+\UnaryInfC{$M = N \quad M$}
+\LeftLabel{[rifl]}
+\UnaryInfC{$M = N \quad M = M$}
+\LeftLabel{[cong]}
+\UnaryInfC{$N = M$}
+\DisplayProof
+\]
+        \end{pframe}
+
+    \item transitività:
+        \[ \frac{M = N \quad N = L}{M = L} \]
+        
+\begin{pframe}{}
+            ottenuta da:
+\[
+\AxiomC{$M = N \quad N = L$}
+\LeftLabel{[simm]}
+\UnaryInfC{$N = M \quad N = L$}
+\LeftLabel{[cong]}
+\UnaryInfC{$M = L$}
+\DisplayProof
+\]
+        \end{pframe}
+
+\end{itemize}
+
+\subsubsection{Correttezza di \texttt{plus}}
+
+\begin{defframe}{\texttt{plus}}{}
+    La funzione \( plus \) 
+    \[ \texttt{plus} \ M \ N = \begin{cases}
+        N & M = 0 \\
+        succ(\texttt{plus} \ n \ N) & M = succ \ n
+    \end{cases}\]
+
+    può essere definita tramite \( rec \) in questo modo:
+    \[ \texttt{plus}\equiv fn \ x \Rightarrow (fn \ y \Rightarrow  (rec \ y \ (fn \ w \Rightarrow fn \ z \Rightarrow succ \ w)) \ x)\]
+\end{defframe}
+
+Vogliamo dimostrare che l'operatore \texttt{plus} gode della proprietà commutativa.
+
+\begin{lemmaframe}{commutatività}{}
+    Si ha che
+    \( \texttt{plus} \ M \ N \equiv \texttt{plus} \ N \ M \)
+\end{lemmaframe}
+
+Procediamo per induzione su \(n\) per dimostrare \(P(n): \forall m.\; \texttt{plus}\; m\; n = \mathtt{plus}\; n\; m\)
+
+\begin{enumerate}
+    \item \textbf{C.B.} (\(n=0\)): \(\texttt{plus}\; 0\; m = \mathtt{plus}\; m\; 0\).
+    \begin{itemize}
+        \item \( Q(0) \) è valido per identità: 
+            \[ \texttt{plus} \ 0 \ 0 = \texttt{plus} \ 0 \ 0 \]
+        \item assumiamo \( Q(y) \), e verifichiamo \( Q(succ \ y) \)
+            \[ 
+    \begin{array}{rll}
+        \texttt{plus} (succ \ y) \ 0 & = succ(\texttt{plus} \ y \ 0) &  \text{def}\\
+                                     & = \texttt{succ}(\mathtt{plus}\; 0\; y) & \text{ip. ind.} \\
+     & = succ \ y \\
+     & = \texttt{plus} \ 0 \ (succ \ y)
+    \end{array}
+            \]
+    \end{itemize}
+
+    Quindi, per la regola di induzione:
+    \[ 
+        \AxiomC{\( Q(0) \quad Q(y)\implies Q(succ \ y) \)}
+        \UnaryInfC{\( \forall x Q(x) \)}
+        \UnaryInfC{\( P(0) \)}
+        \DisplayProof
+    \]
+
+    \item \textbf{P.I.}:
+    
+        Assumiamo \(P(n): \texttt{plus}\; n\; m \equiv \mathtt{plus}\; m\; n\).
+    
+        Dobbiamo dimostrare \(P(succ \; n): \mathtt{plus}(succ \; n)\; m \equiv \mathtt{plus}\; m\; (\mathtt{succ}\; n)\).
+.
+
+Definiamo il predicato ausiliario $R(x) := [\texttt{plus } (succ \ n) \ x = \texttt{plus } x \ (succ \ n)]$. 
+
+Per induzione su $x$:
+
+\begin{itemize}
+    \item \textbf{Base} $R(0)$:
+
+    \[
+    \begin{array}{lll}
+         \text{plus } 0 \ (succ \ n) & = succ \ n & \text{(def)} \\
+                                           & = succ \ (\text{plus } 0 \ n) & \text{(def )} \\
+                                           & = succ \ (\text{plus } n \ 0) & \text{(} P(n) \text{ con } m=0) \\
+                                           & = \text{plus } (succ \ n) \ 0 & \text{(def inversa)}
+    \end{array}
+    \]
+
+    \item \textbf{Passo} $R(y) \implies R(succ \ y)$:
+    
+        Assumiamo $R(y): \texttt{plus } (succ \ n) \ y = \text{plus } y \ (\text{succ } n)$.
+    
+        Sviluppiamo il lato sinistro:
+    \[
+    \begin{array}{lll}
+        \text{plus } (succ \ y) \ (succ \ n) & = succ \ (\text{plus } y \ (succ \ n)) & \text{(def)} \\
+        & = succ \ (\text{plus } (succ \ n) \ y) & \text{(per } R(y)) \\
+        & = succ \ (succ \ (\text{plus } n \ y)) & \text{(def)} \\
+        & = succ \ (succ \ (\text{plus } y \ n)) & \text{(} P(n) \text{ con } m=y) \\
+        & = succ \ (\text{plus } (succ \ y) \ n) & \text{(def inversa)} \\
+        & = succ \ (\text{plus } n \ (succ \ y)) & \text{(} P(n) \text{ con } m=succ \ y) \\
+        & = \text{plus } (succ \ n) \ (succ \ y) & \text{(def inversa)}
+    \end{array}
+    \]
+\end{itemize}
+
+Per la regola di induzione:
+
+\[ 
+    \AxiomC{$R(0) \quad R(y)\implies R(succ \ y)$}
+    \UnaryInfC{$\forall x \; R(x)$}
+    \UnaryInfC{$P(succ \ n)$}
+    \DisplayProof
+\]
+
+Abbiamo quindi dimostrato $P(\text{succ } n)$.
+
+\end{enumerate}
+Per il principio di induzione, otteniamo quindi:
+
+\[ 
+    \AxiomC{$P(0) \quad P(n)\implies P(succ \ n)$}
+    \UnaryInfC{$\forall n \ P(n)$}
+    \DisplayProof
+\]
+
+Abbiamo quindi che \( \texttt{plus} \ M \ N \equiv \texttt{plus} \ N \ M \). \qed
+
+
+\subsubsection{Correttezza di \texttt{twice}}
+
+\begin{defframe}{\texttt{twice}}{}
+    La funzione \( twice \) 
+    \[ \texttt{twice} \ M  = \begin{cases}
+        0 & M = 0\\
+        succ(succ(\texttt{twice} \ n)) & M = succ \ n
+    \end{cases}\]
+
+    può essere definita tramite \( rec \) in questo modo:
+    \[ \texttt{twice}\equiv rec(0, fn \ y \ z \Rightarrow succ (succ \ z))\]
+\end{defframe}
+
+\begin{lemmaframe}{\texttt{twice} e \texttt{plus}}{}
+    Si ha:
+    \[ \texttt{twice} \ n \equiv \texttt{plus} \ n \ n \]
+\end{lemmaframe}
+
+\begin{enumerate}
+    \item \textbf{C.B.} (\( n = 0 \)): 
+        \[ \underbracket[0.187ex]{\texttt{twice} \ 0}_{=0} \equiv \underbracket[0.187ex]{\texttt{plus} \ 0 \ 0}_{= 0} \]
+
+
+    \item \textbf{P.I.}
+        Supponiamo \( \texttt{twice} \ n \equiv \texttt{plus} \  n \ n \).
+
+        Dimostriamo 
+        \[ \texttt{twice}(succ \ n) \equiv \texttt{plus} (succ \ n ) (succ \ n) \]
+
+        \[
+            \begin{array}{rll}
+                \mathtt{twice}\; (\mathtt{succ}\; n) & = \mathtt{succ}(\mathtt{succ}(\mathtt{twice}\; n)) & \text{(def)}\\
+                                                     & = \mathtt{succ}(\mathtt{succ}(\mathtt{plus}\; n\; n)) & \text{(I.I.)} \\
+                                                     & = \mathtt{succ}(\mathtt{plus}\; (\mathtt{succ}\; n)\; n) & \text{(def plus)} \\
+                                                     & = \mathtt{succ}(\mathtt{plus}\; n\; (\mathtt{succ}\; n)) & \text{(commutatività)} \\
+                                                     & = \mathtt{plus}\; (\mathtt{succ}\; n)\; (\mathtt{succ}\; n) & \text{(def. plus)}
+            \end{array}
+        \]
+\end{enumerate}
+\qed
+
+\chapter{Teoria dei tipi}
 
 \end{document}
 
