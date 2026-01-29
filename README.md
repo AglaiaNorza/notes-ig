@@ -44,5 +44,4 @@ alcuni appunti sono presi a mano (su tablet), alcuni sono pdf scritti con LaTeX 
 | [cybersecurity](https://aglaianorza.github.io/notesig/vault/cybersecurity/cybersecurity) (🇬🇧) | quartz, wip |
 | **2o sem:**|
 | tecniche di programmazione funzionale e imperativa | tbd |
-| optimization (🇬🇧) ?? | tbd |
-| intelligenza artificiale ?? | tbd |
+| intelligenza artificiale | tbd |
