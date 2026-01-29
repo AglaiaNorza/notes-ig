@@ -2435,7 +2435,7 @@ Lo scopo di un sistema dei tipi è evitare che durante l'esecuzione del programm
 La definizione di una \textbf{teoria dei tipi}, ovvero un sistema di tipi di dato sotto forma di regole formali di deduzione permette, se si definisce anche una semantica formale, di dimostrare matematicamente proprietà dinamiche di un linguaggio.
 
 \section{F1: il Lambda Calcolo tipato semplice}
-\( F1 \) è un sistema di primo ordine, ovvero senza parametrizzazione o astrazione sui tipi.
+\( F1 \) è un sistema di \textit{secondo ordine}, ovvero senza parametrizzazione o astrazione sui tipi.
 
 \begin{defframe}{Grammatica di \( F1 \)}{}
     \[ {\color{CadetBlue}Types \ni} A, B ::= K \mid A\to B \]
@@ -2515,6 +2515,144 @@ Deriviamo il suo tipo in questo modo:
 
     \BinaryInfC{$(fn\ x: int \to bool \Rightarrow x\ 5)\ (fn\ y: int \Rightarrow true): bool$}
 \end{prooftree}
+
+\subsection{Espressioni non tipabili}
+Non tutte le espressioni sono però tipabili in \( F1 \)
+
+Prendiamo per esempio l'espressione
+\[ fn \ x \Rightarrow xx \]
+
+Questa si deriverebbe con albero:
+\[ 
+\AxiomC{$x:A \vdash x: A\to B$}
+\AxiomC{$x:A \vdash x:A$}
+\BinaryInfC{$x:A \vdash xx:B$}
+\UnaryInfC{$\emptyset \vdash fn \ x:A \Rightarrow xx: A\to B$}
+\DisplayProof
+\]
+
+che richiede che \( x \) sia allo stesso momento di tipo \( A \) e \( A \to B \), ovvero che \( A \equiv A\to B \).
+
+Un tale tipo (detto ``circolare'') non esiste, e il termine non è perciò tipabile in \( F1 \).
+
+\section{F2: il Lambda Calcolo polimorfo}
+\subsection{Polimorfismo}
+\begin{defframe}{Polimorfismo}{}
+    Il polimorfismo è la possibilità per un'espressione di assumere molteplici tipi in base al contesto considerato.
+\end{defframe}
+
+Il polimorfismo è introdotto dai sistemi di tipo di \textit{secondo ordine} attraverso \textbf{variabili di tipo}, che permettono di descrivere in maniera generica i termini.
+
+Consideriamo per esempio il termine:
+\[ fn \ x \Rightarrow ((x \ 5)((x \ true) false)) \]
+Notiamo che questo termine non è tipabile in \( F1 \), in quanto \( x \) dovrebbe essere allo stesso tempo:
+\begin{itemize}
+    \item una funzione che prende un intero in input
+    \item una funzione che prende un booleano in input
+    \item una funzione che restituisce un'altra funzione \( Bool \to Bool \)
+\end{itemize}
+
+All'interno di un sistema dei tipi di secondo ordine, che permette di quantificare universalmente sui tipi, invece, il termine risulta tipabile senza problemi con il tipo \( \forall X.(X\to (Bool \to Bool)) \).
+
+\subsection{Il sistema F2}
+Il sistema \( F2 \) è detto anche lambda calcolo polimorfo o System F.
+\begin{defframe}{Grammatica di \( F2 \)}{}
+    La sua grammatica è:
+    \[ M, N ::= k \mid x \mid fn \ x : A \Rightarrow M \mid M N \mid \Lambda X.M \mid M B \]
+    \[ A, B ::= K \mid A\to B \mid X \mid \forall X.A \]
+\end{defframe}
+
+\begin{cdefframe}{DeepGreenLight}{DeepGreen}{Regole di inferenza}{}
+    \begin{itemize}
+    \item \textbf{Generalizzazione dei tipi:}
+    \begin{prooftree}
+        \AxiomC{$\Gamma \vdash M : A$}
+        \RightLabel{$(\text{se } X \notin \text{free}(\Gamma))$}
+        \UnaryInfC{$\Gamma \vdash \Lambda X.M : \forall X.A$}
+    \end{prooftree}
+
+    \item \textbf{Specializzazione del tipo:}
+    \begin{prooftree}
+        \AxiomC{$\Gamma \vdash M : \forall X.A$}
+        \UnaryInfC{$\Gamma \vdash M\ B :[B/X]A $}
+    \end{prooftree}
+\end{itemize}
+\end{cdefframe}
+    \subsection{Semantica e meccanismi di astrazione}
+
+Per comprendere a fondo il funzionamento di \( F2 \), è fondamentale distinguere i due livelli di astrazione introdotti dai sistemi del secondo ordine.
+Mentre in \( F1 \) i termini vengono tipati in un contesto che assegna tipi alle variabili, in \( F2 \) le variabili agiscono da segnaposto non solo per i termini, ma anche per i tipi.
+Termini e tipi operano quindi su livelli distinti e i simboli $\forall$ e $\Lambda$ gestiscono l'interazione tra questi due mondi.
+
+\subsubsection{Il Quantificatore Universale ($\forall X. A$)}
+Il simbolo $\forall$ non denota un singolo tipo, bensì una \textbf{famiglia di tipi}.
+Asserire che un termine possiede il tipo $\forall X. A$ equivale a una quantificazione logica universale: significa garantire che la struttura $A$ è valida per \textit{qualsiasi} tipo concreto venga sostituito alla variabile $X$.
+
+Da un punto di vista semantico, questo implica una proprietà di uniformità (o parametricità): il comportamento del termine non deve dipendere dalle specificità del tipo $X$ - esso deve funzionare allo stesso modo sia che $X$ sia un $int$, sia che sia un $bool$.
+
+\subsubsection{L'Astrazione sui Tipi ($\Lambda X. M$)}
+Il simbolo $\Lambda$ è l'operatore costruttivo che realizza la quantificazione universale.
+Utilizziamo la sintassi \( \Lambda X.M \) per dichiarare la variabile di tipo \( X \) all'interno dell'espressione \( M \).
+
+Possiamo interpretare questo costrutto in due modi complementari:
+\begin{itemize}
+    \item \textit{come definizione (Definition):} è il meccanismo che produce un termine di tipo \( \forall X.A \). Il corpo $M$ è definito in modo parametrico rispetto a $X$ e il calcolo è sospeso fintanto che non viene fornito un tipo concreto.
+    \item \textit{come funzione (Type $\to$ Term):} mentre l'astrazione classica ($fn$) mappa valori in valori, l'astrazione $\Lambda$ definisce una funzione che \textit{mappa tipi in termini}.
+\end{itemize}
+
+\begin{gframe}{}
+    Possiamo formalizzare la distinzione tra le due forme di astrazione osservando il loro dominio e codominio:
+    \begin{itemize}
+        \item \textbf{Astrazione sui Termini ($fn$):}
+        \[ fn \ x : A \Rightarrow M \]
+        È una funzione $Termine \to Termine$. Accetta un valore a runtime e restituisce un valore calcolato.
+
+        \item \textbf{Astrazione sui Tipi ($\Lambda$):}
+        \[ \Lambda X . M \]
+        È una funzione $Tipo \to Termine$. Accetta un tipo in fase di specializzazione e restituisce un nuovo termine eseguibile.
+    \end{itemize}
+\end{gframe}
+
+\subsubsection{L'Istanziazione dei Tipi (Specialization)}
+Per utilizzare un'espressione polimorfa definita tramite $\Lambda$, è necessario prima \textbf{istanziarne} (o specializzarne) il tipo.
+La sintassi dell'istanziazione è \( M A \) (dove \( M \) è il termine polimorfo e \( A \) è il tipo specifico).
+
+Questo passaggio è cruciale per l'esecuzione:
+\begin{enumerate}
+    \item elimina il quantificatore \( \forall \) dal tipo
+    \item sostituisce tutte le occorrenze della variabile di tipo \( X \) con il tipo concreto \( A \) nel corpo del termine ($M[A/X]$)
+    \item produce un termine specializzato pronto per essere applicato a un valore
+\end{enumerate}
+
+
+\begin{gframe}{Esempio: L'Identità Polimorfa}{}
+    L'oggetto matematico ``identità polimorfa'' si definisce così:
+    \[
+    ID_{poly} = \Lambda X . (fn \ x : X \Rightarrow x)
+    \]
+    Il suo tipo è \( \forall X . (X \to X) \).
+    
+    Se vogliamo usare questa funzione per restituire l'intero 5, dobbiamo procedere in due passaggi:
+    \begin{enumerate}
+        \item \textit{Istanziazione del tipo (Type Application)}
+        
+            Passiamo il tipo \( int \) alla \( \Lambda \). La \( X \) diventa \( int \).
+        \[ (\Lambda X . fn \ x : X \Rightarrow x) \ int \longrightarrow_{\beta} (fn \ x : int \Rightarrow x) \]
+        Ora abbiamo ottenuto una normale funzione identità sugli interi (come in \( F1 \)).
+        
+        \item \textit{Applicazione del termine (Term Application)}
+        
+            Ora possiamo passare il valore 5 alla funzione \( fn \).
+        \[ (fn \ x : int \Rightarrow x) \ 5 \longrightarrow_{\beta} 5 \]
+    \end{enumerate}
+    
+    L'espressione completa è quindi:
+    \[
+    \underbracket[0.187ex]{((\Lambda X . fn \ x : X \Rightarrow x) \ int)}_{\text{produce una funzione } int \to int} \ 5
+    \]
+    \end{gframe}
+
+
 
 
 \end{document}
