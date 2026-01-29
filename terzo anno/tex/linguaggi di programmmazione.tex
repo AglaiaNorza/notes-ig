@@ -455,7 +455,7 @@ Per esempio, \( \{(z, 3), (y, 9)\}\{(z, 4)\}(z) = 4 \) e \( \{(z, 3), (y, 9)\}\{
 
 \vspace{0.5em}
 
-\begin{defframe}{Semantica operazionale di \( Exp \)}{}
+\begin{cdefframe}{DeepGreenLight}{DeepGreen}{Semantica operazionale di \( Exp \)}{}
     La \textbf{semantica operazionale} di \( Exp \) è una relazione
     \[ \leadsto \ \subseteq Exp \times Env \times Val\]
 
@@ -501,7 +501,7 @@ Per esempio, \( \{(z, 3), (y, 9)\}\{(z, 4)\}(z) = 4 \) e \( \{(z, 3), (y, 9)\}\{
             \item si ``associa'' il risultato \( v_1 \) a \( x \), concatenando \( (x, v_1) \) all'ambiente
             \item e si valuta \( N \) nel nuovo ambiente)
     \end{itemize} }
-\end{defframe}
+\end{cdefframe}
 
 Notiamo che si utilizza la relazione \( \leadsto \) e non una una funzione \( Exp \times Env \to Val \), perché si potrebbe avere più di un risultato (per esempio nel caso del multithreading, in cui un diverso ordine di esecuzione di un programma dà output diversi), o anche nessun risultato (per esempio nel caso in cui in \( Exp \) compare una variabile \( x \), che però \( Env \) non definisce), entrambi casi non accettati dalla definizione di funzione. \\[6pt]
 
@@ -624,7 +624,7 @@ Per farlo, estendiamo nuovamente \( Env \) in questo modo:
 \[ Env_{LS} = Var \farrow (Exp \times Env_{LS}) \]
 
 
-\begin{defframe}{Regole della semantica lazy statica di \(Exp\)}{}
+\begin{cdefframe}{DeepGreenLight}{DeepGreen}{Regole della semantica lazy statica di \(Exp\)}{}
 
    \begin{itemize}
     \item I termini non valutati subito vengono conservati in un ``ambiente pigro'' - estendiamo quindi \( Env \) in questo modo:
@@ -638,7 +638,7 @@ Per farlo, estendiamo nuovamente \( Env \) in questo modo:
     \[ \frac{E(x, M, E)\vdash N \leadsto v}{E \vdash let \ x = M \ in \ N \leadsto v} \]
 
    \end{itemize}
-\end{defframe}
+\end{cdefframe}
 
 Valutiamo la stessa espressione anche con questo approccio:
 
@@ -792,7 +792,7 @@ Quindi, per esempio:
 Esempio:
 \todo{esempio}
 
-\begin{cdefframe}{DeepGreenLight}{DeepGreen}{Semantica eager statica di \( Fun \)}{}
+\begin{cdefframe}{BrightGreenLight}{BrightGreen}{Semantica eager statica di \( Fun \)}{}
     \begin{center}
     [\( fn \) statico eager]
 \end{center}
@@ -820,7 +820,7 @@ Esempio:
 
 
 
-\begin{defframe}{Semantica lazy dinamica di \( Fun \)}{}
+\begin{cdefframe}{DeepGreenLight}{DeepGreen}{Semantica lazy dinamica di \( Fun \)}{}
 
     \begin{center}
         [\( fn \) lazy statico]
@@ -838,8 +838,8 @@ Esempio:
         \AxiomC{\( E(x, N)\vdash M' \leadsto v \)}
         \BinaryInfC{\( E\vdash M \ N \leadsto v \)}
     \end{prooftree}
-\end{defframe}
-\begin{defframe}{Semantica lazy statica di \( Fun \)}{}
+\end{cdefframe}
+\begin{cdefframe}{BrightGreenLight}{BrightGreen}{Semantica lazy statica di \( Fun \)}{}
 
     \begin{center}
         [\( fn \) lazy statico]
@@ -857,7 +857,7 @@ Esempio:
         \AxiomC{\( E'(x, (N, E))\vdash M' \leadsto v \)}
         \BinaryInfC{\( E\vdash M \ N \leadsto v \)}
     \end{prooftree}
-\end{defframe}
+\end{cdefframe}
 
 Introduciamo un termine interessante - \( (fn \ x \implies xx)(fn \ x \implies xx) \) - e tentiamo di valutarlo con un approccio eager (dinamico)
 \begin{prooftree}
@@ -921,7 +921,7 @@ Si trasforma quindi una funzione che prende due argomenti in una funzione ad un 
   \TrinaryInfC{$F$}
 \end{prooftree}
 
-\begin{defframe}{Semantica operazionale di \( Fun \) lazy dinamico}{}
+\begin{cdefframe}{DeepGreenLight}{DeepGreen}{Semantica operazionale di \( Fun \) lazy dinamico}{}
 
     \begin{center}
         [\( fn \) lazy statico]
@@ -939,8 +939,8 @@ Si trasforma quindi una funzione che prende due argomenti in una funzione ad un 
         \AxiomC{\( E(x, N)\vdash M' \leadsto v \)}
         \BinaryInfC{\( E\vdash M \ N \leadsto v \)}
     \end{prooftree}
-\end{defframe}
-\begin{defframe}{Semantica operazionale di \( Fun \) lazy statico}{}
+\end{cdefframe}
+\begin{cdefframe}{BrightGreenLight}{BrightGreen}{Semantica operazionale di \( Fun \) lazy statico}{}
 
     \begin{center}
         [\( fn \) lazy statico]
@@ -958,7 +958,7 @@ Si trasforma quindi una funzione che prende due argomenti in una funzione ad un 
         \AxiomC{\( E'(x, (N, E))\vdash M' \leadsto v \)}
         \BinaryInfC{\( E\vdash M \ N \leadsto v \)}
     \end{prooftree}
-\end{defframe}
+\end{cdefframe}
 
 \begin{defframe}{Curryficazione}{}
 
@@ -2351,7 +2351,7 @@ Per induzione su $x$:
     \[
     \begin{array}{lll}
         \text{plus } (succ \ y) \ (succ \ n) & = succ \ (\text{plus } y \ (succ \ n)) & \text{(def)} \\
-        & = succ \ (\text{plus } (succ \ n) \ y) & \text{(per } R(y)) \\
+        & = succ \ (\text{plus } (succ \ n) \ y) & (R(y)) \\
         & = succ \ (succ \ (\text{plus } n \ y)) & \text{(def)} \\
         & = succ \ (succ \ (\text{plus } y \ n)) & \text{(} P(n) \text{ con } m=y) \\
         & = succ \ (\text{plus } (succ \ y) \ n) & \text{(def inversa)} \\
@@ -2425,7 +2425,97 @@ Abbiamo quindi che \( \texttt{plus} \ M \ N \equiv \texttt{plus} \ N \ M \). \qe
 \end{enumerate}
 \qed
 
-\chapter{Teoria dei tipi}
+\chapter{Sistemi dei tipi}
+Un \textbf{sistema dei tipi} per un linguaggio di programmazione è un insieme di regole che consentono di dare un tipo ad espressioni, comandi ed altri costrutti del linguaggio.
+
+Un linguaggio si dice \textit{tipato} se per esso è definito un tale sistema, e \textit{non tipato} altrimenti. Un linguaggio si dice \textit{fortemente tipato} se il tipo di tutte le variabili è determinato a tempo di compilazione, e \textit{dinamicamente tipato} se è determinato a tempo di esecuzione.
+
+Lo scopo di un sistema dei tipi è evitare che durante l'esecuzione del programma occorrano errori legati ai tipi di dato.
+
+La definizione di una \textbf{teoria dei tipi}, ovvero un sistema di tipi di dato sotto forma di regole formali di deduzione permette, se si definisce anche una semantica formale, di dimostrare matematicamente proprietà dinamiche di un linguaggio.
+
+\section{F1: il Lambda Calcolo tipato semplice}
+\( F1 \) è un sistema di primo ordine, ovvero senza parametrizzazione o astrazione sui tipi.
+
+\begin{defframe}{Grammatica di \( F1 \)}{}
+    \[ {\color{CadetBlue}Types \ni} A, B ::= K \mid A\to B \]
+    \[ {\color{CadetBlue}Terms \ni} M, N  ::= k \mid x \mid fn \ x: A \Rightarrow B \mid M \, N\]
+    dove:
+    \begin{itemize}
+        \item \( K \) indica un generico \textbf{tipo costante} o tipo base (\( int, \ bool\dots \))
+        \item  \( Terms \) è l'insieme dei ``termini grezzi'' del linguaggio (grezzi perché non necessariamente tipabili)
+        \item \( k \) indica una costante di tipo \( K \)
+        \item \( x \in Var\) indica una \textbf{variabile}
+    \end{itemize}
+\end{defframe}
+
+\begin{defframe}{Contesti}{}
+    Nel lambda calcolo tipato semplice, definiamo come \textbf{insieme dei contesti} l'insieme delle funzioni parziali che associano ogni variabile al suo tipo:
+
+    \[ Ctx = \{f \mid f: Var \farrow Types\} \]
+
+    Una generica metavariabile \( \Gamma \) indica un generico \textbf{contesto dei tipi} (quindi una mappa), esprimibile tramite una lista ordinata \( x_1: \Gamma(x_1) = A_1, \ x_2: A_2. \dots, x_n: A_n \) di variabili \( x_i \) distinte, associate al loro tipo \( A_i \) secondo \( \Gamma \).
+
+    I contesti si possono concatenare analogamente agli ambienti e alle memorie.
+\end{defframe}
+
+\begin{cdefframe}{BrightGreenLight}{BrightGreen}{Asserzione di tipi (judgements)}{}
+    Il sistema \( F1 \) permette di dedurre \textbf{asserzioni di tipo}, ovvero clausole del tipo:
+    \[ \Gamma\vdash M: A \]
+
+    all'interno della \textit{semantica di tipi}, indicata con il simbolo ``:'', definita come:
+    \[ : \ \subseteq Ctx \times Terms \times Types \]
+\end{cdefframe}
+
+\begin{cdefframe}{DeepGreenLight}{DeepGreen}{Regole di inferenza}{}
+\begin{itemize}
+    \item \textbf{Costanti:}
+    \begin{prooftree}
+        \AxiomC{}
+        \UnaryInfC{$\Gamma \vdash k : K$}
+    \end{prooftree}
+
+    \item \textbf{Variabili:}
+    \begin{prooftree}
+        \AxiomC{}
+        \RightLabel{$\quad(\text{se } \Gamma(x) = A)$}
+        \UnaryInfC{$\Gamma \vdash x : A$}
+    \end{prooftree}
+
+    \item \textbf{Funzione:}
+    \begin{prooftree}
+        \AxiomC{$\Gamma, x : A \vdash M : B$}
+        \UnaryInfC{$\Gamma \vdash \lambda x : A.M : A \to B$}
+    \end{prooftree}
+
+    \item \textbf{Applicazione:}
+    \begin{prooftree}
+        \AxiomC{$\Gamma \vdash M : A \to B$}
+        \AxiomC{$\Gamma \vdash N : A$}
+        \BinaryInfC{$\Gamma \vdash M N : B$}
+    \end{prooftree}
+\end{itemize}
+\end{cdefframe}
+
+\textbf{Esempio}:
+
+Consideriamo il termine
+\[ (fn\ x: int \to bool \Rightarrow x\ 5)\ (fn\ y: int \Rightarrow true) \]
+
+Deriviamo il suo tipo in questo modo:
+\vspace{-1.5em}
+\begin{prooftree}
+    \AxiomC{$x: int \to bool \vdash x: int \to bool$}
+    \AxiomC{$\Gamma \vdash 5: int$}
+    \BinaryInfC{$x: int \to bool \vdash x\ 5: bool$}
+    \UnaryInfC{$\emptyset \vdash fn\ x: int \to bool \Rightarrow x\ 5 : (int \to bool) \to bool$}
+
+    \AxiomC{$y: int \vdash true: bool$}
+    \UnaryInfC{$\emptyset \vdash fn\ y: int \Rightarrow true: bool$}
+
+    \BinaryInfC{$(fn\ x: int \to bool \Rightarrow x\ 5)\ (fn\ y: int \Rightarrow true): bool$}
+\end{prooftree}
+
 
 \end{document}
 
