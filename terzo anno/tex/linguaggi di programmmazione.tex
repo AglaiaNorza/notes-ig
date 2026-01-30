@@ -1265,6 +1265,8 @@ Introduciamo il concetto di \textbf{locazioni} per prepararci al linguaggio \tex
             \AxiomC{$E \vdash x, S \leadsto v \quad (se\ E(x)=l\ ed\ S(l)=v)$}
         \end{prooftree}
 
+Per valutare $x$, guardiamo l'ambiente $E$ per trovare il suo indirizzo $l$, e poi lo store $S$ per trovare il valore $v$ contenuto in $l$.
+
     \item Somma:
         \begin{prooftree}
             (se\ $v_1 + v_2 = v$)
@@ -1301,6 +1303,9 @@ Introduciamo il concetto di \textbf{locazioni} per prepararci al linguaggio \tex
             \BinaryInfC{$E \vdash p; q, S \leadsto S''$}
         \end{prooftree}
 
+ Il comando $p$ modifica $S$ in $S'$. Il comando $q$ modifica il nuovo stato $S'$ in $S''$.
+
+
     \item If (condizione vera):
         \begin{prooftree}
             \AxiomC{$E \vdash M, S \leadsto true$}
@@ -1322,12 +1327,15 @@ Introduciamo il concetto di \textbf{locazioni} per prepararci al linguaggio \tex
             \AxiomC{$E \vdash while\ M\ do\ p, S' \leadsto S''$}
             \TrinaryInfC{$E \vdash while\ M\ do\ p, S \leadsto S''$}
         \end{prooftree}
+\textit{Caso induttivo (true):} se la guardia è vera: si esegue il corpo $p$ che produce uno stato intermedio $S'$, e si ri-esegue l'intero ciclo partendo da $S'$. Il risultato finale $S''$ è il risultato del ciclo.
 
     \item While (condizione falsa):
         \begin{prooftree}
             \AxiomC{$E \vdash M, S \leadsto false$}
             \UnaryInfC{$E \vdash while\ M\ do\ p, S \leadsto S$}
         \end{prooftree}
+
+        \textit{Caso base (false):} Se la guardia è falsa, il ciclo termina e lo stato non cambia.
 
     \item Inizializzazione:
         \begin{prooftree}
@@ -1337,6 +1345,14 @@ Introduciamo il concetto di \textbf{locazioni} per prepararci al linguaggio \tex
             \BinaryInfC{$E \vdash var\ x := M\ in\ p, S \leadsto S'$}
         \end{prooftree}
 
+        \begin{enumerate}
+        \item si calcola il valore iniziale $v$.
+        \item si trova una locazione $l$ libera (allocazione).
+    \item si estende l'ambiente ($E[x \mapsto l]$) e si aggiorna lo store ($S[l \mapsto v]$) (inizializzazione).
+        \item si esegue $p$ in questo nuovo contesto.
+        \end{enumerate}
+        {\color{gray}NB: All'uscita da $p$, le modifiche allo store ($S'$) rimangono, ma la variabile $x$ scompare dallo scope perché si torna all'ambiente $E$ originale.}
+
     \item Assegnamento:
         \begin{prooftree}
             se \( l = E(x) \) \ \ 
@@ -1344,10 +1360,12 @@ Introduciamo il concetto di \textbf{locazioni} per prepararci al linguaggio \tex
             \UnaryInfC{$E \vdash x := M, S \leadsto S(l,v)$} 
         \end{prooftree}
 
+        Non si modifica l'ambiente $E$. Si cerca la locazione già esistente associata a $x$ e si sovrascrive il valore nello store.
+
 \end{itemize}
 
 \begin{gframe}{}
-    Notiamo che questa semantica non fa ``garbage collection'' !
+    Notiamo che questa semantica non fa ``garbage collection'' (all'uscita di un blocco \texttt{var}, la locazione $l$ non viene rimossa dallo Store $S'$, anche se non è più accessibile dall'ambiente $E$)
 \end{gframe}
 
 \newpage
@@ -1387,18 +1405,22 @@ Introduciamo il concetto di \textbf{locazioni} per prepararci al linguaggio \tex
 Gli array in \( All \) sono associati a sequenze finite e non vuote di locazioni (che indichiamo con \( Loc^+ \) {\small \color{gray}(con $^+$ ``chiusura positiva'' della stella di Kleene, ovvero insieme di stringhe di lunghezza finita sull'alfabeto, esclusa la stringa vuota)})
 
 \begin{cframe}{DeepBlueLight}{DeepBlue}{Domini semantici}
-    Definiamo \( Env \), l'insieme degli ambienti, in questo modo:
+        A causa dell'introduzione degli array, una variabile non è più associata a una singola locazione, ma a una sequenza finita e non vuota di locazioni ($Loc^+$).
+    
+        Definiamo quindi \( Env \), l'insieme degli ambienti, in questo modo:
     \[ Env = Var \farrow Loc^+ \cup (Var \times All \times Env) \]
     {\small \color{gray}(array, variabile, corpo della funzione e ambiente in cui valutarla)}
 \end{cframe}
 
 \begin{cdefframe}{DeepGreenLight}{DeepGreen}{Semantiche operazionali}{}
+In \( All \) introduciamo una nuova relazione di valutazione specifica per le \textbf{L-Value} (che restituiscono una locazione $l$), distinta da quella per le \textbf{R-Value} (che restituiscono un valore $v$).
+
     \begin{itemize}
-        \item introduciamo una nuova relazione di valutazione per le \textbf{espressioni assegnabili}:
+        \item relazione di valutazione per le \textbf{espressioni assegnabili}:
             \[
                 \overset{V}{\leadsto} \subseteq Env \times L-Exp \times Store \times Loc
             \]
-        \item oltre a quelle (già esistenti) per le \textbf{espressioni} \( M \):
+        \item relazioni (già esistenti) per le \textbf{espressioni} \( M \):
             \[ \overset{M}{\leadsto} \subseteq Env \times Exp \times Store \times Val \]
             \[ E \vdash M, S \overset{M}{\leadsto} v \]
 
@@ -1408,37 +1430,50 @@ Gli array in \( All \) sono associati a sequenze finite e non vuote di locazioni
     \end{itemize}
 \end{cdefframe}
 
-Oltre alle regole già definite in \( Imp \), il linguaggio \( All \) definisce:
 
+\subsection{Semantica Operazionale: dichiarazioni, assegnamenti, references} 
 
 \begin{itemize}
-    \item Loc 1:
+    \item \textbf{Accesso a variabile e array ([loc1], [loc2])}:
+    
 \begin{prooftree}
     \AxiomC{$E \vdash x, S \stackrel{l}{\leadsto} l$ \ \  se \( E(x) = l \)}
 \end{prooftree}
 
-\item Loc 2:
-\begin{prooftree}
-    \AxiomC{$E \vdash M, S \stackrel{M}{\leadsto} m$}
-    \RightLabel{($\text{se } E(x) = \langle l_0, \ldots, l_n \rangle \text{ e } 0 \le m \le n$)}
-    \UnaryInfC{$E \vdash x[M], S \stackrel{l}{\leadsto} l_m$}
-\end{prooftree}
+    \begin{prooftree}
+        \AxiomC{$E \vdash M, S \stackrel{M}{\leadsto} m$}
+        \RightLabel{($\text{se } E(x) = \langle l_0, \ldots, l_n \rangle \text{ e } 0 \le m \le n$)}
+        \UnaryInfC{$E \vdash x[M], S \stackrel{l}{\leadsto} l_m$}
+        \LeftLabel{[loc2]}
+    \end{prooftree}
 
-\item Ref:
-\begin{prooftree}
-    \AxiomC{$E \vdash V, S \stackrel{l}{\leadsto} l$}
-    \RightLabel{($\text{se } S(l) = v$)}
-    \UnaryInfC{$E \vdash V, S \stackrel{v}{\leadsto} v$}
-\end{prooftree}
+        Per ottenere il valore di una variabile, ora sono necessari due passi: risolvere la locazione e poi leggere lo store.
 
-\item Assign:
-\begin{prooftree}
-    \AxiomC{$E \vdash M, S \stackrel{M}{\leadsto} v$}
-    \AxiomC{$E \vdash V, S \stackrel{l}{\leadsto} l$}
-    \BinaryInfC{$E \vdash V := M, S \stackrel{p}{\leadsto} S(l, v)$}
-\end{prooftree}
+\item \textbf{Dereferenziazione ([ref])}:
+    
+    \begin{prooftree}
+        \AxiomC{$E \vdash V, S \stackrel{l}{\leadsto} l$}
+        \RightLabel{($\text{se } S(l) = v$)}
+        \UnaryInfC{$E \vdash V, S \stackrel{M}{\leadsto} v$}
+        \LeftLabel{[ref]}
+    \end{prooftree}
 
-\item Arr:
+        La regola converte una L-Exp in un valore leggendo dallo store.
+
+
+\item \textbf{Assegnamento ([assign])}:
+    \begin{prooftree}
+        \AxiomC{$E \vdash M, S \stackrel{M}{\leadsto} v$}
+        \AxiomC{$E \vdash V, S \stackrel{l}{\leadsto} l$}
+        \BinaryInfC{$E \vdash V := M, S \stackrel{p}{\leadsto} S[l \mapsto v]$}
+    \end{prooftree}
+
+        Questa regola formalizza l'effetto collaterale (side-effect) dell'aggiornamento della memoria.
+
+        {\color{gray}La regola distingue tra il calcolo del \textit{R-value} (l'espressione $M$ valutata a $v$) e del \textit{L-value} (l'espressione assegnabile $V$ valutata alla locazione $l$). Lo store $S$ viene aggiornato scrivendo $v$ nella locazione $l$.}
+    
+\item \textbf{Dichiarazione di Array ([arr]):}
+
 \begin{prooftree}
     \AxiomC{$E \vdash M_0, S \stackrel{v}{\leadsto} v_0$}
     \AxiomC{$\ldots$}
@@ -1451,24 +1486,96 @@ Oltre alle regole già definite in \( Imp \), il linguaggio \( All \) definisce:
     $(*)$ dove $l_i$ è nuova, per $i = 0 \ldots n$
 \end{center}
 
-\item Proc:
-\begin{prooftree}
-    \AxiomC{$E(y, \langle x, p, E \rangle) \vdash q, S \stackrel{v}{\leadsto} S'$}
-    \UnaryInfC{$E \vdash \text{proc } y(x) \text{ is } p \text{ in } q, S \stackrel{v}{\leadsto} S'$}
-\end{prooftree}
+    Questa regola gestisce l'allocazione di blocchi contigui di memoria.
 
-\item Call by value:
-\begin{prooftree}
-    \AxiomC{$E \vdash M, S \stackrel{M}{\leadsto} v$}
-    \AxiomC{$E'(x, l) \vdash p, S(l, v) \stackrel{v}{\leadsto} S'$}
-    \RightLabel{($*$)}
-    \BinaryInfC{$E \vdash \text{call } y(M), S \stackrel{v}{\leadsto} S'$}
-\end{prooftree}
-\begin{center}
-    $(*)$ $\text{se } E(y) = \langle x, p, E' \rangle \text{ e } l \text{ è nuova}$
-\end{center}
+    \begin{enumerate}
+        \item tutte le espressioni iniziali $M_i$ vengono valutate.
+        \item vengono reperite $n+1$ locazioni libere ($l_i$).
+        \item la variabile $x$ viene associata nell'ambiente all'intera sequenza di locazioni $\langle l_0, \dots, l_n \rangle$.
+        \item la memoria viene inizializzata con i valori $v_i$.
+    \end{enumerate}
 
+    \item \textbf{Dichiarazione di Procedura ([proc])}:
+
+    \begin{prooftree}
+        \AxiomC{$E[y \mapsto \langle x, p, E \rangle] \vdash q, S \stackrel{p}{\leadsto} S'$}
+        \UnaryInfC{$E \vdash \text{proc } y(x) \text{ is } p \text{ in } q, S \stackrel{p}{\leadsto} S'$}
+    \end{prooftree}
 \end{itemize}
+La regola crea una chiusura, ovvero una tripla $\langle x, p, E \rangle$.
+    Viene catturato l'ambiente $E$ esistente al momento della definizione (``cattura del contesto''), quindi quando la procedura verrà chiamata, userà questo ambiente salvato (esteso con il parametro) e non quello del chiamante, garantendo così lo scoping statico.
+
+\subsection{Semantica Operazionale: semantiche di chiamata}
+
+Esistono tre modalità principali per il passaggio dei parametri in \( All \), distinte in base a \textit{cosa} viene passato (valore vs locazione) e \textit{quando} viene valutato (eager vs lazy).
+
+\subsubsection*{Call-by-Value (Passaggio per Valore)}
+È una semantica \textbf{eager statica}. L'argomento viene valutato a un valore $v$ \textit{prima} dell'esecuzione del corpo della procedura. Viene allocata una \textbf{nuova locazione} per il parametro formale.
+
+\begin{cdefframe}{DeepGreenLight}{DeepGreen}{Regola Call-by-Value}{}
+    \begin{prooftree}
+        \AxiomC{$E \vdash M, S \stackrel{M}{\leadsto} v$}
+        \AxiomC{$E'[x \mapsto l] \vdash p, S[l \mapsto v] \stackrel{p}{\leadsto} S'$}
+        \RightLabel{(*)}
+        \BinaryInfC{$E \vdash \text{call } y(M), S \stackrel{p}{\leadsto} S'$}
+    \end{prooftree}
+    \vspace{-0.5em}
+    {\small (*) dove $E(y) = \langle x, p, E' \rangle$ e $l$ è una locazione \textbf{nuova} ($l \notin dom(S)$).}
+\end{cdefframe}
+\textbf{Effetto:} Modifiche alla variabile $x$ dentro la procedura non influenzano l'argomento originale (lavorano su una copia).
+
+\subsubsection*{Call-by-Reference (Passaggio per Riferimento)}
+È una semantica \textbf{eager statica}, ma l'argomento deve essere una L-Exp ($V$). Viene passata la \textbf{locazione} dell'argomento già esistente valutato.
+
+\begin{cdefframe}{DeepGreenLight}{DeepGreen}{Regola Call-by-Reference}{}
+    L'argomento della chiamata \textbf{deve} essere di tipo assegnabile ($V$).
+    \begin{prooftree}
+        \AxiomC{$E \vdash V, S \stackrel{l}{\leadsto} l$}
+        \AxiomC{$E'[x \mapsto l] \vdash p, S \stackrel{p}{\leadsto} S'$}
+        \RightLabel{(*)}
+        \BinaryInfC{$E \vdash \text{call } y(V), S \stackrel{p}{\leadsto} S'$}
+    \end{prooftree}
+    \vspace{-0.5em}
+    {\small (*) dove $E(y) = \langle x, p, E' \rangle$.}
+\end{cdefframe}
+\textbf{Effetto:} Il parametro formale $x$ diventa un \textit{alias} dell'argomento $V$. Le modifiche a $x$ sono visibili esternamente.
+
+\subsubsection*{Call-by-Name (Passaggio per Nome)}
+È una semantica \textbf{lazy statica}. L'argomento non viene valutato subito. Viene passata l'espressione non valutata insieme al suo ambiente. L'argomento viene valutato solo quando (e ogni volta che) il parametro viene usato.
+
+\begin{cframe}{DeepBlueLight}{DeepBlue}{Estensione Ambiente per CBN}
+    L'ambiente deve poter contenere espressioni non valutate:
+    \[ Env = Var \xrightarrow{fin} Loc^+ \cup (Var \times Imp \times Env) \cup \mathbf{(LExp \times Env)} \]
+   
+\end{cframe}
+
+Questa semantica richiede due modifiche alle regole operazionali:
+\begin{enumerate}
+    \item \textbf{Regola di Chiamata:} Associa al parametro la chiusura dell'argomento.
+    \item \textbf{Regola di Accesso ([loc3]):} Quando si usa la variabile, si valuta l'espressione salvata.
+\end{enumerate}
+
+\begin{cdefframe}{DeepGreenLight}{DeepGreen}{Regole Call-by-Name}{}
+    \begin{prooftree}
+        \AxiomC{$E'[x \mapsto (V, E)] \vdash p, S \stackrel{p}{\leadsto} S'$}
+        \RightLabel{($\text{se } E(y) = \langle x, p, E' \rangle$)}
+        \UnaryInfC{$E \vdash \text{call } y(V), S \stackrel{p}{\leadsto} S'$}
+    \end{prooftree}
+    
+    \vspace{1em}
+    \textbf{Nuova regola di accesso [loc3]:}
+    Sostituisce [loc1] per le variabili passate per nome.
+    \begin{prooftree}
+        \AxiomC{$E' \vdash V, S \stackrel{l}{\leadsto} l$}
+        \RightLabel{($\text{se } E(x) = (V, E')$)}
+        \UnaryInfC{$E \vdash x, S \stackrel{l}{\leadsto} l$}
+    \end{prooftree}
+   
+\end{cdefframe}
+
+\begin{lemmaframe}{(Non-)equivalenza tra le semantiche}{}
+    In \( All \), non esistono due semantiche equivalenti.
+\end{lemmaframe}
 
 \chapter{Correttezza dei programmi}
 
