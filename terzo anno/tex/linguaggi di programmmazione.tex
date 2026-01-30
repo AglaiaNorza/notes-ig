@@ -2562,95 +2562,6 @@ All'interno di un sistema dei tipi di secondo ordine, che permette di quantifica
     \[ A, B ::= K \mid A\to B \mid X \mid \forall X.A \]
 \end{defframe}
 
-\begin{cdefframe}{DeepGreenLight}{DeepGreen}{Regole di inferenza}{}
-    \begin{itemize}
-    \item \textbf{Generalizzazione dei tipi:}
-    \begin{prooftree}
-        \AxiomC{$\Gamma \vdash M : A$}
-        \RightLabel{$(\text{se } X \notin \text{free}(\Gamma))$}
-        \UnaryInfC{$\Gamma \vdash \Lambda X.M : \forall X.A$}
-    \end{prooftree}
-
-    \subitem permette di astrarre sul tipo, creando un termine polimorfo
-
-    \begin{defframe}{Variabili libere}{}
-        La funzione:
-\[
-\text{free} : \mathit{Types} \cup \mathit{Ctx} \to \mathcal{P}(\mathit{Var})
-\]
-
-restituisce l'insieme di tutte le \textbf{variabili di tipo libere}, dove:
-
-\[
-\begin{cases}
-\text{free}(K) = \varnothing \\
-\text{free}(X) = \{X\} \\
-\text{free}(A \to B) = \text{free}(A) \cup \text{free}(B) \\
-\text{free}(\forall X.A) = \text{free}(A) - \{X\} \\
-\text{free}(\Gamma) = \displaystyle \bigcup_{x:A \in \Gamma} \text{free}(A)
-\end{cases}
-\]
-
-(essenzialmente
-\( X \in \text{free}(\Gamma)\) se non compare in \( \Gamma \) oppure se compare, ma non ``legato'' 
-             (es. in \( x:X \) è libero, in  \( y: \forall X.X\to X \) è ``legato''))
-        
-    \end{defframe}
-
-    \item \textbf{Specializzazione del tipo:}
-    \begin{prooftree}
-        \AxiomC{$\Gamma \vdash M : \forall X.A$}
-        \UnaryInfC{$\Gamma \vdash M\ B :[B/X]A $}
-   \end{prooftree}
-
-    \subitem permette di istanziare un termine polimorfo con un tipo concreto \( B \)
-\end{itemize}
-\end{cdefframe}
-
-\begin{gframe}{Condizione laterale}
-    La regola di introduzione del $\forall$ impone che la variabile di tipo $X$ non sia libera nel contesto $\Gamma$ ($X \notin \text{free}(\Gamma)$).
-
-Se violassimo questa condizione, il sistema diventerebbe logicamente incoerente.
-
-    Supponiamo di avere $x:X$ nel contesto (quindi $X$ libero). Se si ignorasse la regola della condizione laterale, si potrebbe generalizzare $X$ anche se è già in uso.
-
-        Questo ci permetterebbe di costruire un termine che converte ``magicamente'' una variabile $x$ (di tipo generico $X$) in un intero, forzandone il tipo:
-        \vspace{-1em}
-\begin{center}
-    \begin{prooftree}
-        \AxiomC{ $x:X \vdash x:X$}
-        \UnaryInfC{$x:X \vdash \Lambda X.x : \forall X.X$}
-        \UnaryInfC{$x:X \vdash (\Lambda X.x)\ int : int$}
-        \UnaryInfC{$\varnothing \vdash \lambda x : X.(\Lambda X.x)\ int : X \to int$}
-        \UnaryInfC{$\varnothing \vdash \Lambda X.\lambda x : X.(\Lambda X.x)\ int : \forall X.(X \to int)$}
-    \end{prooftree}
-    \end{center}
-
-     Chiamiamo \( M \) il termine risultante dalla derivazione sopra:
-    \[ M = \Lambda X.\lambda x : X.(\Lambda X.x)\ int \]
-
-        Usiamo \( M \) per costruire un intero dal nulla.    
-    
-        Consideriamo la valutazione del termine $M\ (int \to int)(M\ int)$:
- \vspace{-1.5em}
-    \begin{center}
-    \begin{prooftree}
-        \AxiomC{$\varnothing \vdash M : \forall X.(X \to int)$}
-        \UnaryInfC{$\varnothing \vdash M\ (int \to int) : (int \to int) \to int$}
-        
-        \AxiomC{$\varnothing \vdash M : \forall X.(X \to int)$}
-        \UnaryInfC{$\varnothing \vdash M\ int : int \to int$}
-        
-        \BinaryInfC{$\varnothing \vdash M\ (int \to int)(M\ int) : int$}
-    \end{prooftree}
-    \end{center}
-
-     il termine $M\ (int \to int)(M\ int)$ corrisponderebbe ad un intero, nonostante al suo interno non sia presente alcun numero intero
-
-Avremmo "costruito un intero fatto di aria fritta": il sistema prevederebbe l'esistenza di un intero senza sapere quale esso sia, violando la natura costruttiva del calcolo.
-
-\end{gframe}
-
     \subsection{Semantica e meccanismi di astrazione}
 
 Per comprendere a fondo il funzionamento di \( F2 \), è fondamentale distinguere i due livelli di astrazione introdotti dai sistemi del secondo ordine.
@@ -2724,6 +2635,98 @@ Questo passaggio è cruciale per l'esecuzione:
     \underbracket[0.187ex]{((\Lambda X . fn \ x : X \Rightarrow x) \ int)}_{\text{produce una funzione } int \to int} \ 5
     \]
     \end{gframe}
+
+
+    \begin{defframe}{Variabili libere}{}
+        La funzione:
+\[
+\text{free} : \mathit{Types} \cup \mathit{Ctx} \to \mathcal{P}(\mathit{Var})
+\]
+
+restituisce l'insieme di tutte le \textbf{variabili di tipo libere}, dove:
+
+\[
+\begin{cases}
+\text{free}(K) = \varnothing \\
+\text{free}(X) = \{X\} \\
+\text{free}(A \to B) = \text{free}(A) \cup \text{free}(B) \\
+\text{free}(\forall X.A) = \text{free}(A) - \{X\} \\
+\text{free}(\Gamma) = \displaystyle \bigcup_{x:A \in \Gamma} \text{free}(A)
+\end{cases}
+\]
+
+(essenzialmente
+\( X \in \text{free}(\Gamma)\) se non compare in \( \Gamma \) oppure se compare, ma non ``legato'' 
+             (es. in \( x:X \) è libero, in  \( y: \forall X.X\to X \) è ``legato''))
+        
+    \end{defframe}
+
+
+
+\begin{cdefframe}{DeepGreenLight}{DeepGreen}{Regole di inferenza}{}
+    Oltre a quelle di \( F1 \), \( F2 \) introduce le seguenti regole:
+    \begin{itemize}
+    \item \textbf{Generalizzazione dei tipi:}
+    \begin{prooftree}
+        \AxiomC{$\Gamma \vdash M : A$}
+        \RightLabel{$(\text{se } X \notin \text{free}(\Gamma))$}
+        \UnaryInfC{$\Gamma \vdash \Lambda X.M : \forall X.A$}
+    \end{prooftree}
+
+    \subitem permette di astrarre sul tipo, creando un termine polimorfo
+    \item \textbf{Specializzazione del tipo:}
+    \begin{prooftree}
+        \AxiomC{$\Gamma \vdash M : \forall X.A$}
+        \UnaryInfC{$\Gamma \vdash M\ B :[B/X]A $}
+   \end{prooftree}
+
+    \subitem permette di istanziare un termine polimorfo con un tipo concreto \( B \)
+\end{itemize}
+\end{cdefframe}
+
+\begin{gframe}{Condizione laterale}
+    La regola di introduzione del $\forall$ impone che la variabile di tipo $X$ non sia libera nel contesto $\Gamma$ ($X \notin \text{free}(\Gamma)$).
+
+Se violassimo questa condizione, il sistema diventerebbe logicamente incoerente.
+
+    Supponiamo di avere $x:X$ nel contesto (quindi $X$ libero). Se si ignorasse la regola della condizione laterale, si potrebbe generalizzare $X$ anche se è già in uso.
+
+        Questo ci permetterebbe di costruire un termine che converte ``magicamente'' una variabile $x$ (di tipo generico $X$) in un intero, forzandone il tipo:
+        \vspace{-1em}
+\begin{center}
+    \begin{prooftree}
+        \AxiomC{ $x:X \vdash x:X$}
+        \UnaryInfC{$x:X \vdash \Lambda X.x : \forall X.X$}
+        \UnaryInfC{$x:X \vdash (\Lambda X.x)\ int : int$}
+        \UnaryInfC{$\varnothing \vdash \lambda x : X.(\Lambda X.x)\ int : X \to int$}
+        \UnaryInfC{$\varnothing \vdash \Lambda X.\lambda x : X.(\Lambda X.x)\ int : \forall X.(X \to int)$}
+    \end{prooftree}
+    \end{center}
+
+     Chiamiamo \( M \) il termine risultante dalla derivazione sopra:
+    \[ M = \Lambda X.\lambda x : X.(\Lambda X.x)\ int \]
+
+        Usiamo \( M \) per costruire un intero dal nulla.    
+    
+        Considerando la valutazione del termine $M\ (int \to int)(M\ int)$:
+ \vspace{-1.5em}
+    \begin{center}
+    \begin{prooftree}
+        \AxiomC{$\varnothing \vdash M : \forall X.(X \to int)$}
+        \UnaryInfC{$\varnothing \vdash M\ (int \to int) : (int \to int) \to int$}
+        
+        \AxiomC{$\varnothing \vdash M : \forall X.(X \to int)$}
+        \UnaryInfC{$\varnothing \vdash M\ int : int \to int$}
+        
+        \BinaryInfC{$\varnothing \vdash M\ (int \to int)(M\ int) : int$}
+    \end{prooftree}
+    \end{center}
+
+     il termine $M\ (int \to int)(M\ int)$ corrisponderebbe ad un intero, nonostante al suo interno non sia presente alcun numero intero.
+
+Avremmo "costruito un intero fatto di aria fritta": il sistema prevederebbe l'esistenza di un intero senza sapere quale esso sia, violando la natura costruttiva del calcolo.
+
+\end{gframe}
 
 \subsection{Proprietà del Sistema F2}
 \begin{itemize}
