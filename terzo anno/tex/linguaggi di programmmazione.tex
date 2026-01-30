@@ -329,8 +329,6 @@ Per dimostrare che  questa tupla sia un'algebra induttiva, dobbiamo ora verifica
         \end{itemize}
 
     \end{proofframe}
-l
-
 
 \chapter{Paradigma funzionale}
 
@@ -399,7 +397,7 @@ Questo linguaggio causa però facilmente ambiguità. Per esempio, come valutiamo
 Per esplicitare la struttura del termine, è necessario legare le occorrenze delle variabili alle dichiarazioni.
 
 \begin{defframe}{Variabili libere, legate, scope}{}
-    Si dice che un'occorrenza di una variabile \( x \) è \textbf{libera} in un termine \( t \) quando non compare nel corpo di \( N \) nessun sottotermine di \( t \) nella forma \( let \ x = M \ in \ N \) (quindi, quando non le viene assegnato un valore).
+    Si dice che un'occorrenza di una variabile \( x \) è \textbf{libera} in un termine \( t \) quando non compare nel corpo di \( N \) di nessun sottotermine di \( t \) nella forma \( let \ x = M \ in \ N \) (quindi, quando non le viene assegnato un valore).
 
     Ogni occorrenza libera di \ \( x \) \ in un termine \( N \) si dice \textbf{legata} (bound) alla dichiarazione di \( x \) nel termine \( let \ x = M \ in \ N \).
 
@@ -495,16 +493,15 @@ Per esempio, \( \{(z, 3), (y, 9)\}\{(z, 4)\}(z) = 4 \) e \( \{(z, 3), (y, 9)\}\{
         \ \ \  [let]
     \]
 
-    {\color{gray}(essenzialmente, per valutare una \( let \), si:
+    {\color{gray}(essenzialmente, per valutare una \( let \):
         \begin{itemize}
-            \item valuta \( M\) \ \ (\( E \vdash M \leadsto v_1) \)
+            \item \color{gray}si valuta \( M\) \ \ (\( E \vdash M \leadsto v_1) \)
             \item si ``associa'' il risultato \( v_1 \) a \( x \), concatenando \( (x, v_1) \) all'ambiente
             \item e si valuta \( N \) nel nuovo ambiente)
     \end{itemize} }
 \end{cdefframe}
 
-Notiamo che si utilizza la relazione \( \leadsto \) e non una una funzione \( Exp \times Env \to Val \), perché si potrebbe avere più di un risultato (per esempio nel caso del multithreading, in cui un diverso ordine di esecuzione di un programma dà output diversi), o anche nessun risultato (per esempio nel caso in cui in \( Exp \) compare una variabile \( x \), che però \( Env \) non definisce), entrambi casi non accettati dalla definizione di funzione. \\[6pt]
-
+Notiamo che si utilizza la relazione \( \leadsto \) e non una una funzione \( Exp \times Env \to Val \), perché si potrebbe avere più di un risultato (per esempio nel caso del multithreading, in cui un diverso ordine di esecuzione di un programma dà output diversi), o anche nessun risultato (per esempio nel caso in cui in \( Exp \) compare una variabile \( x \), che però \( Env \) non definisce), entrambi casi non accettati dalla definizione di funzione.
 
 \begin{gframe}{precedenza}
     Introduciamo un concetto di ``precedenza'' nella valutazione di un'espressione potenzialmente ambigua;
@@ -515,22 +512,43 @@ Notiamo che si utilizza la relazione \( \leadsto \) e non una una funzione \( Ex
 
     Corrisponde quindi a 
 
-    \[ let \ \ {\color{purple}x}= {\color{purple} 3} \ \ in \ \ [ \ let \ \ {\color{ForestGreen}x}= \ (let \ \ {\color{RoyalPurple}y} = {\color{RoyalPurple} 2} \ \ in \ \ {\color{purple} x}+{\color{RoyalPurple} y}) \ \ in \ \ {\color{ForestGreen}x}+7 \ ] + {\color{purple}x} \]
+\[ let \ \ {\color{purple}x}= {\color{purple} 3} \ \ in \ \Bigl( \ [ \ let \ \ {\color{ForestGreen}x}= \ (let \ \ {\color{RoyalPurple}y} = {\color{RoyalPurple} 2} \ \ in \ \ {\color{purple} x}+{\color{RoyalPurple} y}) \ \ in \ \ {\color{ForestGreen}x}+7 \ ] + {\color{purple}x}\Bigr) \]
     E si ha quindi che:
     \begin{itemize}
         \item la \( \color{purple} x \) in \( {\color{purple}x}+y \) e quella finale (\( + \color{purple} x \)) sono quelle valutate dal \( let \) iniziale
         \item il valore della \( \color{ForestGreen} x \) in \( x+7 \) è invece dato dal risultato di \(let \ x =  (let \  y = {\color{purple} 2} \ \ in \ \ {\color{purple} x}+{\color{purple} y})  \)
+        \item (il \( let \) iniziale è del tipo \( let \ x = M \ in N+L \))
     \end{itemize}
 
 \end{gframe}
 
 Facciamo un esempio di valutazione di un'espressione:
+{\tiny
+\begin{prooftree}
+            \AxiomC{$(x,3) \vdash 2 \to 2$} % Valutazione di 2
+            
+                \AxiomC{$(x,3)(y,2) \vdash x \leadsto 3$}
+                \AxiomC{$(x,3)(y,2) \vdash y \leadsto 2$}
+                \RightLabel{\scriptsize [Plus]}
+                \BinaryInfC{$(x,3)(y,2) \vdash x + y \leadsto 5$}
+            
+                \RightLabel{\scriptsize [Let]}
+            \BinaryInfC{$(x,3) \vdash \text{let } y = 2 \text{ in } x + y \leadsto 5$}
 
+            \AxiomC{$(x,3)(x,5) \vdash x + 7 \leadsto 12$}
+            
+            \RightLabel{\scriptsize [Let]}
+            \BinaryInfC{$(x,3) \vdash \text{let } x = (\text{let } y = 2 \text{ in } x + y) \text{ in } x + 7 \leadsto 12$}
 
-\begin{center}
-\includegraphics[width=1\textwidth]{img/valutazione-es}
-\end{center}
-(copierò appena ho tempo...)
+        \AxiomC{$(x,3) \vdash x \leadsto 3$}
+    
+        \RightLabel{\scriptsize [Plus]}
+    \BinaryInfC{$(x,3) \vdash (\text{let } x = (\text{let } y = 2 \text{ in } x + y) \text{ in } x + 7) + x \leadsto 15$}
+
+    \RightLabel{\scriptsize [Let]}
+    \UnaryInfC{$\text{let } x = 3 \text{ in } \text{let } x = (\text{let } y = 2 \text{ in } x + y) \text{ in } x + 7 + x\leadsto 15$}
+\end{prooftree}
+}
 
 \section{Valutazioni Eager e Lazy}
 La valutazione utilizzata fino a questo momento viene definita
