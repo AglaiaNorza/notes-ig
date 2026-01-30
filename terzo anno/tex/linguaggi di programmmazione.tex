@@ -2612,13 +2612,10 @@ restituisce l'insieme di tutte le \textbf{variabili di tipo libere}, dove:
 
 Se violassimo questa condizione, il sistema diventerebbe logicamente incoerente.
 
-Supponiamo di avere $x:X$ nel contesto (quindi $X$ è libero)\\
-Se potessimo generalizzare:
-\[ x:X \vdash \Lambda X.x : \forall X.X \]
-Applicando questo termine a $int$:
-\[ x:X \vdash (\Lambda X.x) \ int : int \]
+    Supponiamo di avere $x:X$ nel contesto (quindi $X$ libero). Se si ignorasse la regola della condizione laterale, si potrebbe generalizzare $X$ anche se è già in uso.
 
-(albero di derivazione:
+        Questo ci permetterebbe di costruire un termine che converte ``magicamente'' una variabile $x$ (di tipo generico $X$) in un intero, forzandone il tipo:
+        \vspace{-1em}
 \begin{center}
     \begin{prooftree}
         \AxiomC{ $x:X \vdash x:X$}
@@ -2628,10 +2625,13 @@ Applicando questo termine a $int$:
         \UnaryInfC{$\varnothing \vdash \Lambda X.\lambda x : X.(\Lambda X.x)\ int : \forall X.(X \to int)$}
     \end{prooftree}
     \end{center}
- \vspace{-1em}
-    )
 
- Se consideriamo la valutazione del termine $M\ (int \to int)(M\ int)$:
+     Chiamiamo \( M \) il termine risultante dalla derivazione sopra:
+    \[ M = \Lambda X.\lambda x : X.(\Lambda X.x)\ int \]
+
+        Usiamo \( M \) per costruire un intero dal nulla.    
+    
+        Consideriamo la valutazione del termine $M\ (int \to int)(M\ int)$:
  \vspace{-1.5em}
     \begin{center}
     \begin{prooftree}
