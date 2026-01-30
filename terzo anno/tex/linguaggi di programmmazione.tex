@@ -2536,6 +2536,7 @@ che richiede che \( x \) sia allo stesso momento di tipo \( A \) e \( A \to B \)
 Un tale tipo (detto ``circolare'') non esiste, e il termine non è perciò tipabile in \( F1 \).
 
 \section{F2: il Lambda Calcolo polimorfo}
+Il sistema \( F2 \) (o System F) estende il lambda calcolo tipato introducendo il polimorfismo parametrico esplicito.
 \subsection{Polimorfismo}
 \begin{defframe}{Polimorfismo}{}
     Il polimorfismo è la possibilità per un'espressione di assumere molteplici tipi in base al contesto considerato.
@@ -2554,10 +2555,9 @@ Notiamo che questo termine non è tipabile in \( F1 \), in quanto \( x \) dovreb
 
 All'interno di un sistema dei tipi di secondo ordine, che permette di quantificare universalmente sui tipi, invece, il termine risulta tipabile senza problemi con il tipo \( \forall X.(X\to (Bool \to Bool)) \).
 
-\subsection{Il sistema F2}
-Il sistema \( F2 \) è detto anche lambda calcolo polimorfo o System F.
+\subsection{Sistema F2}
 \begin{defframe}{Grammatica di \( F2 \)}{}
-    La sua grammatica è:
+    La sintassi prevede due livelli distinti: termini e tipi.
     \[ M, N ::= k \mid x \mid fn \ x : A \Rightarrow M \mid M N \mid \Lambda X.M \mid M B \]
     \[ A, B ::= K \mid A\to B \mid X \mid \forall X.A \]
 \end{defframe}
@@ -2571,13 +2571,36 @@ Il sistema \( F2 \) è detto anche lambda calcolo polimorfo o System F.
         \UnaryInfC{$\Gamma \vdash \Lambda X.M : \forall X.A$}
     \end{prooftree}
 
+    \subitem permette di astrarre sul tipo, creando un termine polimorfo
+
+    \begin{itemize}
+        \item ricordiamo che \( X \in \text{free}(\Gamma)\) se non compare in \( \Gamma \) oppure se compare, ma non ``legato'' 
+            \subitem (es. in \( x:X \) è libero, in  \( y: \forall X.X\to X \) è ``legato'')
+    \end{itemize}
+
     \item \textbf{Specializzazione del tipo:}
     \begin{prooftree}
         \AxiomC{$\Gamma \vdash M : \forall X.A$}
         \UnaryInfC{$\Gamma \vdash M\ B :[B/X]A $}
-    \end{prooftree}
+   \end{prooftree}
+
+    \subitem permette di istanziare un termine polimorfo con un tipo concreto \( B \)
 \end{itemize}
+
+\begin{gframe}{Condizione laterale}
+    La regola di introduzione del $\forall$ impone che la variabile di tipo $X$ non sia libera nel contesto $\Gamma$ ($X \notin \text{free}(\Gamma)$).
+
+Se violassimo questa condizione, il sistema diventerebbe logicamente incoerente.
+
+Supponiamo di avere $x:X$ nel contesto (quindi $X$ è libero)\\
+Se potessimo generalizzare:
+\[ x:X \vdash \Lambda X.x : \forall X.X \]
+Applicando questo termine a $int$:
+\[ x:X \vdash (\Lambda X.x) \ int : int \]
+Avremmo "costruito un intero fatto di aria fritta": il sistema prevederebbe l'esistenza di un intero senza sapere quale esso sia, violando la natura costruttiva del calcolo.
+\end{gframe}
 \end{cdefframe}
+
     \subsection{Semantica e meccanismi di astrazione}
 
 Per comprendere a fondo il funzionamento di \( F2 \), è fondamentale distinguere i due livelli di astrazione introdotti dai sistemi del secondo ordine.
@@ -2652,8 +2675,11 @@ Questo passaggio è cruciale per l'esecuzione:
     \]
     \end{gframe}
 
-
-
+\subsection{Proprietà del Sistema F2}
+\begin{itemize}
+    \item \textbf{Inferenza Indecidibile:} Non esiste un algoritmo che, dato un termine non annotato, possa ricostruirne il tipo in F2 (l'utente deve scrivere esplicitamente i tipi.)
+    \item \textbf{Mancanza di Punto Fisso:} In F2 puro non è possibile tipare il combinatore di punto fisso ($Y$) o funzioni che si auto-applicano ($xx$), quindi la ricorsione generale non è supportata direttamente.
+\end{itemize}
 
 \end{document}
 
