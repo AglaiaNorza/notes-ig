@@ -453,7 +453,7 @@ Per esempio, \( \{(z, 3), (y, 9)\}\{(z, 4)\}(z) = 4 \) e \( \{(z, 3), (y, 9)\}\{
 
 \vspace{0.5em}
 
-\begin{cdefframe}{DeepGreenLight}{DeepGreen}{Semantica operazionale di \( Exp \)}{}
+\begin{cdefframe}{DeepGreenLight}{DeepGreen}{Semantica operazionale eager di \( Exp \)}{}
     La \textbf{semantica operazionale} di \( Exp \) è una relazione
     \[ \leadsto \ \subseteq Exp \times Env \times Val\]
 
@@ -501,7 +501,7 @@ Per esempio, \( \{(z, 3), (y, 9)\}\{(z, 4)\}(z) = 4 \) e \( \{(z, 3), (y, 9)\}\{
     \end{itemize} }
 \end{cdefframe}
 
-Notiamo che si utilizza la relazione \( \leadsto \) e non una una funzione \( Exp \times Env \to Val \), perché si potrebbe avere più di un risultato (per esempio nel caso del multithreading, in cui un diverso ordine di esecuzione di un programma dà output diversi), o anche nessun risultato (per esempio nel caso in cui in \( Exp \) compare una variabile \( x \), che però \( Env \) non definisce), entrambi casi non accettati dalla definizione di funzione.
+Notiamo che si utilizza la relazione \( \leadsto \) e non una\def\LabelSpacing{1pt} una funzione \( Exp \times Env \to Val \), perché si potrebbe avere più di un risultato (per esempio nel caso del multithreading, in cui un diverso ordine di esecuzione di un programma dà output diversi), o anche nessun risultato (per esempio nel caso in cui in \( Exp \) compare una variabile \( x \), che però \( Env \) non definisce), entrambi casi non accettati dalla definizione di funzione.
 
 \begin{gframe}{precedenza}
     Introduciamo un concetto di ``precedenza'' nella valutazione di un'espressione potenzialmente ambigua;
@@ -517,7 +517,7 @@ Notiamo che si utilizza la relazione \( \leadsto \) e non una una funzione \( Ex
     \begin{itemize}
         \item la \( \color{purple} x \) in \( {\color{purple}x}+y \) e quella finale (\( + \color{purple} x \)) sono quelle valutate dal \( let \) iniziale
         \item il valore della \( \color{ForestGreen} x \) in \( x+7 \) è invece dato dal risultato di \(let \ x =  (let \  y = {\color{purple} 2} \ \ in \ \ {\color{purple} x}+{\color{purple} y})  \)
-        \item (il \( let \) iniziale è del tipo \( let \ x = M \ in N+L \))
+        \item (il \( let \) iniziale è del tipo \( let \ x = M \ in \ N+L \))
     \end{itemize}
 
 \end{gframe}
@@ -616,8 +616,6 @@ Notiamo che i due approcci ci danno risultati diversi.
 
 Ciò è causato non dall'approccio valutativo, bensì dallo \textbf{scoping} utilizzato. Abbiamo infatti utilizzato quello che viene definito "scoping dinamico", il che ha causato problemi perché, in \( Exp \), lazy dinamico e eager non sono equivalenti.
 
-\pagebreak
-
 \section{Scoping}
 
 \begin{defframe}{Scoping}{}
@@ -631,23 +629,20 @@ Ciò è causato non dall'approccio valutativo, bensì dallo \textbf{scoping} uti
 \end{defframe}
 
 \begin{defframe}{Scoping dinamico}{}
-    Quando si usa lo \textbf{scoping dinamico}, i riferimenti ad una variabile sono risolti in base allo \textbf{stato di esecuzione} del programma (per esempio, una dichiarazione estende il suo effetto fino a che non si incontra un altra dichiarazione di variabile con lo stesso nome).
+    Quando si usa lo \textbf{scoping dinamico}, i riferimenti ad una variabile sono risolti in base allo \textbf{stato di esecuzione} del programma (per esempio, una dichiarazione estende il suo effetto fino a che non si incontra un'altra dichiarazione di variabile con lo stesso nome).
 
     Quindi, durante la valutazione viene utilizzato l'\textbf{ambiente definito a tempo di valutazione} stesso.
 \end{defframe}
 
-Dobbiamo quindi mantenere, oltre alle espressioni rimaste da valutare, anche gli ambienti in cui valutarle.
 
-Per farlo, estendiamo nuovamente \( Env \) in questo modo:
-\[ Env_{LS} = Var \farrow (Exp \times Env_{LS}) \]
 
 
 \begin{cdefframe}{DeepGreenLight}{DeepGreen}{Regole della semantica lazy statica di \(Exp\)}{}
 
+    Dobbiamo mantenere, oltre alle espressioni rimaste da valutare, anche gli ambienti in cui valutarle.
+\[ Env_{LS} = Var \farrow (Exp \times Env_{LS}) \]
+
    \begin{itemize}
-    \item I termini non valutati subito vengono conservati in un ``ambiente pigro'' - estendiamo quindi \( Env \) in questo modo:
-   \[ Env = Var \farrow Exp \]
-   (gli ambienti contengono ora anche i termini non valutati, quindi non possiamo avere come codominio \( Val \))
 
 \item la nuova regola per le variabili è:
     \[ \frac{E'\vdash M \leadsto v}{E\vdash x \leadsto v} \ \ \text{se } E(x)=(M, E')\]
