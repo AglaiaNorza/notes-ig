@@ -2661,8 +2661,6 @@ restituisce l'insieme di tutte le \textbf{variabili di tipo libere}, dove:
         
     \end{defframe}
 
-
-
 \begin{cdefframe}{DeepGreenLight}{DeepGreen}{Regole di inferenza}{}
     Oltre a quelle di \( F1 \), \( F2 \) introduce le seguenti regole:
     \begin{itemize}
@@ -2732,8 +2730,293 @@ Avremmo "costruito un intero fatto di aria fritta": il sistema prevederebbe l'es
 \begin{itemize}
     \item \textbf{Inferenza Indecidibile:} non esiste un algoritmo che, dato un termine non annotato, possa ricostruirne il tipo in F2 (l'utente deve scrivere esplicitamente i tipi.)
     \item \textbf{Mancanza di Punto Fisso:} in F2 puro non è possibile tipare il combinatore di punto fisso ($Y$), quindi la ricorsione generale non è supportata direttamente.
+\item Ogni termine di \( F2 \) \textbf{termina}.
 \end{itemize}
 
+\section{\( Fun_{\tau}\): il sistema dei tipi di Hindley-Milner}
+Il sistema dei tipi di Hindley-Milner (sistema HM) è il sisistema utilizzato dal linguaggio Standard ML. Si può formalizzare tramite 
+
+Per garantire la decidibilità dell'inferenza dei tipi (Algoritmo W), il linguaggio ML impone delle restrizioni rispetto a F2.
+
+\subsection{Gerarchia dei Tipi in ML}
+I tipi sono divisi in due categorie:
+\begin{enumerate}
+    \item \textbf{Prime Types ($\tau$):} Tipi monomorfi (base o funzioni di tipi base). Non contengono $\forall$.
+    \[ \tau ::= K \mid X \mid \tau \to \tau \]
+    \item \textbf{Type Schemes ($\sigma$):} Schemi polimorfi dove i quantificatori sono solo esterni.
+    \[ \sigma ::= \tau \mid \forall X . \sigma \]
+\end{enumerate}
+
+\begin{gframe}{Limitazione di ML}{}
+    In ML, una funzione non può prendere in input un oggetto polimorfo.
+    Non posso scrivere un tipo come $(\forall X. X \to X) \to int$. Il polimorfismo è "prenex": i quantificatori stanno solo in cima.
+\end{gframe}
+
+\subsection{Il Polimorfismo del Let (Let-Polymorphism)}
+Dato che non possiamo passare polimorfismo tramite $fn$, ML usa il costrutto $let$ per introdurre generalizzazione.
+
+\begin{gframe}{Sintassi e Semantica}{}
+    \[ let \ x = M \ in \ N \]
+    Semanticamente equivale a $(fn \ x \Rightarrow N) M$, ma viene tipato diversamente.
+\end{gframe}
+
+\subsubsection{Differenza tra $fn$ e $let$}
+Consideriamo il termine auto-applicativo:
+\[ fn \ x \Rightarrow x \ x \]
+\begin{itemize}
+    \item \textbf{In ML (con $fn$):} Non è tipabile. $x$ dovrebbe avere un tipo polimorfo per essere usata sia come funzione che come argomento, ma gli argomenti di $fn$ devono essere monomorfi ($\tau$).
+    \item \textbf{In ML (con $let$):}
+    \[ let \ x = (fn \ y \Rightarrow y) \ in \ (x \ x) \]
+    È tipabile e corretto.
+\end{itemize}
+
+\textbf{Perché funziona?}
+Nel $let$, il sistema calcola il tipo di $M$ ($fn \ y \Rightarrow y : \alpha \to \alpha$), lo \textbf{generalizza} in uno schema ($\forall \alpha. \alpha \to \alpha$) e lo assegna a $x$.
+Nel corpo $N$, ogni occorrenza di $x$ può essere \textbf{istanziata} con tipi diversi (es. la prima come $(int \to int) \to (int \to int)$ e la seconda come $int \to int$).
+
+\section{Fun$_{\tau}$: Il Sistema dei Tipi di ML}
+
+Il linguaggio $Fun_{\tau}$ rappresenta il formalismo teorico alla base del sistema dei tipi di ML (Standard ML). A differenza del System F (F2), dove i tipi sono completamente espliciti, in ML i tipi vengono spesso omessi e calcolati tramite un algoritmo di inferenza.
+Dal punto di vista della potenza espressiva, $Fun_{\tau}$ si colloca tra il lambda calcolo tipato semplice (F1) e il sistema F2, introducendo una forma limitata di polimorfismo, nota come \textbf{sistema di Hindley-Milner}.
+
+\subsection{Monotipi e Politipi}
+La caratteristica fondamentale che distingue $Fun_{\tau}$ da F2 è la stratificazione dei tipi in due categorie distinte. Questa restrizione è necessaria per garantire l'inferenza automatica dei tipi.
+
+\begin{defframe}{Grammatica dei Tipi}{}
+    In $Fun_{\tau}$, i tipi sono divisi in due livelli gerarchici:
+    \begin{itemize}
+    \item \textbf{Tipi Primitivi} ($\tau$, monotipi):
+        
+            Non contengono quantificatori universali ($\forall$). Rappresentano i tipi concreti o variabili di tipi semplici.
+        \[ \tau ::= K \mid X \mid \tau_1 \to \tau_2 \]
+        dove $K$ sono costanti (es. $int, bool$) e $X$ variabili di tipo.
+
+\item \textbf{Schemi di Tipo} ($\sigma$, politipi):
+        
+            Possono contenere quantificatori, ma \textit{solo al livello più esterno} (Forma Normale Prenessa).
+        \[ \sigma ::= \tau \mid \forall X.\sigma \]
+        Gli schemi rappresentano tipi polimorfi generici.
+    \end{itemize}
+
+\begin{gframe}{Restrizione del Polimorfismo}
+    Questa grammatica implica che il costruttore di funzione $\to$ può collegare solo tipi primitivi $\tau$, mai schemi $\sigma$.
+    \begin{itemize}
+        \item Il tipo $(\forall X.X) \to (\forall X.X)$ è \textit{legale in F2 ma non in ML}.
+        \item In $Fun_{\tau}$ non esistono funzioni che prendono in input oggetti polimorfi; l'astrazione è possibile solo sui tipi primitivi.
+    \end{itemize}
+\end{gframe}
+\end{defframe}
+
+\begin{defframe}{Grammatica dei Termini}{}
+    I termini di \( Fun_{\tau} \) sono del tipo:
+    \[ M, N ::= k \mid x \mid fn \ x\Rightarrow M \mid M N \mid let \ x = M \ in \ N \]
+\end{defframe}
+\subsection{Istanza Generica}
+Il meccanismo che permette di utilizzare uno schema polimorfo in contesti concreti è la relazione di \textit{Specializzazione} o \textit{Istanza Generica}.
+
+\begin{defframe}{Definizione: Istanza Generica ($\succ$)}{}
+    Uno schema $\sigma' = \forall Y_1 \dots Y_m . \tau'$ è un'\textbf{istanza generica} di $\sigma = \forall X_1 \dots X_n . \tau$, scritto $\sigma \succ \sigma'$ (oppure $\sigma' \sqsubseteq \sigma$), se:
+    \[ \tau' = [\tau_1, \dots, \tau_n / X_1, \dots, X_n] \tau \]
+    dove le $\tau_i$ sono tipi primitivi e nessuna variabile $Y_j$ appare libera in $\sigma$.
+\end{defframe}
+
+\textbf{Esempi di specializzazione:}
+\begin{itemize}
+    \item Dato $\sigma = \forall X. X \to X$, il tipo $int \to int$ è istanza generica ($\sigma \succ int \to int$).
+    \item Dato $\sigma = \forall X, Y. X \to Y$, lo schema $\forall Z. (int \to Z) \to bool$ è istanza generica.
+    \item \textit{Non valido:} Se $\sigma = \forall X. Y \to X$, allora $\forall Y. (int \to Y) \to X$ \textit{non} è istanza generica perché $Y$ è libera in $\sigma$ e non può essere catturata dalla quantificazione.
+\end{itemize}
+
+\subsection{Regole di Inferenza di $Fun_{\tau}$}
+Il sistema di tipi utilizza giudizi della forma $\Gamma \vdash M : \sigma$. Oltre alle regole standard per variabili e costanti, $Fun_{\tau}$ introduce regole specifiche per gestire la generalizzazione e specializzazione.
+
+
+\begin{cdefframe}{DeepGreenLight}{DeepGreen}{Regole standard}{}
+
+    \begin{itemize}
+        \item \textbf{Costanti}:
+    \begin{prooftree}
+        \AxiomC{}
+        \UnaryInfC{$\Gamma \vdash k : K$}
+    \end{prooftree}
+
+\item \textbf{Variabili}:
+    \begin{prooftree}
+        \AxiomC{}
+        \RightLabel{$\ (\text{se } \Gamma(x) = \sigma)$}
+        \UnaryInfC{$\Gamma \vdash x : \sigma$}
+    \end{prooftree}
+
+\item \textbf{Funzione}:
+    \begin{prooftree}
+        \AxiomC{$\Gamma, x : \tau \vdash M : \tau'$}
+        \UnaryInfC{$\Gamma \vdash fn\ x \Rightarrow M : \tau \to \tau'$}
+    \end{prooftree}
+
+\item \textbf{Applicazione}:
+    \begin{prooftree}
+        \AxiomC{$\Gamma \vdash M : \tau \to \tau'$}
+        \AxiomC{$\Gamma \vdash N : \tau$}
+        \BinaryInfC{$\Gamma \vdash M\ N : \tau'$}
+    \end{prooftree}
+    \end{itemize}
+
+\end{cdefframe}
+
+\begin{cdefframe}{DeepGreenLight}{DeepGreen}{Regole del Polimorfismo}{}
+    \begin{itemize}
+        \item \textbf{Generalizzazione (Gen):}
+        
+            Permette di introdurre il polimorfismo astraendo su una variabile di tipo $X$, a patto che non sia vincolata nel contesto.
+        \begin{prooftree}
+            \AxiomC{$\Gamma \vdash M : \sigma$}
+            \RightLabel{\ (se $X \notin \text{free}(\Gamma)$)}
+            \UnaryInfC{$\Gamma \vdash M : \forall X.\sigma$}
+        \end{prooftree}
+
+        \item \textbf{Specializzazione (Spec):}
+        
+            Permette di utilizzare un termine polimorfo come se avesse un tipo più specifico (istanza generica).
+
+        \begin{prooftree}
+            \AxiomC{$\Gamma \vdash M : \sigma$}
+            \RightLabel{\ (se $(\sigma \succ \sigma'$)}
+            \UnaryInfC{$\Gamma \vdash M : \sigma'$}
+        \end{prooftree}
+        {\color{gray}In ML questa regola è implicita: l'interprete specializza automaticamente il tipo quando necessario per far combaciare i tipi nell'applicazione.}
+    \end{itemize}
+\end{cdefframe}
+
+\subsection{Il Let-Polimorfismo}
+Mentre le funzioni ($\lambda$ o $fn$) accettano solo argomenti monomorfi, il costrutto \texttt{let} permette di legare una variabile a uno schema polimorfo.
+
+\begin{cdefframe}{DeepGreenLight}{DeepGreen}{Regola Let-in}{}
+    \begin{prooftree}
+        \AxiomC{$\Gamma \vdash M : \sigma$}
+        \AxiomC{$\Gamma, x : \sigma \vdash N : \sigma'$}
+        \BinaryInfC{$\Gamma \vdash \text{let } x = M \text{ in } N : \sigma'$}
+    \end{prooftree}
+    \textbf{Nota:} La variabile $x$ viene inserita nel contesto per la valutazione del corpo $N$ con tipo $\sigma$ (schema), e non $\tau$ (primitivo).
+\end{cdefframe}
+
+\subsubsection{Let vs Fn}
+Sebbene operazionalmente \texttt{let x = M in N} possa sembrare simile a \texttt{(fn x => N) M}, il sistema dei tipi li tratta in modo profondamente diverso.
+
+Consideriamo il termine:
+\[ \text{let } x = (fn \ y \Rightarrow y) \text{ in } (x \ 5, \ x \ true) \]
+\begin{enumerate}
+    \item L'identità $fn \ y \Rightarrow y$ ha tipo $\forall Y. Y \to Y$.
+    \item Grazie alla regola \texttt{let}, $x$ nel corpo ha questo schema polimorfo.
+    \item Nella prima occorrenza ($x \ 5$), $x$ si specializza in $int \to int$.
+    \item Nella seconda occorrenza ($x \ true$), $x$ si specializza in $bool \to bool$.
+\end{enumerate}
+
+Al contrario, il termine equivalente con lambda:
+\[ (fn \ x \Rightarrow (x \ 5, \ x \ true)) (fn \ y \Rightarrow y) \]
+\textbf{Non è tipabile} in $Fun_{\tau}$. La regola di astrazione ($fn$) obbligherebbe il parametro formale $x$ ad avere un unico tipo primitivo $\tau$ (dovrebbe essere contemporaneamente $int \to \dots$ e $bool \to \dots$).
+
+\section{Isomorfismo di Curry-Howard}
+
+L'isomorfismo di Curry-Howard stabilisce una corrispondenza tra la logica formale e la teoria dei tipi. Esso rivela che le regole di derivazione logica e le regole di tipizzazione del lambda calcolo non sono semplicemente simili, ma sono sostanzialmente la stessa cosa vista sotto due lenti diverse.
+
+\subsection{Corrispondenza tra Regole}
+Per intuire l'isomorfismo, osserviamo il parallelismo tra le regole fondamentali della logica intuizionista e quelle del lambda calcolo tipato.
+
+\subsubsection{Modus Ponens e Applicazione}
+In logica, la regola del Modus Ponens afferma che se \( A \) implica \( B \) ed \( A \) è vero, allora \( B \) è vero.
+Nei tipi, la regola di \textit{Applicazione} afferma che se abbiamo una funzione da \( A \) a \( B \) e un argomento di tipo \( A \), otteniamo un risultato di tipo \( B \).
+
+\begin{center}
+\begin{tabular}{c c}
+    \textbf{Logica (Modus Ponens)} & \textbf{Tipi (Applicazione)} \\
+    \\
+    \AxiomC{$\Gamma \vdash A \Rightarrow B$}
+    \AxiomC{$\Gamma \vdash A$}
+    \BinaryInfC{$\Gamma \vdash B$}
+    \DisplayProof
+    &
+    \AxiomC{$\Gamma \vdash M : A \to B$}
+    \AxiomC{$\Gamma \vdash N : A$}
+    \BinaryInfC{$\Gamma \vdash M N : B$}
+    \DisplayProof
+\end{tabular}
+\end{center}
+
+\subsubsection{Deduzione e Astrazione}
+Analogamente, il teorema di deduzione corrisponde alla creazione di una funzione (\textit{Astrazione}).
+Se assumendo l'ipotesi \( A \) possiamo dimostrare \( B \), allora anche l'implicazione \( A \to B \) è dimostrabile. Parallelamente, se in un contesto con una variabile \( x:A \) possiamo costruire un termine \( M:B \), allora esiste la funzione \( A \to B \).
+
+\begin{center}
+\begin{tabular}{c c}
+    \textbf{Logica (teo. di Deduzione)} & \textbf{Tipi (Astrazione)} \\
+    \\
+    \AxiomC{$\Gamma, A \vdash B$}
+    \UnaryInfC{$\Gamma \vdash A \to B$}
+    \DisplayProof
+    &
+    \AxiomC{$\Gamma, x:A \vdash M : B$}
+    \UnaryInfC{$\Gamma \vdash \text{fn } x \Rightarrow M : A \to B$}
+    \DisplayProof
+\end{tabular}
+\end{center}
+\subsection{Tipi e programmi, proposizioni e dimostrazioni}
+L'isomorfismo si articola su due livelli: la corrispondenza tra le formule (proposizioni/tipi) e quella tra i meccanismi di prova (deduzioni/programmi).
+
+\begin{defframe}{Proposizioni come Tipi}{}
+    Esiste una mappatura diretta tra i connettivi logici e i costruttori di tipo:
+    
+    \begin{center}
+    \begin{tabular}{|l|l|}
+        \hline
+        \textbf{Logica Proposizionale} & \textbf{Sistema dei Tipi} \\
+        \hline
+        Implicazione ($A \Rightarrow B$) & Tipo Funzione ($A \to B$) \\
+        Congiunzione ($A \wedge B$) & Tipo Prodotto ($A \times B$) \\
+        Disgiunzione ($A \vee B$) & Unione Disgiunta ($A + B$) \\
+        Vero ($True$) & Tipo Unitario ($1$ o $Unit$) \\
+        Falso ($False$) & Tipo Vuoto ($\emptyset$ o $Void$) \\
+        \hline
+    \end{tabular}
+    \end{center}
+\end{defframe}
+
+\begin{defframe}{Dimostrazioni come Programmi}{}
+    Esiste una corrispondenza tra la struttura di una dimostrazione logica e la struttura di un programma:
+    
+    \begin{center}
+    \begin{tabular}{|l|l|}
+        \hline
+        \textbf{Deduzione Naturale} & \textbf{Lambda Calcolo Tipato} \\
+        \hline
+        Ipotesi & Variabili libere \\
+        Eliminazione dell'implicazione & Applicazione di funzione \\
+        Introduzione dell'implicazione & Astrazione (def. di funzione) \\
+        Dimostrazione completa & Termine chiuso (programma) \\
+        \hline
+    \end{tabular}
+    \end{center}
+\end{defframe}
+
+\subsubsection{Dimostrazioni come Programmi}
+
+Una conseguenza fondamentale di questo isomorfismo è la possibilità di verificare la validità logica attraverso la programmazione.
+
+\begin{gframe}{Validità Logica e Abitabilità}
+    Dato un tipo \( A \) e la sua proposizione corrispondente \( \varphi_A \):
+    \[ \text{Esiste un termine chiuso } M \text{ tale che } \vdash M : A \iff \varphi_A \text{ è una tautologia} \]
+    
+    \begin{itemize}
+        \item \textbf{Tipo Abitato:} Se riusciamo a scrivere una funzione (un programma che termina) con un certo tipo, abbiamo effettivamente fornito una \textit{dimostrazione costruttiva} della proposizione logica corrispondente.
+        \item \textbf{Tipo Vuoto:} Se un tipo non ha abitanti (non è possibile scrivere un termine per quel tipo), la proposizione corrispondente è logicamente falsa (o non dimostrabile).
+    \end{itemize}
+\end{gframe}
+
+\textbf{Esempio}:
+Consideriamo il tipo \( \forall X, Y. X \to (Y \to X) \).
+\begin{itemize}
+    \item \textbf{Logica:} Corrisponde all'assioma \( A \to (B \to A) \).
+    \item \textbf{Programma:} Corrisponde al termine \( \text{fn } x \Rightarrow \text{fn } y \Rightarrow x \). Questo programma è valido e ben tipato, il che conferma che la proposizione logica è una tautologia.
+\end{itemize}
 
 \end{document}
 
