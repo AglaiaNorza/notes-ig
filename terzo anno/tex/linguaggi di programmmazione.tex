@@ -2573,10 +2573,29 @@ All'interno di un sistema dei tipi di secondo ordine, che permette di quantifica
 
     \subitem permette di astrarre sul tipo, creando un termine polimorfo
 
-    \begin{itemize}
-        \item ricordiamo che \( X \in \text{free}(\Gamma)\) se non compare in \( \Gamma \) oppure se compare, ma non ``legato'' 
-            \subitem (es. in \( x:X \) è libero, in  \( y: \forall X.X\to X \) è ``legato'')
-    \end{itemize}
+    \begin{defframe}{Variabili libere}{}
+        La funzione:
+\[
+\text{free} : \mathit{Types} \cup \mathit{Ctx} \to \mathcal{P}(\mathit{Var})
+\]
+
+restituisce l'insieme di tutte le \textbf{variabili di tipo libere}, dove:
+
+\[
+\begin{cases}
+\text{free}(K) = \varnothing \\
+\text{free}(X) = \{X\} \\
+\text{free}(A \to B) = \text{free}(A) \cup \text{free}(B) \\
+\text{free}(\forall X.A) = \text{free}(A) - \{X\} \\
+\text{free}(\Gamma) = \displaystyle \bigcup_{x:A \in \Gamma} \text{free}(A)
+\end{cases}
+\]
+
+(essenzialmente
+\( X \in \text{free}(\Gamma)\) se non compare in \( \Gamma \) oppure se compare, ma non ``legato'' 
+             (es. in \( x:X \) è libero, in  \( y: \forall X.X\to X \) è ``legato''))
+        
+    \end{defframe}
 
     \item \textbf{Specializzazione del tipo:}
     \begin{prooftree}
@@ -2586,6 +2605,7 @@ All'interno di un sistema dei tipi di secondo ordine, che permette di quantifica
 
     \subitem permette di istanziare un termine polimorfo con un tipo concreto \( B \)
 \end{itemize}
+\end{cdefframe}
 
 \begin{gframe}{Condizione laterale}
     La regola di introduzione del $\forall$ impone che la variabile di tipo $X$ non sia libera nel contesto $\Gamma$ ($X \notin \text{free}(\Gamma)$).
@@ -2597,9 +2617,20 @@ Se potessimo generalizzare:
 \[ x:X \vdash \Lambda X.x : \forall X.X \]
 Applicando questo termine a $int$:
 \[ x:X \vdash (\Lambda X.x) \ int : int \]
+
+\begin{center}
+    \begin{prooftree}
+        \AxiomC{ $x:X \vdash x:X$}
+        \UnaryInfC{$x:X \vdash \Lambda X.x : \forall X.X$}
+        \UnaryInfC{$x:X \vdash (\Lambda X.x)\ int : int$}
+        \UnaryInfC{$\varnothing \vdash \lambda x : X.(\Lambda X.x)\ int : X \to int$}
+        \UnaryInfC{$\varnothing \vdash \Lambda X.\lambda x : X.(\Lambda X.x)\ int : \forall X.(X \to int)$}
+    \end{prooftree}
+    \end{center}
+
 Avremmo "costruito un intero fatto di aria fritta": il sistema prevederebbe l'esistenza di un intero senza sapere quale esso sia, violando la natura costruttiva del calcolo.
+
 \end{gframe}
-\end{cdefframe}
 
     \subsection{Semantica e meccanismi di astrazione}
 
@@ -2680,6 +2711,7 @@ Questo passaggio è cruciale per l'esecuzione:
     \item \textbf{Inferenza Indecidibile:} Non esiste un algoritmo che, dato un termine non annotato, possa ricostruirne il tipo in F2 (l'utente deve scrivere esplicitamente i tipi.)
     \item \textbf{Mancanza di Punto Fisso:} In F2 puro non è possibile tipare il combinatore di punto fisso ($Y$) o funzioni che si auto-applicano ($xx$), quindi la ricorsione generale non è supportata direttamente.
 \end{itemize}
+
 
 \end{document}
 
