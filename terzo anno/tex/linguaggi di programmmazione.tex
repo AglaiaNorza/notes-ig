@@ -1241,10 +1241,9 @@ Infatti, \texttt{F fact \(\equiv \) if (n>0) then 1 else n*fact(n-1) \( \equiv \
 
 Applichiamo \( Y \) ad una funzione \( F \):
 \begin{align*}
-    YF \equiv& \ fn \ f \Rightarrow \bigl((fn \ x \Rightarrow f(xx)) (Fn \ x \Rightarrow f(xx))\bigr) F  \\
+    YF \equiv& \ fn \ f \Rightarrow \bigl((fn \ x \Rightarrow f(xx)) (fn \ x \Rightarrow f(xx))\bigr) F  \\
        &\text{sostituiamo il parametro \( F \)} \\
        \brule& \ (fn \ x \Rightarrow F(xx) (fn \ x \Rightarrow F(xx)) \\
-        &(\text{notiamo che abbiamo ottenuto nuovamente } YF) \\
         &\text{sostituiamo il parametro \((fn \ x \Rightarrow F(xx))\)} \\
        \brule& \ F\bigl((fn \ x \Rightarrow F(xx) (fn \ x \Rightarrow F(xx))\bigr) \\
        \equiv&\ F(YF)
