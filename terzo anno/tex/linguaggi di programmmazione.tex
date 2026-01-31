@@ -839,14 +839,48 @@ consideriamo l'espressione: \texttt{(fn x => x + 1) (2 * 3)}
 \end{prooftree}
 \end{itemize}
 
-\end{cdefframe}
+funziona così:
+\begin{enumerate}
+    \item \textit{valutazione della funzione}:
+    valuto \( M \) nell'ambiente corrente; il risultato è la chiusura \((x, M', E')\).
+    \begin{itemize}
+        \item \( x, M' \): sono il parametro e il codice della funzione.
+        \item \textbf{\( E' \)}: è l'ambiente definizione della funzione, che era stato salvato dentro la chiusura dalla regola \( fn \)
+    \end{itemize}
 
+\item \textit{valutazione dell'argomento (eager):}
+    valuto \( N \) nell'ambiente corrente \( E \) (quello in cui avviene la chiamata, non quello della funzione) - ottengo il valore \( v \).
+
+    \item \textit{ripristino dell'ambiente + binding:}
+    poiché lo scoping è statico, per eseguire la funzione non uso l'ambiente corrente \( E \); invece:
+    \begin{itemize}
+        \item prendo l'ambiente \( E' \) dalla chiusura.
+        \item lo estendo con l'associazione \( (x, v) \).
+    \end{itemize}
+    {\color{gray}in qualche modo, ``torno indietro nel tempo'' a quando la funzione è stata creata, e aggiungo il parametro attuale}
+
+    \item \textit{esecuzione del corpo:}
+    valuto \( M' \) usando questo nuovo ambiente (\( E' (x,v) \)). il risultato \( v' \) è il risultato finale.
+\end{enumerate}
+
+\end{cdefframe}
 
 \begin{lemmaframe}{Eager dinamico e statico in \( Fun \)}{}
     (Al contrario di \( Exp \)), si ha che:
     \[ Fun \text{ eager dinamico} \not\equiv \ Fun \text{ eager statico } \]
 \end{lemmaframe}
 
+Differenza tra eager statico e dinamico:
+
+consideriamo: \texttt{let x = 1 in (let f = fn x => x + y in (let y = 100 in f 5))}
+\begin{itemize}
+    \item quando definisco \texttt{f}, l'ambiente contiene \( y=1 \) - in una semantica statica, la chiusura salva questo ambiente: \( E' = \dots (y, 1) \).
+    \item quando chiamo \texttt{f 5}, sono in un ambiente \( E = \dots(y, 100)\)
+    \item in una semantica statica, non uso \( E \), ma recupero \( E' \) dalla chiusura e calcolo \( 5 + y \) usando \( (y, 1)\)
+        \subitem ottengo \( 6 \)    
+    \item in una semantica dinamica, uso l'ambiente corrente con \( (y, 100) \) 
+        \subitem ottengo 105
+\end{itemize}
 
 
 \begin{cdefframe}{DeepGreenLight}{DeepGreen}{Semantica lazy dinamica di \( Fun \)}{}
