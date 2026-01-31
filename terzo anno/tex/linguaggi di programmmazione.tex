@@ -691,7 +691,8 @@ In \( Exp \) non c'è, invece, differenza tra eager statico e eager dinamico.
 
 \subsection{Riassunto delle regole in \( Exp \)}
 
-\begin{gframe}[colframe=DeepGreen, colback=DeepGreenLight, colbacktitle=DeepGreen]{eager}
+\begin{gframe}[colframe=DeepGreen, colback=DeepGreenLight, colbacktitle=DeepGreen]{eager (statico/dinamico)}
+    \vspace{-2em}
         \[ E \vdash k \leadsto k  \ \ \ [ const ] \] 
         \vspace{-2.5em}
 
@@ -723,7 +724,7 @@ In \( Exp \) non c'è, invece, differenza tra eager statico e eager dinamico.
 
 
 \begin{gframe}[colback=DeepTealLight]{lazy statico}
-    
+    \vspace{-2em}
     \[ \frac{E'\vdash M \leadsto v}{E\vdash x \leadsto v} \ \ \text{se } E(x)=(M, E') \ \ \ [var] \]
 
     \[ \frac{E(x, M, E)\vdash N \leadsto v}{E \vdash let \ x = M \ in \ N \leadsto v} \ \ \ [let]\]
@@ -733,14 +734,11 @@ In \( Exp \) non c'è, invece, differenza tra eager statico e eager dinamico.
 
 
 \begin{gframe}[colframe=BlueGray, colback=BlueGrayLight, colbacktitle=BlueGray]{(lazy dinamico)}
+    \vspace{-2em}
     \[ \frac{E\vdash M \leadsto v}{E\vdash x \leadsto v} \ \ \text{se } E(x)=M \ \ \ [var]\]
 
     \[ \frac{E(x, M)\vdash N \leadsto v}{E \vdash let \ x = M \ in \ N \leadsto v} \ \ \ [let] \]
 \end{gframe}
-
-
-\todo{esercizi}
-
 \pagebreak
 
 \section{Fun}
