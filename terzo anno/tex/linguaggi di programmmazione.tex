@@ -800,7 +800,7 @@ Quindi, per esempio:
 funziona così:
 \begin{enumerate}
     \item \textit{valutazione della funzione (\(M\)):} 
-    valuto \( M \) per capire cosa sto chiamando - ottengo la chiusura composta dal parametro formale \( x \) e dal corpo del codice \( M' \).
+    valuto \( M \) per capire cosa sto chiamando - (poiché è un \( fn \), per la relativa regola) ottengo la chiusura composta dal parametro formale \( x \) e dal corpo del codice \( M' \).
 
 \item \textit{valutazione dell'argomento (\(N\))}:
     valuto \( N \) nell'ambiente corrente - infatti, essendo una semantica eager , devo risolvere l'espressione dell'argomento e ottenere un valore concreto \( v \) prima di entrare nella funzione.
@@ -942,61 +942,6 @@ Si trasforma quindi una funzione che prende due argomenti in una funzione ad un 
   \TrinaryInfC{$Z$}
   \TrinaryInfC{$F$}
 \end{prooftree}
-
-\begin{cdefframe}{DeepGreenLight}{DeepGreen}{Semantica operazionale di \( Fun \) lazy dinamico}{}
-
-    \begin{center}
-        [\( fn \) lazy statico]
-    \end{center}
-    \vspace{-1em}
-    \[ E \vdash fn \ x \Rightarrow M \leadsto (x, M) \]
-
-
-    \begin{center}
-        [\( apply \) lazy statico]
-    \end{center}
-    \vspace{-2em}
-    \begin{prooftree}
-        \AxiomC{\( E\vdash M \leadsto (x, M') \)}
-        \AxiomC{\( E(x, N)\vdash M' \leadsto v \)}
-        \BinaryInfC{\( E\vdash M \ N \leadsto v \)}
-    \end{prooftree}
-\end{cdefframe}
-\begin{cdefframe}{BrightGreenLight}{BrightGreen}{Semantica operazionale di \( Fun \) lazy statico}{}
-
-    \begin{center}
-        [\( fn \) lazy statico]
-    \end{center}
-    \vspace{-1em}
-    \[ E \vdash fn \ x \Rightarrow M \leadsto (x, (M, E)) \]
-
-
-    \begin{center}
-        [\( apply \) lazy statico]
-    \end{center}
-    \vspace{-2em}
-    \begin{prooftree}
-        \AxiomC{\( E\vdash M \leadsto (x, M', E') \)}
-        \AxiomC{\( E'(x, (N, E))\vdash M' \leadsto v \)}
-        \BinaryInfC{\( E\vdash M \ N \leadsto v \)}
-    \end{prooftree}
-\end{cdefframe}
-
-\begin{defframe}{Curryficazione}{}
-
-    La \textbf{curryficazione} è la tecnica che consiste nel tradurre una funzione che accetta più argomenti in una sequenza di famiglie di funzioni, ciascuna delle quali accetta un singolo argomento.
-
-
-    Partendo da una funzione \( f: (X \times Y) \to Z\) che prende due argomenti, la sua curryficazione tratta il primo argomento come un parametro, e crea una famiglia di funzioni \( f_x : Y \to Z \) tale che, per ogni \( x \in X  \), c'è esattamente una funzione \( f_x \) tale che \( \forall \ y \in Y , \  f_x(y)=f(x,y)\).
-
-    \[ \text{curry}: [ \ (X \times Y) \to Z \ ] \to [ \ X \to (Y \to Z) \ ]\]
-    \[ f \mapsto h : f(x, y) = h(x)(y) \]
-
-
-Si trasforma quindi una funzione che prende due argomenti in una funzione ad un argomento che ritorna un'altra funzione t.c. \( curry((f))(x)(y) = f(x, y) \)
-
-\end{defframe}
-
 
 \chapter{Lambda calcolo}
 \section{Numeri di Church}
