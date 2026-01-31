@@ -872,7 +872,7 @@ funziona così:
 
 Differenza tra eager statico e dinamico:
 
-consideriamo: \texttt{let x = 1 in (let f = fn x => x + y in (let y = 100 in f 5))}
+consideriamo: \texttt{let y = 1 in (let f = fn x => x + y in (let y = 100 in f 5))}
 \begin{itemize}
     \item quando definisco \texttt{f}, l'ambiente contiene \( y=1 \) - in una semantica statica, la chiusura salva questo ambiente: \( E' = \dots (y, 1) \).
     \item quando chiamo \texttt{f 5}, sono in un ambiente \( E = \dots(y, 100)\)
@@ -897,6 +897,24 @@ consideriamo: \texttt{let x = 1 in (let f = fn x => x + y in (let y = 100 in f 5
         \BinaryInfC{\( E\vdash M \ N \leadsto v \)}
     \end{prooftree}
 \end{itemize}
+
+funziona così:
+\begin{enumerate}
+    \item \textit{valutazione della funzione (\(M\)):}
+    valuto \( M \) nell'ambiente corrente per ottenere la definizione della funzione: parametro \( x \) e corpo \( M' \).
+
+    \item \textit{nessuna valutazione dell'argomento:}
+        (differenza tra lazy e eager) il linguaggio non calcola quanto vale \( N \) adesso - prende l'intera espressione \( N \) e la tiene da parte così com'è (la valuterà solo quando (e se) servirà)
+    
+    \item \textit{passaggio dei parametri (call-by-name):}
+    estendo l'ambiente corrente \( E \).
+    Associo alla variabile \( x \) direttamente l'espressione \( N \)
+    \[ E_{\text{new}} = E (x, N)\]
+    
+\item \textit{esecuzione del corpo:}
+    valuto \( M' \) nel nuovo ambiente. 
+    \subitem ogni volta che nel corpo \( M' \) verrà usata la variabile \( x \), solo in quel momento verrà valutata l'espressione \( N \) {\color{gray}(usando l'ambiente attuale (dinamico))}
+\end{enumerate}
 \end{cdefframe}
 \begin{cdefframe}{BrightGreenLight}{BrightGreen}{Semantica lazy statica di \( Fun \)}{}
 
@@ -905,7 +923,6 @@ consideriamo: \texttt{let x = 1 in (let f = fn x => x + y in (let y = 100 in f 5
 \item\text{[\( fn \) lazy statico]}
     \[ E \vdash fn \ x \Rightarrow M \leadsto (x, (M, E)) \]
 
-
     \item\text{[\( apply \) lazy statico]}
     \begin{prooftree}
         \AxiomC{\( E\vdash M \leadsto (x, M', E') \)}
@@ -913,9 +930,33 @@ consideriamo: \texttt{let x = 1 in (let f = fn x => x + y in (let y = 100 in f 5
         \BinaryInfC{\( E\vdash M \ N \leadsto v \)}
     \end{prooftree}
     \end{itemize}
+
+    \begin{enumerate}
+        \item \textit{valutazione della funzione}:
+    valuto \( M \) nell'ambiente corrente - ottengo la chiusura \((x, M', E')\).
+    \begin{itemize}
+        \item \( E' \) è l'ambiente in cui la funzione è stata definita
+    \end{itemize}
+
+    \item \textit{creazione del ``thunk''}:
+    essendo una dinamica lazy, non calcolo \( N \).
+    ma, essendo anche statica, se dovessi calcolare \( N \), dovrò farlo usando l'ambiente corrente \( E \), non quello della funzione - quindi creo una coppia chiamata ``thunk'': \((N, E)\).
+    \begin{itemize}
+        \item \( N \): il codice dell'argomento.
+        \item \( E \): l'ambiente di ``chiamata'' necessario per calcolarlo.
+    \end{itemize}
+
+    \item \textit{passaggio dei parametri + binding:}
+    prendo l'ambiente della funzione \( E' \) (statico) e lo estendo associando a \( x \) il thunk appena creato.
+    \[ E'_{\text{new}} = E'(N, E) \]
+\item \textit{esecuzione del corpo:}
+valuto \( M' \) in questo nuovo ambiente
+    \subitem se nel corpo \( M' \) verrà usata \( x \), il sistema prenderà il thunk \((N, E)\) e valuterà \( N \) usando l'ambiente \( E \) salvato
+\end{enumerate}
 \end{cdefframe}
 
 Introduciamo un termine interessante - \( (fn \ x \Rightarrow xx)(fn \ x \Rightarrow xx) \) - e tentiamo di valutarlo con un approccio eager (dinamico)
+\vspace{-1em}
 \begin{prooftree}
     \def\defaultHypSeparation{\hskip-5pt}
   \AxiomC{\(  \emptyset \vdash fn \ x \Rightarrow xx \leadsto (x, xx) \)}
