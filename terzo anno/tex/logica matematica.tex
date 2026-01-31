@@ -3237,5 +3237,77 @@ Otteniamo quindi una prima forma debole del Primo Teorema di Incompletezza di G�
 \end{pframe}
 
 \section{Primo Teorema di Incompletezza di Gödel}
+\begin{thmframe}{Primo Teorema di Incompletezza}{}
+    Se \( T \) è decidibile, coerente e contiene un minimo di aritmetica (MA, aritmetica minimale), allora \( T  \) è incompleta.
+
+    \begin{gframe}{}
+        NB: in realtà, Gödel ha dimostrato una versione più debole che assume la \( \omega\)-coerenza (e non la coerenza)
+    \end{gframe}
+\end{thmframe}
+
+La differenza principale di questa versione rispetto a quella precedente è che non si assume \( \N \vDash T \): le ipotesi su \( T \) sono di natura sintattica e non fanno riferimento a strutture infinite o al concetto semantico di soddisfacibilità.
+
+\subsection{Aritmetica minimale (MA)}
+L'aritmetica minimale è assiomatizzata dai seguenti assiomi nel linguaggio \( \{0, 1, +, \times\} \). Per ogni \( n\in \N \) denotiamo con \( n \) il termine ottenuto sommando la costante \( 1 \) a se stessa \( n \) volte.
+\begin{mdframed}
+        \begin{itemize}
+            \item[(Ax 1)] \( 0 + 1 = 1 \)
+            \item[(Ax 2)] \( \forall x(x + 1 \neq 0) \)
+            \item[(Ax 3)] \( \forall x(x \neq 0 \to \exists z(z + 1 = x)) \)
+            \item[(Ax 4)] \( \forall x\forall y(x + 1 = y + 1 \to x = y) \)
+            \item[(Ax 5)] \( \forall x(x + 0 = x) \)
+            \item[(Ax 6)] \( \forall x\forall y(x + (y + 1) = (x + y) + 1) \)
+            \item[(Ax 7)] \( \forall x(x \times 0 = 0) \)
+            \item[(Ax 8)] \( \forall x\forall y(x \times (y + 1) = (x \times y) + x) \)
+            \item[(Ax 9)] \( \forall x\forall y(x < y \lor x = y \lor y < x) \)
+        \end{itemize}
+\end{mdframed}
+
+Dobbiamo verificare che MA sia sufficiente a rappresentare tutte le funzioni calcolabili.
+
+\begin{defframe}{Rappresentabilità di una funzione in una teoria}{}
+Una funzione \( \varphi : \N^k \to \N \) è rappresentabile in una teoria \( T \) se esiste una formula \( F_{\varphi}(x_1, \dots, x_k, z) \) nel linguaggio di \( T \) tale che
+\[
+T \vdash (\forall x_1)\dots(\forall x_k)(\forall y)(\forall z)[F_{\varphi}(x_1, \dots, x_k, y) \land F_{\varphi}(x_1, \dots, x_k, z) \to y = z],
+\]
+e per ogni \( n_1, \dots, n_k, m \) in \( \N \)
+\[
+\text{Se } \varphi(n_1, \dots, n_k) = m \text{ allora } T \vdash F_{\varphi}(\bar{n}_1, \dots, \bar{n}_k, \bar{m}).
+\]
+(se l'ultima implicazione si inverte, si parla di \textit{rappresentabilità forte}).
+\end{defframe}
+
+\begin{thmframe}{Rappresentabilità in MA}{}
+    Tutte le funzioni calcolabili sono rappresentabili in MA.
+    \begin{proofframe}{}{}
+        La dimostrazione segue quella del Teorema di Rappresentabilità delle funzioni computabili in \( \N \) sostituendo gli argomenti semantici (\( \N \vDash \)) con argomenti sintattici MA (\( \vdash\)).
+    \end{proofframe}
+\end{thmframe}
+
+
+\begin{defframe}{Rappresentabilità di una relazione in una teoria}{}
+Una relazione \( R \subseteq \N^k \) è rappresentabile in una teoria \( T \) se esiste una formula \( F_R(x_1, \dots, x_k) \) nel linguaggio di \( T \) con \( k \) variabili libere tale che
+\begin{itemize}
+    \item[(1)] Se \( (n_1, \dots, n_k) \in R \) allora \( T \vdash F_R(\bar{n}_1, \dots, \bar{n}_k) \),
+    \item[(2)] Se \( (n_1, \dots, n_k) \notin R \) allora \( T \vdash \neg F_R(\bar{n}_1, \dots, \bar{n}_k) \)
+\end{itemize}
+\begin{gframe}{}
+    Se ogni funzione è rappresentabile, ogni relazione è rappresentabile.
+\end{gframe}
+\end{defframe}
+
+\subsection{Il teorema}
+Gödel ha individuato una relazione binaria \( R \subseteq \N \times \N \) tale che:
+\begin{align*}
+    (m, n) \in R \iff & m \text{ è il codice numerico di una formula \( A \) con una variabile libera e}\\
+                      & n \text{ è il codice numerico di una dimostrazione in \( T \) di \( A(\overline{m}) \) }
+\end{align*}
+
+Notiamo che questa relazione è \textbf{calcolabile} (poiché \( T \) è decidibile, posso controllare algoritmicamente se una sequenza di formule è una dimostrazione valida). È quindi anche \textbf{rappresentabile} in \( T \) da una formula \( F(x, y) \) tale che:
+\begin{itemize}
+    \item \( (m, n)\in R \implies T\vdash F(m, n) \)
+    \item \( (m, n)\not\in R \implies T\vdash \neg F(m, n) \)
+\end{itemize}
+
 
 \end{document}
