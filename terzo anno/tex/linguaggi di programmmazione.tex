@@ -748,14 +748,14 @@ Introduciamo un nuovo linguaggio, \( Fun \), che estende \( Exp \) con la nozion
 
 La grammatica di \( Fun \) è:
     \[
-        M, N ::= k \mid x \mid M + N \mid let \ x = M \ in \ N \mid fn \ x \implies M \mid MN
+        M, N ::= k \mid x \mid M + N \mid let \ x = M \ in \ N \mid fn \ x \Rightarrow M \mid MN
     \]
     dove:
     \begin{itemize}
         \item le regole presenti in \( Exp \) (1-4) rimangono invariate, con gli appropriati cambi di dominio (es. \( let : Var \times Fun \times Fun \to Fun \))
         \item \( fn : Var \times Fun \to Fun \) \ è una \textbf{funzione} (anonima) con parametro \( x \)     
         \begin{itemize}
-            \item una funzione \( fn \ x \implies M \) si può rappresentare in maniera alternativa attraverso la sua \textbf{chiusura}, \( (x, M)\in Var \times Fun \)
+            \item una funzione \( fn \ x \Rightarrow M \) si può rappresentare in maniera alternativa attraverso la sua \textbf{chiusura}, \( (x, M)\in Var \times Fun \)
         \end{itemize}
     \item \( \cdot : Fun \times Fun \to Fun \) \ è l'\textbf{applicazione di funzioni} 
         \subitem il termine sinistro (che, perché l'espressione abbia semanticamente senso, deve necessariamente essere una funzione) viene applicato al termine destro (quindi \( MN=M(N) \))
@@ -766,12 +766,12 @@ La grammatica di \( Fun \) è:
 
 Quindi, per esempio:
 \begin{itemize}
-    \item \( (fn \ x \implies x+1) \ 5 = 6\) \ \ (la funzione \( x+1 \) è applicata all'argomento \( 6 \))
-    \item \( (fn \ x \implies x \ 5)(fn \ y \implies y + 1) = 6 \)
+    \item \( (fn \ x \Rightarrow x+1) \ 5 = 6\) \ \ (la funzione \( x+1 \) è applicata all'argomento \( 6 \))
+    \item \( (fn \ x \Rightarrow x \ 5)(fn \ y \Rightarrow y + 1) = 6 \)
         \subitem la funzione prende in input una funzione (in questo caso ``successore''), e la applica a \( 5 \)
-    \item \( (fn \ x \implies (fn \ y \implies y \ x)) \ 3 \ (fn \ z \implies z+1) \ = 4\)
+    \item \( (fn \ x \Rightarrow (fn \ y \Rightarrow y \ x)) \ 3 \ (fn \ z \Rightarrow z+1) \ = 4\)
         \subitem è una funzione che, presa in input un'altra funzione, la applica ad \( x \) - le passiamo la funzione ``successore'', che, applicata a \( 3 \), dà \( 4 \).
-    \item un'applicazione del tipo \( fn \ x \implies x \ 10 \) ``non ha semantica'' (non è valutabile), in quanto \( 10 \) non è una funzione e non si può applicare a \( x \)
+    \item un'applicazione del tipo \( fn \ x \Rightarrow x \ 10 \) ``non ha semantica'' (non è valutabile), in quanto \( 10 \) non è una funzione e non si può applicare a \( x \)
 \end{itemize}
 
 \begin{gframe}{precedenza di \( apply \)}
@@ -785,7 +785,7 @@ Quindi, per esempio:
     [\( fn \) dinamico eager]
 \end{center}
 \vspace{-1em}
-    \[  E \vdash fn \ x \implies M \leadsto (x, M) \]
+    \[  E \vdash fn \ x \Rightarrow M \leadsto (x, M) \]
 
 \begin{center}
     [\( apply \) dinamico eager]
@@ -808,7 +808,7 @@ Esempio:
     [\( fn \) statico eager]
 \end{center}
 \vspace{-1em}
-    \[  E \vdash fn \ x \implies M \leadsto (x, M, E)\]
+    \[  E \vdash fn \ x \Rightarrow M \leadsto (x, M, E)\]
 
 \begin{center}
     [\( apply \) statico eager]
@@ -837,7 +837,7 @@ Esempio:
         [\( fn \) lazy statico]
     \end{center}
     \vspace{-1em}
-    \[ E \vdash fn \ x \implies M \leadsto (x, M) \]
+    \[ E \vdash fn \ x \Rightarrow M \leadsto (x, M) \]
 
 
     \begin{center}
@@ -856,7 +856,7 @@ Esempio:
         [\( fn \) lazy statico]
     \end{center}
     \vspace{-1em}
-    \[ E \vdash fn \ x \implies M \leadsto (x, (M, E)) \]
+    \[ E \vdash fn \ x \Rightarrow M \leadsto (x, (M, E)) \]
 
 
     \begin{center}
@@ -870,14 +870,14 @@ Esempio:
     \end{prooftree}
 \end{cdefframe}
 
-Introduciamo un termine interessante - \( (fn \ x \implies xx)(fn \ x \implies xx) \) - e tentiamo di valutarlo con un approccio eager (dinamico)
+Introduciamo un termine interessante - \( (fn \ x \Rightarrow xx)(fn \ x \Rightarrow xx) \) - e tentiamo di valutarlo con un approccio eager (dinamico)
 \begin{prooftree}
     \def\defaultHypSeparation{\hskip-5pt}
-  \AxiomC{\(  \emptyset \vdash fn \ x \implies xx \leadsto (x, xx) \)}
+  \AxiomC{\(  \emptyset \vdash fn \ x \Rightarrow xx \leadsto (x, xx) \)}
   \AxiomC{\(  (x, (x,xx))\vdash  x \leadsto (x, xx) \ \)}
   \AxiomC{\((x, (x,xx))\vdash  x \leadsto (x, xx) \quad (x, (x,xx))\vdash  xx \leadsto \)}
-  \BinaryInfC{\( \emptyset \vdash fn \ x \implies xx \leadsto (x, xx) \quad (x, (x,xx))\vdash  xx \leadsto \)}
-  \BinaryInfC{\( \emptyset \vdash (fn \ x \implies xx)(fn \ x \implies xx) \)}
+  \BinaryInfC{\( \emptyset \vdash fn \ x \Rightarrow xx \leadsto (x, xx) \quad (x, (x,xx))\vdash  xx \leadsto \)}
+  \BinaryInfC{\( \emptyset \vdash (fn \ x \Rightarrow xx)(fn \ x \Rightarrow xx) \)}
 \end{prooftree}
 
 
@@ -885,7 +885,7 @@ Notiamo che il termine va in loop - infatti, si ha che, per valutare \((x, (x,xx
 
 \begin{gframe}{Termine \( \omega \)}
     Chiamiamo \( \omega \) il termine appena introdotto:
-    \[ \omega =  (fn \ x \implies xx)(fn \ x \implies xx) \]
+    \[ \omega =  (fn \ x \Rightarrow xx)(fn \ x \Rightarrow xx) \]
 
 \end{gframe}
 
@@ -910,7 +910,7 @@ Si trasforma quindi una funzione che prende due argomenti in una funzione ad un 
 
 \begin{cframe}{DeepGreenLight}{DeepGreen}{Curryficazione in \( Fun \)}
     La curryficazione ci permette di introdurre una notazione contratta del \( fn \):
-    \[ [ \ fn \ x y \implies \ ] \equiv [ \ fn \ x \implies ( fn \ y \implies ) \ ]\]
+    \[ [ \ fn \ x y \Rightarrow \ ] \equiv [ \ fn \ x \Rightarrow ( fn \ y \Rightarrow ) \ ]\]
 
     Possiamo così introdurre \textbf{funzioni a più argomenti} all'interno del linguaggio \( Fun \).
 
@@ -938,7 +938,7 @@ Si trasforma quindi una funzione che prende due argomenti in una funzione ad un 
         [\( fn \) lazy statico]
     \end{center}
     \vspace{-1em}
-    \[ E \vdash fn \ x \implies M \leadsto (x, M) \]
+    \[ E \vdash fn \ x \Rightarrow M \leadsto (x, M) \]
 
 
     \begin{center}
@@ -957,7 +957,7 @@ Si trasforma quindi una funzione che prende due argomenti in una funzione ad un 
         [\( fn \) lazy statico]
     \end{center}
     \vspace{-1em}
-    \[ E \vdash fn \ x \implies M \leadsto (x, (M, E)) \]
+    \[ E \vdash fn \ x \Rightarrow M \leadsto (x, (M, E)) \]
 
 
     \begin{center}
@@ -994,32 +994,32 @@ Tra i diversi modi di rappresentare i numeri naturali, ci interessa presentare q
 Per Church, il cui mondo è fatto di funzioni, un numero naturale \( n \) corrisponde all'applicare \( n \) volte una funzione \( x \) su un argomento \( y \).
  
 Possiamo, per esempio, rappresentare il numero \( 2 \) ``di Church'' in \( Fun \) in questo modo:
-\[ fn \  x \ y \implies x \ (x \ y) \ {\color{gray} \equiv fn \ x \implies fn \ y \implies x \ (x \ y) }\]
+\[ fn \  x \ y \Rightarrow x \ (x \ y) \ {\color{gray} \equiv fn \ x \Rightarrow fn \ y \Rightarrow x \ (x \ y) }\]
     (ovvero, presa una funzione \( x \) e un valore \( y \) di partenza, si applica due volte la funzione \( x \) (prima al valore stesso ``(\( x \ y \))'', e poi al risultato di questa applicazione - ``\( x( \)'' \ )))
 
 \begin{defframe}{Numeri di Church in \( Fun \)}{}
     Più in generale, indicando con \( M^n N \) il termine \( M(M(\dots(MN)\dots)) \) {\small\color{gray}(in cui si ripete \( n \) volte \( M \))}, un numero \(c_n\) di Church si può rappresentare, con la sintassi di \( Fun \), in questo modo:
-    \[ c_n \equiv fn \ x \ y \implies x^n \ y \]
+    \[ c_n \equiv fn \ x \ y \Rightarrow x^n \ y \]
 \end{defframe}
 
 Possiamo rappresentare anche altri concetti essenziali come la funzione ``successore'', la somma e il prodotto tramite numeri di Church.
 
 \begin{defframe}{\( succ \) di Church}{}
     La funzione \textbf{successore di Church}, seguendo lo stesso ragionamento, dovrà ricevere un numero di Church \( z \) in ingresso, e restituire il numero di Church che applica \( x \) a \( y \), \( z+1 \) volte:
-    \[ succ \equiv fn \ z \ x \ y \implies x\ (z \ x \ y) \]
-    \[\color{gray} succ \equiv fn \ z \implies fn \ x \implies fn \ y \implies x\ (z \ x \ y) \]
+    \[ succ \equiv fn \ z \ x \ y \Rightarrow x\ (z \ x \ y) \]
+    \[\color{gray} succ \equiv fn \ z \Rightarrow fn \ x \Rightarrow fn \ y \Rightarrow x\ (z \ x \ y) \]
     essenzialmente, dato \( z \) numero di Church di cui calcolare il successore (che vuole quindi come parametri \( x \) funzione e \( y \) valore di partenza), si applica una volta in più \( x \).
 
     La funzione si può scrivere anche, equivalentemente, in questo modo:
-    \[ fn \ z \ x \ y \implies z \ x \ (x \ y) \]
+    \[ fn \ z \ x \ y \Rightarrow z \ x \ (x \ y) \]
     ``anticipando'' essenzialmente il \( +1 \) (prima si applica \( x \) una volta ``in più'', e poi le altre \( z \) volte)
 \end{defframe}
 
 Facciamo un esempio concreto:
 \begin{align*}
-    succ \ c_1 &= fn \ x \ y \implies x \ (c_1 \ x \ y) \\
-               & = fn \ x \ y \implies x \ (( fn \ x \ y \implies xy) \ x \ y ) \\
-               & = fn \ x \ y \implies x \ ( x \ y)
+    succ \ c_1 &= fn \ x \ y \Rightarrow x \ (c_1 \ x \ y) \\
+               & = fn \ x \ y \Rightarrow x \ (( fn \ x \ y \Rightarrow xy) \ x \ y ) \\
+               & = fn \ x \ y \Rightarrow x \ ( x \ y)
 \end{align*}
 che corrisponde al due di Church !
 
@@ -1028,23 +1028,23 @@ che corrisponde al due di Church !
     
     Possiamo, con questo scopo, definire una funzione \( dechurch \) (o ``\( eval \,\)''), che, dato un numero di Church \( c_n \), ci restituisce l'intero corrispondente \( n \).
 
-    \[ dechurch(M) = M \ (fn \ x \implies x+1) \ 0 \]
+    \[ dechurch(M) = M \ (fn \ x \Rightarrow x+1) \ 0 \]
 
     \begin{gframe}{}
     Quello che stiamo facendo, essenzialmente, è passare al numero di Church in input la funzione ``successore'' dei numeri naturali, e il numero \( 0 \). Il numero di Church applicherà quindi \( n \) volte \( succ() \) a partire da \( 0 \), ritornandoci \( n \).
     \end{gframe}
 \end{defframe}
 
-Facciamo un esempio. Dato \( c_2 = fn \ x \ y \implies x \ (x \ y ) \), calcoliamo \( dechurch(c2) \) in questo modo:
+Facciamo un esempio. Dato \( c_2 = fn \ x \ y \Rightarrow x \ (x \ y ) \), calcoliamo \( dechurch(c2) \) in questo modo:
 \begin{align*}
-    dechurch(c2) &= (fn\ x \implies fn \ y \implies x \ (x \ y)) \ (fn \ x \implies x+1) \ 0 \\
+    dechurch(c2) &= (fn\ x \Rightarrow fn \ y \Rightarrow x \ (x \ y)) \ (fn \ x \Rightarrow x+1) \ 0 \\
     & \text{sostituisco } x: \\
-    &= (fn\ y \implies (fn\ x \implies x+1) ((fn\ x \implies x+1) \ y)) \ 0 \\
+    &= (fn\ y \Rightarrow (fn\ x \Rightarrow x+1) ((fn\ x \Rightarrow x+1) \ y)) \ 0 \\
     & \text{sostituisco } y: \\
-    &= (fn\ x \implies x+1) ((fn\ x \implies x+1) \ 0) \\
+    &= (fn\ x \Rightarrow x+1) ((fn\ x \Rightarrow x+1) \ 0) \\
     & \text{applico:} \\
-    &= (fn\ x \implies x+1) (0+1) \\
-    &= (fn\ x \implies x+1) \ 1 \\
+    &= (fn\ x \Rightarrow x+1) (0+1) \\
+    &= (fn\ x \Rightarrow x+1) \ 1 \\
     &= 1+1 \\
     &= 2
 \end{align*}
@@ -1056,7 +1056,7 @@ Facciamo un esempio. Dato \( c_2 = fn \ x \ y \implies x \ (x \ y ) \), calcolia
 
 \begin{defframe}{Somma di Church}{}
     Seguendo lo stesso ragionamento usato per calcolare \( succ \) di Church, la \textbf{somma di Church} tra \( z\) e \( w \) è quella funzione che applica \( x\) \( w\) volte a \( y \), e passa il risultato a \( z \), (che la applicherà altre \( z \) volte).
-    \[ plus \equiv fn \ z \ w \ x \ y \implies z \ x \ (w \ x \ y)\]
+    \[ plus \equiv fn \ z \ w \ x \ y \Rightarrow z \ x \ (w \ x \ y)\]
 
     (passo a \( z \), numero di Church che vuole quindi una funzione e un valore di partenza, come funzione \( x \) e come valore di partenza l'applicazione di \( x \) a partire da \( y \), \( w \) volte)
 
@@ -1067,11 +1067,11 @@ Facciamo un esempio. Dato \( c_2 = fn \ x \ y \implies x \ (x \ y ) \), calcolia
 
     Sappiamo che \( u \times v = \underset{v \text{ volte}}{u + u + u + ... + u} \).
 
-    Sappiamo che un numero di Church ha come parametri una funzione e un valore da cui iniziare. Possiamo quindi ``definire'' una funzione \( plus_u \) che somma \( u \) al suo input: \( fn \ x \implies (plus \ x \ v) \) (in cui \( plus \) è la somma di Church precedentemente definita).
+    Sappiamo che un numero di Church ha come parametri una funzione e un valore da cui iniziare. Possiamo quindi ``definire'' una funzione \( plus_u \) che somma \( u \) al suo input: \( fn \ x \Rightarrow (plus \ x \ v) \) (in cui \( plus \) è la somma di Church precedentemente definita).
 
     Ora, ci basta fornire al numero \( v \) come parametri questa nuova funzione e \( c_0 \) come valore di inizio, perché questa, essenzialmente, sommi \( u \) \( v \) volte a partire da zero.
-    \[ times \equiv fn \ v \implies fn \ u \implies v \ (fn \ x \implies (plus \ x \ u) ) \ c_0 \]
-    \[\color{gray} \equiv fn \ v  \ u \implies v \ (plus_u)  \ c_0 \]
+    \[ times \equiv fn \ v \Rightarrow fn \ u \Rightarrow v \ (fn \ x \Rightarrow (plus \ x \ u) ) \ c_0 \]
+    \[\color{gray} \equiv fn \ v  \ u \Rightarrow v \ (plus_u)  \ c_0 \]
     
 \end{defframe}
 
@@ -1165,18 +1165,18 @@ Infatti, \texttt{F fact \(\equiv \) if (n>0) then 1 else n*fact(n-1) \( \equiv \
     Quindi una funzione per cui si ha che \( F(YF) = F \).
 
     Nel \textit{lambda calcolo},
-    \[ Y \equiv fn \ F \implies \bigl[ \left(fn \ x \implies F(xx)\right)\left(fn \ x \implies F(xx)\right) \bigr] \]
+    \[ Y \equiv fn \ F \Rightarrow \bigl[ \left(fn \ x \Rightarrow F(xx)\right)\left(fn \ x \Rightarrow F(xx)\right) \bigr] \]
     
 \end{defframe}
 
 Applichiamo \( Y \) ad una funzione \( F \):
 \begin{align*}
-    YF \equiv& \bigl((fn \ x \implies F(xx)) (Fn \ x \implies F(xx))\bigr) F  \\
+    YF \equiv& \bigl((fn \ x \Rightarrow F(xx)) (Fn \ x \Rightarrow F(xx))\bigr) F  \\
        &\text{sostituiamo il parametro \( F \)} \\
-       \brule& \ (fn \ x \implies F(xx) (fn \ x \implies F(xx)) \\
+       \brule& \ (fn \ x \Rightarrow F(xx) (fn \ x \Rightarrow F(xx)) \\
         &(\text{notiamo che abbiamo ottenuto nuovamente } YF) \\
-        &\text{sostituiamo il parametro \((fn \ x \implies F(xx))\)} \\
-       \brule& \ F\bigl((fn \ x \implies F(xx) (fn \ x \implies F(xx))\bigr) \\
+        &\text{sostituiamo il parametro \((fn \ x \Rightarrow F(xx))\)} \\
+       \brule& \ F\bigl((fn \ x \Rightarrow F(xx) (fn \ x \Rightarrow F(xx))\bigr) \\
        \equiv&\ F(YF)
   \end{align*}
 
@@ -1712,7 +1712,7 @@ La \textbf{logica di Hoare} è un sistema formale che rientra tra le semantiche 
         \item \( M, N \) sono \textbf{espressioni numeriche}
         \item \( A, B \) sono \textbf{espressioni booleane}
         \item \( p, q\) sono \textbf{programmi}
-        \item introduciamo il simbolo \( \supset \) per indicare l'\textbf{implicazione logica} \( \implies \) (Peano–Russell notation)
+        \item introduciamo il simbolo \( \supset \) per indicare l'\textbf{implicazione logica} \( \Rightarrow \) (Peano–Russell notation)
     \end{itemize}
     (usiamo una versione minimalista delle operazioni booleane - gli altri simboli si possono derivare (per esempio, \( \neg A \equiv A \supset false \)))
 \end{defframe}
@@ -2138,7 +2138,7 @@ Definiamo quindi un primo linguaggio funzionale che contenga quanto introdotto.
 \begin{defframe}{\( Fun_{\rho} \)}{}
     La grammatica di questo linguaggio è:
         \[
-        M, N ::= zero \mid x \mid fn \ x \implies M \mid MN \mid succ(M) \mid \rho(M, N)
+        M, N ::= zero \mid x \mid fn \ x \Rightarrow M \mid MN \mid succ(M) \mid \rho(M, N)
     \]
 
     e deve essere vero che:
@@ -2206,7 +2206,7 @@ Introduciamo quindi un linguaggio funzionale che contenga \( rec \).
 \begin{defframe}{\( Fun_{rec} \)}{}
     La grammatica di questo linguaggio è:
     \[
-        M, N ::= zero \mid x \mid fn \ x \implies M \mid MN \mid succ(M) \mid rec(M, N)
+        M, N ::= zero \mid x \mid fn \ x \Rightarrow M \mid MN \mid succ(M) \mid rec(M, N)
     \]
     dove:
     \begin{itemize}
@@ -2218,12 +2218,12 @@ Introduciamo quindi un linguaggio funzionale che contenga \( rec \).
 Possiamo usare \( rec \) anche per fare tutto ciò che faceva \( \rho \) (ci basta ``ignorare'' il secondo argomento della funzione \( N\) fornita). 
 
 Per esempio, la funzione \( is\_even \) si può definire tramite \( rec \) in questo modo:
-\[ is\_even \equiv rec(true, fn \ y z \implies not \ y) \]
+\[ is\_even \equiv rec(true, fn \ y z \Rightarrow not \ y) \]
 {\color{gray}(\( rec \) vuole una funzione a due argomenti, ma noi ne utilizziamo semplicemente uno solo (ignoriamo \( z \)))}
 
 Possiamo definire anche altre funzioni a noi note tramite \( rec \):
-\[ fact \equiv rec(1, fn \ yz \implies y * (succ \ z)) \]
-\[ plus \equiv fn \ x y \implies rec(y, fn \ w \ z \implies succ \ w) x\]
+\[ fact \equiv rec(1, fn \ yz \Rightarrow y * (succ \ z)) \]
+\[ plus \equiv fn \ x y \Rightarrow rec(y, fn \ w \ z \Rightarrow succ \ w) x\]
 
 \begin{gframe}{Simulazione \( rec \)}
     Per capire meglio come funzioni \( rec \), facciamo una simulazione su \( plus \).
@@ -2263,7 +2263,7 @@ Introduciamo ora le regole di un sistema logico per la verifica formale dei prog
     \[
     \AxiomC{}
     \RightLabel{$[\alpha]$}
-    \UnaryInfC{$fn \ x \implies M = fn \ y \implies [y/x]M$}
+    \UnaryInfC{$fn \ x \Rightarrow M = fn \ y \Rightarrow [y/x]M$}
     \DisplayProof
     \]
 
@@ -2271,7 +2271,7 @@ Introduciamo ora le regole di un sistema logico per la verifica formale dei prog
     \[
     \AxiomC{}
     \RightLabel{$[\beta]$}
-    \UnaryInfC{$(fn \ x \implies M) N = [N/x]M$}
+    \UnaryInfC{$(fn \ x \Rightarrow M) N = [N/x]M$}
     \DisplayProof
     \]
 
@@ -2294,7 +2294,7 @@ Introduciamo ora le regole di un sistema logico per la verifica formale dei prog
     \item principio di induzione:
     \[
     \AxiomC{$P(0)$}
-    \AxiomC{$P(x) \implies P(succ\ x)$}
+    \AxiomC{$P(x) \Rightarrow P(succ\ x)$}
     \RightLabel{$[Ind]$}
     \BinaryInfC{$\forall n . P(n)$}
     \DisplayProof
@@ -2322,7 +2322,7 @@ Introduciamo ora le regole di un sistema logico per la verifica formale dei prog
     \[
     \AxiomC{$M = N$}
     \RightLabel{$[\lambda_{Astr} / \xi]$}
-    \UnaryInfC{$fn\ x \implies M = fn \ x \implies N$}
+    \UnaryInfC{$fn\ x \Rightarrow M = fn \ x \Rightarrow N$}
     \DisplayProof
     \]
 \end{itemize}
@@ -2330,16 +2330,16 @@ Introduciamo ora le regole di un sistema logico per la verifica formale dei prog
 
 \begin{gframe}{}
     Nota bene: quando applichiamo l'operatore di sostituzione, dobbiamo fare attenzione.
-    Per esempio, se applicassimo \( [y/x] fn \ y \implies x \) senza fare attenzione, otterremmo \( fn \ y \implies y \), che ci permetterebbe di dimostrare affermazioni false.
+    Per esempio, se applicassimo \( [y/x] fn \ y \Rightarrow x \) senza fare attenzione, otterremmo \( fn \ y \Rightarrow y \), che ci permetterebbe di dimostrare affermazioni false.
 
 Se per esempio abbiamo
-\[ fn \ y \implies (fn \ x \implies fn \ y \implies x) \underline{y} \]
+\[ fn \ y \Rightarrow (fn \ x \Rightarrow fn \ y \Rightarrow x) \underline{y} \]
 sostituendo ``bovinamente'', l'ultima \( y \), che è legata al \( fn \) più esterno, entra nello scope del \( fn \) più interno (si dice che ``viene catturata'').
 
 Per evitarlo, ci è utile la \( \alpha-regola \). Possiamo assumere che l'operatore di sostituzione rinomini eventuali variabili legate per evitarne la cattura.
 
-Per esempio, visto che \( fn \ y \implies x \) è \( \alpha\)-equivalente a \( fn \ z \implies x \), otteniamo:
-\[ (fn \ x \implies fn \ y \implies x) y = [y/x] fn \ y \implies  x = [y/x] fn \ z \implies x = fn \ z \implies y \]
+Per esempio, visto che \( fn \ y \Rightarrow x \) è \( \alpha\)-equivalente a \( fn \ z \Rightarrow x \), otteniamo:
+\[ (fn \ x \Rightarrow fn \ y \Rightarrow x) y = [y/x] fn \ y \Rightarrow  x = [y/x] fn \ z \Rightarrow x = fn \ z \Rightarrow y \]
 \end{gframe}
 
 \end{cdefframe}
@@ -2432,7 +2432,7 @@ Procediamo per induzione su \(n\) per dimostrare \(P(n): \forall m.\; \texttt{pl
 
     Quindi, per la regola di induzione:
     \[ 
-        \AxiomC{\( Q(0) \quad Q(y)\implies Q(succ \ y) \)}
+        \AxiomC{\( Q(0) \quad Q(y)\Rightarrow Q(succ \ y) \)}
         \UnaryInfC{\( \forall x Q(x) \)}
         \UnaryInfC{\( P(0) \)}
         \DisplayProof
@@ -2461,7 +2461,7 @@ Per induzione su $x$:
     \end{array}
     \]
 
-    \item \textbf{Passo} $R(y) \implies R(succ \ y)$:
+    \item \textbf{Passo} $R(y) \Rightarrow R(succ \ y)$:
     
         Assumiamo $R(y): \texttt{plus } (succ \ n) \ y = \text{plus } y \ (\text{succ } n)$.
     
@@ -2482,7 +2482,7 @@ Per induzione su $x$:
 Per la regola di induzione:
 
 \[ 
-    \AxiomC{$R(0) \quad R(y)\implies R(succ \ y)$}
+    \AxiomC{$R(0) \quad R(y)\Rightarrow R(succ \ y)$}
     \UnaryInfC{$\forall x \; R(x)$}
     \UnaryInfC{$P(succ \ n)$}
     \DisplayProof
@@ -2494,7 +2494,7 @@ Abbiamo quindi dimostrato $P(\text{succ } n)$.
 Per il principio di induzione, otteniamo quindi:
 
 \[ 
-    \AxiomC{$P(0) \quad P(n)\implies P(succ \ n)$}
+    \AxiomC{$P(0) \quad P(n)\Rightarrow P(succ \ n)$}
     \UnaryInfC{$\forall n \ P(n)$}
     \DisplayProof
 \]
@@ -3048,7 +3048,7 @@ Nei tipi, la regola di \textit{Applicazione} afferma che se abbiamo una funzione
 \begin{tabular}{c c}
     \textbf{Logica (Modus Ponens)} & \textbf{Tipi (Applicazione)} \\
     \\
-    \AxiomC{$\Gamma \vdash A \Rightarrow B$}
+    \AxiomC{$\Gamma \vdash A \to B$}
     \AxiomC{$\Gamma \vdash A$}
     \BinaryInfC{$\Gamma \vdash B$}
     \DisplayProof
@@ -3088,7 +3088,7 @@ L'isomorfismo si articola su due livelli: la corrispondenza tra le formule (prop
         \hline
         \textbf{Logica Proposizionale} & \textbf{Sistema dei Tipi} \\
         \hline
-        Implicazione ($A \Rightarrow B$) & Tipo Funzione ($A \to B$) \\
+        Implicazione ($A \to B$) & Tipo Funzione ($A \to B$) \\
         Congiunzione ($A \wedge B$) & Tipo Prodotto ($A \times B$) \\
         Disgiunzione ($A \vee B$) & Unione Disgiunta ($A + B$) \\
         Vero ($True$) & Tipo Unitario ($1$ o $Unit$) \\
