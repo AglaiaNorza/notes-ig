@@ -771,7 +771,7 @@ Quindi, per esempio:
         \subitem la funzione prende in input una funzione (in questo caso ``successore''), e la applica a \( 5 \)
     \item \( (fn \ x \Rightarrow (fn \ y \Rightarrow y \ x)) \ 3 \ (fn \ z \Rightarrow z+1) \ = 4\)
         \subitem è una funzione che, presa in input un'altra funzione, la applica ad \( x \) - le passiamo la funzione ``successore'', che, applicata a \( 3 \), dà \( 4 \).
-    \item un'applicazione del tipo \( fn \ x \Rightarrow x \ 10 \) ``non ha semantica'' (non è valutabile), in quanto \( 10 \) non è una funzione e non si può applicare a \( x \)
+    \item un'applicazione del tipo \( fn \ x \Rightarrow 10 \ x \) ``non ha semantica'' (non è valutabile), in quanto \( 10 \) non è una funzione e non si può applicare a \( x \)
 \end{itemize}
 
 \begin{gframe}{precedenza di \( apply \)}
