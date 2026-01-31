@@ -1428,7 +1428,7 @@ Per valutare $x$, guardiamo l'ambiente $E$ per trovare il suo indirizzo $l$, e p
         \begin{enumerate}
         \item si calcola il valore iniziale $v$.
         \item si trova una locazione $l$ libera (allocazione).
-    \item si estende l'ambiente ($E[x \mapsto l]$) e si aggiorna lo store ($S[l \mapsto v]$) (inizializzazione).
+    \item si estende l'ambiente ($E(x, l)$) e si aggiorna lo store ($S(l, v)$) (inizializzazione).
         \item si esegue $p$ in questo nuovo contesto.
         \end{enumerate}
         {\color{gray}NB: All'uscita da $p$, le modifiche allo store ($S'$) rimangono, ma la variabile $x$ scompare dallo scope perché si torna all'ambiente $E$ originale.}
