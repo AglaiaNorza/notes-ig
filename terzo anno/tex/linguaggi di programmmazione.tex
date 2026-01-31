@@ -1057,9 +1057,19 @@ Possiamo, per esempio, rappresentare il numero \( 2 \) ``di Church'' in \( Fun \
 \[ fn \  x \ y \Rightarrow x \ (x \ y) \ {\color{gray} \equiv fn \ x \Rightarrow fn \ y \Rightarrow x \ (x \ y) }\]
     (ovvero, presa una funzione \( x \) e un valore \( y \) di partenza, si applica due volte la funzione \( x \) (prima al valore stesso ``(\( x \ y \))'', e poi al risultato di questa applicazione - ``\( x( \)'' \ )))
 
+
 \begin{defframe}{Numeri di Church in \( Fun \)}{}
     Più in generale, indicando con \( M^n N \) il termine \( M(M(\dots(MN)\dots)) \) {\small\color{gray}(in cui si ripete \( n \) volte \( M \))}, un numero \(c_n\) di Church si può rappresentare, con la sintassi di \( Fun \), in questo modo:
     \[ c_n \equiv fn \ x \ y \Rightarrow x^n \ y \]
+
+    Ovvero:
+    \begin{itemize}
+        \item zero := \( fn \ xy \Rightarrow y \)
+        \item uno := \( fn \ xy \Rightarrow xy \)
+        \item due := \( fn \ xy \Rightarrow x(xy) \)
+        \item tre := \( fn \ xy \Rightarrow x(x(xy) \)
+        \item \( \dots \)
+    \end{itemize}
 \end{defframe}
 
 Possiamo rappresentare anche altri concetti essenziali come la funzione ``successore'', la somma e il prodotto tramite numeri di Church.
