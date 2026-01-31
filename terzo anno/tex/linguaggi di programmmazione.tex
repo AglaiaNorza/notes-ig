@@ -1235,13 +1235,13 @@ Infatti, \texttt{F fact \(\equiv \) if (n>0) then 1 else n*fact(n-1) \( \equiv \
     Quindi una funzione per cui si ha che \( F(YF) = YF \).
 
     Nel \textit{lambda calcolo},
-    \[ Y \equiv fn \ F \Rightarrow \bigl[ \left(fn \ x \Rightarrow F(xx)\right)\left(fn \ x \Rightarrow F(xx)\right) \bigr] \]
+    \[ Y \equiv fn \ f \Rightarrow \bigl[ \left(fn \ x \Rightarrow f(xx)\right)\left(fn \ x \Rightarrow f(xx)\right) \bigr] \]
     
 \end{defframe}
 
 Applichiamo \( Y \) ad una funzione \( F \):
 \begin{align*}
-    YF \equiv& \bigl((fn \ x \Rightarrow F(xx)) (Fn \ x \Rightarrow F(xx))\bigr) F  \\
+    YF \equiv& \ fn \ f \Rightarrow \bigl((fn \ x \Rightarrow f(xx)) (Fn \ x \Rightarrow f(xx))\bigr) F  \\
        &\text{sostituiamo il parametro \( F \)} \\
        \brule& \ (fn \ x \Rightarrow F(xx) (fn \ x \Rightarrow F(xx)) \\
         &(\text{notiamo che abbiamo ottenuto nuovamente } YF) \\
