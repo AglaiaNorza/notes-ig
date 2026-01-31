@@ -2920,47 +2920,6 @@ Avremmo "costruito un intero fatto di aria fritta": il sistema prevederebbe l'es
 \item Ogni termine di \( F2 \) \textbf{termina}.
 \end{itemize}
 
-\section{\( Fun_{\tau}\): il sistema dei tipi di Hindley-Milner}
-Il sistema dei tipi di Hindley-Milner (sistema HM) è il sisistema utilizzato dal linguaggio Standard ML. Si può formalizzare tramite 
-
-Per garantire la decidibilità dell'inferenza dei tipi (Algoritmo W), il linguaggio ML impone delle restrizioni rispetto a F2.
-
-\subsection{Gerarchia dei Tipi in ML}
-I tipi sono divisi in due categorie:
-\begin{enumerate}
-    \item \textbf{Prime Types ($\tau$):} Tipi monomorfi (base o funzioni di tipi base). Non contengono $\forall$.
-    \[ \tau ::= K \mid X \mid \tau \to \tau \]
-    \item \textbf{Type Schemes ($\sigma$):} Schemi polimorfi dove i quantificatori sono solo esterni.
-    \[ \sigma ::= \tau \mid \forall X . \sigma \]
-\end{enumerate}
-
-\begin{gframe}{Limitazione di ML}{}
-    In ML, una funzione non può prendere in input un oggetto polimorfo.
-    Non posso scrivere un tipo come $(\forall X. X \to X) \to int$. Il polimorfismo è "prenex": i quantificatori stanno solo in cima.
-\end{gframe}
-
-\subsection{Il Polimorfismo del Let (Let-Polymorphism)}
-Dato che non possiamo passare polimorfismo tramite $fn$, ML usa il costrutto $let$ per introdurre generalizzazione.
-
-\begin{gframe}{Sintassi e Semantica}{}
-    \[ let \ x = M \ in \ N \]
-    Semanticamente equivale a $(fn \ x \Rightarrow N) M$, ma viene tipato diversamente.
-\end{gframe}
-
-\subsubsection{Differenza tra $fn$ e $let$}
-Consideriamo il termine auto-applicativo:
-\[ fn \ x \Rightarrow x \ x \]
-\begin{itemize}
-    \item \textbf{In ML (con $fn$):} Non è tipabile. $x$ dovrebbe avere un tipo polimorfo per essere usata sia come funzione che come argomento, ma gli argomenti di $fn$ devono essere monomorfi ($\tau$).
-    \item \textbf{In ML (con $let$):}
-    \[ let \ x = (fn \ y \Rightarrow y) \ in \ (x \ x) \]
-    È tipabile e corretto.
-\end{itemize}
-
-\textbf{Perché funziona?}
-Nel $let$, il sistema calcola il tipo di $M$ ($fn \ y \Rightarrow y : \alpha \to \alpha$), lo \textbf{generalizza} in uno schema ($\forall \alpha. \alpha \to \alpha$) e lo assegna a $x$.
-Nel corpo $N$, ogni occorrenza di $x$ può essere \textbf{istanziata} con tipi diversi (es. la prima come $(int \to int) \to (int \to int)$ e la seconda come $int \to int$).
-
 \section{Fun$_{\tau}$: Il Sistema dei Tipi di ML}
 
 Il linguaggio $Fun_{\tau}$ rappresenta il formalismo teorico alla base del sistema dei tipi di ML (Standard ML). A differenza del System F (F2), dove i tipi sono completamente espliciti, in ML i tipi vengono spesso omessi e calcolati tramite un algoritmo di inferenza.
@@ -2989,7 +2948,7 @@ La caratteristica fondamentale che distingue $Fun_{\tau}$ da F2 è la stratifica
     Questa grammatica implica che il costruttore di funzione $\to$ può collegare solo tipi primitivi $\tau$, mai schemi $\sigma$.
     \begin{itemize}
         \item Il tipo $(\forall X.X) \to (\forall X.X)$ è \textit{legale in F2 ma non in ML}.
-        \item In $Fun_{\tau}$ non esistono funzioni che prendono in input oggetti polimorfi; l'astrazione è possibile solo sui tipi primitivi.
+        \item In $Fun_{\tau}$ non esistono funzioni che prendono in input oggetti polimorfi; l'astrazione è possibile solo sui tipi primitivi 
     \end{itemize}
 \end{gframe}
 \end{defframe}
