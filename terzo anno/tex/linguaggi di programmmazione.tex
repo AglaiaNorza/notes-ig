@@ -2324,7 +2324,7 @@ Dobbiamo quindi introdurre una nuova versione della \hyperref[prop1]{Proposizion
 Definiamo quindi un equivalente di \( \rho \) che restituisca questo omomorfismo. Lo chiamiamo \( rec \).
 
 \begin{defframe}{Operatore \( rec \)}{}
-    L'operatore \( rec \), dato un elemento \( a \in A \) e una funzione \( A \to (\N \to A) \), restituisce l'unico omomorfismo \( \N \to A \).
+    L'operatore \( rec \), dato un elemento \( a \in A \) e una funzione \( h: A \to (\N \to A) \), restituisce l'unico omomorfismo \( \N \to A \).
 \end{defframe}
 
 L'operatore \( rec \) appartiene al \textit{System-T} di Gödel.
@@ -2343,18 +2343,68 @@ Introduciamo quindi un linguaggio funzionale che contenga \( rec \).
     \end{itemize}
 \end{defframe}
 
-Possiamo usare \( rec \) anche per fare tutto ciò che faceva \( \rho \) (ci basta ``ignorare'' il secondo argomento della funzione \( N\) fornita). 
+\begin{gframe}{Costruire funzioni con \( rec \)}
 
-Per esempio, la funzione \( is\_even \) si può definire tramite \( rec \) in questo modo:
+Possiamo definire funzioni a noi note tramite \( rec \):
 \[ is\_even \equiv rec(true, fn \ y z \Rightarrow not \ y) \]
-{\color{gray}(\( rec \) vuole una funzione a due argomenti, ma noi ne utilizziamo semplicemente uno solo (ignoriamo \( z \)))}
-
-Possiamo definire anche altre funzioni a noi note tramite \( rec \):
 \[ fact \equiv rec(1, fn \ yz \Rightarrow y * (succ \ z)) \]
 \[ plus \equiv fn \ x y \Rightarrow rec(y, fn \ w \ z \Rightarrow succ \ w) x\]
 
+Per costruire una funzione \( f(n) \) tramite \( rec(M, N) \), si può seguire uno schema di questo tipo:
+
+\begin{itemize}
+    \item Caso Base (\( M \)): 
+
+    ci si chiede quanto valga la funzione quando \( n=0 \)
+    \[ M = f(0)\]
+
+    \item Passo Induttivo (\( N \)):
+
+    la funzione \( N \) descrive come passare dal passo \( n \) al passo \( n+1 \).
+    Essa accetta sempre due argomenti: \( fn \ y \ z \Rightarrow \dots \)
+    \begin{itemize}
+        \item \( y \): è il \textit{risultato già calcolato} al passo precedente (ovvero \( f(n) \));
+        \item \( z \): è il ``contatore'' al passo precedente (ovvero \( n \)).
+    \end{itemize}
+    Il corpo della funzione deve rispondere alla domanda: \textit{``Come ottengo il risultato per \( n+1 \) avendo a disposizione il risultato di \( n \) e il numero \( n \)?''}
+\end{itemize}
+
+\begin{gframe}{N.B.}
+    Non bisogna necessariamente utilizzare entrambi i parametri di \( fn \) - se il risultato \( f(n+1) \) dipende solo da \( f(n) \) (e non da \( n \)), si può semplicemente ignorare il secondo parametro (\( rec \) si può comportare come \( \rho \))
+\end{gframe}
+
+\end{gframe}
+
+Esempio: costriuamo la funzione fattoriale \( fact(x) = x! \) utilizzando il metodo appena descritto.
+
+\begin{itemize}
+    \item Caso Base (\( x = 0 \))
+
+    sappiamo che \( 0! = 1 \).
+    \[ M = 1 \]
+
+    \item Passo Induttivo (\( n+1 \))
+
+    vogliamo calcolare \( fact(n+1) \), avendo a disposizione
+    \begin{itemize}
+        \item \( y \): il risultato precedente (\( n! \))
+        \item \( z \): il contatore precedente (\( n \))
+    \end{itemize}
+
+    La formula matematica è:  
+    \[ (n+1)! = \underbracket[0.187ex]{(n+1)}_{\text{numero corrente}} \cdot \underbracket[0.187ex]{n!}_{\text{risultato prec.}} \]
+
+    Quindi la funzione \( N \) è:
+    \[ N \equiv fn \ y \ z \Rightarrow y * succ(z) \]
+
+\item Definizione con \( rec \):
+
+    assemblando \( M \) e \( N \):
+    \[ fact \equiv rec(1, \ fn \ y \ z \Rightarrow y * succ(z)) \]
+\end{itemize}
+
 \begin{gframe}{Simulazione \( rec \)}
-    Per capire meglio come funzioni \( rec \), facciamo una simulazione su \( plus \).
+    Per capire ancora meglio come funzioni \( rec \), facciamo una simulazione su \( plus \).
 
 Proviamo a calcolare $plus(2, 3)$, dove $x=2$ e $y=3$.
 
