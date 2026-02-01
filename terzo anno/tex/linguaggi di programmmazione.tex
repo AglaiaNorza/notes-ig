@@ -1577,7 +1577,7 @@ In \( All \) introduciamo una nuova relazione di valutazione specifica per le \t
     \end{prooftree}
 \end{itemize}
 
-Si valuta il programma \( q \) nell'ambiente in cui a \( y \) viene associata la \textit{chiusura} formata da parametro \( x \) e corpo del programma \( p \) - si salva anche l'ambiente corrente (di definizione della procedura), garantendo quindi lo scoping statico.
+Si valuta il programma \( q \) nell'ambiente in cui a \( y \) viene associata la \textit{chiusura} formata da parametro \( x \) e corpo del programma \( p \) - si salva anche l'ambiente corrente (di definizione della procedura), garantendo quindi lo \textbf{scoping statico}.
 
 \subsection{Semantica Operazionale: semantiche di chiamata}
 
@@ -1610,7 +1610,7 @@ Esistono tre modalità principali per il passaggio dei parametri in \( All \), d
         \BinaryInfC{$E \vdash \text{call } y(V), S \stackrel{p}{\leadsto} S'$}
     \end{prooftree}
     \vspace{-0.5em}
-    {\small (*) dove $E(y) = \langle x, p, E' \rangle$.}
+    {\small (*) dove $E(y) = (x, p, E')$.}
 \end{cdefframe}
 \textbf{Effetto:} Il parametro formale $x$ diventa un \textit{alias} dell'argomento $V$. Le modifiche a $x$ sono visibili esternamente.
 
@@ -1625,26 +1625,29 @@ Esistono tre modalità principali per il passaggio dei parametri in \( All \), d
 
 Questa semantica richiede due modifiche alle regole operazionali:
 \begin{enumerate}
-    \item \textbf{Regola di Chiamata:} Associa al parametro la chiusura dell'argomento.
-    \item \textbf{Regola di Accesso ([loc3]):} Quando si usa la variabile, si valuta l'espressione salvata.
+    \item \textbf{Regola di Chiamata:} associa al parametro la chiusura dell'argomento.
+    \item \textbf{Regola di Accesso ([loc3]):} quando si usa la variabile, si valuta l'espressione salvata.
 \end{enumerate}
 
 \begin{cdefframe}{DeepGreenLight}{DeepGreen}{Regole Call-by-Name}{}
-    \begin{prooftree}
-        \AxiomC{$E'(x, (V, E)) \vdash p, S \stackrel{p}{\leadsto} S'$}
-        \RightLabel{($\text{se } E(y) = \langle x, p, E' \rangle$)}
-        \UnaryInfC{$E \vdash \text{call } y(V), S \stackrel{p}{\leadsto} S'$}
-    \end{prooftree}
-    
-    \vspace{1em}
-    \textbf{Nuova regola di accesso [loc3]:}
-    Sostituisce [loc1] per le variabili passate per nome.
+\begin{itemize}
+\item{nuova regola di accesso} [loc3]:
+\vspace{-1em}
     \begin{prooftree}
         \AxiomC{$E' \vdash V, S \stackrel{V}{\leadsto} l$}
         \RightLabel{($\text{se } E(x) = (V, E')$)}
         \UnaryInfC{$E \vdash x, S \stackrel{V}{\leadsto} l$}
     \end{prooftree}
-   
+
+    il sistema guarda nell'ambiente \( E \) per vedere cos'è \( x \) - non è associato a una locazione fisica diretta \( l \), ma a una coppia \( (V, E') \) (in cui V è l'espressione originale passata come argomento dal chiamante, e \( E \) l'ambiente del chiamante (dove V ha senso)), quindi, per ottenere la locazione di \( x \) deve trovare quella di \( V \) nell'ambiente \( E' \)
+\item{[call-by-name]}
+\vspace{-1em}
+    \begin{prooftree}
+        \AxiomC{$E'(x, (V, E)) \vdash p, S \stackrel{p}{\leadsto} S'$}
+        \RightLabel{($\text{se } E(y) = (x, p, E')$)}
+        \UnaryInfC{$E \vdash \text{call } y(V), S \stackrel{p}{\leadsto} S'$}
+    \end{prooftree}
+\end{itemize}
 \end{cdefframe}
 
 \begin{lemmaframe}{(Non-)equivalenza tra le semantiche}{}
