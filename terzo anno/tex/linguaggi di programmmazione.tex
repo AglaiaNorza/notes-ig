@@ -2129,22 +2129,28 @@ Ma notiamo che, anche in questo caso, la nostra premessa \( \{(a+1)y + (b-y) = x
 (Il tutto, in un unico albero di inferenza:
 {\tiny
 \begin{prooftree}
-  \AxiomC{\(\{(a+1)y + b = x \land b \ge 0\}\; a := a+1\; \{ay + b = x \land b \ge 0\}\)}
-  \UnaryInfC{\(\{(a+1)y + b = x \land b \ge 0\}\; a := a+1\; \{A\}\)}
+\AxiomC{}
+\RightLabel{$[assign]$}
+\UnaryInfC{\(\{(a+1)y + (b - y) = x \land (b - y) \ge 0\}\; b := b - y\; \{(a+1)y + b = x \land b \ge 0\}\)}
 
-  \AxiomC{\(\{(a+1)y + (b - y) = x \land (b - y) \ge 0\}\; b := b - y\; \{(a+1)y + b = x \land b \ge 0\}\)}
-  \UnaryInfC{\(\{(a+1)y + (b - y) = x \land b - y \ge 0\}\; b := b - y\; \{(a+1)y + b = x \land b \ge 0\}\)}
+\AxiomC{}
+\RightLabel{$[assign]$}
+\UnaryInfC{\(\{(a+1)y + b = x \land b \ge 0\}\; a := a+1\; \{A\}\)}
 
-  \BinaryInfC{\(\{(a+1)y + (b - y) = x \land b - y \ge 0\}\;
-                 b := b - y;\; a := a+1\;
-                 \{A\}\)}
+\RightLabel{$[comp]$}
+\BinaryInfC{\(\{(a+1)y + (b - y) = x \land b - y \ge 0\}\;
+                  b := b - y;\; a := a+1\;
+                  \{A\}\)}
 
-  \UnaryInfC{\(\{ay + b = x \land b \ge y\}\;
-                 b := b - y;\; a := a+1\;
-                 \{A\}\)}
+                  \RightLabel{$[math (str\ implicito)]$}
+\UnaryInfC{\(\{ay + b = x \land b \ge y\}\;
+                  b := b - y;\; a := a+1\;
+                  \{A\}\)}
 
-  \UnaryInfC{\(\{A\}\; while \ (b \ge y) \ do \ \ b := b - y;\; a := a+1\; \{A \land \neg(b \ge y)\}\)}
+                  \RightLabel{$[while]$}
+\UnaryInfC{\(\{A\}\; while \ (b \ge y) \ do \ \ b := b - y;\; a := a+1\; \{A \land \neg(b \ge y)\}\)}
 \end{prooftree}
+
 }
 )
 \section{Correttezza nei linguaggi funzionali}
