@@ -1510,7 +1510,7 @@ In \( All \) introduciamo una nuova relazione di valutazione specifica per le \t
 \subsection{Semantica Operazionale: dichiarazioni, assegnamenti, references} 
 
 \begin{itemize}
-    \item \textbf{Accesso a variabile e array ([loc1], [loc2])}:
+\item \textbf{Accesso a variabile e array} ([loc1], [loc2]):
     
 \begin{prooftree}
     \AxiomC{$E \vdash x, S \stackrel{V}{\leadsto} l$ \ \  se \( E(x) = l \)}
@@ -1525,7 +1525,7 @@ In \( All \) introduciamo una nuova relazione di valutazione specifica per le \t
 
         Per ottenere il valore di una variabile, ora sono necessari due passi: risolvere la locazione e poi leggere lo store.
 
-\item \textbf{Dereferenziazione ([ref])}:
+\item \textbf{Dereferenziazione} ([ref]):
     
     \begin{prooftree}
         \AxiomC{$E \vdash V, S \stackrel{V}{\leadsto} l$}
@@ -1534,21 +1534,20 @@ In \( All \) introduciamo una nuova relazione di valutazione specifica per le \t
         \LeftLabel{[ref]}
     \end{prooftree}
 
-        La regola converte una L-Exp in un valore leggendo dallo store.
+    Si usa la regola di accesso (relazione \( \stackrel{V}{\leadsto} \)) per ottenere la locazione di \( V \), e ne si legge il valore con la relazione \( \stackrel{M}{\leadsto} \).
 
-
-\item \textbf{Assegnamento ([assign])}:
+\item \textbf{Assegnamento} ([assign]):
     \begin{prooftree}
         \AxiomC{$E \vdash M, S \stackrel{M}{\leadsto} v$}
         \AxiomC{$E \vdash V, S \stackrel{V}{\leadsto} l$}
         \BinaryInfC{$E \vdash V := M, S \stackrel{p}{\leadsto} S(l,v)$}
     \end{prooftree}
 
-        Questa regola formalizza l'effetto collaterale (side-effect) dell'aggiornamento della memoria.
+        Per assegnare un nuovo valore a \( V \), si valuta il nuovo valore \( M\), si usa la relazione \(   \stackrel{M}{\leadsto}\) per accedere alla sua locazione, e si dà un nuovo valore alla locazione nello store.
 
-        {\color{gray}La regola distingue tra il calcolo del \textit{R-value} (l'espressione $M$ valutata a $v$) e del \textit{L-value} (l'espressione assegnabile $V$ valutata alla locazione $l$). Lo store $S$ viene aggiornato scrivendo $v$ nella locazione $l$.}
+        {\color{gray}La regola distingue tra il calcolo del \textit{R-value} (l'espressione $M$ valutata a $v$) e del \textit{L-value} (l'espressione assegnabile $V$ valutata alla locazione $l$).}
     
-\item \textbf{Dichiarazione di Array ([arr]):}
+    \item \textbf{Dichiarazione di Array} ([arr]):
 
 \begin{prooftree}
     \AxiomC{$E \vdash M_0, S \stackrel{v}{\leadsto} v_0$}
@@ -1571,7 +1570,7 @@ In \( All \) introduciamo una nuova relazione di valutazione specifica per le \t
         \item la memoria viene inizializzata con i valori $v_i$.
     \end{enumerate}
 
-    \item \textbf{Dichiarazione di Procedura ([proc])}:
+\item \textbf{Dichiarazione di Procedura} ([proc]):
 
     \begin{prooftree}
         \AxiomC{$E(y,(x, p, E)) \vdash q, S \stackrel{p}{\leadsto} S'$}
