@@ -3309,5 +3309,72 @@ Notiamo che questa relazione è \textbf{calcolabile} (poiché \( T \) è decidib
     \item \( (m, n)\not\in R \implies T\vdash \neg F(m, n) \)
 \end{itemize}
 
+Consideriamo l'enunciato \( A(x)\equiv \forall y \neg F(x, y) \) (che dice ``non esiste una dimostrazione di me stesso'') 
+
+Sia \( m \) il codice di \( A(x) \). 
+
+Abbiamo che \( G = A(\bar{m}) \equiv \forall y \neg F(\bar{m}, y) \), ovvero ``per ogni \( y \), \( y \) non è il codice di una dimostrazione della formula che ha codice \( m \)'' (ovvero \( A(\bar{m}) \) stessa).
+
+\begin{lemmaframe}{}{}
+    \( G \) non è dimostrabile né refutabile in \( T \), ovvero:
+    \[ T\not\vdash  \forall y \neg F(\bar{m}, y)  \]
+    \[ T\not\vdash \neg(\forall y \neg F(\bar{m}, y)) \]
+\end{lemmaframe}
+\begin{pframe}
+    \begin{enumerate}
+        \item \( T\not\vdash  \forall y \neg F(\bar{m}, y) \)
+           
+            Supponiamo per assurdo \( T \) coerente e \( T \vdash \forall y \neg F(\bar{m}, y)  \).
+
+            Vuol dire che ne esiste una dimostrazione con derivazione formale. Sia \( n \) il codice di una tale derivazione. Poiché \( n \) è la dimostrazione di \( G \), si ha \( (m, n)\in R \). 
+
+            Poiché \( R \) è rappresentata da \( F \), otteniamo che \( T\vdash F(\bar{m}, n) \), quindi 
+            \[ T\vdash \exists y F(\bar{m}, n) \]
+            che è esattamente l'opposto dell'ipotesi \( T \vdash \forall y \neg F(\bar{m}, y)   \) (ovvero avremmo \( T \) incoerente)
+
+
+        \item \( T\not\vdash  \forall y \neg F(\bar{m}, y) \)
+
+            Supponiamo per assurdo \(T\vdash\neg (\forall y \neg F(\bar{m}, y))\equiv \exists y F(m, y)\).
+            (ovvero, in termini intuitivi, ``Esiste un numero \( y \) che è il codice della dimostrazione di \( G \)''
+
+            Dalla prima parte del teorema (basata sulla semplice coerenza), sappiamo però che \( G \) non è dimostrabile. Pertanto, nessun numero naturale \(  n \in \mathbb{N}\) corrisponde al codice di una sua dimostrazione.
+Poiché la teoria \( T \) è corretta nel verificare le proprietà calcolabili (rappresentabilità forte), per ogni specifico numero \( n \) la teoria dimostra che esso non è la dimostrazione cercata:
+\[
+\forall n \in \mathbb{N}, \quad T \vdash \neg F(m, n)
+\]
+
+Sorge questa situazione apparentemente paradossale:
+\begin{itemize}
+    \item  La teoria dice \( \exists y \)
+    \item  Ma dice anche \( \forall n \in \mathbb{N}, \quad T \vdash \neg F(m, n)\)
+\end{itemize}
+La semplice coerenza logica non vieta questa situazione (la teoria potrebbe riferirsi a un elemento ``infinito'' non standard). Per escludere questo caso, Gödel introduce la \textbf{$\omega$-coerenza}.
+
+\begin{defframe}{$\omega$-coerenza}{}
+Una teoria $T$ è $\omega$-coerente se non accade mai che:
+\[
+T \vdash \exists x \varphi(x) \quad \text{e contemporaneamente} \quad \forall n \in \mathbb{N}, \; T \vdash \neg \varphi(n)
+\]
+\end{defframe}
+Se assumiamo che \( T \) sia \(\omega\)-coerente, la situazione descritta sopra è impossibile.
+Poiché \(\forall n \in \mathbb{N}, \quad T \vdash \neg F(m, n) \) è un fatto vero e inevitabile, dobbiamo rifiutare l'ipotesi iniziale \(T\vdash \exists y F(m, y) \).
+
+Quindi, se \( T \) è \(\omega\)-coerente, \(\neg G\) non è dimostrabile in \( T \).
+
+    \end{enumerate}
+\end{pframe}
+
+Possiamo quindi formulare più accuratamente il Primo Teorema di Incompletezza:
+\begin{thmframe}{Primo Teorema di Incompletezza}{}
+    Sia \( T \) una teoria formale che estende MA.
+    \begin{itemize}
+        \item se \( T \) è coerente, allora \( G \) è indimostrabile in \( T \)
+        \item se \( T \) è \( \omega\)-coerente, allora \( \neg G \) è indimostrabile in \( T \)
+    \end{itemize}
+
+    Dunque, se \( T \) è \( \omega\)-coerente, \( T \) è incompleta.
+\end{thmframe}
+
 
 \end{document}
