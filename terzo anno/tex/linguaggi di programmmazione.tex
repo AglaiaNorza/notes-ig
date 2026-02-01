@@ -1456,21 +1456,16 @@ Per valutare $x$, guardiamo l'ambiente $E$ per trovare il suo indirizzo $l$, e p
 \( All \) estende \( Exp \in Imp \) con un costrutto sintattico per indicizzare array. Inoltre, distingue tra espressioni ``assegnabili'' (\( L-Exp \), ammesse alla sinistra di un assegnamento), e non.
 
 \begin{defframe}{Grammatica del linguaggio \( All \)}{}
-    \[ 
-        k ::= 0 \mid 1 \mid \dots \mid true \mid false
-    \]
-    \[ 
-        V (\in L-Exp) ::= x \mid x[M]
-    \]
-    \[
-        M, N ::= k \mid V \mid M + N \mid M < N
-    \]
     \vspace{-2em}
-    \begin{align*}
-        p, q ::= \ &skip \mid p;q \mid if \ M \ then \ p \ else \ q \mid while \ M \ do \ p \mid \\
+\begin{align*}
+    k ::=& \ 0 \mid 1 \mid \dots \mid true \mid false\\[0.5em]
+  {\color{gray}(L-Exp \ni)}\ \ V  ::=& \ x \mid x[M]  \\[0.5em]
+  M, N ::=& \ k \mid V \mid M + N \mid M < N \\[0.5em]
+    p, q ::=& \ skip \mid p;q \mid if \ M \ then \ p \ else \ q \mid while \ M \ do \ p \mid \\
                    &var \ x = M \ in \ p \mid arr \ x = [M_0, \dots, M_n] \  in \ p \mid V:= M \mid \\
                    &proc \ y(x) \ is \ p \ in \ q \mid call \ y(M)
-    \end{align*}
+\end{align*}
+
     dove:
     \begin{itemize}
         \item \( V\) rappresenta quindi le \( L-Exp \)
