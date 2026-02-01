@@ -1576,8 +1576,8 @@ In \( All \) introduciamo una nuova relazione di valutazione specifica per le \t
         \UnaryInfC{$E \vdash \text{proc } y(x) \text{ is } p \text{ in } q, S \stackrel{p}{\leadsto} S'$}
     \end{prooftree}
 \end{itemize}
-La regola crea una chiusura, ovvero una tripla $\langle x, p, E \rangle$.
-    Viene catturato l'ambiente $E$ esistente al momento della definizione (``cattura del contesto'').
+
+Si valuta il programma \( q \) nell'ambiente in cui a \( y \) viene associata la \textit{chiusura} formata da parametro \( x \) e corpo del programma \( p \) - si salva anche l'ambiente corrente (di definizione della procedura), garantendo quindi lo scoping statico.
 
 \subsection{Semantica Operazionale: semantiche di chiamata}
 
