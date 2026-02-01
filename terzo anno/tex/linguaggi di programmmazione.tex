@@ -1513,13 +1513,13 @@ In \( All \) introduciamo una nuova relazione di valutazione specifica per le \t
     \item \textbf{Accesso a variabile e array ([loc1], [loc2])}:
     
 \begin{prooftree}
-    \AxiomC{$E \vdash x, S \stackrel{l}{\leadsto} l$ \ \  se \( E(x) = l \)}
+    \AxiomC{$E \vdash x, S \stackrel{V}{\leadsto} l$ \ \  se \( E(x) = l \)}
 \end{prooftree}
 
     \begin{prooftree}
         \AxiomC{$E \vdash M, S \stackrel{M}{\leadsto} m$}
         \RightLabel{($\text{se } E(x) = \langle l_0, \ldots, l_n \rangle \text{ e } 0 \le m \le n$)}
-        \UnaryInfC{$E \vdash x[M], S \stackrel{l}{\leadsto} l_m$}
+        \UnaryInfC{$E \vdash x[M], S \stackrel{V}{\leadsto} l_m$}
         \LeftLabel{[loc2]}
     \end{prooftree}
 
@@ -1528,7 +1528,7 @@ In \( All \) introduciamo una nuova relazione di valutazione specifica per le \t
 \item \textbf{Dereferenziazione ([ref])}:
     
     \begin{prooftree}
-        \AxiomC{$E \vdash V, S \stackrel{l}{\leadsto} l$}
+        \AxiomC{$E \vdash V, S \stackrel{V}{\leadsto} l$}
         \RightLabel{($\text{se } S(l) = v$)}
         \UnaryInfC{$E \vdash V, S \stackrel{M}{\leadsto} v$}
         \LeftLabel{[ref]}
@@ -1540,7 +1540,7 @@ In \( All \) introduciamo una nuova relazione di valutazione specifica per le \t
 \item \textbf{Assegnamento ([assign])}:
     \begin{prooftree}
         \AxiomC{$E \vdash M, S \stackrel{M}{\leadsto} v$}
-        \AxiomC{$E \vdash V, S \stackrel{l}{\leadsto} l$}
+        \AxiomC{$E \vdash V, S \stackrel{V}{\leadsto} l$}
         \BinaryInfC{$E \vdash V := M, S \stackrel{p}{\leadsto} S(l,v)$}
     \end{prooftree}
 
@@ -1606,7 +1606,7 @@ Esistono tre modalità principali per il passaggio dei parametri in \( All \), d
 \begin{cdefframe}{DeepGreenLight}{DeepGreen}{Regola Call-by-Reference}{}
     L'argomento della chiamata \textbf{deve} essere di tipo assegnabile ($V$).
     \begin{prooftree}
-        \AxiomC{$E \vdash V, S \stackrel{l}{\leadsto} l$}
+        \AxiomC{$E \vdash V, S \stackrel{V}{\leadsto} l$}
         \AxiomC{$E'(x,l) \vdash p, S \stackrel{p}{\leadsto} S'$}
         \RightLabel{(*)}
         \BinaryInfC{$E \vdash \text{call } y(V), S \stackrel{p}{\leadsto} S'$}
@@ -1642,9 +1642,9 @@ Questa semantica richiede due modifiche alle regole operazionali:
     \textbf{Nuova regola di accesso [loc3]:}
     Sostituisce [loc1] per le variabili passate per nome.
     \begin{prooftree}
-        \AxiomC{$E' \vdash V, S \stackrel{l}{\leadsto} l$}
+        \AxiomC{$E' \vdash V, S \stackrel{V}{\leadsto} l$}
         \RightLabel{($\text{se } E(x) = (V, E')$)}
-        \UnaryInfC{$E \vdash x, S \stackrel{l}{\leadsto} l$}
+        \UnaryInfC{$E \vdash x, S \stackrel{V}{\leadsto} l$}
     \end{prooftree}
    
 \end{cdefframe}
