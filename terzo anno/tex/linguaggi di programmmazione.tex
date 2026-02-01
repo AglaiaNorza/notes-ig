@@ -1550,12 +1550,11 @@ In \( All \) introduciamo una nuova relazione di valutazione specifica per le \t
     \item \textbf{Dichiarazione di Array} ([arr]):
 
 \begin{prooftree}
-    \AxiomC{$E \vdash M_0, S \stackrel{v}{\leadsto} v_0$}
-    \AxiomC{$\ldots$}
+    \AxiomC{$E \vdash M_0, S \stackrel{v}{\leadsto} v_0\dots$}
     \AxiomC{$E \vdash M_n, S \stackrel{v}{\leadsto} v_n$}
-    \AxiomC{$E(x, \langle l_0, \ldots, l_n \rangle) \vdash p, S (l_i, v_i) \stackrel{v}{\leadsto} S'$}
+    \AxiomC{$E(x, \langle l_0, \ldots, l_n \rangle) \vdash p, S ((l_0, v_0)\dots(l_n, v_n)) \stackrel{v}{\leadsto} S'$}
     \RightLabel{($*$)}
-    \QuaternaryInfC{$E \vdash \text{arr } x = [M_0, \ldots, M_n] \text{ in } p, S \stackrel{v}{\leadsto} S'$}
+    \TrinaryInfC{$E \vdash \text{arr } x = [M_0, \ldots, M_n] \text{ in } p, S \stackrel{v}{\leadsto} S'$}
 \end{prooftree}
 \begin{center}
     $(*)$ dove $l_i$ è nuova, per $i = 0 \ldots n$
@@ -1567,7 +1566,7 @@ In \( All \) introduciamo una nuova relazione di valutazione specifica per le \t
         \item tutte le espressioni iniziali $M_i$ vengono valutate.
         \item vengono reperite $n+1$ locazioni libere ($l_i$).
         \item la variabile $x$ viene associata nell'ambiente all'intera sequenza di locazioni $\langle l_0, \dots, l_n \rangle$.
-        \item la memoria viene inizializzata con i valori $v_i$.
+        \item il programma \( p \) viene eseguito con lo store in cui alle nuove locazioni corrispondono i valori \( v_i \)
     \end{enumerate}
 
 \item \textbf{Dichiarazione di Procedura} ([proc]):
