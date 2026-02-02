@@ -2593,7 +2593,9 @@ Vogliamo dimostrare che l'operatore \texttt{plus} gode della proprietà commutat
 Procediamo per induzione su \(n\) per dimostrare \(P(n): \forall m.\; \texttt{plus}\; m\; n = \mathtt{plus}\; n\; m\)
 
 \begin{enumerate}
-    \item \textbf{C.B.} (\(n=0\)): \(\texttt{plus}\; 0\; m = \mathtt{plus}\; m\; 0\).
+    \item \textbf{C.B.} (\(n=0\)): 
+
+        Sia \( Q(m) = \texttt{plus}\; 0\; m = \mathtt{plus}\; m\; 0\).
     \begin{itemize}
         \item \( Q(0) \) è valido per identità: 
             \[ \texttt{plus} \ 0 \ 0 = \texttt{plus} \ 0 \ 0 \]
