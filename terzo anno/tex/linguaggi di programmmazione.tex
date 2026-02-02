@@ -2741,10 +2741,14 @@ La definizione di una \textbf{teoria dei tipi} (ovvero un sistema di tipi di dat
     dove:
     \begin{itemize}
         \item \( K \) indica un generico \textbf{tipo costante} o tipo base (\( int, \ bool\dots \))
+        \item Il costruttore di \textbf{tipo funzionale} \( A \to B \) indica l'insieme delle funzioni che accettano un argomento di tipo \( A \) (dominio) e restituiscono un risultato di tipo \( B \) (codominio).    
+    \subitem\( \to \) è associativo a destra: \( A \to B \to C \) corrisponde a \(A\to (B \to C) \)
         \item  \( Terms \) è l'insieme dei ``termini grezzi'' del linguaggio (grezzi perché non necessariamente tipabili)
         \item \( k \) indica una costante di tipo \( K \)
-        \item \( x \in Var\) indica una \textbf{variabile}
-    \end{itemize}
+        \item \( x \in Var\) indica una variabile
+
+\end{itemize}
+
 \end{defframe}
 
 \begin{defframe}{Contesti}{}
@@ -2760,6 +2764,7 @@ La definizione di una \textbf{teoria dei tipi} (ovvero un sistema di tipi di dat
 \begin{cdefframe}{BrightGreenLight}{BrightGreen}{Asserzione di tipi (judgements)}{}
     Il sistema \( F1 \) permette di dedurre \textbf{asserzioni di tipo}, ovvero clausole del tipo:
     \[ \Gamma\vdash M: A \]
+    {\color{gray}\small (si legge: ``nel contesto \( \Gamma \), il termine \( M \) ha tipo \( A \)'')}
 
     all'interno della \textit{semantica di tipi}, indicata con il simbolo ``:'', definita come:
     \[ : \ \subseteq Ctx \times Terms \times Types \]
@@ -2783,8 +2788,10 @@ La definizione di una \textbf{teoria dei tipi} (ovvero un sistema di tipi di dat
     \item \textbf{Funzione:}
     \begin{prooftree}
         \AxiomC{$\Gamma, x : A \vdash M : B$}
-        \UnaryInfC{$\Gamma \vdash \lambda x : A.M : A \to B$}
+        \UnaryInfC{$\Gamma \vdash fn \ x : A \Rightarrow M : A \to B$}
     \end{prooftree}
+
+    per dimostrare che una funzione accetta \( A \) e restituisce \( B \) (ha tipo \( A \to B \)), devo analizzare il suo corpo \( M \) - poiché \( M \) contiene la variabile \( x \), ``suppongo'' che \( x \) sia di tipo \( A \) (aggiungo \( x:A \) al contesto) e, se sotto questa ipotesi riesco a dimostrare che il corpo \( M \) produce un \( B \), allora la funzione ha quel tipo.
 
     \item \textbf{Applicazione:}
     \begin{prooftree}
