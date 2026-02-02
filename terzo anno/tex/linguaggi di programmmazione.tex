@@ -2864,6 +2864,9 @@ che richiede che \( x \) sia allo stesso momento di tipo \( A \) e \( A \to B \)
 
 Un tale tipo (detto ``circolare'') non esiste, e il termine non è perciò tipabile in \( F1 \).
 
+\newpage
+
+
 \section{F2: il Lambda Calcolo polimorfo}
 Il sistema \( F2 \) (o System F) estende il lambda calcolo tipato introducendo il polimorfismo parametrico esplicito.
 \subsection{Polimorfismo}
@@ -2912,19 +2915,6 @@ Possiamo interpretare questo costrutto in due modi complementari:
     \item \textit{come definizione (Definition):} è il meccanismo che produce un termine di tipo \( \forall X.A \). Il corpo $M$ è definito in modo parametrico rispetto a $X$ e il calcolo è sospeso fintanto che non viene fornito un tipo concreto.
     \item \textit{come funzione (Type $\to$ Term):} mentre l'astrazione classica ($fn$) mappa valori in valori, l'astrazione $\Lambda$ definisce una funzione che \textit{mappa tipi in termini}.
 \end{itemize}
-
-\begin{gframe}{}
-    Possiamo formalizzare la distinzione tra le due forme di astrazione osservando il loro dominio e codominio:
-    \begin{itemize}
-        \item \textbf{Astrazione sui Termini ($fn$):}
-        \[ fn \ x : A \Rightarrow M \]
-        È una funzione $Termine \to Termine$. Accetta un valore a runtime e restituisce un valore calcolato.
-
-        \item \textbf{Astrazione sui Tipi ($\Lambda$):}
-        \[ \Lambda X . M \]
-        È una funzione $Tipo \to Termine$. Accetta un tipo in fase di specializzazione e restituisce un nuovo termine eseguibile.
-    \end{itemize}
-\end{gframe}
 
 \subsubsection{L'Istanziazione dei Tipi (Specialization)}
 Per utilizzare un'espressione polimorfa definita tramite $\Lambda$, è necessario prima \textbf{istanziarne} (o specializzarne) il tipo.
@@ -3093,12 +3083,94 @@ essenzialmente
 
 \subsection{Proprietà del Sistema F2}
 \begin{itemize}
-    \item \textbf{Inferenza indecidibile:} non esiste un algoritmo che, dato un termine non annotato, possa ricostruirne il tipo in F2 (l'utente deve scrivere esplicitamente i tipi.)
+    \item \textbf{Inferenza indecidibile:} non esiste un algoritmo che, dato un termine non annotato, possa ricostruirne il tipo in F2 (l'utente deve scrivere esplicitamente i tipi)
     \item \textbf{Mancanza di punto fisso:} in F2 puro non è possibile tipare il combinatore di punto fisso ($Y$), quindi la ricorsione generale non è supportata direttamente.
 \item Ogni termine di \( F2 \) \textbf{termina}.
 \end{itemize}
 
-\section{Fun$_{\tau}$: Il Sistema dei Tipi di ML}
+\subsection*{Esempio di inferenza}
+
+Deriviamo il tipo del termine: \( \Lambda A. \Lambda B. fn\ x:A \Rightarrow fn\ y:B \Rightarrow x\)
+\vspace{-1em}
+\begin{prooftree}
+    \AxiomC{$x:A, y:B \vdash x : {\color{purple}A}$}
+    
+    \RightLabel{{\color{gray}[\( fn \)]}}
+    \UnaryInfC{$x:A \vdash fn\ y:B \Rightarrow x : {\color{purple}B \to A}$}
+    
+    \RightLabel{{\color{gray}[\( fn \)]}}
+    \UnaryInfC{$\emptyset \vdash fn\ x:A \Rightarrow fn\ y:B \Rightarrow x : {\color{purple}A \to (B \to A)}$}
+    
+    \RightLabel{{\color{gray}[ gen ]}}
+    \UnaryInfC{$\emptyset \vdash \Lambda B. fn\ x:A \Rightarrow fn\ y:B \Rightarrow x : {\color{purple}\forall B. (A \to B \to A)}$}
+    
+    \RightLabel{{\color{gray}[gen ]}}
+    \UnaryInfC{$\emptyset \vdash \Lambda A. \Lambda B. fn\ x:A \Rightarrow fn\ y:B \Rightarrow x : {\color{purple}\forall A. \forall B. A \to B \to A}$}
+\end{prooftree}
+
+Ora, il termine \( ((\Lambda A. \Lambda B. fn\ x:A \Rightarrow fn\ y:B \Rightarrow x)\ Nat)\ Bool \)
+\vspace{-1em}
+\begin{prooftree}
+    \AxiomC{$x:A, y:B \vdash x : {\color{purple}A}$}
+    
+    \RightLabel{{\color{gray}[\( fn \)]}}
+    \UnaryInfC{$x:A \vdash fn\ y:B \Rightarrow x : {\color{purple}B \to A}$}
+    
+    \RightLabel{{\color{gray}[\( fn \)]}}
+    \UnaryInfC{$\emptyset \vdash fn\ x:A \Rightarrow fn\ y:B \Rightarrow x : {\color{purple}A \to (B \to A)}$}
+    
+    \RightLabel{{\color{gray}[gen]}}
+    \UnaryInfC{$\emptyset \vdash \Lambda B. fn\ x:A \Rightarrow \dots : {\color{purple}\forall B. (A \to B \to A)}$}
+    
+    \RightLabel{{\color{gray}[gen]}}
+    \UnaryInfC{$\emptyset \vdash \Lambda A. \Lambda B. fn\ x:A \Rightarrow \dots : {\color{purple}\forall A. \forall B. A \to B \to A}$}
+    
+    \RightLabel{{\color{gray}[spec]}}
+    \UnaryInfC{$\emptyset \vdash (\Lambda A. \Lambda B. \dots)\ Nat : {\color{purple}\forall B. (Nat \to B \to Nat)}$}
+    
+    \RightLabel{{\color{gray}[spec]}}
+    \UnaryInfC{$\emptyset \vdash ((\Lambda A. \Lambda B. fn\ x:A \Rightarrow fn\ y:B \Rightarrow x)\ Nat)\ Bool : {\color{purple}Nat \to Bool \to Nat}$}
+\end{prooftree}
+
+\subsubsection*{auto-applicazione e impredicatività}
+Come abbiamo visto, in \( F1 \) il termine di auto-applicazione \( fn\ x \Rightarrow x\ x \) è impossibile da tipare. Ciò deriva da un vincolo strutturale: se assumiamo che \( x \) abbia tipo \( T \), la prima occorrenza di \( x \) (in posizione di funzione) deve necessariamente avere un tipo \( T \to R \) per poter accettare la seconda \( x \) come argomento. Questo porta all'equazione ricorsiva \( T \equiv T \to R \), che non ammette soluzioni finite in F1 (richiederebbe tipi ricorsivi infiniti).
+
+In \( F2 \), invece, l'auto-applicazione è derivabile grazie alla proprietà di impredicatività (capacità di istanziare un quantificatore \( \forall X \) con un qualsiasi tipo, incluso il tipo stesso che si sta definendo o utilizzando).
+
+Per tipare l'auto-applicazione, assegniamo a \( x \) il tipo polimorfo dell'identità:
+\[ U = \forall X. X \to X \]
+Nel Sistema \( F2 \), non possiamo applicare direttamente un termine polimorfo a un dato. Dobbiamo prima specializzarlo. Il termine che andremo a derivare è quindi:
+\[ fn \ x : U \Rightarrow (x \ U) \ x \]
+Dove il frammento \( (x \ U) \) rappresenta l'istanziazione sintattica della prima \( x \) con il tipo \( U \).
+
+Formalmente:
+\vspace{-1em}
+{
+    \small
+\begin{prooftree}
+    
+    \AxiomC{$x : \forall X. X \to X \vdash x : {\color{purple}\forall X. X \to X}$}
+    
+    \RightLabel{{\color{gray}[spec]}}
+    \UnaryInfC{$x : \forall X. X \to X \vdash x\ (\forall X. X \to X) : {\color{purple}(\forall X. X \to X) \to (\forall X. X \to X)}$}
+    
+    
+    \AxiomC{$x : \forall X. X \to X \vdash x : {\color{purple}\forall X. X \to X}$}
+    
+
+    \RightLabel{{\color{gray}[apply]}}
+    \BinaryInfC{$x : \forall X. X \to X \vdash (x\ (\forall X. X \to X))\ x : {\color{purple}\forall X. X \to X}$}
+    
+    
+    \RightLabel{{\color{gray}[\( fn \)]}}
+    \UnaryInfC{$\emptyset \vdash fn \ x : (\forall X. X \to X) \Rightarrow (x\ (\forall X. X \to X))\ x : {\color{purple}(\forall X. X \to X) \to (\forall X. X \to X)}$}
+\end{prooftree}
+}
+
+
+\newpage
+
+\section{Fun$_{\tau}$: Il sistema dei tipi di ML}
 
 Il linguaggio $Fun_{\tau}$ rappresenta il formalismo teorico alla base del sistema dei tipi di ML (Standard ML). A differenza del System F (F2), dove i tipi sono completamente espliciti, in ML i tipi vengono spesso omessi e calcolati tramite un algoritmo di inferenza.
 Dal punto di vista della potenza espressiva, $Fun_{\tau}$ si colloca tra il lambda calcolo tipato semplice (F1) e il sistema F2, introducendo una forma limitata di polimorfismo, nota come \textbf{sistema di Hindley-Milner}.
