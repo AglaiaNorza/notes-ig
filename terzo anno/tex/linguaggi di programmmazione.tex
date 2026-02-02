@@ -3088,10 +3088,10 @@ essenzialmente
 \item Ogni termine di \( F2 \) \textbf{termina}.
 \end{itemize}
 
-\subsection*{Esempio di inferenza}
+\subsection*{Esempi di inferenza}
 
 Deriviamo il tipo del termine: \( \Lambda A. \Lambda B. fn\ x:A \Rightarrow fn\ y:B \Rightarrow x\)
-\vspace{-1em}
+\vspace{-1.5em}
 \begin{prooftree}
     \AxiomC{$x:A, y:B \vdash x : {\color{purple}A}$}
     
@@ -3109,7 +3109,7 @@ Deriviamo il tipo del termine: \( \Lambda A. \Lambda B. fn\ x:A \Rightarrow fn\ 
 \end{prooftree}
 
 Ora, il termine \( ((\Lambda A. \Lambda B. fn\ x:A \Rightarrow fn\ y:B \Rightarrow x)\ Nat)\ Bool \)
-\vspace{-1em}
+\vspace{-1.5em}
 \begin{prooftree}
     \AxiomC{$x:A, y:B \vdash x : {\color{purple}A}$}
     
@@ -3173,7 +3173,7 @@ Formalmente:
 \section{Fun$_{\tau}$: Il sistema dei tipi di ML}
 
 Il linguaggio $Fun_{\tau}$ rappresenta il formalismo teorico alla base del sistema dei tipi di ML (Standard ML). A differenza del System F (F2), dove i tipi sono completamente espliciti, in ML i tipi vengono spesso omessi e calcolati tramite un algoritmo di inferenza.
-Dal punto di vista della potenza espressiva, $Fun_{\tau}$ si colloca tra il lambda calcolo tipato semplice (F1) e il sistema F2, introducendo una forma limitata di polimorfismo, nota come \textbf{sistema di Hindley-Milner}.
+Dal punto di vista della potenza espressiva, $Fun_{\tau}$ si colloca tra il lambda calcolo tipato semplice (F1) e il sistema F2, introducendo una forma limitata di polimorfismo nota come \textbf{sistema di Hindley-Milner}.
 
 \subsection{Monotipi e Politipi}
 La caratteristica fondamentale che distingue $Fun_{\tau}$ da F2 è la stratificazione dei tipi in due categorie distinte. Questa restrizione è necessaria per garantire l'inferenza automatica dei tipi.
@@ -3210,17 +3210,32 @@ La caratteristica fondamentale che distingue $Fun_{\tau}$ da F2 è la stratifica
 \subsection{Istanza Generica}
 Il meccanismo che permette di utilizzare uno schema polimorfo in contesti concreti è la relazione di \textit{Specializzazione} o \textit{Istanza Generica}.
 
-\begin{defframe}{Definizione: Istanza Generica ($\succ$)}{}
-    Uno schema $\sigma' = \forall Y_1 \dots Y_m . \tau'$ è un'\textbf{istanza generica} di $\sigma = \forall X_1 \dots X_n . \tau$, scritto $\sigma \succ \sigma'$ (oppure $\sigma' \sqsubseteq \sigma$), se:
+\begin{defframe}{Istanza Generica ($\succ$)}{}
+    Uno schema $\sigma' = \forall Y_1 \dots Y_m . \tau'$ è un'\textbf{istanza generica} di $\sigma = \forall X_1 \dots X_n . \tau$,\\ scritto $\sigma \succ \sigma'$ (oppure $\sigma' \sqsubseteq \sigma$), se:
     \[ \tau' = [\tau_1, \dots, \tau_n / X_1, \dots, X_n] \tau \]
     dove le $\tau_i$ sono tipi primitivi e nessuna variabile $Y_j$ appare libera in $\sigma$.
+
+    (possiamo ottenere $\sigma'$ sostituendo le variabili \( X_i \) con dei monotipi)
 \end{defframe}
 
 \textbf{Esempi di specializzazione:}
 \begin{itemize}
-    \item Dato $\sigma = \forall X. X \to X$, il tipo $int \to int$ è istanza generica ($\sigma \succ int \to int$).
-    \item Dato $\sigma = \forall X, Y. X \to Y$, lo schema $\forall Z. (int \to Z) \to bool$ è istanza generica.
-    \item \textit{Non valido:} Se $\sigma = \forall X. Y \to X$, allora $\forall Y. (int \to Y) \to X$ \textit{non} è istanza generica perché $Y$ è libera in $\sigma$ e non può essere catturata dalla quantificazione.
+    \item Dato $\sigma = \forall X. X \to X$, il tipo $int \to int$ è sua istanza generica ($\sigma \succ int \to int$).
+    \item Dato $\sigma = \forall X, Y. X \to Y$, lo schema $\forall Z. (int \to Z) \to bool$ è sua istanza generica.
+    \item \textit{Non valido:} Se $\sigma = \forall X. Y \to X$, allora \ $\forall Y. (int \to Y) \to X$ \textit{non} è istanza generica perché $Y$ è libera in $\sigma$ e non può essere catturata dalla quantificazione.
+
+        \begin{gframe}{cattura di variabile}
+            \vspace{-1em}
+    \[ \sigma = \forall X.\ (Y \to X) \quad \xrightarrow{??} \quad \sigma' = \forall Y.\ ((int \to Y) \to \dots) \]
+
+    Nello schema originale \( \forall X. (Y \to X) \), la variabile \( Y \) è libera - è fissata dal contesto esterno.         
+
+    La formula originale dice: ``Dato quel preciso tipo \( Y \) (es. bool), restituisco una funzione che per ogni \( X \)...''
+
+    Nello schema proposto \( \sigma' \), abbiamo aggiunto un quantificatore \( \forall Y \) - diciamo quindi ``per qualsiasi tipo \( Y \)...''
+    
+    Se permettessimo questo passaggio, la \( Y \) che prima indicava un tipo specifico  verrebbe ``catturata'' dal nuovo \( \forall Y \) e diventerebbe generica.
+   \end{gframe}
 \end{itemize}
 
 \subsection{Regole di Inferenza di $Fun_{\tau}$}
@@ -3413,6 +3428,73 @@ Consideriamo il tipo \( \forall X, Y. X \to (Y \to X) \).
     \item \textbf{Logica:} Corrisponde all'assioma \( A \to (B \to A) \).
     \item \textbf{Programma:} Corrisponde al termine \( \text{fn } x \Rightarrow \text{fn } y \Rightarrow x \). Questo programma è valido e ben tipato, il che conferma che la proposizione logica è una tautologia.
 \end{itemize}
+
+\subsubsection{Esempi di tautologie e tipi abitati}
+{\color{gray}(aggiunti da me per curiosità personale)}
+
+Altri casi in cui la verità logica si traduce in programmi:
+
+\begin{itemize}
+    \item \textit{Transitività dell'implicazione}
+    \begin{itemize}
+        \item \textbf{Logica:} $(A \to B) \land (B \to C) \to (A \to C)$.
+        \item \textbf{Programma:} composizione di funzioni. 
+
+            \subitem Termine: $fn \ f \Rightarrow fn \ g \Rightarrow fn \ x \Rightarrow g(f(x))$ 
+
+        \subitem Tipo: $(A \to B) \to (B \to C) \to (A \to C)$.
+        
+    \subitem Dato che possiamo scrivere una funzione che compone due funzioni, la proposizione logica è dimostrata.
+    \end{itemize}
+
+\item \textit{Scambio di premesse (flip)}
+\begin{itemize}
+    \item \textbf{Logica:} $(A \to (B \to C)) \to (B \to (A \to C))$.
+    \subitem Se assumendo $A$ e poi $B$ posso dimostrare $C$, allora posso arrivare a $C$ anche assumendo prima $B$ e poi $A$ (l'ordine delle ipotesi è irrilevante)
+    \item \textbf{Programma:} Una funzione che inverte l'ordine degli argomenti.
+
+    Termine: $fn \ f \Rightarrow fn \ y \Rightarrow fn \ x \Rightarrow f \ x \ y$ 
+
+    Tipo: $(A \to B \to C) \to (B \to A \to C)$.
+
+\end{itemize}
+
+\end{itemize}
+
+\subsubsection{Proposizioni non tipabili}
+Nella logica classica esistono tautologie che non sono dimostrabili nella logica intuizionista e, di conseguenza, corrispondono a tipi che non possono essere abitati da un programma puro. Questo accade perché l'informatica richiede una costruzione esplicita del risultato.
+
+\begin{gframe}{}
+    In questo contesto, la negazione $\neg A$ è definita come $A \to \bot$ (logicamente equivalenti). \\
+    Un programma di tipo $\neg A$ è una funzione che, se alimentata con un input di tipo $A$, non restituisce mai un valore (crasha o diverge), producendo l'assurdo.
+\end{gframe}
+
+Ecco esempi di formule logicamente valide in logica classica ma computazionalmente impossibili (senza effetti collaterali o eccezioni):
+
+\begin{itemize}
+    \item \textit{Tertium non datur}
+    \begin{itemize}
+        \item \textbf{Logica:} $A \lor \neg A$.
+
+        \item \textbf{Tipo:} $A + (A \to \bot)$
+        \subitem per abitare questo tipo, dovremmo scrivere una funzione universale che, per un qualsiasi tipo generico $A$, sia in grado di decidere se restituire un'istanza di $A$ (ramo sinistro) o una dimostrazione che $A$ è impossibile (ramo destro) - non esiste un algoritmo onnisciente in grado di determinare l'abitabilità di un tipo arbitrario.
+    \end{itemize}
+
+    \item \textit{Eliminazione della doppia negazione}
+    \begin{itemize}
+        \item \textbf{Logica:} $\neg \neg A \to A$. 
+        \item \textbf{Tipo:} $((A \to \bot) \to \bot) \to A$.
+        \subitem questo richiederebbe una funzione che prende in input la ``prova dell'impossibilità che $A$ non esista'' e restituisca un'istanza concreta di $A$ - ma sapere che un dato non può non esistere non equivale ad averlo costruito in memoria.
+    \end{itemize}
+    
+    \item \textit{Legge di Peirce}
+    \begin{itemize}
+        \item \textbf{Logica:} $((A \to B) \to A) \to A$.
+        \item \textbf{Tipo:} stesso della logica.
+        \subitem questo tipo richiede di produrre un $A$ avendo solo una funzione che promette di restituire un $A$ se noi gli forniamo un modo per andare da $A$ a $B$. È un vicolo cieco computazionale: non possiamo ottenere l'$A$ iniziale senza invocare la funzione, ma per invocarla ci serve un $A$ che ancora non abbiamo.
+    \end{itemize}
+\end{itemize}
+
 
 \end{document}
 
