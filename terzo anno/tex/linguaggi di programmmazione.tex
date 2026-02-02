@@ -2984,10 +2984,12 @@ restituisce l'insieme di tutte le \textbf{variabili di tipo libere}, dove:
 \end{cases}
 \]
 
-(essenzialmente
-\( X \in \text{free}(\Gamma)\) se non compare in \( \Gamma \) oppure se compare, ma non ``legato'' 
-             (es. in \( x:X \) è libero, in  \( y: \forall X.X\to X \) è ``legato''))
-        
+essenzialmente
+\( X \in \text{free}(\Gamma)\) se non compare in \( \Gamma \) oppure se compare, ma non ``legato''; per esempio: 
+\begin{itemize}
+    \item se nell'ambiente ho \( x:X \), quell'\(X \) è libero: si riferisce ad un tipo specifico esistente nell'ambiente esterno, ma che non conosciamo: non è definito o specificato
+    \item se ho invece \( y: \forall X.X\to X \), \(X \) non è libero: è vincolato da \(  \forall X.X\to X\)
+\end{itemize}
     \end{defframe}
 
 \begin{cdefframe}{DeepGreenLight}{DeepGreen}{Regole di inferenza}{}
@@ -3029,15 +3031,31 @@ restituisce l'insieme di tutte le \textbf{variabili di tipo libere}, dove:
 \end{itemize}
 \end{cdefframe}
 
-\begin{gframe}{Condizione laterale}
-    La regola di introduzione del $\forall$ impone che la variabile di tipo $X$ non sia libera nel contesto $\Gamma$ ($X \notin \text{free}(\Gamma)$).
+\begin{gframe}{Conseguenze della violazione della condizione laterale}{}
+    La regola \( X \notin \text{free}(\Gamma) \) è fondamentale per garantire la coerenza del sistema.
+    
+    Impedisce di trattare una variabile che ha un tipo specifico (vincolato dal contesto esterno) come se fosse generica.
 
-Se violassimo questa condizione, il sistema diventerebbe logicamente incoerente.
+    Supponiamo di avere nel contesto \( \Gamma = \{ x : X \} \).  \( X \) è libero, e potrebbe essere qualsiasi cosa (es. \texttt{bool} e \( x \) un valore concreto (es. \texttt{true})).
 
-    Supponiamo di avere $x:X$ nel contesto (quindi $X$ libero). Se si ignorasse la regola della condizione laterale, si potrebbe generalizzare $X$ anche se è già in uso.
+    Possiamo analizzare le conseguenze di una violazione della regola su due livelli.
+    \begin{itemize}
+        \item \textit{a livello ``pratico'': rottura della type safety}
+    
+    
+    Se potessimo generalizzare illegalmente su \( X \):
+    \[ x:X \vdash \Lambda X. x : \forall X. X \]
+    
+    Avremmo creato una funzione che promette di convertire \( x \) in qualsiasi tipo. Basterebbe specializzarla per esempio con \texttt{int}:
+    \[ (\Lambda X. x)\ int : int \]
+    
+ Il type system crede di avere un intero, ma a runtime il valore è ancora \texttt{true}.
 
-        Questo ci permetterebbe di costruire un termine che converte ``magicamente'' una variabile $x$ (di tipo generico $X$) in un intero, forzandone il tipo:
-        \vspace{-1em}
+\item \textit{livello logico: incoerenza del sistema}
+    
+    Formalmente, questa violazione permette di costruire termini che violano la natura costruttiva del calcolo (es. creare un intero senza avere nessun numero).
+    
+    Costruiamo il termine \( M = \Lambda X.\lambda x : X.(\Lambda X.x)\ int \).
 \begin{center}
     \begin{prooftree}
         \AxiomC{ $x:X \vdash x:X$}
@@ -3047,14 +3065,10 @@ Se violassimo questa condizione, il sistema diventerebbe logicamente incoerente.
         \UnaryInfC{$\varnothing \vdash \Lambda X.\lambda x : X.(\Lambda X.x)\ int : \forall X.(X \to int)$}
     \end{prooftree}
     \end{center}
-
-     Chiamiamo \( M \) il termine risultante dalla derivazione sopra:
-    \[ M = \Lambda X.\lambda x : X.(\Lambda X.x)\ int \]
-
-        Usiamo \( M \) per costruire un intero dal nulla.    
     
-        Considerando la valutazione del termine $M\ (int \to int)(M\ int)$:
- \vspace{-1.5em}
+    Se ora applichiamo questo termine a se stesso:
+    \[ \varnothing \vdash M\ (int \to int)(M\ int) : int \]
+    \vspace{-1em}
     \begin{center}
     \begin{prooftree}
         \AxiomC{$\varnothing \vdash M : \forall X.(X \to int)$}
@@ -3067,11 +3081,12 @@ Se violassimo questa condizione, il sistema diventerebbe logicamente incoerente.
     \end{prooftree}
     \end{center}
 
-     il termine $M\ (int \to int)(M\ int)$ corrisponderebbe ad un intero, nonostante al suo interno non sia presente alcun numero intero.
+    Otteniamo un termine che il sistema classifica come intero, nonostante al suo interno non compaia mai nessuna costante numerica. 
 
-Avremmo "costruito un intero fatto di aria fritta": il sistema prevederebbe l'esistenza di un intero senza sapere quale esso sia, violando la natura costruttiva del calcolo.
-
+    Abbiamo dimostrato l'esistenza di un oggetto che non esiste (``costruito un intero di aria fritta''), rendendo la logica del sistema incoerente.
+    \end{itemize}
 \end{gframe}
+
 
 \subsection{Proprietà del Sistema F2}
 \begin{itemize}
@@ -3221,7 +3236,7 @@ Al contrario, il termine equivalente con lambda:
 \[ (fn \ x \Rightarrow (x \ 5, \ x \ true)) (fn \ y \Rightarrow y) \]
 \textbf{Non è tipabile} in $Fun_{\tau}$. La regola di astrazione ($fn$) obbligherebbe il parametro formale $x$ ad avere un unico tipo primitivo $\tau$ (dovrebbe essere contemporaneamente $int \to \dots$ e $bool \to \dots$).
 
-\section{Isomorfismo di Curry-Howard}
+\chapter{Isomorfismo di Curry-Howard}
 
 L'isomorfismo di Curry-Howard stabilisce una corrispondenza tra la logica formale e la teoria dei tipi. Esso rivela che le regole di derivazione logica e le regole di tipizzazione del lambda calcolo non sono semplicemente simili, ma sono sostanzialmente la stessa cosa vista sotto due lenti diverse.
 
