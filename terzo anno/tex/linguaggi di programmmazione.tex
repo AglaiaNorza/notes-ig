@@ -2810,15 +2810,39 @@ Consideriamo il termine
 Deriviamo il suo tipo in questo modo:
 \vspace{-1.5em}
 \begin{prooftree}
-    \AxiomC{$x: int \to bool \vdash x: int \to bool$}
-    \AxiomC{$\Gamma \vdash 5: int$}
-    \BinaryInfC{$x: int \to bool \vdash x\ 5: bool$}
-    \UnaryInfC{$\emptyset \vdash fn\ x: int \to bool \Rightarrow x\ 5 : (int \to bool) \to bool$}
+    \AxiomC{$x: int \to bool \vdash x: {\color{purple}int \to bool}$}
+    \AxiomC{$ x: int \to bool\vdash 5: {\color{purple}int}$}
+    \LeftLabel{\color{gray}[apply]}
+    \BinaryInfC{$x: int \to bool \vdash x\ 5: {\color{purple}bool}$}
+    \LeftLabel{\color{gray}[\( fn \)]}
+    \UnaryInfC{$\emptyset \vdash fn\ x: int \to bool \Rightarrow x\ 5 : {\color{purple}(int \to bool) \to bool}$}
 
-    \AxiomC{$y: int \vdash true: bool$}
-    \UnaryInfC{$\emptyset \vdash fn\ y: int \Rightarrow true: bool$}
+    \AxiomC{$y: int \vdash true: {\color{purple}bool}$}
+    \RightLabel{{\color{gray}[\( fn \)]}}
+    \UnaryInfC{$\emptyset \vdash fn\ y: int \Rightarrow true: {\color{purple}int \to bool}$}
 
-    \BinaryInfC{$(fn\ x: int \to bool \Rightarrow x\ 5)\ (fn\ y: int \Rightarrow true): bool$}
+\RightLabel{{\color{gray}[apply]}}
+\BinaryInfC{$(fn\ x: int \to bool \Rightarrow x\ 5)\ (fn\ y: int \Rightarrow true): {\color{purple}bool}$}
+\end{prooftree}
+
+Facciamo un altro esempio:
+
+\[\emptyset \vdash fn\ f: int \to int \Rightarrow (fn\ x: int \Rightarrow f\ x) \]
+Deriviamo il suo tipo in questo modo:
+\vspace{-1.5em}
+\begin{prooftree}
+    \AxiomC{$f: int \to int, x: int \vdash f : {\color{purple}int \to int}$}
+    
+    \AxiomC{$f: int \to int, x: int \vdash x : {\color{purple}int}$}
+    
+    \RightLabel{{\color{gray}[apply]}}
+    \BinaryInfC{$f: int \to int, x: int \vdash f\ x : {\color{purple}int}$}
+    
+    \RightLabel{{\color{gray}[\( fn \)]}}
+    \UnaryInfC{$f: int \to int \vdash fn\ x: int \Rightarrow f\ x : {\color{purple}int \to int}$}
+    
+    \RightLabel{{\color{gray}[\( fn \)]}}
+    \UnaryInfC{$\emptyset \vdash fn\ f: int \to int \Rightarrow (fn\ x: int \Rightarrow f\ x) : {\color{purple}(int \to int) \to (int \to int)}$}
 \end{prooftree}
 
 \subsection{Espressioni non tipabili}
@@ -2832,7 +2856,7 @@ Questa si deriverebbe con albero:
 \AxiomC{$x:A \vdash x: A\to B$}
 \AxiomC{$x:A \vdash x:A$}
 \BinaryInfC{$x:A \vdash xx:B$}
-\UnaryInfC{$\emptyset \vdash fn \ x:A \Rightarrow xx: A\to B$}
+\UnaryInfC{$\emptyset \vdash fn \ x:A \Rightarrow xx: \\ ??$} 
 \DisplayProof
 \]
 
@@ -2976,14 +3000,32 @@ restituisce l'insieme di tutte le \textbf{variabili di tipo libere}, dove:
         \UnaryInfC{$\Gamma \vdash \Lambda X.M : \forall X.A$}
     \end{prooftree}
 
-    \subitem permette di astrarre sul tipo, creando un termine polimorfo
+    \begin{gframe}{}
+\begin{itemize}
+    \item ``top-down''
+        \subitem la regola dice che se abbiamo un termine \( M \) che funziona con un tipo generico \( A \) (senza vincoli esterni su \( X \)), possiamo ``impacchettarlo'' con \( \Lambda X \); il risultato è un nuovo termine polimorfo che non dipende più da un tipo fisso, ma accetta il tipo come parametro
+
+\subitem{\color{CadetBlue}(dalla funzione specifica \( M \) creo la funzione generica \(\Lambda X. M \))}
+
+\item ``bottom-up'' (verifica / type inference)
+
+    \subitem in una derivazione, per inferire da \( \Lambda X \) il tipo completo \( \forall X. A \):
+\begin{enumerate}
+    \item ``spogliamo'' il termine della sua astrazione \( \Lambda X \).
+    \item analizziamo il corpo \( M \) trattando la variabile \( X \) come se fosse un tipo base disponibile (una costante temporanea)
+    \item troviamo che il corpo \( M \) ha un certo tipo \( A \)     
+    \item il tipo finale del termine originale è \( \forall X. \) seguito dal tipo \( A \) appena trovato.
+\end{enumerate}
+\end{itemize}
+\end{gframe}
+
     \item \textbf{Specializzazione del tipo:}
     \begin{prooftree}
         \AxiomC{$\Gamma \vdash M : \forall X.A$}
         \UnaryInfC{$\Gamma \vdash M\ B :[B/X]A $}
    \end{prooftree}
 
-    \subitem permette di istanziare un termine polimorfo con un tipo concreto \( B \)
+    \subitem permette di istanziare un termine polimorfo con un tipo concreto \( B \) (per poterlo fare, dobbiamo dimostrare che \( M \) sia effettivamente polimorfo)
 \end{itemize}
 \end{cdefframe}
 
