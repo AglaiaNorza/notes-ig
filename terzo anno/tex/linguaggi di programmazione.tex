@@ -2900,23 +2900,39 @@ Per comprendere a fondo il funzionamento di \( F2 \), è fondamentale distinguer
 Mentre in \( F1 \) i termini vengono tipati in un contesto che assegna tipi alle variabili, in \( F2 \) le variabili agiscono da segnaposto non solo per i termini, ma anche per i tipi.
 Termini e tipi operano quindi su livelli distinti e i simboli $\forall$ e $\Lambda$ ne gestiscono l'interazione.
 
-\subsubsection{Il Quantificatore Universale ($\forall X. A$)}
+\subsubsection{Il quantificatore universale ($\forall X. A$)}
 Il simbolo $\forall$ non denota un singolo tipo, bensì una \textbf{famiglia di tipi}.
 Asserire che un termine possiede il tipo $\forall X. A$ equivale a una quantificazione logica universale: significa garantire che la struttura $A$ è valida per \textit{qualsiasi} tipo concreto venga sostituito alla variabile $X$.
 
-Da un punto di vista semantico, questo implica una proprietà di uniformità (o parametricità): il comportamento del termine non deve dipendere dalle specificità del tipo $X$ - esso deve funzionare allo stesso modo sia che $X$ sia un $int$, sia che sia un $bool$.
+Da un punto di vista semantico, questo implica una proprietà di uniformità (o parametricità): il comportamento del termine non deve dipendere dalle specificità del tipo $X$. Facciamo alcuni esempi per vedere come $X$ viene usata nel corpo $A$ per capire la relazione tra il tipo generico e il risultato:
 
-\subsubsection{L'Astrazione sui Tipi ($\Lambda X. M$)}
+\begin{itemize}
+    \item  $\forall X. X \to X$ 
+        \subitem output dipendente da \( X \)
+    \subitem il tipo di ritorno varia in base all'istanza. Se istanziamo $X$ con $int$, la funzione restituisce un $int$. Se lo istanziamo con $bool$, restituisce un $bool$ (l'output "segue" il tipo di input)
+
+    \item $\forall X. X \to bool$
+        \subitem output fisso, input variabile
+    \subitem in questo caso, la funzione accetta un argomento di tipo qualsiasi ($X$), ma restituisce sempre un booleano 
+    (ad sempio, una funzione che scarta l'argomento e restituisce sempre \texttt{true}: \( fn \ x \Rightarrow true \))
+
+\item $\forall X. int$
+        \subitem completa indipendenza
+        \subitem qui la variabile $X$ non appare nel tipo del risultato - parametrizziamo su un \( X \), e possiamo passare un tipo solo per soddisfare il quantificatore \( \forall \), ma il termine lo ignora e restituisce un valore fisso\\ (esempio: $M = \Lambda X. 42$ (vale 42))
+\end{itemize}
+
+
+\subsubsection{L'astrazione sui tipi ($\Lambda X. M$)}
 Il simbolo $\Lambda$ è l'operatore costruttivo che realizza la quantificazione universale.
 Utilizziamo la sintassi \( \Lambda X.M \) per \textbf{dichiarare la variabile} di tipo \( X \) all'interno dell'espressione \( M \).
 
 Possiamo interpretare questo costrutto in due modi complementari:
 \begin{itemize}
-    \item \textit{come definizione (Definition):} è il meccanismo che produce un termine di tipo \( \forall X.A \). Il corpo $M$ è definito in modo parametrico rispetto a $X$ e il calcolo è sospeso fintanto che non viene fornito un tipo concreto.
+    \item \textit{come definizione (definition):} è il meccanismo che produce un termine di tipo \( \forall X.A \). Il corpo $M$ è definito in modo parametrico rispetto a $X$ e il calcolo è sospeso fintanto che non viene fornito un tipo concreto.
     \item \textit{come funzione (Type $\to$ Term):} mentre l'astrazione classica ($fn$) mappa valori in valori, l'astrazione $\Lambda$ definisce una funzione che \textit{mappa tipi in termini}.
 \end{itemize}
 
-\subsubsection{L'Istanziazione dei Tipi (Specialization)}
+\subsubsection{L'Istanziazione dei tipi (Specialization)}
 Per utilizzare un'espressione polimorfa definita tramite $\Lambda$, è necessario prima \textbf{istanziarne} (o specializzarne) il tipo.
 La sintassi dell'istanziazione è \( M A \) (dove \( M \) è il termine polimorfo e \( A \) è il tipo specifico).
 
@@ -2953,7 +2969,16 @@ Questo passaggio è cruciale per l'esecuzione:
     \[
     \underbracket[0.187ex]{((\Lambda X . fn \ x : X \Rightarrow x) \ int)}_{\text{produce una funzione } int \to int} \ 5
     \]
+
+    Il comportamento dell'identità è indipendente dal tipo: se proviamo con i booleani, la struttura del calcolo rimarrà identica:
+    \[
+    \underbracket[0.187ex]{((\Lambda X . fn \ x : X \Rightarrow x) \ bool)}_{\text{diventa } bool \to bool} \ true \longrightarrow_{\beta} true
+    \]
+    In entrambi i casi, l'astrazione sul tipo \( \Lambda X \) è stata eliminata senza che la funzione dovesse "controllare" cosa fosse \( X \). L'algoritmo ($x \Rightarrow x$) agisce ciecamente sul valore, sia esso un 5 o un \textit{true}.
+
     \end{gframe}
+
+
 
 
     \begin{defframe}{Variabili libere}{}
