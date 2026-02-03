@@ -3307,6 +3307,12 @@ Il sistema di tipi utilizza giudizi della forma $\Gamma \vdash M : \sigma$. Oltr
         \UnaryInfC{$\Gamma \vdash fn\ x \Rightarrow M : \tau \to \tau'$}
     \end{prooftree}
 
+    \begin{itemize}
+        \item non sappiamo ancora che tipo abbia \( x \), ma assumiamo che sia un monotipo \( \tau \)
+        \item sotto questa ipotesi, analizziamo \( M \) e determiniamo che tipo \(\tau '  \) ritorni (il tipo del \( fn \) sarà \( \tau \to \tau '\))
+        \item NB: la regola usa \( \tau \) (tipo monomorfo): gli argomenti di una funzione non possono essere polimorfi
+    \end{itemize}
+
 \item \textbf{Applicazione}:
     \begin{prooftree}
         \AxiomC{$\Gamma \vdash M : \tau \to \tau'$}
@@ -3342,7 +3348,7 @@ Il sistema di tipi utilizza giudizi della forma $\Gamma \vdash M : \sigma$. Oltr
 \end{cdefframe}
 
 \subsection{Il Let-Polimorfismo}
-Mentre le funzioni ($\lambda$ o $fn$) accettano solo argomenti monomorfi, il costrutto \texttt{let} permette di legare una variabile a uno schema polimorfo.
+Mentre le funzioni accettano solo argomenti monomorfi, il costrutto \texttt{let} permette di legare una variabile a uno schema polimorfo.
 
 \begin{cdefframe}{DeepGreenLight}{DeepGreen}{Regola Let-in}{}
     \begin{prooftree}
@@ -3368,6 +3374,34 @@ Consideriamo il termine:
 Al contrario, il termine equivalente con lambda:
 \[ (fn \ x \Rightarrow (x \ 5, \ x \ true)) (fn \ y \Rightarrow y) \]
 \textbf{Non è tipabile} in $Fun_{\tau}$. La regola di astrazione ($fn$) obbligherebbe il parametro formale $x$ ad avere un unico tipo primitivo $\tau$ (dovrebbe essere contemporaneamente $int \to \dots$ e $bool \to \dots$).
+
+
+\begin{gframe}{Approfondimento: Perché il Let supporta il polimorfismo e la Fn no?}
+    La distinzione nasce da un compromesso fondamentale tra \textit{potenza espressiva} e \textit{decidibilità dell'inferenza}.
+
+
+    \begin{itemize}
+        \item costrutto \texttt{let} - conosciamo il valore !!
+
+    In \texttt{let x = M in N}, il compilatore ha accesso immediato al termine \( M \).
+    \begin{itemize}
+        \item il sistema analizza \( M \) \textit{prima} di guardare \( N \).
+        \item calcola il tipo di \( M \), vede che è generico e lo generalizza in uno schema \( \sigma \) (es. \( \forall \alpha. \alpha \to \alpha \))
+        \item quindi, ogni volta che \( x \) compare nel corpo \( N \), si applica la regola della specializzazione
+    \end{itemize}
+
+\item costrutto \texttt{fn} - non conosciamo il valore
+
+    In \texttt{fn x => N}, stiamo definendo una funzione che verrà chiamata da qualcun altro in futuro.
+    \begin{itemize}
+        \item il compilatore non sa cosa verrà passato al posto di \( x \).
+        \item per poter inferire automaticamente i tipi, il sistema assume che \( x \) abbia un solo tipo concreto \( \tau \) (monotipo).
+        \item all'interno del corpo \( N \), tutte le occorrenze di \( x \) devono essere coerenti con questo unico tipo \( \tau \).
+    \end{itemize}
+
+       \textit{Nota storica:} se permettessimo il polimorfismo anche negli argomenti di funzione (polimorfismo di rango superiore), l'inferenza dei tipi diventerebbe indecidibile (dimostrato da Wells, 1994). ML sceglie di limitare la \texttt{fn} per garantire che l'inferenza funzioni sempre.
+    \end{itemize}
+\end{gframe}
 
 \chapter{Isomorfismo di Curry-Howard}
 
