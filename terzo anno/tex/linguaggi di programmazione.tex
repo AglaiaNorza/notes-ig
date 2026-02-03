@@ -1969,24 +1969,24 @@ Per dimostrare che l'intero \texttt{if} porta alla postcondizione, dobbiamo dimo
 
     \item regola del \textbf{while}:
 \[
-\AxiomC{$\{P \wedge Q\} \ C \ \{P\}$}
+\AxiomC{$\{I \wedge Q\} \ C \ \{I\}$}
 \RightLabel{$(while)$}
-\UnaryInfC{$\{P\} \ while \ Q \ do \ C \ \{P \wedge \neg Q\}$}
+\UnaryInfC{$\{I\} \ while \ Q \ do \ C \ \{I \wedge \neg Q\}$}
 \DisplayProof
 \]
 
 {
 \color{CadetBlue}
-Non possiamo sapere quante volte sarà eseguito il corpo di un ciclo \texttt{while} - per risolverlo usiamo quindi l'invariante di ciclo \( P \).
+Non possiamo sapere quante volte sarà eseguito il corpo di un ciclo \texttt{while} - per risolverlo usiamo quindi l'invariante di ciclo \( I \).
     \begin{itemize}
-        \item premessa (corpo del ciclo): Dobbiamo dimostrare che se l'invariante \( P \) è vero all'inizio del giro, e la guardia \( Q \) è vera (quindi si entra nel ciclo), allora dopo aver eseguito \( C \), l'invariante \( P \) è \textit{ancora} vera.
+        \item premessa (corpo del ciclo): dobbiamo dimostrare che se l'invariante \( I \) è vero all'inizio del giro, e la guardia \( Q \) è vera (quindi si entra nel ciclo), allora dopo aver eseguito \( C \), l'invariante \( I \) è \textit{ancora} vera.
         \item conclusione: se la premessa regge, allora quando il ciclo finisce (e se finisce), sapremo due cose:
         \begin{enumerate}
-            \item l'invariante \( P \) è ancora vero (perché il corpo lo preserva sempre).
+            \item l'invariante \( I \) è ancora vero (perché il corpo lo preserva sempre).
             \item la guardia \( Q \) è falsa (altrimenti il ciclo non sarebbe finito).
         \end{enumerate}
     \end{itemize}
-    La postcondizione è quindi \( P \wedge \neg Q \).
+    La postcondizione è quindi \( I \wedge \neg Q \).
 }
 
     \item regola della \textbf{concatenazione}:
