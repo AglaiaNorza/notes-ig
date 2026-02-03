@@ -3240,22 +3240,33 @@ La caratteristica fondamentale che distingue $Fun_{\tau}$ da F2 è la stratifica
     \[ M, N ::= k \mid x \mid fn \ x\Rightarrow M \mid M N \mid let \ x = M \ in \ N \]
 \end{defframe}
 \subsection{Istanza Generica}
-Il meccanismo che permette di utilizzare uno schema polimorfo in contesti concreti è la relazione di \textit{Specializzazione} o \textit{Istanza Generica}.
+Il meccanismo che permette di utilizzare uno schema polimorfo in contesti concreti è la relazione di \textit{specializzazione} o \textit{istanza generica}.
 
-\begin{defframe}{Istanza Generica ($\succ$)}{}
+\begin{defframe}{Istanza generica ($\succ$)}{}
     Uno schema $\sigma' = \forall Y_1 \dots Y_m . \tau'$ è un'\textbf{istanza generica} di $\sigma = \forall X_1 \dots X_n . \tau$,\\ scritto $\sigma \succ \sigma'$ (oppure $\sigma' \sqsubseteq \sigma$), se:
     \[ \tau' = [\tau_1, \dots, \tau_n / X_1, \dots, X_n] \tau \]
     dove le $\tau_i$ sono tipi primitivi e nessuna variabile $Y_j$ appare libera in $\sigma$.
 
-    (possiamo ottenere $\sigma'$ sostituendo le variabili \( X_i \) con dei monotipi)
+    {\color{CadetBlue}(possiamo ottenere $\sigma'$ sostituendo le variabili \( X_i \) (\textit{solo quelle} quantificate da un \( \forall X_i \)) con dei monotipi)}
+
+    \begin{gframe}{}
+    I quantificatori $\forall Y_1 \dots Y_m$ in $\sigma'$ sono necessari per chiudere lo schema: se la sostituzione introduce nuove variabili di tipo (contenute nei $\tau_i$), queste risulterebbero libere in $\tau'$; la regola impone quindi di quantificarle tutte (e sole quelle) per mantenere lo schema chiuso (vedi esempio sotto).
+    \end{gframe}
 \end{defframe}
 
 \textbf{Esempi di specializzazione:}
 \begin{itemize}
     \item dato $\sigma = \forall X. X \to X$, il tipo $int \to int$ è sua istanza generica ($\sigma \succ int \to int$).
+    
     \item dato $\sigma = \forall X, Y. X \to Y$, lo schema $\forall Z. (int \to Z) \to bool$ è sua istanza generica.
-    \item \textit{non valido:} Se $\sigma = \forall X. Y \to X$, allora \ $\forall Y. (int \to Y) \to X$ \textit{non} è istanza generica perché $Y$ è libera in $\sigma$ e non può essere catturata dalla quantificazione.
 
+    \begin{itemize}
+        \item[$\hookrightarrow$] abbiamo sostituito $X$ con il tipo $(int \to Z)$
+        \item[$\hookrightarrow$] la variabile $Z$ è nuova ed è libera dopo la sostituzione
+        \item[$\hookrightarrow$] dobbiamo aggiungere $\forall Z$ in testa per chiudere lo schema
+    \end{itemize}
+
+    \item \textit{non valido:} Se $\sigma = \forall X. Y \to X$, allora \ $\forall Y. (int \to Y) \to X$ \textit{non} è istanza generica perché $Y$ è libera in $\sigma$ e non può essere catturata dalla quantificazione (violazione della condizione laterale).
         \begin{gframe}{cattura di variabile}
             \vspace{-1em}
             \[ \sigma = \forall X.\ (Y \to X) \quad \overset{??}{\succ} \quad \sigma' = \forall Y.\ ((int \to Y) \to \dots) \]
