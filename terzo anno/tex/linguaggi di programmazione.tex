@@ -1650,6 +1650,38 @@ Questa semantica richiede due modifiche alle regole operazionali:
 \end{itemize}
 \end{cdefframe}
 
+\begin{gframe}{Call-by-Reference vs Call-by-Name}
+La differenza tra call-by-reference e call-by-name non è banale: le due semantiche differiscono per il tempo di valutazione dell'\( L-Value \) input della funzione.
+
+Consideriamo il seguente programma:
+    \begin{lstlisting}
+        arr A = [0, 0] in
+        var i = 0 in
+            proc p(x) is 
+                (i := 1; x := 5) 
+            in
+                call p(A[i])
+    \end{lstlisting}
+
+    \begin{itemize}
+        \item \textit{Call-by-Reference}:
+        \begin{enumerate}
+            \item alla chiamata, si valuta l'L-value dell'argomento $A[i]$. Dato che $i=0$, il parametro $x$ diventa un alias per la locazione di A[0].
+            \item nel corpo, $i$ diventa 1.
+            \item l'assegnamento $x:=5$ scrive nella locazione fissata al passo 1 ($A[0]$).
+        \item \textit{Risultato:} $A = [5, 0]$.
+        \end{enumerate}
+
+        \item \textit{Call-by-Name:}
+        \begin{enumerate}
+            \item alla chiamata, $x$ viene associato alla chiusura dell'espressione $(A[i], E)$.
+            \item nel corpo, $i$ diventa 1.
+            \item all'assegnamento $x:=5$, viene invocata la regola di accesso per $x$. Si valuta $A[i]$ con lo stato attuale ($i=1$).
+        \item \textit{Risultato:} $A = [0, 5]$.
+        \end{enumerate}
+    \end{itemize}
+\end{gframe}
+
 \begin{lemmaframe}{(Non-)equivalenza tra le semantiche}{}
     In \( All \), non esistono due semantiche equivalenti.
 \end{lemmaframe}
