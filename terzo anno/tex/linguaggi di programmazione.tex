@@ -2934,7 +2934,7 @@ Possiamo interpretare questo costrutto in due modi complementari:
 
 \subsubsection{L'Istanziazione dei tipi (Specialization)}
 Per utilizzare un'espressione polimorfa definita tramite $\Lambda$, è necessario prima \textbf{istanziarne} (o specializzarne) il tipo.
-La sintassi dell'istanziazione è \( M A \) (dove \( M \) è il termine polimorfo e \( A \) è il tipo specifico).
+La sintassi dell'istanziazione è \( M B \) (dove \( M \) è il termine polimorfo e \( B \) è il tipo specifico).
 
 Questo passaggio è cruciale per l'esecuzione:
 \begin{enumerate}
@@ -3020,9 +3020,14 @@ essenzialmente
     \begin{gframe}{}
 \begin{itemize}
     \item ``top-down''
-        \subitem la regola dice che se abbiamo un termine \( M \) che funziona con un tipo generico \( A \) (senza vincoli esterni su \( X \)), possiamo ``impacchettarlo'' con \( \Lambda X \); il risultato è un nuovo termine polimorfo che non dipende più da un tipo fisso, ma accetta il tipo come parametro
+        \subitem la regola dice che se il termine \( M \) è ben tipato assumendo che \( X \) sia un tipo qualsiasi (una variabile libera non vincolata nel contesto \( \Gamma \)), allora la logica di \( M \) è valida universalmente.
+        \subitem possiamo quindi astrarre \( X \): usiamo \( \Lambda X \) per trasformare quella variabile libera in un parametro di ingresso
+        \subitem \( \Lambda X. M \) non è più un termine che ``usa'' un tipo \( X \), ma una funzione che ``aspetta'' un tipo per essere eseguita.
 
-\subitem{\color{CadetBlue}(dalla funzione specifica \( M \) creo la funzione generica \(\Lambda X. M \))}
+        \begin{gframe}{}
+        Immaginiamo un termine $M = fn \ y: X \to y$.\\
+        Qui $M$ ha senso solo se sappiamo cos'è $X$. Applicando la regola ($\Lambda X. M$), otteniamo $\Lambda X. fn \ y:X \Rightarrow y$: ora il termine è autosufficiente: non dipende più da una definizione esterna di $X$, perché la definisce lui stesso come parametro.
+        \end{gframe}
 
 \item ``bottom-up'' (verifica / type inference)
 
@@ -3164,7 +3169,9 @@ In \( F2 \), invece, l'auto-applicazione è derivabile grazie alla proprietà di
 
 Per tipare l'auto-applicazione, assegniamo a \( x \) il tipo polimorfo dell'identità:
 \[ U = \forall X. X \to X \]
-Nel Sistema \( F2 \), non possiamo applicare direttamente un termine polimorfo a un dato. Dobbiamo prima specializzarlo. Il termine che andremo a derivare è quindi:
+Ma nel Sistema \( F2 \), non possiamo applicare direttamente un termine polimorfo a un dato: \( xx \) è un'applicazione e la regola delle applicazioni richiede un tipo funzione \( A \to B \), mentre noi abbiamo un tipo quantificato (\( \forall X.X\to X \)) - per poterlo usare come tipo funzione, dobbiamo prima specializzarlo.
+
+Il termine che andremo a derivare è quindi:
 \[ fn \ x : U \Rightarrow (x \ U) \ x \]
 Dove il frammento \( (x \ U) \) rappresenta l'istanziazione sintattica della prima \( x \) con il tipo \( U \).
 
@@ -3245,19 +3252,19 @@ Il meccanismo che permette di utilizzare uno schema polimorfo in contesti concre
 
 \textbf{Esempi di specializzazione:}
 \begin{itemize}
-    \item Dato $\sigma = \forall X. X \to X$, il tipo $int \to int$ è sua istanza generica ($\sigma \succ int \to int$).
-    \item Dato $\sigma = \forall X, Y. X \to Y$, lo schema $\forall Z. (int \to Z) \to bool$ è sua istanza generica.
-    \item \textit{Non valido:} Se $\sigma = \forall X. Y \to X$, allora \ $\forall Y. (int \to Y) \to X$ \textit{non} è istanza generica perché $Y$ è libera in $\sigma$ e non può essere catturata dalla quantificazione.
+    \item dato $\sigma = \forall X. X \to X$, il tipo $int \to int$ è sua istanza generica ($\sigma \succ int \to int$).
+    \item dato $\sigma = \forall X, Y. X \to Y$, lo schema $\forall Z. (int \to Z) \to bool$ è sua istanza generica.
+    \item \textit{non valido:} Se $\sigma = \forall X. Y \to X$, allora \ $\forall Y. (int \to Y) \to X$ \textit{non} è istanza generica perché $Y$ è libera in $\sigma$ e non può essere catturata dalla quantificazione.
 
         \begin{gframe}{cattura di variabile}
             \vspace{-1em}
-    \[ \sigma = \forall X.\ (Y \to X) \quad \xrightarrow{??} \quad \sigma' = \forall Y.\ ((int \to Y) \to \dots) \]
+            \[ \sigma = \forall X.\ (Y \to X) \quad \overset{??}{\succ} \quad \sigma' = \forall Y.\ ((int \to Y) \to \dots) \]
 
     Nello schema originale \( \forall X. (Y \to X) \), la variabile \( Y \) è libera - è fissata dal contesto esterno.         
 
-    La formula originale dice: ``Dato quel preciso tipo \( Y \) (es. bool), restituisco una funzione che per ogni \( X \)...''
+    La formula originale dice: ``dato quel preciso tipo \( Y \) (es. bool), restituisco una funzione che per ogni \( X \)...''
 
-    Nello schema proposto \( \sigma' \), abbiamo aggiunto un quantificatore \( \forall Y \) - diciamo quindi ``per qualsiasi tipo \( Y \)...''
+    Nello schema \( \sigma' \), abbiamo aggiunto un quantificatore \( \forall Y \) - diciamo quindi ``per qualsiasi tipo \( Y \)...''
     
     Se permettessimo questo passaggio, la \( Y \) che prima indicava un tipo specifico  verrebbe ``catturata'' dal nuovo \( \forall Y \) e diventerebbe generica.
    \end{gframe}
