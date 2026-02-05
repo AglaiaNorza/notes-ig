@@ -2686,7 +2686,7 @@ Procediamo per induzione su \(n\) per dimostrare \(P(n): \forall m.\; \texttt{pl
     
         Assumiamo \(P(n): \texttt{plus}\; n\; m \equiv \mathtt{plus}\; m\; n\).
     
-        Dobbiamo dimostrare \(P(succ \; n): \mathtt{plus}(succ \; n)\; m \equiv \mathtt{plus}\; m\; (\mathtt{succ}\; n)\).
+        Dobbiamo dimostrare \(P(succ \; n): \mathtt{plus}(succ \; n \ succ \ m) \equiv \mathtt{plus}\; ( succ \ m \ succ\; n)\).
 .
 
 Definiamo il predicato ausiliario $R(x) := [\texttt{plus } (succ \ n) \ x = \texttt{plus } x \ (succ \ n)]$. 
@@ -3303,7 +3303,7 @@ La caratteristica fondamentale che distingue $Fun_{\tau}$ da F2 è la stratifica
     I termini di \( Fun_{\tau} \) sono del tipo:
     \[ M, N ::= k \mid x \mid fn \ x\Rightarrow M \mid M N \mid let \ x = M \ in \ N \]
 \end{defframe}
-\subsection{Istanza Generica}
+\subsection{Istanza generica}
 Il meccanismo che permette di utilizzare uno schema polimorfo in contesti concreti è la relazione di \textit{specializzazione} o \textit{istanza generica}.
 
 \begin{defframe}{Istanza generica ($\succ$)}{}
