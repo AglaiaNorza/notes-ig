@@ -2575,8 +2575,14 @@ Introduciamo ora le regole di un sistema logico per la verifica formale dei prog
     Per esempio, se applicassimo \( [y/x] fn \ y \Rightarrow x \) senza fare attenzione, otterremmo \( fn \ y \Rightarrow y \), che ci permetterebbe di dimostrare affermazioni false.
 
 Se per esempio abbiamo
-\[ fn \ y \Rightarrow (fn \ x \Rightarrow fn \ y \Rightarrow x) \underline{y} \]
-sostituendo ``bovinamente'', l'ultima \( y \), che è legata al \( fn \) più esterno, entra nello scope del \( fn \) più interno (si dice che ``viene catturata'').
+\[  (fn \ x \Rightarrow fn \ y \Rightarrow x) \underline{y} \]
+sostituendo ``bovinamente'', l'ultima \( y \), che è legata all'esterno, entra nello scope del \( fn \) più interno (si dice che ``viene catturata'').
+
+\begin{itemize}
+    \item io ho \( fn \ x \Rightarrow fn \ y \Rightarrow x \), ovvero una funzione che, data una \( x \), restituisce una funzione che per qualsiasi input restituirà \( x \)
+    \item io passo \( y \) a questa funzione - essa diventa di fatto \( fn \ y \Rightarrow y \) (perché \( x \) è \( y \))
+    \item il problema è che ora, poiché il parametro si chiama \( y \), la funzione (che ora è \( fn \ y \Rightarrow y \)) diventerà la funzione identità e tornerà quindi un qualsiasi input che riceverà, invece di ritornare \( x \)
+\end{itemize}
 
 Per evitarlo, ci è utile la \( \alpha-regola \). Possiamo assumere che l'operatore di sostituzione rinomini eventuali variabili legate per evitarne la cattura.
 
