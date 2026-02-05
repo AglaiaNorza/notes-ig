@@ -148,9 +148,18 @@ In questo modo, dire \( P(0) \) equivale a dire \( 0 \in S \), e dire \( P(n) \i
         a_1, \dots, a_n \in S \implies f( a_1, \dots, a_n,  k_1, \dots, k_n) \in S
     \]
 
-    \begin{gframe}[colframe=RedViolet, colbacktitle=RedViolet]{nota!}
-        Data un'operazione \( f \) che prende solo elementi esterni all'insieme \( S \) (come per esempio la funzione nullaria \ \( \mathbb{1} \to A \)), un insieme \( S \) si dice chiuso rispetto a \(f \iff \text{Im}(f) \subseteq S \)).
+    \begin{gframe}{nota!}
+        Data un'operazione \( f \) che prende solo elementi esterni all'insieme \( S \), un insieme \( S \) si dice chiuso rispetto a \(f \iff \text{Im}(f) \subseteq S \)).
+    \end{gframe}
 
+    \begin{gframe}{Insieme vuoto}
+        L'insieme vuoto (\( \emptyset \)) non è chiuso rispetto ad una funzione nullaria, ma lo è per tutte le operazioni con arietà \( \geq 1 \).
+
+        Questo perché:
+    \begin{itemize}
+        \item una funzione nullaria restituisce una costante (es. \( f() = c \)). Per la chiusura dovrebbe essere \( c \in \emptyset \), il che è impossibile.
+        \item per le funzioni non nullarie: la definizione di chiusura è un'implicazione (``se \( x \in S \dots \)'') - poiché non esistono elementi in \( \emptyset \), la premessa è falsa e l'implicazione risulta sempre vera per il principio di verità vacua.
+    \end{itemize}
     \end{gframe}
 \end{defframe}
 
@@ -249,6 +258,15 @@ Per dimostrare che  questa tupla sia un'algebra induttiva, dobbiamo ora verifica
     Infatti, l'implicazione \( x \in \emptyset \implies \text{not}(x) \in \emptyset \) risulta vera per falsificazione della premessa (non esistono elementi in \( \emptyset \)).
 
     \( (\emptyset, \text{not}) \) è quindi una sotto-algebra induttiva di \( B \), che però è diversa da essa. L'implicazione della terza condizione \( (x \in \emptyset \implies \text{not}(x) \in \emptyset) \implies \emptyset = B \) è falsa, e \( (B, \text{not}) \) non è quindi un'algebra induttiva.
+
+\begin{gframe}{Insiemi finiti e costruttori base}
+    \textbf{Nota Bene}: se abbiamo un'algebra con carrier finito, possiamo sempre costruirla come algebra induttiva utilizzando \textit{solo} costruttori ``base''.
+
+    Per l'esempio dei booleani, potremmo definire l'algebra \( (\{0, \ 1\}, \{true, false: \mathbb{1}\to B \} )\) (ovvero con i due costruttori nullari che ritornano \( 0 \) e \( 1 \)).
+
+    In questo caso, poiché l'insieme vuoto non è chiuso rispetto alle funzioni nullarie, l'algebra risulta essere induttiva.
+\end{gframe}
+
 \end{gframe}
 
 \section{Omomorfismi, lemma di Lambek}
@@ -874,7 +892,7 @@ funziona così:
 
 \textbf{Eager statico vs eager dinamico}
 
-Per capire la differenza tra eager statico e dinamico, dobbiamo far sì che una variabile venga ridefinita all'
+Per capire la differenza tra eager statico e dinamico, dobbiamo far sì che una variabile venga definita nell'ambiente prima della definizione di una funzione, e poi ridefinita prima che essa venga chiamata (in questo modo, se la funzione viene chiamata con il suo ambiente di definizione, la variabile avrà il primo valore, mentre se viene chiamata con l'ambiente corrente avrà il secondo valore).
 
 consideriamo: \texttt{let y = 1 in (let f = fn x => x + y in (let y = 100 in f 5))}
 \begin{itemize}
@@ -1142,6 +1160,20 @@ Facciamo un esempio. Dato \( c_2 = fn \ x \ y \Rightarrow x \ (x \ y ) \), calco
     Ora, ci basta fornire al numero \( v \) come parametri questa nuova funzione e \( c_0 \) come valore di inizio, perché questa, essenzialmente, sommi \( u \) \( v \) volte a partire da zero.
     \[ times \equiv fn \ v \Rightarrow fn \ u \Rightarrow v \ (fn \ x \Rightarrow (plus \ x \ u) ) \ c_0 \]
     \[\color{gray} \equiv fn \ v  \ u \Rightarrow v \ (plus_u)  \ c_0 \]
+\end{defframe}
+
+\begin{defframe}{Booleani di Church}{}
+    Possiamo descrivere anche la logica booleana tramite lambda calcolo.
+
+    \begin{itemize}
+    \item \textbf{True} di Church
+            \[ true \equiv fn \ x y \Rightarrow x \]
+    \item \textbf{False} di Church
+            \[ false \equiv fn \ x y \Rightarrow y \]
+    \item \textbf{eval} dei booleani
+            \[ evalBool \equiv (fn \ z \Rightarrow z)\ true \ false \]
+
+    \end{itemize}
     
 \end{defframe}
 
@@ -3284,6 +3316,22 @@ Il meccanismo che permette di utilizzare uno schema polimorfo in contesti concre
     \begin{gframe}{}
     I quantificatori $\forall Y_1 \dots Y_m$ in $\sigma'$ sono necessari per chiudere lo schema: se la sostituzione introduce nuove variabili di tipo (contenute nei $\tau_i$), queste risulterebbero libere in $\tau'$; la regola impone quindi di quantificarle tutte (e sole quelle) per mantenere lo schema chiuso (vedi esempio sotto).
     \end{gframe}
+
+\begin{gframe}{NB: istanze senza nuovi quantificatori}
+    È possibile che l'istanza generica $\sigma'$ non abbia quantificatori ($\forall Y_1 \dots Y_m$ con $m=0$). Questo accade quando il risultato della sostituzione è un monotipo.
+    
+    Un caso che potrebbe creare confusione è:
+    \[ \forall X.\ X \quad \succ \quad X \]
+    
+    Perché la $X$ a destra non viene "richiusa" con un $\forall$?
+    \begin{enumerate}
+        \item per evitare ambiguità, rinominiamo la variabile legata nello schema: $\sigma = \forall \alpha.\ \alpha$.
+        \item applichiamo la sostituzione $[\alpha \mapsto X]$, dove $X$ è il tipo di destinazione (un monotipo).
+        \item il risultato è $X$. Poiché $X$ non è una variabile \textit{nuova} introdotta all'interno di un tipo complesso (ma è il tipo stesso), non ci sono nuove variabili libere da catturare.
+    \end{enumerate}
+    Quindi $m=0$ e lo schema risultante è semplicemente il monotipo $X$.
+\end{gframe}
+
 \end{defframe}
 
 \textbf{Esempi di specializzazione:}
@@ -3435,6 +3483,63 @@ Al contrario, il termine equivalente con lambda:
     \end{itemize}
 \end{gframe}
 
+\section{Trovare termini a partire da tipi}
+
+Per costruire un termine abitante partendo da un tipo, si procede decomponendo il tipo:
+\begin{enumerate}
+    \item se il tipo è una funzione $A \to B$, il termine deve iniziare con un $fn \ x \Rightarrow$ - assegniamo un nome alla variabile di tipo $A$.
+    \item se il tipo target non è una funzione (è una variabile di tipo $X$), dobbiamo ``produrlo'' applicando le funzioni che abbiamo accumulato nel contesto agli argomenti disponibili.
+\end{enumerate}
+
+Vediamo l'applicazione di questa strategia sugli assiomi di Hilbert.
+
+\begin{itemize}
+    \item il primo assioma corrisponde alla logica dell'introduzione di ipotesi ridondanti.
+\[ \text{tipo: } A \to B \to A \]
+
+\begin{gframe}{Analisi}{}
+    \vspace{-1em}
+    \begin{enumerate}
+        \item il tipo ha due frecce principali - dobbiamo quindi accettare due argomenti.
+        \[ fn \ x \Rightarrow fn \ y \Rightarrow \dots \]
+        \item analizziamo il contesto:
+        \begin{itemize}
+            \item $x : A$
+            \item $y : B$
+            \item dobbiamo ottenere $A$
+        \end{itemize}
+        \item abbiamo già un termine del tipo \( A \) nel contesto, quindi ``ignoriamo'' \( y \) e semplicemente ritorniamo \( x \)
+    \end{enumerate}
+    \textit{termine ML:}
+    \[ fn \ x \Rightarrow fn \ y \Rightarrow x \]
+\end{gframe}
+
+\item il secondo assioma è più complesso
+\[ \text{tipo: } (A \to B \to C) \to (A \to B) \to A \to C \]
+
+\begin{gframe}{analisi}{}
+    \vspace{-1em}
+    \begin{enumerate}
+        \item il tipo ha tre frecce prima del risultato finale $C$ - abbiamo quindi sicuramente bisogno di tre \( fn \)
+        \[ fn \ x \Rightarrow fn \ y \Rightarrow fn \ z \Rightarrow \dots \]
+        \item contesto disponibile:
+        \begin{itemize}
+            \item $x : A \to B \to C$ \ (funzione a due argomenti che produce $C$)
+            \item $y : A \to B$ 
+            \item $z : A$ 
+            \item dobbiamo ottenere $C$
+        \end{itemize}
+    \item per ottenere $C$, dobbiamo sicuramente applicare $x$ - ma $x$ richiede un $A$ e un $B$.
+        \item abbiamo $z: A$, quindi possiamo vedere il primo pezzo come $(x \ z) : B \to C$.
+        \item ora ci serve un $B$: non lo abbiamo direttamente, ma possiamo produrlo applicando $y$ a $z$; quindi $(y \ z) : B$.
+        \item combiniamo il tutto: passiamo il $B$ ottenuto al risultato parziale di $x$.
+    \end{enumerate}
+    \textit{termine ML:}
+    \[ M = fn \ x \Rightarrow fn \ y \Rightarrow fn \ z \Rightarrow x \ z \ (y \ z) \]
+\end{gframe}
+
+\end{itemize}
+
 \chapter{Isomorfismo di Curry-Howard}
 
 L'isomorfismo di Curry-Howard stabilisce una corrispondenza tra la logica formale e la teoria dei tipi. Esso rivela che le regole di derivazione logica e le regole di tipizzazione del lambda calcolo non sono semplicemente simili, ma sono sostanzialmente la stessa cosa vista sotto due lenti diverse.
@@ -3500,6 +3605,18 @@ L'isomorfismo si articola su due livelli: la corrispondenza tra le formule (prop
     \end{center}
 \end{defframe}
 
+
+\begin{gframe}{Hilbert vs Intuizionismo (mio approfondimento)}
+Per comprendere meglio l'isomorfismo, può essere utile distinguere tra due concezioni della verità matematica:
+\begin{itemize}
+    \item \textit{Logica Classica (visione ontologica):} la verità è una proprietà assoluta degli oggetti, indipendente dalla nostra conoscenza. Una proposizione è vera o falsa a prescindere dal fatto che noi sappiamo dimostrarlo.
+    \item \textit{Logica Intuizionista (visione costruttiva):} la verità coincide con la dimostrabilità. Dire che una proposizione è vera significa possedere una dimostrazione della sua verità.
+\end{itemize}
+
+In informatica, questa distinzione è cruciale: poiché un programma è intrinsecamente una serie di istruzioni per costruire un risultato, il Lambda Calcolo è \textit{isomorfo alla Logica Intuizionista} e non a quella Classica.
+
+\end{gframe}
+
 \begin{defframe}{Dimostrazioni come Programmi}{}
     Esiste una corrispondenza tra la struttura di una dimostrazione logica e la struttura di un programma:
     
@@ -3517,17 +3634,18 @@ L'isomorfismo si articola su due livelli: la corrispondenza tra le formule (prop
     \end{center}
 \end{defframe}
 
+
 \subsubsection{Dimostrazioni come Programmi}
 
 Una conseguenza fondamentale di questo isomorfismo è la possibilità di verificare la validità logica attraverso la programmazione.
 
 \begin{gframe}{Validità Logica e Abitabilità}
     Dato un tipo \( A \) e la sua proposizione corrispondente \( \varphi_A \):
-    \[ \text{Esiste un termine chiuso } M \text{ tale che } \vdash M : A \iff \varphi_A \text{ è una tautologia} \]
+    \[ \text{esiste un termine chiuso } M \text{ tale che } \vdash M : A \iff \varphi_A \text{ è una tautologia} \]
     
     \begin{itemize}
-        \item \textbf{Tipo Abitato:} Se riusciamo a scrivere una funzione (un programma che termina) con un certo tipo, abbiamo effettivamente fornito una \textit{dimostrazione costruttiva} della proposizione logica corrispondente.
-        \item \textbf{Tipo Vuoto:} Se un tipo non ha abitanti (non è possibile scrivere un termine per quel tipo), la proposizione corrispondente è logicamente falsa (o non dimostrabile).
+        \item \textbf{Tipo abitato:} Se riusciamo a scrivere una funzione (un programma che termina) con un certo tipo, abbiamo effettivamente fornito una \textit{dimostrazione costruttiva} della proposizione logica corrispondente.
+        \item \textbf{Tipo vuoto:} Se un tipo non ha abitanti (non è possibile scrivere un termine per quel tipo), la proposizione corrispondente è logicamente falsa (o non dimostrabile).
     \end{itemize}
 \end{gframe}
 
@@ -3572,7 +3690,7 @@ Altri casi in cui la verità logica si traduce in programmi:
 \end{itemize}
 
 \subsubsection{Proposizioni non tipabili}
-Nella logica classica esistono tautologie che non sono dimostrabili nella logica intuizionista e, di conseguenza, corrispondono a tipi che non possono essere abitati da un programma puro (l'informatica richiede una costruzione esplicita del risultato).
+Nella logica classica esistono tautologie che non sono dimostrabili nella logica intuizionista e, di conseguenza, corrispondono a tipi che non possono essere abitati da un programma puro.
 
 \begin{gframe}{}
     In questo contesto, la negazione $\neg A$ è definita come $A \to \bot$ (logicamente equivalenti). \\
@@ -3583,8 +3701,18 @@ Esempi di formule logicamente valide in logica classica ma computazionalmente im
 
 \begin{itemize}
     \item \textit{Tertium non datur}
-    \begin{itemize}
+
+        \begin{itemize}
         \item \textbf{Logica:} $A \lor \neg A$.
+        \end{itemize}
+
+        Qui si vede la differenza più evidente tra Logica Classica e Logica Intuizionista:
+\begin{itemize}
+    \item per Hilbert, $A \lor \neg A$ è un assioma sempre valido (poiché la verità è appunto una proprietà degli oggetti)
+    \item per l'intuizionismo, affermare $A \lor \neg A$ significa avere una prova di $A$ oppure una prova di $\neg A$ -  poiché esistono problemi aperti di cui non conosciamo né la verità né la falsità (non siamo onniscienti), questo principio non è accettato come assioma universale
+\end{itemize}
+
+    \begin{itemize}
 
         \item \textbf{Tipo:} $A + (A \to \bot)$
         \subitem per abitare questo tipo, dovremmo scrivere una funzione universale che, per un qualsiasi tipo generico $A$, sia in grado di decidere se restituire un'istanza di $A$ (ramo sinistro) o una dimostrazione che $A$ è impossibile (ramo destro) - non esiste un algoritmo onnisciente in grado di determinare l'abitabilità di un tipo arbitrario.
