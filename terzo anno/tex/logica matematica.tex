@@ -244,6 +244,7 @@ L'unione rappresenta una sorta di "aggiunta di vincoli": si sta chiedendo che va
 \end{itemize}
 
 \textbf{Intersezione di teorie} (\( T \cap S \)):
+
 L'intersezione tra teorie è "debole", in quanto contiene solo le proposizioni che appartengono ad entrambi gli insiemi.
 
 \begin{itemize}
@@ -506,7 +507,7 @@ Ovvero, un assegnamento \( \alpha \) soddisfa la teoria \( T_X \) se e solo se l
 
 \begin{gframe}{Colorabilità}
     \vspace{-1.5em}
-\subsection*{Esempio: 2-colorabilità}
+\subsection*{2-colorabilità}
 
 Consideriamo il problema di colorare una mappa (grafo) con due colori (Rosso e Blu) in modo che nazioni confinanti abbiano colori diversi.
 
@@ -812,7 +813,7 @@ Data \( T \in \texttt{FINSAT} \), definiamo \( \mathcal{T} = \{\hat T \mid T \su
 
 Vogliamo verificare che \( \mathcal{T} \) verifichi le condizioni per applicare il lemma di Zorn.
 
-Sia \( C = (T_i) \) una catena crescente. È evidente che \( \bigcup_i T_i\) è un maggiorante, e anche che estende \(T\). Sappiamo anche che è \texttt{FINSAT}. Infatti, se consideriamo un qualsiasi sottoinsieme finito di \( \bigcup_i T_i\), ogni sua proposizione sarà un elemento di qualche elemento della catena; questo significa che l'insieme stesso è un sottoinsieme di un elemento della catena, ed è quindi \texttt{FINSAT}.
+Sia \( C = \{T_i\}_{i\in \N} \subseteq \mathcal{T} \) una catena crescente. È evidente che \( \bigcup_i T_i\) è un maggiorante, e anche che estende \(T\). Sappiamo anche che è \texttt{FINSAT}. Infatti, se consideriamo un qualsiasi sottoinsieme finito di \( \bigcup_i T_i\), ogni sua proposizione sarà un elemento di qualche elemento della catena; questo significa che l'insieme stesso è un sottoinsieme di un elemento della catena, ed è quindi \texttt{FINSAT}.
 
 Applicando quindi il lemma di Zorn, otteniamo che \( \mathcal{T} \) contiene un massimale \( T^* \), ovvero una teoria tale che:
 \begin{itemize}
@@ -1081,7 +1082,7 @@ Sia \( \alpha \) un modello di \( T_A \). L'insieme \( R = \{ \sigma \in A : \al
 
 \section{Decidibilità}
 
-Dato il potere espressivo della logica proposizionale, è naturale chiedersi se sia possibile automatizzare la risposta alla domanda ``\( T\vDash A \)''. 
+Dato il potere espressivo della logica proposizionale, è naturale chiedersi se sia possibile automatizzare la risposta alla domanda ``\( T\overset{?}{\vDash} A \)''. 
 
 Se \( T = \{A_1, \dots, A_n\} \) è una \textbf{teoria finita}, la risposta è banalmente ``sì'', in quanto sappiamo che \( T\vDash A \iff (A_1 \land \dots \land A_n) \to A \in \texttt{TAUT} \) (il che è facilmente verificabile tramite tavole di verità).
 
@@ -1176,6 +1177,17 @@ Da questo possiamo derivare che:
 \pagebreak
 
 \chapter{Calcolo Proposizionale}
+
+\begin{gframe}{Nota: sintassi (\( \vdash \)) vs semantica (\( \vDash \))}
+    È fondamentale distinguere tra due piani che idealmente coincidono, ma sono concettualmente diversi:
+    \begin{itemize}
+    \item \textit{Semantica} (\( T \vDash A \)): riguarda il significato dei simboli e la loro verità - ci si chiede se una formula sia vera in tutti i ``mondi possibili'' (es. analizzando le tavole di verità)
+\item \textit{Sintassi} (\( T \vdash A \)): riguarda la forma e la deduzione - ci si chiede se una formula sia derivabile dagli assiomi rispettando le regole del sistema di prova interessato (non conta il significato dei simboli, ma solo la loro manipolazione meccanica tramite le regole di inferenza)
+    \end{itemize}
+
+    L'obiettivo del \textit{Calcolo Proposizionale} è costruire una macchina sintattica formata da assiomi e regole che sia capace di catturare esattamente tutte le verità semantiche (teoremi di correttezza e completezza).
+\end{gframe}
+
 Una dimostrazione rigorosa è una successione ordinata e finita di asserzioni, ognuna delle quali può essere giustificata richiamandosi a una verità assunta come ipotesi (assioma), o a una regola di ragionamento corretta che permette di ottenerla da altre proposizioni.
 
 La regola che utilizziamo nel nostro sistema di dimostrazioni (``alla Hilbert'') è il \textbf{Modus Ponens}: da \( X \land (X\to Y) \) segue \( Y \).
