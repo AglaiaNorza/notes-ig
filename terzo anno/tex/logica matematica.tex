@@ -1377,7 +1377,7 @@ Per farlo, utilizziamo un lemma fondamentale che collega la verità semantica (v
         \item \textbf{Caso \( B = \neg C \):}
         \begin{itemize}
             \item Se \(\alpha(C)=0\), allora \(\alpha(B)=1\). Per ipotesi induttiva \( \Gamma \vdash C^\alpha \) cioè \( \Gamma \vdash \neg C \). Ma \( B^\alpha \) è \( B \) (cioè \( \neg C \)). Quindi \( \Gamma \vdash B^\alpha \).
-            \item Se \(\alpha(C)=1\), allora \(\alpha(B)=0\). Per ipotesi induttiva \( \Gamma \vdash C \). Dobbiamo dimostrare \( \Gamma \vdash \neg B \) (cioè \( \neg\neg C \)). Usiamo il teorema \( \vdash C \to \neg\neg C \).
+            \item Se \(\alpha(C)=1\), allora \(\alpha(B)=0\), quindi \( B^{\alpha} = \neg B \). Per ipotesi induttiva \( \Gamma \vdash C \). Dobbiamo dimostrare \( \Gamma \vdash \neg B \), che corrisponde a \( \neg\neg C \). Usiamo il teorema \( \vdash C \to \neg\neg C \).
         \end{itemize}
 
         \item \textbf{Caso \( B = C \to D \):}
@@ -1399,7 +1399,7 @@ Per farlo, utilizziamo un lemma fondamentale che collega la verità semantica (v
     Dal Lemma precedente segue che per ogni assegnamento \( \alpha \):
     \[ p_1^\alpha, \dots, p_k^\alpha \vdash B \]
 
-    Consideriamo due assegnamenti \( \alpha \) e \( \beta \) che differiscono solo per il valore di \( p_k \):
+    Consideriamo due assegnamenti \( \alpha \) e \( \beta \) che differiscono solo per il valore di \( p_k \); poiché \( B \) è una tautologia, abbiamo quindi:
     \begin{itemize}
         \item \( \alpha(p_k)=1 \implies p_1^\alpha, \dots, p_{k-1}^\alpha, p_k \vdash B \)
         \item \( \beta(p_k)=0 \implies p_1^\alpha, \dots, p_{k-1}^\alpha, \neg p_k \vdash B \)
@@ -1420,7 +1420,7 @@ Grazie al Teorema di Deduzione, possiamo ora completare la strategia descritta a
 
 \begin{enumerate}
     \item Dal \textbf{Teorema di Compattezza}: \( T \vDash A \implies \exists \{A_1, \dots, A_n\} \subseteq T \) tale che \( A_1, \dots, A_n \vDash A \).
-    \item Questo equivale a dire che \( \vDash (A_1 \to (\dots \to A)\dots) \) è una tautologia.
+    \item Questo equivale a dire \( \vDash (A_1 \to (\dots \to A)\dots) \) (ovvero \(  (A_1 \to (\dots \to A)\dots) \) è una tautologia).
     \item Per la \textbf{Completezza Semplice} (le tautologie sono teoremi), abbiamo:
     \[ \vdash (A_1 \to (A_2 \to \dots (A_n \to A)\dots)) \]
     \item Applicando \( n \) volte il \textbf{Teorema di Deduzione} (nella direzione \( \Longleftarrow \)), ``scarichiamo'' le premesse una alla volta:
