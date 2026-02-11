@@ -2874,6 +2874,22 @@ Infatti, se esistesse \( S \) finita t.c. \( \Aa \vDash S \iff \Aa  \) ha domini
     Se \( P \) è assiomatizzabile da \( T \) e \( P \) è finitamente assiomatizzabile, allora \( \exists T_0 \subseteq T \) che assiomatizza \( P \).
 \end{lemmaframe}
 
+\begin{pframe}
+    Sia $\phi$ l'enunciato (o la congiunzione finita di enunciati) che assiomatizza finitamente $P$.
+    Quindi, per ogni struttura $\Aa$:
+    \[ \Aa \in P \iff \Aa \vDash \phi \]
+    Poiché per ipotesi $T$ assiomatizza $P$, ogni modello di $T$ deve avere la proprietà $P$, e quindi deve soddisfare $\phi$:
+    \[ T \vDash \phi \]
+    Per il \textbf{Teorema di Compattezza}, se una teoria $T\vDash \phi$, allora allora esiste un sottoinsieme finito $T_0 \subseteq T$ tale che $T_0 \vDash \phi$.
+
+    $T_0$ assiomatizza $P$, cioè $\Aa \vDash T_0 \iff \Aa \in P$:
+    \begin{itemize}
+        \item[($\Leftarrow$)] Se $\Aa \in P$, allora $\Aa \vDash T$ (perché $T$ assiomatizza $P$). Poiché $T_0 \subseteq T$, ne segue che $\Aa \vDash T_0$.
+        \item[($\Rightarrow$)] Se $\Aa \vDash T_0$, dato che abbiamo stabilito $T_0 \vDash \phi$, allora $\Aa \vDash \phi$. Poiché $\phi$ assiomatizza $P$, allora $\Aa \in P$.
+    \end{itemize}
+    Dunque $P$ è assiomatizzata dal sottoinsieme finito $T_0$ di $T$.
+\end{pframe}
+
 \begin{lemmaframe}{}{}
     Se \( T \) ha modelli finiti arbitrariamente grandi (per ogni \( n \) c'è un modello con almeno \( n \) elementi), allora \( T \) ha anche modelli infiniti.
 \end{lemmaframe}
