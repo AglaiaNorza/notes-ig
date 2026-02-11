@@ -39,7 +39,7 @@ alcuni appunti sono presi a mano (su tablet), alcuni sono pdf scritti con LaTeX 
 | **1o sem:**|
 | [linguaggi di programmazione](../../raw/main/terzo%20anno/linguaggi%20di%20programmazione.pdf) | pdf (o .tex) |
 |[automi, calcolabilità e complessità](../../raw/main/terzo%20anno/automi%2C%20calcolabilit%C3%A0%20e%20complessit%C3%A0.pdf)| scritti a mano (pdf) |
-| [logica matematica](../../raw/main/terzo%20anno/logica%20matematica.pdf) (1022365) |  pdf (o .tex), WIP |
+| [logica matematica](../../raw/main/terzo%20anno/logica%20matematica.pdf) (1022365) |  pdf (o .tex) |
 | [programmazione (embedded e) multicore](https://aglaianorza.github.io/notesig/vault/multicore/multicore) (🇬🇧) | quartz, WIP |
 | [cybersecurity](https://aglaianorza.github.io/notesig/vault/cybersecurity/cybersecurity) (🇬🇧) | quartz, WIP |
 | **2o sem:**|
