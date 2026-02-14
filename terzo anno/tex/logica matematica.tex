@@ -1899,7 +1899,7 @@ Chiamiamo questa teoria \textbf{DLO} (\textit{Dense Linear Order}).
     Sia \( \Bb = (B, \leq_B) \) una struttura con dominio \( B \) numerabile e \( \leq_B \) un ordine totale denso senza estremi su \( B \). Allora esiste un isomorfismo tra \( \Bb\) e \(\Qq \).
 \end{thmframe}
 
-Vogliamo dimostrare che \textit{ogni struttura} dove \( B \) è numerabile e \( \preceq \) è un ordine totale denso senza estremi su \( A \) è isomorfa a \( (\Q, \leq)  \).
+Vogliamo dimostrare che \textit{ogni struttura} dove \( B \) è numerabile e \( \leq_B \) è un ordine totale denso senza estremi su \( A \) è isomorfa a \( (\Q, \leq)  \).
 
 \begin{gframe}{}
     È naturale definire l'isomorfismo così: \(\Bb \cong \Qq \iff \exists h : \Q \bij B \ \text{ t.c. } \ \forall q, q' \in \Q\)
@@ -1987,16 +1987,19 @@ Introduciamo come prima cosa il concetto di sottostruttura:
 
 \end{defframe}
 
-
 \begin{defframe}{Sottostruttura elementare}{}
-    Date due strutture \( \Aa \) e \( \Bb \), \( \Aa \) si dice \textbf{sottostruttura elementare} di \( \Bb \) (\( \Aa \prec \Bb \)) se e solo se si ha:
-    \[ A \subseteq B \  \land \ \forall F, \ \forall \vec{a}\in A, \ \ \Aa \vDash F[\vec{a}] \iff \Bb \vDash F[\vec{a}] \]
-
-    (ovvero \( \Aa \subseteq \Bb \) e \( \Aa \equiv \Bb \)).
+    Date due strutture \( \Aa \) e \( \Bb \) tali che \( \Aa \subseteq \Bb \), si dice che \( \Aa \) è \textbf{sottostruttura elementare} di \( \Bb \) (\( \Aa \prec \Bb \)) se la verità delle formule è preservata prendendo parametri da \( A \).
     
+    Formalmente, per ogni formula \( F(x_1, \dots, x_n) \in \Ll \) e per ogni scelta di elementi \( a_1, \dots, a_n \in A \):
+    \[ \Aa \vDash F[a_1, \dots, a_n] \iff \Bb \vDash F[a_1, \dots, a_n] \]
+    
+\begin{gframe}{}
+        se \( \Aa \prec \Bb \), allora \( \Aa \equiv \Bb \) (sono elementarmente equivalenti)
+\end{gframe}
+
 \end{defframe}
 
-Notiamo che \( \Qq \subseteq \Rr \).
+Tornando alla teoria DLO, notiamo che \( \Qq \subseteq \Rr \).
 
 Data una formula \( F \), è naturale che se \( \alpha \)  è un assegnamento in \( \Q \) e \( \Qq \vDash \exists x F[\alpha] \), allora \( \Rr \vDash \exists x F[\alpha] \).
 
@@ -2019,62 +2022,77 @@ Come già visto, conviene dimostrare la proprietà per le formule (così che val
     \[ \Qq \vDash F[\alpha] \iff \Rr \vDash F[\alpha] \]
 \end{corframe}
 
+\begin{corframe}{Conseguenza della proprietà del testimone}{}
+    Se vale la proprietà del testimone tra \( \Rr \) e \( \Qq \), allora \( \forall F, \forall \alpha \) su \( Q \),
+    \[ \Qq \vDash F[\alpha] \iff \Rr \vDash F[\alpha] \]
+\end{corframe}
+
 \begin{proofframe}{}{}
-    Si dimostra per induzione su \( F \).
+    Si dimostra per induzione sulla complessità della formula \( F \).
 
     \begin{itemize}
-        \item \textbf{caso base}: \( F \) è di tipo \( (x \leq y) \).
+        \item \textbf{caso base}: \( F \) è una formula atomica, ad esempio di tipo \( (x \leq y) \).
+        
+        Poiché \( \Qq \subseteq \Rr \), la relazione d'ordine in \( \Qq \) è definita esattamente come la restrizione dell'ordine di \( \Rr \) ai numeri razionali (\( \leq_\Qq = \leq_\Rr \cap (\Qq \times \Qq) \)). Essendo \( \alpha(x) \) e \( \alpha(y) \) numeri razionali, la relazione vale in un modello se e solo se vale nell'altro:
             \begin{align*}
-                \Qq \vDash (x\leq y)[\alpha] &\iff \Rr \vDash (x\leq y)[\alpha] \\
-                 \alpha(x) \leq_\Q \alpha(y) &\iff \alpha(x) \leq_\R \alpha(y) 
+                \Qq \vDash (x\leq y)[\alpha] &\iff \alpha(x) \leq_\Q \alpha(y) \\
+                &\iff \alpha(x) \leq_\R \alpha(y) \quad (\text{poiché } \Qq \subseteq \Rr) \\
+                &\iff \Rr \vDash (x\leq y)[\alpha] 
             \end{align*}
+            (Il ragionamento è analogo per l'uguaglianza \( x = y \)).
 
-            (argomento analogo per \( (x = y) \))
+        \item \textbf{passo induttivo (booleani)}:
 
-        \item \textbf{booleani}:
+        Supponiamo per Ipotesi Induttiva che il teorema valga per le sottoformule \( A \) e \( B \). Ovvero:
+        \[
+        \Q \models A[\alpha] \iff \R \models A[\alpha] \quad \text{e} \quad \Q \models B[\alpha] \iff \R \models B[\alpha]
+        \]
+        La verità di una congiunzione dipende unicamente dalla verità delle singole parti. Quindi l'equivalenza si conserva:
             \begin{align*}
-                \Qq \vDash A \land B [\alpha] &\iff \Rr \vDash A \land B[\alpha] \\
-                \Qq \vDash A[\alpha] \land \Qq \vDash B[\alpha] &\iff \Rr \vDash A[\alpha] \land \Rr \vDash B[\alpha]
+                \Qq \vDash (A \land B) [\alpha] &\iff \Qq \vDash A[\alpha] \land \Qq \vDash B[\alpha] \\
+                (\text{per I.I.}) &\iff \Rr \vDash A[\alpha] \land \Rr \vDash B[\alpha] \\
+                &\iff \Rr \vDash (A \land B)[\alpha]
             \end{align*}
-            Vero per ipotesi induttiva su $A$ e $B$:
-\[
-\Q \models A[\alpha] \iff \R \models A[\alpha] \quad \text{e} \quad \Q \models B[\alpha] \iff \R \models B[\alpha]
-\]
+            (Argomento analogo per gli altri connettivi).
 
-(argomento analogo per gli altri connettivi booleani)
+        \item \textbf{passo induttivo (esistenziale)}:
+        
+            Sia \(F \equiv \exists x \, G(x)\). 
 
-\item \textbf{esistenziale}:
+            \textit{Ipotesi Induttiva}: Assumiamo che per la formula interna \( G(x) \) e per qualsiasi assegnamento in \( \Qq \), l'equivalenza valga.
+        Dobbiamo mostrare:
+        \[
+        \Q \vDash \exists x \, G(x)[\alpha] \iff \R \vDash \exists x \, G(x)[\alpha]
+        \]
 
-Sia \(F \equiv \exists x \, F(x)\). Assumiamo che la tesi valga per la formula \(F(x)\) (I.I.). Dobbiamo mostrare che:
-\[
-\Q \vDash \exists x \, F(x)[\alpha] \iff \R \vDash \exists x \, F(x)[\alpha]
-\]
+        \textit{Direzione \(\implies\):}
+        Assumiamo \(\Q \vDash \exists x \, G(x)[\alpha]\).
+        Significa che esiste un testimone concreto \(q \in \Q\) tale che \(\Q \vDash G(x)[\alpha\ass{x}{q}]\).
+        Poiché \( \Qq \subseteq \Rr \), questo \( q \) esiste anche in \( \Rr \).
+        Applicando l'I.I. alla formula \( G(x) \) valutata su \( q \):
+        \[
+            \Q \vDash G(x)[\alpha \ass{x}{q}] \implies \R \vDash G(x)[\alpha \ass{x}{q}]
+        \]
+        Dato che abbiamo trovato un elemento in \( \Rr \) (lo stesso \( q \)) che soddisfa la formula, concludiamo:
+        \[
+            \R \vDash \exists x \, G(x)[\alpha]
+        \]
 
-\textit{Direzione \(\implies\):}
-Assumiamo \(\Q \vDash \exists x \, F(x)[\alpha]\).
-Per definizione, vale sse esiste un elemento \(q \in \Q\) tale che \(\Q \vDash F(x)[\alpha\ass{x}{q}]\).
-Poiché l'assegnazione \(\alpha\ass{x}{q}\) è in \(\Q\), per I.I. applicata a \(F(x)\):
-\[
-    \Q \vDash F(x)[\alpha \ass{x}{q}] \iff \R \vDash F(x)[\alpha \ass{x}{q}]
-\]
- Poiché \(q \in \Q\) e \(\Q \subseteq \R\), \(q\) è un elemento di \(\R\).
-Per definizione di soddisfacibilità in \(\R\):
-\[
-    \R \vDash \exists x \, F(x)[\alpha]
-\]
+        \textit{Direzione \(\impliedby\):}
+        Assumiamo \(\R \vDash \exists x \, G(x)[\alpha]\).
 
-\textit{Direzione \(\impliedby\):}
-Assumiamo \(\R \vDash \exists x \, F(x)[\alpha]\), con \( \alpha \) assegnamento in \( \Q \). Per definizione, vale sse \( \exists r \in \R \) t.c. \( \Rr\vDash F(x)\ass{x}{r} \)
-Per la \textit{proprietà del testimone}, se \(\R \vDash \exists x \, F(x)[\alpha]\), allora esiste un testimone \(q \in \Q\) tale che \(\R \vDash F(x)[\alpha \ass{x}{q}]\).
-Per ipotesi induttiva su \( F \), questo vale sse \( \exists q \in \Q \) t.c. \( \Qq \vDash F(x)[\alpha\ass{x}{q}] \).
-Ovvero:
-\[
-    \R \vDash F(x)[\alpha\ass{x}{q}] \iff \Q \vDash F(x)[\alpha\ass{x}{q}]
-\]
-Quindi \(\Q \vDash F(x)[\alpha\ass{x}{q}]\). Poiché esiste un \(q \in \Q\) che soddisfa \(F(x)\) in \(\Q\), per definizione (di soddisfacibilità):
-\[
-    \Q \vDash \exists x \, F(x)[\alpha]
-\]
+        Normalmente, il testimone in \( \Rr \) potrebbe essere irrazionale. Ma la \textit{Proprietà del Testimone} garantisce che se esiste una soluzione in \( \Rr \), allora esiste un testimone \(q \in \Q\) tale che:
+        \[
+            \R \vDash G(x)[\alpha \ass{x}{q}]
+        \]
+        Ora che abbiamo un parametro \( q \) razionale, possiamo usare l'I.I.:
+        \[
+            \R \vDash G(x)[\alpha\ass{x}{q}] \iff \Q \vDash G(x)[\alpha\ass{x}{q}]
+        \]
+        Quindi \(\Q \vDash G(x)[\alpha\ass{x}{q}]\). Poiché abbiamo trovato un testimone in \( \Qq \), per definizione di soddisfacibilità:
+        \[
+            \Q \vDash \exists x \, G(x)[\alpha]
+        \]
 
     \end{itemize}
     \qed
