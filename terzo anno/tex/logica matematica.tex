@@ -2044,8 +2044,8 @@ Come già visto, conviene dimostrare la proprietà per le formule (così che val
         \item \textbf{passo induttivo (booleani)}:
 
         Supponiamo per Ipotesi Induttiva che il teorema valga per le sottoformule \( A \) e \( B \). Ovvero:
-        \[
-        \Q \models A[\alpha] \iff \R \models A[\alpha] \quad \text{e} \quad \Q \models B[\alpha] \iff \R \models B[\alpha]
+                \[
+        \Qq \vDash A[\alpha] \iff \Rr \vDash A[\alpha] \quad \text{e} \quad \Qq \vDash B[\alpha] \iff \Rr \vDash B[\alpha]
         \]
         La verità di una congiunzione dipende unicamente dalla verità delle singole parti. Quindi l'equivalenza si conserva:
             \begin{align*}
@@ -2053,45 +2053,46 @@ Come già visto, conviene dimostrare la proprietà per le formule (così che val
                 (\text{per I.I.}) &\iff \Rr \vDash A[\alpha] \land \Rr \vDash B[\alpha] \\
                 &\iff \Rr \vDash (A \land B)[\alpha]
             \end{align*}
-            (Argomento analogo per gli altri connettivi).
+            (argomento analogo per gli altri connettivi).
 
         \item \textbf{passo induttivo (esistenziale)}:
         
             Sia \(F \equiv \exists x \, G(x)\). 
 
-            \textit{Ipotesi Induttiva}: Assumiamo che per la formula interna \( G(x) \) e per qualsiasi assegnamento in \( \Qq \), l'equivalenza valga.
+            \textit{Ipotesi Induttiva}: Assumiamo che per la formula interna \( G(x) \) e per qualsiasi assegnamento in \( \Qq \), l'equivalenza valga (\( \forall \beta \text{ in } \Qq, \Qq \vDash G[\beta] \iff \Rr \vDash G[\beta] \))
+
         Dobbiamo mostrare:
         \[
-        \Q \vDash \exists x \, G(x)[\alpha] \iff \R \vDash \exists x \, G(x)[\alpha]
+        \Qq \vDash \exists x \, G(x)[\alpha] \iff \Rr \vDash \exists x \, G(x)[\alpha]
         \]
 
         \textit{Direzione \(\implies\):}
         Assumiamo \(\Q \vDash \exists x \, G(x)[\alpha]\).
         Significa che esiste un testimone concreto \(q \in \Q\) tale che \(\Q \vDash G(x)[\alpha\ass{x}{q}]\).
-        Poiché \( \Qq \subseteq \Rr \), questo \( q \) esiste anche in \( \Rr \).
+        Poiché \( \Qq \subseteq \Rr \), questo \( q \) esiste anche in \( \R \).
         Applicando l'I.I. alla formula \( G(x) \) valutata su \( q \):
         \[
-            \Q \vDash G(x)[\alpha \ass{x}{q}] \implies \R \vDash G(x)[\alpha \ass{x}{q}]
+            \Qq \vDash G(x)[\alpha \ass{x}{q}] \implies \Rr \vDash G(x)[\alpha \ass{x}{q}]
         \]
-        Dato che abbiamo trovato un elemento in \( \Rr \) (lo stesso \( q \)) che soddisfa la formula, concludiamo:
+        Dato che abbiamo trovato un elemento in \( \R \) (lo stesso \( q \)) che soddisfa la formula, concludiamo:
         \[
-            \R \vDash \exists x \, G(x)[\alpha]
+            \Rr \vDash \exists x \, G(x)[\alpha]
         \]
 
         \textit{Direzione \(\impliedby\):}
-        Assumiamo \(\R \vDash \exists x \, G(x)[\alpha]\).
+        Assumiamo \(\Rr \vDash \exists x \, G(x)[\alpha]\).
 
-        Normalmente, il testimone in \( \Rr \) potrebbe essere irrazionale. Ma la \textit{Proprietà del Testimone} garantisce che se esiste una soluzione in \( \Rr \), allora esiste un testimone \(q \in \Q\) tale che:
+        Normalmente, il testimone in \( \R \) potrebbe essere irrazionale. Ma la \textit{Proprietà del Testimone} garantisce che se esiste una soluzione in \( \R \), allora esiste un testimone \(q \in \Q\) tale che:
         \[
-            \R \vDash G(x)[\alpha \ass{x}{q}]
+            \Rr \vDash G(x)[\alpha \ass{x}{q}]
         \]
         Ora che abbiamo un parametro \( q \) razionale, possiamo usare l'I.I.:
         \[
-            \R \vDash G(x)[\alpha\ass{x}{q}] \iff \Q \vDash G(x)[\alpha\ass{x}{q}]
+            \Rr \vDash G(x)[\alpha\ass{x}{q}] \iff \Qq \vDash G(x)[\alpha\ass{x}{q}]
         \]
-        Quindi \(\Q \vDash G(x)[\alpha\ass{x}{q}]\). Poiché abbiamo trovato un testimone in \( \Qq \), per definizione di soddisfacibilità:
+        Quindi \(\Qq \vDash G(x)[\alpha\ass{x}{q}]\). Poiché abbiamo trovato un testimone in \( \Qq \), per definizione di soddisfacibilità:
         \[
-            \Q \vDash \exists x \, G(x)[\alpha]
+            \Qq \vDash \exists x \, G(x)[\alpha]
         \]
 
     \end{itemize}
