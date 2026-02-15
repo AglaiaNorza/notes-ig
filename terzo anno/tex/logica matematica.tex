@@ -1999,6 +1999,8 @@ Introduciamo come prima cosa il concetto di sottostruttura:
 
 \end{defframe}
 
+\subsection{Proprietà del testimone tra \( \Rr \) e \(\Qq\)}
+
 Tornando alla teoria DLO, notiamo che \( \Qq \subseteq \Rr \).
 
 Data una formula \( F \), è naturale che se \( \alpha \)  è un assegnamento in \( \Q \) e \( \Qq \vDash \exists x F[\alpha] \), allora \( \Rr \vDash \exists x F[\alpha] \).
@@ -2103,8 +2105,10 @@ Come già visto, conviene dimostrare la proprietà per le formule (così che val
     Quindi, se vale la proprietà del testimone tra \( \Qq \) e \( \Rr \), per ogni enunciato \( E \) nel linguaggio degli ordini si ha:
     \[ \Qq \vDash E \iff \Rr \vDash E \]
 
-    ovvero \( \Qq \equiv \Rr \), e quindi \( \Qq \prec \Rr \).
+    ovvero \( \Qq \equiv \Rr \)
 \end{corframe}
+
+Abbiamo quindi ottenuto che, se vale la Proprietà del Testimone tra \( \Rr \) e \( \Qq \), si ha \( \Qq \prec \Rr \).
 
 \subsection{Equivalenza tra \( \Rr \) e \( \Qq \)}
 
@@ -2120,6 +2124,7 @@ Seguiremo quindi questi passi:
     \item per transitività, \( \Rr \equiv \Qq \).
 \end{enumerate}
 
+\subsubsection{Costruzione di \( \Aa \)}
 Costruiamo quindi \( \Aa \) partendo da \( \Qq \).
 
 Sia \( F \) una formula del linguaggio DLO e siano \( x_1, x_2, y \) le sue variabili libere.
@@ -2161,7 +2166,9 @@ Ovvero, se
 allora \( \exists a \in A \) t.c.
 \[ \Rr \vDash F(x_1, x_2, y)\tworowmatrix{x1 & x2 & y}{a_1 & a_2 & a} \]
 
-{\color{CadetBlue}[caso generale: \( \forall F, \forall \alpha \in A \), se:
+{\color{CadetBlue}[
+
+    caso generale: \( \forall F, \forall \alpha \in A \), se:
     \[ \Rr\vDash \exists x F(x)[a] \]
     allora \( \exists a \in A \) t.c.:
     \[ \Aa \vDash F(x)\left[\alpha \ass{x}{a}\right] \]
@@ -2187,11 +2194,12 @@ Dunque \( \Aa \iso \Qq \). Dunque \( \Qq \equiv \Rr \) (nel linguaggio degli ord
 \subsection{Generalizzazione della dimostrazione}
     La dimostrazione è generale - si può ricostruire in maniera equivalente partendo non da \( \Rr \) ma da un qualunque \( \Bb \) modello non-numerabile di DLO.
 
-    La Proprietà del Testimone si esprime non relativamente a \( \Qq \) ma ad una sottostruttura numerabile \( \Xx \) di \( \Bb \) del tipo \( (X, \leq^\Xx ) \) con \( X \subseteq B \) e \( \leq^\Aa = \leq^\Bb \cap (A \times A)\).
+    La Proprietà del Testimone si esprime non relativamente a \( \Qq \) ma ad una sottostruttura numerabile \( \Xx \) di \( \Bb \) del tipo \( (X, \leq_\Xx ) \) con \( X \subseteq B \) e \( \leq_\Xx = \leq_\Bb \cap (X \times X)\).
 
-    Si parte da un sottoinsieme numerabile \( X \) di \( \Bb \) (che ha sicuramente), e si procede per chiusura sotto funzioni di Skolem allo stesso modo.
+    Si parte da un sottoinsieme numerabile \( X \) di \( \Bb \) (che esiste sicuramente), e si procede per chiusura sotto funzioni di Skolem allo stesso modo.
 
-    Si costruisce così \( \Xx = \bigcup_{i\in \N} X_i \). Si ha \( \Xx \vDash  \)DLO, e quindi \( \iso  \) e \( \equiv \Qq\).
+    Si costruisce così \( \Xx = \bigcup_{i\in \N} X_i \).\\ 
+    Si ha \( \Xx \vDash  \)DLO, e quindi \( \iso  \) e \( \equiv \Qq\).
 
     \begin{thmframe}{}{}
         Si ha quindi che \textbf{tutti i modelli di DLO} (numerabili o meno) soddisfano esattamente gli stessi enunciati di \( \Qq \).
@@ -2214,13 +2222,13 @@ Dunque \( \Aa \iso \Qq \). Dunque \( \Qq \equiv \Rr \) (nel linguaggio degli ord
 \subsection*{Vademecum per esercizi su DLO}
 Riassumiamo alcune informazioni utili su DLO.
 
-Poiché DLO è completa e \( \Qq \) ne è un modello, e poiché DLO e \( \R \) condividono la stessa teoria nel linguaggio degli ordini, vale:
+Poiché DLO è completa e \( \Qq \) ne è un modello, e poiché DLO e \( \Rr \) condividono la stessa teoria nel linguaggio degli ordini, vale:
 \[ \text{DLO} \vDash E \iff \Qq \vDash E \iff \Rr \vDash E \]
 
 Questo significa che (limitatamente al linguaggio degli ordini)
 \begin{itemize}
-    \item se un enunciato \( E \) è vero in \( \R \), DLO \(\vDash E  \)
-    \item se un enunciato \( E \) è falso in \( \Q \), DLO \( \vDash \neg E \)
+    \item se un enunciato \( E \) è vero in \( \Rr \), DLO \(\vDash E  \)
+    \item se un enunciato \( E \) è falso in \( \Qq \), DLO \( \vDash \neg E \)
 \end{itemize}
 
 \vspace{0.5em}
@@ -2260,9 +2268,22 @@ allora  \(\exists a \in A\) tale che:
 \end{thmframe}
 
 
-Quindi, iniziamo a vedere che partendo da un arbitrario modello \(\mathcal{B}\) infinito, ne esiste sempre uno numerabile (purché il linguaggio sia numerabile).
+\section{Teorema di Löwenheim-Skolem (all'in giù)}
 
-\begin{pframe}
+
+\begin{thmframe}{Teorema di Löwenheim-Skolem all'in giù}{}
+Sia \(\mathcal{B}\) una struttura infinita adeguata per un linguaggio numerabile \(\mathcal{L}\). Sia \(X \subseteq B\) un sottoinsieme del suo dominio. Esiste una struttura \(\mathcal{A}\) tale che:
+\begin{enumerate}
+    \item \(X \subseteq A\)
+    \item \(\mathcal{A} \preceq \mathcal{B}\) (è sottostruttura elementare)
+    \item Se il linguaggio \(\mathcal{L}\) e l'insieme \(X\) sono numerabili, allora \(A\) è numerabile.
+\end{enumerate}
+
+Essenzialmente, \textbf{ogni teoria in un linguaggio numerabile che ammette un modello infinito (\(\mathcal{B}\)), ammette un ``sotto-modello'' numerabile} (\(\mathcal{A}\)) che è una sottostruttura elementare di \(\mathcal{B}\).
+
+\end{thmframe}
+
+\begin{proofframe}[title=idea di dimostrazione]
 Prendiamo \(\mathcal{B} \models T\) con \(|\mathcal{B}| = \infty\) e \(X \subseteq B\) con \(X\) numerabile.
 
 Facciamo la solita chiusura per funzioni di Skolem. 
@@ -2291,24 +2312,8 @@ La struttura risultante è:
 \implies \mathcal{A} \equiv \mathcal{B} \quad (\text{elementarmente equivalenti})
 \]
 Quindi, \(\mathcal{A} \models T\).
-\end{pframe}
+\end{proofframe}
 
-
-\section{Teorema di Löwenheim-Skolem (All'in giù)}
-
-\begin{thmframe}{Teorema di Löwenheim-Skolem all'in giù}{}
-Sia \(\mathcal{B}\) una struttura infinita adeguata per un linguaggio numerabile \(\mathcal{L}\). Sia \(X \subseteq B\) un sottoinsieme del suo dominio. Esiste una struttura \(\mathcal{A}\) tale che:
-\begin{enumerate}
-    \item \(X \subseteq A\)
-    \item \(\mathcal{A} \preceq \mathcal{B}\) (è sottostruttura elementare)
-    \item Se il linguaggio \(\mathcal{L}\) e l'insieme \(X\) sono numerabili, allora \(A\) è numerabile.
-\end{enumerate}
-
-Essenzialmente, \textbf{ogni teoria in un linguaggio numerabile che ammette un modello infinito (\(\mathcal{B}\)), ammette un ``sotto-modello'' numerabile} (\(\mathcal{A}\)) che è una sottostruttura elementare di \(\mathcal{B}\).
-
-\end{thmframe}
-
-La dimostrazione procede quasi analogamente a quella vista sopra.
 
 \begin{corframe}{}{}
 Non esiste una teoria \(T\) in un linguaggio \(\mathcal{L}\) numerabile (predicativo) che possa forzare i suoi modelli ad essere ``più che numerabili''.
