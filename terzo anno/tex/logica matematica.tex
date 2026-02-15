@@ -1988,7 +1988,7 @@ Introduciamo come prima cosa il concetto di sottostruttura:
 \end{defframe}
 
 \begin{defframe}{Sottostruttura elementare}{}
-    Date due strutture \( \Aa \) e \( \Bb \) tali che \( \Aa \subseteq \Bb \), si dice che \( \Aa \) è \textbf{sottostruttura elementare} di \( \Bb \) (\( \Aa \prec \Bb \)) se la verità delle formule è preservata prendendo parametri da \( A \).
+    Date due strutture \( \Aa \) e \( \Bb \) tali che \( \Aa \subseteq \Bb \), si dice che \( \Aa \) è \textbf{sottostruttura elementare} di \( \Bb \) (\( \Aa \preceq \Bb \)) se la verità delle formule è preservata prendendo parametri da \( A \).
     
     Formalmente, per ogni formula \( F(x_1, \dots, x_n) \in \Ll \) e per ogni scelta di elementi \( a_1, \dots, a_n \in A \):
     \[ \Aa \vDash F[a_1, \dots, a_n] \iff \Bb \vDash F[a_1, \dots, a_n] \]
@@ -2134,7 +2134,7 @@ Se \( \Rr \vDash \exists y F(x_1, x_2, y) \tworowmatrix{x_1 & x_2}{q_1 & q_2} \)
 
 \begin{defframe}{Funzione di Skolem}{}
     Chiamiamo \textbf{funzione di Skolem} (da \href{https://en.wikipedia.org/wiki/Thoralf_Skolem}{Thoralf Skolem}) della formula \( F \) relativamente ad \( y \) la funzione 
-    \[ f_{F, y} : \Qq^n \to \Rr \]
+    \[ f_{F, y} : \Q^n \to \R \]
     che associa ad ogni scelta di \( (q_1, \dots, q_n) \) un tale \( r \in \R \) in modo canonico.
 \end{defframe}
 
@@ -2520,7 +2520,7 @@ Ci manca da dimostrare \( T \) coerente \( \implies Mod(T) \neq \emptyset\).
             \subitem Per {\color{purple}(2)}, quindi, \( T \cup \neg A \) è incoerente, quindi \( T \vdash A \)
 
             {\color{CadetBlue}\( T\cup \neg A  \) incoerente significa \( T \cup \neg A \vdash \bot\), quindi (x deduzione) \( T \vdash \neg A \to \bot \); \\
-            per reductio ad absurdum ( \((\neg A \to \bot) \vdash A \)), si ha quindi \( T \vdash A \).}
+            per reductio ad absurdum {\small(se un'ipotesi porta a un assurdo, allora l'ipotesi deve essere falsa, ovvero \((\neg A \to \bot) \vdash A \))}, si ha quindi \( T \vdash A \).}
     \end{itemize}
 
 \item Assumiamo {\color{blue}(1)} e dimostriamo \( T \) coerente \(\implies T \) ha un modello
