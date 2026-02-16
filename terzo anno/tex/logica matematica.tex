@@ -2861,7 +2861,7 @@ Data una proprietà \( P \) di strutture, è utile chiedersi se possa essere esp
 
 Se un tale \( T \) esiste, diciamo che \textbf{assiomatizza} o \textit{definisce} la proprietà \( P \).
 
-Ha ancora più senso chiedersi, nello specifico, data una classe di strutture \( \Cc \) e un linguaggio predicativo \( \Ll \), se esista una teoria in \(\Ll \) tale che la proprietà s opra sia soddisfatta.
+Ha ancora più senso chiedersi, nello specifico, data una classe di strutture \( \Cc \) e un linguaggio predicativo \( \Ll \), se esista una teoria in \(\Ll \) tale che la proprietà sopra sia soddisfatta.
 
 Se esiste una teoria \( T \) che assiomatizza una proprietà \( P \), ci si può chiedere se esiste un \textit{insieme finito di enunciati} che assiomatizza \( P \). Questo è equivalente a chiedersi se esiste un singolo enunciato \( E \) {\color{gray} (l'AND tra tutti gli enunciati)} tale che, per ogni struttura \( \Aa \) nella classe \( \Cc \),
 \[ A \vDash E \iff \Aa \text{ ha la proprietà } P\]
@@ -2943,19 +2943,43 @@ Infatti, se esistesse \( S \) finita t.c. \( \Aa \vDash S \iff \Aa  \) ha domini
     Se \( T \) ha modelli finiti arbitrariamente grandi (per ogni \( n \) c'è un modello con almeno \( n \) elementi), allora \( T \) ha anche modelli infiniti.
 \end{lemmaframe}
 
-\begin{gframe}{(Non) assiomatizzazione di ``essere un grafo connesso``}
-    Consideriamo i grafi, con linguaggio \( \Ll = \{E(x,y)\} \), e la proprietà \( P = \) ``essere un grafo connesso''.
+\begin{gframe}{(Non) assiomatizzazione di ``essere un grafo connesso''}
+    Sia \(\mathcal{L} = \{E\}\) il linguaggio dei grafi e \(P\) la proprietà ``essere connesso''.
+    Supponiamo per assurdo che \(P\) sia assiomatizzabile da una teoria \(T_{conn}\).
 
-    Possiamo scrivere la proprietà \( D_n = \) ``essere a distanza \( \geq n \)'' in questo modo:
-    \[ \neg (\exists x_1, \dots, x_n \left(\bigwedge_{i \neq j}\neg (x_i = x_j) \land E(c, x_1)\land E(x_1, x_2) \land \dots \land E(x_n, d)\right))\]
+    Estendiamo il linguaggio a \(\mathcal{L}' = \mathcal{L} \cup \{c, d\}\) aggiungendo due costanti.
+    Indichiamo con \(\psi_n(x,y)\) la formula che afferma l'esistenza di un cammino di lunghezza \(n\) tra \(x\) e \(y\).
 
-    Supponiamo che \( P \) sia assiomatizzabile da una teoria \( C \).
+    Consideriamo la teoria infinita:
+    \[ \Sigma = T_{conn} \cup \{ \neg \psi_n(c, d) \mid n \geq 1 \} \]
+    Questa teoria asserisce che il grafo è connesso, ma non esiste alcun cammino finito tra \(c\) e \(d\).
 
-    Consideriamo \( C \cup \{D_n \mid n\geq 0\} \) - questa teoria non può avere un modello.
+    \begin{itemize}
+        \item Consideriamo un sottoinsieme finito \(\Sigma_0 \subseteq \Sigma\). Sia \(k\) il massimo intero tale che \(\neg \psi_k \in \Sigma_0\).
+        \item \(\Sigma_0\) ammette un modello: basta prendere un grafo connesso con due nodi \(u, v\) a distanza \(> k\) e interpretare \(c \mapsto u, d \mapsto v\).
+        \item \(\texttt{FINSAT} \implies \texttt{SAT}\): Per il Teorema di Compattezza, l'intera \(\Sigma\) ha un modello \(\mathcal{M}\).
+    \end{itemize}
 
-    Come prima, consideriamo un pezzo finito \( T_0 \subseteq C \cup \{D_n \mid n\geq 0\} \). 
+    In \(\mathcal{M}\) valgono \(T_{conn}\) (quindi è connesso) e tutte le \(\neg \psi_n\) (quindi \(c\) e \(d\) non sono connessi). \textbf{Contraddizione.} \qed
+\end{gframe}
 
-    Come prima, questo sottoinsieme ha un modello (un grafo connesso con vertici a distanza \( > \) del massimo \( n \)). Come prima, avremmo \(\texttt{FINSAT} \implies \texttt{SAT} \), e per questo si ha che \( P \) non è assiomatizzabile. \qed
+\begin{gframe}{(Non) assiomatizzazione di ``essere un grafo connesso''}
+    Consideriamo i grafi semplici con linguaggio \( \mathcal{L} = \{E(x,y)\} \).
+    Sia \( P = \) ``essere un grafo connesso''.
+
+    Definiamo la proprietà \( D_n = \) ``\( c \) e \( d \) sono a distanza \( \geq n \)'' (estendendo il linguaggio con le costanti \( c, d \)):
+    \[ 
+    D_n \equiv \neg \left(\exists x_1, \dots, x_n \left(\bigwedge_{i \neq j}\neg (x_i = x_j) \land E(c, x_1)\land \dots \land E(x_n, d)\right)\right)
+    \]
+    \begin{itemize}
+        \item Supponiamo che \( P \) sia assiomatizzabile da una teoria \( C \).
+        \item Consideriamo la teoria \( C' = C \cup \{D_n \mid n \ge 0\} \) - \( C'\) non dovrebbe avere un modello (un grafo non può essere connesso se la distanza tra \( c \) e \( d \) è infinita).
+        \item Prendiamo un sottoinsieme finito \( T_0 \subseteq_{fin} C' \).
+            \subitem sia \( k = \max \{ n \mid D_n \in T_0 \} \).
+    \subitem esiste un modello per \( T_0 \): basta prendere un grafo connesso con due vertici a distanza \( > k \)
+\item abbiamo \( \FINSAT \to \SAT \)
+\item esiste quindi un modello di \( C' \) che è connesso, ma dove \( c \) e \( d \) non sono connessi (per le \( D_n \)) - contraddizione \qed
+    \end{itemize}
 \end{gframe}
 
 \subsection{Modelli non standard dell'aritmetica}
