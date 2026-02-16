@@ -2939,17 +2939,17 @@ Infatti, se esistesse \( S \) finita t.c. \( \Aa \vDash S \iff \Aa  \) ha domini
 \end{lemmaframe}
 
 \begin{pframe}
-    Sia $\phi$ l'enunciato (o la congiunzione finita di enunciati) che assiomatizza finitamente $P$.
+    Sia $E$ l'enunciato (o la congiunzione finita di enunciati) che assiomatizza finitamente $P$.
     Quindi, per ogni struttura $\Aa$:
-    \[ \Aa \in P \iff \Aa \vDash \phi \]
-    Poiché per ipotesi $T$ assiomatizza $P$, ogni modello di $T$ deve avere la proprietà $P$, e quindi deve soddisfare $\phi$:
-    \[ T \vDash \phi \]
-    Per il \textbf{Teorema di Compattezza}, se $T\vDash \phi$, allora allora esiste un sottoinsieme finito $T_0 \subseteq T$ tale che $T_0 \vDash \phi$.
+    \[ \Aa \in P \iff \Aa \vDash E \]
+    Poiché per ipotesi $T$ assiomatizza $P$, ogni modello di $T$ deve avere la proprietà $P$, e quindi deve soddisfare $E$:
+    \[ T \vDash E \]
+    Per il \textbf{Teorema di Compattezza}, se $T\vDash E$, allora allora esiste un sottoinsieme finito $T_0 \subseteq T$ tale che $T_0 \vDash E$.
 
     $T_0$ assiomatizza $P$, cioè $\Aa \vDash T_0 \iff \Aa \in P$:
     \begin{itemize}
         \item[($\Leftarrow$)] Se $\Aa \in P$, allora $\Aa \vDash T$ (perché $T$ assiomatizza $P$). Poiché $T_0 \subseteq T$, ne segue che $\Aa \vDash T_0$.
-        \item[($\Rightarrow$)] Se $\Aa \vDash T_0$, dato che abbiamo stabilito $T_0 \vDash \phi$, allora $\Aa \vDash \phi$. Poiché $\phi$ assiomatizza $P$, allora $\Aa \in P$.
+        \item[($\Rightarrow$)] Se $\Aa \vDash T_0$, dato che abbiamo stabilito $T_0 \vDash E$, allora $\Aa \vDash E$. Poiché $E$ assiomatizza $P$, allora $\Aa \in P$.
     \end{itemize}
     Dunque $P$ è assiomatizzata dal sottoinsieme finito $T_0$ di $T$.
 \end{pframe}
@@ -2957,6 +2957,18 @@ Infatti, se esistesse \( S \) finita t.c. \( \Aa \vDash S \iff \Aa  \) ha domini
 \begin{lemmaframe}{}{}
     Se \( T \) ha modelli finiti arbitrariamente grandi (per ogni \( n \) c'è un modello con almeno \( n \) elementi), allora \( T \) ha anche modelli infiniti.
 \end{lemmaframe}
+\begin{pframe}
+    Usiamo il Teorema di Compattezza.
+    \begin{enumerate}
+        \item per ogni \( n \in \mathbb{N} \), sia \( \varphi_n \) la formula che esprime "esistono almeno \( n \) elementi distinti". Definiamo l'insieme \( \Gamma = T \cup \{ \varphi_n \mid n \in \mathbb{N} \} \).
+        
+        \item per il Teorema di Compattezza, \( \Gamma \) ha un modello se e solo se ogni suo sottoinsieme finito \( \Delta \subset \Gamma \) è soddisfacibile.
+        
+        \item sia \( \Delta \) un arbitrario sottoinsieme finito di \( \Gamma \). Sia \( N \) il massimo intero tale che \( \varphi_N \in \Delta \). Per ipotesi, \( T \) ha modelli arbitrariamente grandi, quindi esiste un modello \( \mathcal{M} \) di \( T \) con almeno \( N \) elementi. Questo modello soddisfa \( T \) e tutte le \( \varphi_n \) in \( \Delta \), rendendo \( \Delta \) soddisfacibile.
+        
+        \item poiché ogni sottoinsieme finito è coerente, \( \Gamma \) ammette un modello \( \mathcal{A} \). Poiché \( \mathcal{A} \models \Gamma \), allora \( \mathcal{A} \models T \) e \( \mathcal{A} \) deve soddisfare \( \varphi_n \) per ogni \( n \), implicando che \( \mathcal{A} \) è infinito.
+    \end{enumerate}
+\end{pframe}
 
 \begin{gframe}{(Non) assiomatizzazione di ``essere un grafo connesso''}
     Consideriamo i grafi semplici con linguaggio \( \mathcal{L} = \{E(x,y)\} \).
