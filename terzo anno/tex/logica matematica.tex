@@ -2475,7 +2475,7 @@ Il calcolo dei predicati mantiene molte delle proprietà del calcolo proposizion
     \item  Ogni istanza di tautologia proposizionale è una verità nel Calcolo dei Predicati
 \end{itemize}
 
-\subsection{Teorema di completezza per la logica predicativa}
+\section{Teorema di Completezza per la Logica Predicativa}
 Come per la logica proposizionale, vogliamo dimostrare \( T\vDash A \iff T \vdash A \).
 
 Esiste però un'altra definizione equivalente per il teorema di completezza.
@@ -2529,7 +2529,7 @@ Ci manca da dimostrare \( T \) coerente \( \implies Mod(T) \neq \emptyset\).
 \end{enumerate}
 \end{proofframe}
 
-\subsection{Estensioni di teorie}
+\section{Estensioni di teorie}
 Vogliamo dimostrare coerenza \( \implies \) soddisfacibilità. Per farlo, introduciamo il concetto di \textit{estensione}.
 
 \begin{defframe}{Estensione}{}
@@ -2600,6 +2600,7 @@ Per definirlo, facciamo alcune assunzioni.
 
 Assumiamo di lavorare con un linguaggio \( \Ll = \{R_i, f_j, c_k\} \) che contenga almeno una costante e una funzione (nota bene: se ci sono una costante e una funzione, ci sono infiniti termini chiusi).
 
+\begin{defframe}{Modello dei termini}{}
 Definiamo \( \Mm \) (detto \textbf{modello di Henkin} dei termini di \( S \)):
 \begin{itemize}
     \item \( M = \{\text{termini chiusi di } \Ll \}\)
@@ -2607,25 +2608,27 @@ Definiamo \( \Mm \) (detto \textbf{modello di Henkin} dei termini di \( S \)):
     \item \( c_k^\Mm = c_k \in M \) 
         \subitem l'interpretazione della costante \( c \) è data dalla costante \( c \) stessa
         \subitem {\color{gray} es. \( \Ll_2 = \{e, *\}, M_2 = \{e, e*e, \dots\} \) - come interpretazione di \( c_0 = e \) prendo \( e\in M_2 \)}
-    \item l'interpretazione di un simbolo di relazione \( \Rr \) è data dall'insieme dei termini chiusi di cui \( S \) dimostra che soddisfano la relazione - ovvero \( (\Mm_1, \dots, \Mm_n) \in \Rr^\Mm_i \iff  S \vdash \Rr_i(t_1, \dots, t_n)\)
-    \item l'interpretazione di un simbolo di funzione \( f \) è l'associazione \( t_1, \dots, t_n \mapsto f(t_1, \dots, t_n) \) - \( f^\Mm_j : M^n \to M \) è t.c. \( f^\Mm_j (t_1, \dots, t_n) := f_j(t_1, \dots, t_n) \)
+    \item l'interpretazione di un simbolo di relazione \( \Rr \) è data dall'insieme dei termini chiusi di cui \( S \) dimostra che soddisfano la relazione - ovvero \( (t_1, \dots, t_n) \in \Rr^\Mm_i \iff  S \vdash \Rr_i(t_1, \dots, t_n)\)
+    \item l'interpretazione di un simbolo di funzione \( f \) è l'associazione \( t_1, \dots, t_n \mapsto f(t_1, \dots, t_n) \)\\ in cui \( f^\Mm_j : M^n \to M \) è t.c. \( f^\Mm_j (t_1, \dots, t_n) := f_j(t_1, \dots, t_n) \)
         \subitem {\color{gray}es. \( +^\Mm(0,1) = \underbracket{+(0,1)}_{t} \)}
 
 \end{itemize}
 
 Osserviamo che l'interpretazione in \( \Mm \) di un termine chiuso \( t \) coincide con il termine stesso (\( t^\Mm = t \)).
 
-Vogliamo dimostrare \( \Mm \vDash S \). Per farlo (come spesso accade) ci è più comodo dimostrare un'affermazione più forte: \( \forall E \ \Mm \vDash E \iff S \vdash E \).
+\end{defframe}
+
+Vogliamo dimostrare \( \Mm \vDash S \). Per farlo (come spesso accade) ci è più comodo dimostrare un'affermazione più forte: \( \forall E, \ \Mm \vDash E \iff S \vdash E \).
 
 \begin{proofframe}{}
-    Dimostriamo per casi (su \( E \)):
+    Procediamo per induzione sulla complessità della formula \( E \).\\
+    Assumiamo che per ogni formula \( A \) con complessità minore di \( E \), valga \( \Mm \vDash A \iff S \vdash A \)
     \begin{itemize}
         \item \( E \)  è \( \neg G \)
 
-            \subitem se \(\Mm \not \vDash E\), per ipotesi induttiva si ha \( S \not \vdash G \) e da \( S \) completa segue \( S \vdash \neg G \).
+            \subitem se \(\Mm \vDash \neg G\) allora \( \Mm\not\vDash G \) e per I.I. \( S\not\vdash G \) - per completezza, \( S\vdash \neg G \)
 
-            \subitem se \( \Mm \vDash E \), allora per ipotesi induttiva \( S \vdash G \) e da \( S \) coerente segue \( S \not\vdash \neg G \)
-
+            \subitem se \(\Mm \not\vDash \neg G\) allora \( \Mm\vDash G \) e per I.I. \( S\vdash G \) - per coerenza, \( S\not\vdash \neg G \)
 
         \item \( \Mm \vDash G \land H \) {\color{CadetBlue}\( \iff S\vdash G \land H \)}
 
@@ -2637,23 +2640,25 @@ Vogliamo dimostrare \( \Mm \vDash S \). Per farlo (come spesso accade) ci è pi�
             (\( \impliedby \)) {\color{CadetBlue}supponiamo \( S \vdash G \land H \);}
             \subitem per la tautologia \( G\land H \to G \), otteniamo \( S\vdash G \ \land \ S \vdash H \)
 
-            \subitem per ipotesi induttiva, segue \( S\vDash G \ \land \ S \vDash H \), da cui \( S\vDash G \land H \)
+            \subitem per ipotesi induttiva, segue \( \Mm\vDash G \ \land \ \Mm \vDash H \), da cui \( \Mm\vDash G \land H \)
             
         \item se \(E\) è un enunciato atomico \( R(t_1, \dots, t_k) \), abbiamo che \( \Mm \vDash R(t_1, \dots, t_n) \) per definizione \(\iff (t^\Mm_1, \dots t^\Mm_n)\in \R^\Mm \) e, per l'osservazione sui termini, \( \iff (t, \dots, t_n)\in R^\Mm \), il che per definizione equivale a \( S\vdash R(t_1, \dots, t_n) \)
 
-        \item se \( E \) è del tipo \( \forall x F \)
+        \item se \( E \) è del tipo \( \forall x F \) {\color{gray}\small(vogliamo \( \Mm \vDash \forall x F \iff S \vdash \forall x F \) )}
+            
+            sappiamo \( \Mm \vDash \forall x F \iff \forall m \in M, \ \Mm \vDash F \tworowmatrix{x}{m} \)\\
+        {\color{CadetBlue}e qui, poiché l'interpretazione di un termine corrisponde al termine stesso, vale\\ \( \Mm \vDash F \tworowmatrix{x}{m} \iff \Mm \vDash F[x/m]\)}
+        \subitem per ipotesi induttiva, l'equivalenza vale sulle istanze: \( \Mm \vDash F[x/m] \iff S\vdash F[x/m] \).
 
-            sappiamo \( \iff \forall m \in M \Mm \vDash F \tworowmatrix{x}{m}\)
+        \subitem \( (\impliedby) \) è immediato: se \( S \vdash \forall x F \), allora per le regole logiche \( \forall m, S \vdash F[x/m] \). Per l'I.I. allora \( \forall m, \Mm \vDash F[x/m] \), e quindi \( \Mm \vDash \forall x F \).
 
-            {\color{CadetBlue}e qui vale \( \Mm \vDash F \tworowmatrix{x}{m} \iff \Mm \vDash F[x/m]\)}
-
-            \subitem per ipotesi induttiva, abbiamo che \( \forall m \in M, \ S\vdash F[x/m] \), ma non abbiamo il \( \iff \). 
-
-            sappiamo \( S \vdash \forall x F \implies S\vdash F[x/t] \), ma non l'altro verso {\color{gray}\small (è come dire che sappiamo che per ogni numero c'è una dimostrazione, ma vogliamo che ci sia una dimostrazione per ogni numero)}
+        \subitem \( (\implies) \) sorge il problema - sappiamo che \( \forall m, S \vdash F[x/m] \) (ogni istanza è dimostrabile), ma questo non implica automaticamente \( S \vdash \forall x F \).
+        
+        {\color{gray}\small (è come dire che sappiamo che per ogni numero c'è una dimostrazione, ma vogliamo che ci sia un'unica dimostrazione che valga per tutti i numeri)}
     \end{itemize}
 \end{proofframe}
 
-Possiamo definire una teoria che ci aiuta nella dimostrazione.
+Possiamo definire una teoria che ci aiuti nella dimostrazione.
 
 \begin{defframe}{Teoria con testimoni}{}
     Una \textbf{teoria con testimoni}, o \textbf{teoria di Henkin} (o ``scapegoat theory'')  soddisfa la seguente proprietà:
@@ -2669,24 +2674,23 @@ Possiamo definire una teoria che ci aiuta nella dimostrazione.
 
 Vediamo come una teoria con testimoni ci aiuta a dimostrare il caso \( \forall x F(x) \) con \( F(x) \) aperta.
 
-\begin{pframe}
-(Dimostriamo che, se \( \Mm \vDash \forall x F \) allora \(T \vdash \forall x F\))
+\begin{proofframe}[title=Dimostriamo che se \( \Mm \vDash \forall x F \) allora \(S \vdash \forall x F\)]
 
-Per assurdo, supponiamo \( \Mm \vDash \forall x F \) e \( T \not\vdash \forall x F \).
+Per assurdo, supponiamo \( \Mm \vDash \forall x F \) e \( S \not\vdash \forall x F \).
 
-Per completezza di \( T \) vale \( T \vdash \neg E \), ovvero \( T \vdash \exists x \neg F(x) \). Dato che \( T \) è una teoria con testimoni, esiste un termine chiuso \( t \) tale che \( T \vdash \exists x \neg F(x) \to \neg F (t) \). 
+Per completezza di \( S \) vale \( S \vdash \neg E \), ovvero \( S \vdash \exists x \neg F(x) \). Dato che \( S \) è una teoria con testimoni, esiste un termine chiuso \( t \) tale che \( S \vdash \exists x \neg F(x) \to \neg F (t) \). 
 
-Dunque \( T\vdash \neg F(t) \).
+Dunque \( S\vdash \neg F(t) \).
 
-Per ipotesi induttiva, \( \Mm \vDash \neg F(t)\). Ma da \( \Mm \vDash \forall x F(x) \), e da \( \Mm \vDash \forall x F(x)\), vale, per qualsiasi termine chiuso \( \Mm \vDash F(x) \to F(t)\).
+Per ipotesi induttiva, \( \Mm \vDash \neg F(t)\). Ma per ipotesi iniziale vale \( \Mm \vDash \forall x F(x) \), ovvero vale per qualsiasi elemento del dominio (che qui sono i termini). Quindi, vale in particolare per \( t \) - ovvero \( \Mm \vDash F(t) \).
 
-Dunque, \( \Mm \vDash F(t)\), il che contraddice \( \Mm \vDash \neg F(t) \). \qed
+Dunque, otteniamo \( \Mm \vDash F(t)\) e \( \Mm \vDash \neg F(t) \) - contraddizione. \qed
 
-\end{pframe}
+\end{proofframe}
 
 Se \( T \) coerente, \( T \) si può estendere a \( T^* \supseteq T\) che sia coerente e con testimoni (in un \( \Ll \) che estende \( \Ll_T \) con un insieme numerabile di costanti.
 
-\begin{thmframe}{}{}
+\begin{thmframe}{Estensioni con testimoni di Teorie}{}
     Per ogni teoria \( T \) coerente esiste una teoria  \( T' \) tale che:
     \begin{itemize}
         \item \( T' \) è un'estensione di \( T \)
@@ -2698,28 +2702,34 @@ Se \( T \) coerente, \( T \) si può estendere a \( T^* \supseteq T\) che sia co
 \end{thmframe}
 
 \begin{proofframe}{}{}
-    Sia \( T \) coerente. 
+    Sia \( T \) una teoria coerente nel linguaggio \( \Ll \).
+
+    Sia \( B = \{c_1, c_2, c_3, \dots\} \) un insieme infinito numerabile di nuovi simboli di costante.
+    Sia \( \Ll' = \Ll \cup B \) il linguaggio esteso.
 
     Sia \( T_0  = T \ \cup \ \{\text{istanze degli assiomi logici nel linguaggio esteso}\}\).
 
-    Fissiamo un'enumerazione delle formule in \( \Ll \) con una variabile libera: \( F_1(x_1), F_2(x_2), \dots \)
+    Fissiamo un'enumerazione di tutte le formule di \( \Ll' \) che hanno esattamente una variabile libera: 
+    \[ F_1(x_1), F_2(x_2), \dots, F_n(x_n), \dots \]
+Costruiamo induttivamente una successione di costanti \( b_{j_1}, b_{j_2}, \dots \in B \).
 
-    Sia \( B = \{b_1, b_2, b_3, \dots\} \) un insieme di nuovi simboli di costante. Fissiamone un'enumerazione \( b_{j1}, b_{j2}, \dots \), in cui \( b_{jk} \) è il primo (per indice) t.c.
+    Per ogni \( n \ge 1 \), sia \( b_{j_n} \) la prima costante dell'insieme \( B \) (secondo un ordine fissato) tale che:
     \begin{itemize}
-        \item \( b_{jk} \) non appare in \( F_1(x_1), \dots, F_k(x_k) \)
-        \item \( b_{jk} \) è diverso da \( b_{j1}, \dots, b_{j_{k-1}} \)
+        \item \( b_{j_n} \) non compare nelle formule \( F_1(x_1), \dots, F_n(x_n) \);
+        \item \( b_{j_n} \) è distinta da tutte le costanti precedentemente scelte \( b_{j_1}, \dots, b_{j_{n-1}} \).
     \end{itemize}
+    
+    {\small \color{gray}(garantiamo che \( b_{j_n} \) sia una costante "nuova" per la formula \( F_n \))}\\
+    {\small \color{gray} (quindi \( b_{j1} \) è la prima costante \( \not \in F_1\), \( b_{j2} \) la prima che non compare in \( F_2 \) e non è già stata usata (quindi \( \neq b_{j1} \)), ecc)}
 
-    {\small \color{gray} quindi \( b_{j1} \) è la prima costante \( \not \in F_1\), \( b_{j2} \) la prima che non compare in \( F_2 \) e non è già stata usata (quindi \( \neq b_{j1} \)), ecc}
-
-    Sia \( W_k \) il seguente enunciato:
-    \[ \exists x_k \neg F_k(x_k) \to \neg F_k(b_{jk})\]
+    Sia \( W_n \) il seguente enunciato (detto "assioma di Henkin" per \( F_n \)):
+    \[ W_n: \quad \exists x_n \neg F_n(x_n) \to \neg F_n(b_{j_n}) \]
 
     Sia \( T_n = T_0 \cup \{W_1, \dots, W_n\} \), e sia \( T_{\infty} = \bigcup_n T_n \).
 
-\textbf{claim}: \( T^* = \bigcup_{n\in \N} T \) è di Henkin, coerente ed estende \( T \).
+    \textbf{claim}: \( T_{\infty} = \bigcup_{n\in \N} T_n \) è di Henkin, coerente ed estende \( T \).
 
-{\color{CadetBlue} di Henkin: \( \forall n \exists t = b_{j_n} \) t.c. \( T^* \ni \exists x_n \neg F_n(x_n) \to \neg F_n (b_{j_n})\) è vero per costruzione}
+{\color{CadetBlue} di Henkin: \( \forall n \ \exists t = b_{j_n} \) t.c. \( T^* \ni \exists x_n \neg F_n(x_n) \to \neg F_n (b_{j_n})\) è vero per costruzione}
 
     \begin{itemize}
         \item Dimostriamo che \( T_\infty \) è coerente (basta dimostrare che \( \forall n \ T_n \) coerente)
@@ -2741,7 +2751,7 @@ Se \( T \) coerente, \( T \) si può estendere a \( T^* \supseteq T\) che sia co
 
             ma \( T_n = T_{n-1} \cup \{W_n\} \), quindi (per deduzione) \( T_{n-1} \vdash W_n \to \neg W_n \);
 
-            {\color{gray}\small \( \neg W_n \) è una negazione di un'implicazione (quindi verifica la premessa \( \exists x_n \neg F_n (x_n) \) e falsifica la conseguenza \( \neg F_n (b_{j_n}) \))} quindi \( T_{n-1} \vdash \exists x_n \neg F)n (x_n)\) e \( T_{n-1} \vdash F_n (b_{j_n})  \).
+            {\color{gray}\small \( \neg W_n \) è una negazione di un'implicazione (quindi verifica la premessa \( \exists x_n \neg F_n (x_n) \) e falsifica la conseguenza \( \neg F_n (b_{j_n}) \))} quindi \( T_{n-1} \vdash \exists x_n \neg F_n (x_n)\) e \( T_{n-1} \vdash F_n (b_{j_n})  \).
 
         Per costruzione, sappiamo che \( T_{n-1} = T_0 \) {\color{gray}\small \( (= T \ \cup\ \) assiomi) } \( \cup \ \{W_1, \dots, W_{n-1}\} \); abbiamo scelto \( b_{j_n} \) e quindi sappiamo che:
         \begin{itemize}
@@ -2814,7 +2824,7 @@ Definiamo quindi il modello dei termini \( \Mm/\sim \) in questo modo:
 
 La dimostrazione \( \Mm/\sim \vDash E \iff T\vdash E \) procede esattamente come quella di \( \Mm \). Inoltre, se \( \Mm \) ha cardinalità numerabile, anche \( \Mm/\sim \) ha cardinalità numerabile.
 
-\section{Teorema di compattezza}
+\section{Teorema di Compattezza}
 Il teorema di compattezza si può riformulare in diversi modi:
 
 \begin{thmframe}{Teorema di compattezza, versioni equivalenti}{}
