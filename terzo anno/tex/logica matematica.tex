@@ -2869,7 +2869,7 @@ Se esiste una teoria \( T \) che assiomatizza una proprietà \( P \), ci si può
 
 In questo caso, diciamo che \( P \) è \textbf{finitamente assiomatizzabile} relativamente alla classe \( \Cc \).
 
-\textbf{Esempio 1: finitezza}
+\subsubsection{Finitezza e infinitezza}
 
 \begin{itemize}
     \item \( P = \) ``avere dominio finito'';
@@ -2898,7 +2898,13 @@ Possiamo assiomatizzare questa proposizione con un linguaggio \( \Ll \) ``vuoto'
 \end{propframe}
 
 \begin{pframe}
+    \textbf{Dominio infinito}:
+
 Consideriamo \( T = \{P_n \mid n \in \N\} \) (``avere dominio di cardinalità almeno \( n \)'' per ogni \( n \)). La teoria \( T \) assiomatizza ``avere un dominio infinito'' {\color{gray}\small (se si ha dominio almeno \( n \) per ogni \( n \))}
+
+\hrulefill
+
+\textbf{Dominio finito}:
 
 Sia per assurdo \( F \) una teoria che assiomatizza \( P = \) ``avere dominio finito''.
 
@@ -2907,6 +2913,8 @@ Consideriamo \( F \cup T \). \( F\cup T \) non può avere modelli (in quanto par
 Se ne prendo un qualsiasi pezzo finito \( T_0 \subseteq F \cup T \), noto però che esso ha un modello (in quanto descrive, ``alla peggio'', l'avere dominio finito (da \( F \)) e l'avere almeno \( n \) elementi (da \( T \))).
 
 Visto che \( T_0 \) ha un modello, per compattezza tutta la teoria dovrebbe avere un modello \( (\texttt{FINSAT}\implies \texttt{SAT}) \), il che è impossibile. \qed
+
+\hrulefill
 
 Vediamo anche che è impossibile che ``avere dominio infinito'' sia \textit{finitamente} assiomatizzabile.
 
@@ -2917,6 +2925,13 @@ Infatti, se esistesse \( S \) finita t.c. \( \Aa \vDash S \iff \Aa  \) ha domini
     Sia \( P \) assiomatizzabile. Se \( \neg P \) non è assiomatizzabile, allora \( P \) non è finitamente assiomatizzabile.
 
     Per contrapposizione, se \( P, \neg P \) sono assiomatizzabili, allora P è finitamente assiomatizzabile.
+
+    \begin{gframe}{Nota / fun fact !}
+    ``Equivalente'' al Teorema di Post della Teoria della Computazione (\( REC \cap coREC = DEC \)).
+    
+    (assiomatizzabile \(\iff\) semidecidibile ,
+    \\finitamente assiomatizzabile \(\iff\) decidibile)
+    \end{gframe}
 \end{lemmaframe}
 
 \begin{lemmaframe}{}{}
