@@ -2529,7 +2529,7 @@ Ci manca da dimostrare \( T \) coerente \( \implies Mod(T) \neq \emptyset\).
 \end{enumerate}
 \end{proofframe}
 
-\section{Estensioni di teorie}
+\subsection{Estensioni di teorie}
 Vogliamo dimostrare coerenza \( \implies \) soddisfacibilità. Per farlo, introduciamo il concetto di \textit{estensione}.
 
 \begin{defframe}{Estensione}{}
@@ -2824,6 +2824,7 @@ Definiamo quindi il modello dei termini \( \Mm/\sim \) in questo modo:
 
 La dimostrazione \( \Mm/\sim \vDash E \iff T\vdash E \) procede esattamente come quella di \( \Mm \). Inoltre, se \( \Mm \) ha cardinalità numerabile, anche \( \Mm/\sim \) ha cardinalità numerabile.
 
+\newpage
 \section{Teorema di Compattezza}
 Il teorema di compattezza si può riformulare in diversi modi:
 
@@ -2838,6 +2839,20 @@ Il teorema di compattezza si può riformulare in diversi modi:
     \end{itemize}
     
 \end{thmframe}
+
+\begin{pframe}
+   Il Teorema di Compattezza può essere visto come una conseguenza diretta (corollario) del \textbf{Teorema di Completezza} appena dimostrato.
+
+   Infatti:
+   \begin{itemize}
+        \item una dimostrazione formale è, per definizione, una sequenza finita di formule
+        \item quindi, se una teoria è incoerente (cioè dimostra una contraddizione, \( T\vdash\bot \)), deve esistere un sottoinsieme finito di assiomi da cui deriva la contraddizione
+        \item di conseguenza, se ogni sottoinsieme finito è coerente, allora l'intera teoria è coerente
+        \item per il Teorema di Completezza, se una teoria è coerente, allora ha un modello.
+    \end{itemize}
+\end{pframe}
+
+
 
 \subsection{Applicazione: (non) assiomatizzabilità}
 
