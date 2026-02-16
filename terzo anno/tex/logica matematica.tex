@@ -2944,26 +2944,6 @@ Infatti, se esistesse \( S \) finita t.c. \( \Aa \vDash S \iff \Aa  \) ha domini
 \end{lemmaframe}
 
 \begin{gframe}{(Non) assiomatizzazione di ``essere un grafo connesso''}
-    Sia \(\mathcal{L} = \{E\}\) il linguaggio dei grafi e \(P\) la proprietà ``essere connesso''.
-    Supponiamo per assurdo che \(P\) sia assiomatizzabile da una teoria \(T_{conn}\).
-
-    Estendiamo il linguaggio a \(\mathcal{L}' = \mathcal{L} \cup \{c, d\}\) aggiungendo due costanti.
-    Indichiamo con \(\psi_n(x,y)\) la formula che afferma l'esistenza di un cammino di lunghezza \(n\) tra \(x\) e \(y\).
-
-    Consideriamo la teoria infinita:
-    \[ \Sigma = T_{conn} \cup \{ \neg \psi_n(c, d) \mid n \geq 1 \} \]
-    Questa teoria asserisce che il grafo è connesso, ma non esiste alcun cammino finito tra \(c\) e \(d\).
-
-    \begin{itemize}
-        \item Consideriamo un sottoinsieme finito \(\Sigma_0 \subseteq \Sigma\). Sia \(k\) il massimo intero tale che \(\neg \psi_k \in \Sigma_0\).
-        \item \(\Sigma_0\) ammette un modello: basta prendere un grafo connesso con due nodi \(u, v\) a distanza \(> k\) e interpretare \(c \mapsto u, d \mapsto v\).
-        \item \(\texttt{FINSAT} \implies \texttt{SAT}\): Per il Teorema di Compattezza, l'intera \(\Sigma\) ha un modello \(\mathcal{M}\).
-    \end{itemize}
-
-    In \(\mathcal{M}\) valgono \(T_{conn}\) (quindi è connesso) e tutte le \(\neg \psi_n\) (quindi \(c\) e \(d\) non sono connessi). \textbf{Contraddizione.} \qed
-\end{gframe}
-
-\begin{gframe}{(Non) assiomatizzazione di ``essere un grafo connesso''}
     Consideriamo i grafi semplici con linguaggio \( \mathcal{L} = \{E(x,y)\} \).
     Sia \( P = \) ``essere un grafo connesso''.
 
