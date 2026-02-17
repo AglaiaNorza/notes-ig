@@ -3017,7 +3017,7 @@ Inizia infatti con \( \N \), ma contiene almeno un elemento maggiore di tutti i 
 
 Intorno a \( c^\Aa \) si sviluppa quindi una copia isomorfa a \( \Z \).
 
-Si esclude quindi che si possa definire una teoria \( T \) che assiomatizzi \( Th(\Nn) \) in modo che valga, come per DLO< che tutti i modelli numerabili di \( T \) sono isomorfi. Resta aperta però la possibilità di trovare un insieme di assiomi \( T \) con insieme di teoremi computabilmente enumerabili che coincida con la ``vera'' Teoria dei Numeri \( Th(\Nn) \). Una tale teoria sarebbe completa e dunque decidibile e fornirebbe un algoritmo per decidere automaticamente se un enunciato \( E \) è un teorema della Teoria dei Numeri o no.
+Si esclude quindi che si possa definire una teoria \( T \) che assiomatizzi \( Th(\Nn) \) in modo che valga, come per (DLO, \( < \)) che tutti i modelli numerabili di \( T \) sono isomorfi. Resta aperta però la possibilità di trovare un insieme di assiomi \( T \) con insieme di teoremi computabilmente enumerabili che coincida con la ``vera'' Teoria dei Numeri \( Th(\Nn) \). Una tale teoria sarebbe completa e dunque decidibile e fornirebbe un algoritmo per decidere automaticamente se un enunciato \( E \) è un teorema della Teoria dei Numeri o no.
 
 \subsection*{Vademecum su limiti espressivi e cardinalità}
 \begin{table}[H]
@@ -3061,7 +3061,7 @@ Esistono diverse definizioni di algoritmo. Le principali ci vengono date da Göd
                 1 & \text{se } x = y\\
                 0 & \text{se } x \neq y
         \end{cases} \)
-    \item \( \prod_i^n (x_1, \dots, x_n) = x_i \) \ {\color{CadetBlue}(proiezione)}
+    \item \( \pi_i^n (x_1, \dots, x_n) = x_i \) \ {\color{CadetBlue}(proiezione)}
     \end{itemize}
     e \( \Cc \) chiusa sotto composizione -
     date \( \theta_1, \dots, \theta_n: \N^k \to \N, \psi:\N^m \to \N \), la composta \( \phi \) è definita come segue:
@@ -3077,8 +3077,10 @@ Esistono diverse definizioni di algoritmo. Le principali ci vengono date da Göd
 
 \end{defframe}
 
-\begin{propframe}{}{}
-    Si ha che \( f\in \Cc \implies f  \) calcolabile.
+\begin{propframe}{Tesi di Church-Turing}{}
+    Una funzione è intuitivamente \textit{calcolabile} se e solo se appartiene alla classe $\mathcal{C}$.
+
+    {\color{gray}(``Se un problema è umanamente calcolabile, allora esisterà una macchina di Turing in grado di risolverlo (cioè di calcolarlo)'')}
 \end{propframe}
 
 \begin{itemize}
@@ -3100,8 +3102,6 @@ Per calcolare una composizione come $h(g_1(\vec{x}), g_2(\vec{x}), \dots)$, è n
 (Anche \( g(\vec{x}, y) \) è algoritmica perché lo è \( h(\vec{x}) \))
 
 \begin{propframe}{Calcolabilità}{}
-    
-
 \begin{itemize}
     \item Una funzione $\varphi: \mathbb{N}^k \rightarrow \mathbb{N}$ è calcolabile $\iff \varphi \in \mathcal{C}$.
     \item  $R \subseteq \mathbb{N}^k$ si dice calcolabile se la sua \textbf{funzione caratteristica} $\chi_R$ è calcolabile.
