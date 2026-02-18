@@ -3373,14 +3373,18 @@ Abbiamo quindi:
     L'insieme delle verità aritmetiche \( Th(\Nn) \) non è algoritmicamente decidibile.
 \end{corframe}
 
+\begin{itemize}
+    \item \( Th(\Nn) \) non è neanche semidecidibile (/computazionalmente enumerabile) - se lo fosse, poiché \( \Nn \) è un modello completo, sarebbe anche decidibile
+\end{itemize}
+
 \subsection{Prima forma debole di Incompletezza}
 Otteniamo quindi una prima forma debole del Primo Teorema di Incompletezza di Gödel
 \begin{thmframe}{Primo Teorema di Incompletezza (forma debole)}{}
     Se \( T \) è una teoria decidibile e tale che \( \Nn \vDash T \), allora \( T \) non è completa: esiste un enunciato \( G \) tale che \( T\not\vDash G \land T \not\vdash\neg G \)
 \end{thmframe}
 \begin{pframe}
-    Se \( T \) fosse completa, dato che \( \N\vDash T \) seguirebbe che \( \{E \mid T\vdash E\} \subseteq \{E \mid \N \vDash E\} \). In più, per completezza, poiché abbiamo \( T\vdash E \xor T\vdash \neg E \), e poiché, visto che \( \N \vDash T \), \( E \) è o vero o falso in \( \N \), abbiamo
-    \[  \{E \mid T\vdash E\} = \{E \mid \N \vDash E\} =Th(\N)  \]
+    Se \( T \) fosse completa, dato che \( \N\vDash T \) seguirebbe che \( \{E \mid T\vdash E\} \subseteq \{E \mid \Nn \vDash E\} \). In più, per completezza, poiché abbiamo \( T\vdash E \xor T\vdash \neg E \), e poiché, visto che \( \N \vDash T \), \( E \) è o vero o falso in \( \N \), abbiamo
+    \[  \{E \mid T\vdash E\} = \{E \mid \N \vDash E\} =Th(\Nn)  \]
     Sapendo che \( Th(\N) \) non è decidibile, otteniamo che:
     \begin{itemize}
         \item se \( T \) decidibile e completa, allora i teoremi di \( T \) sono decidibili
