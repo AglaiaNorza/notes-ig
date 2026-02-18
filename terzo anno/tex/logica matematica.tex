@@ -3282,7 +3282,7 @@ Quindi, sia \( D(x, y) \) una formula che rappresenta \( \delta \) in \( \Nn \),
 \[ \delta(a) = b \iff \Nn \vDash D(\bar{a}, \bar{b})\]
 
 Consideriamo la formula
-\[ \forall y (D(x, y)\to \neg V(y)) \]
+\[ A(x):= \forall y (D(x, y)\to \neg V(y)) \]
 
 \begin{gframe}{}
 la formula dichiara ``data una formula \( x \), la sua diagonalizzazione (applicazione del suo stesso codice a se stessa) è falsa in \( \Nn \)''
@@ -3290,20 +3290,54 @@ la formula dichiara ``data una formula \( x \), la sua diagonalizzazione (applic
 {\color{gray}\small
 più precisamente: per l'unico \( y \) che è il codice della formula ottenuta sostituendo il numerale \(\bar{x}\) dentro la formula con codice \( x \), vale che \( y \) non rappresenta un enunciato vero (cioè non soddisfa \( V \)).}
 \end{gframe}
-Questa formula è una formula con una variabile libera \( x \) (chiamiamola \( A(x) \)). (In quanto tale può essere codificata). 
+Questa formula è una formula con una variabile libera \( x \), e in quanto tale può essere codificata.
 
 Sia \( p \) il codice di \( A(x) \).
 
-Consideriamo \( A(\bar{p}) \), ovvero
-\[ \forall y (D(\bar{p}, y)\to \neg V(y)) \]
-(che dichiara che ogni \( y \) valore di \( \delta(p)\) non è un enunciato vero in \(\Nn \))
+Consideriamo ora l'enunciato \( A(\bar{p}) \), ottenuto sostituendo a \( x \) il numerale del suo stesso codice:
+    \[ A(\bar{p}) := \forall y (D(\bar{p}, y)\to \neg V(y)) \]
 
-Sia \( q \) il suo codice (quindi \( \delta(p) = q  \)).
+    \textit{Cosa sta dicendo esattamente questa frase?}
+    \begin{itemize}
+        \item la funzione diagonale, applicata al codice \( p \) (che rappresenta \( A(x) \)), calcola il codice della formula \( A(\bar{p}) \).
+        \item quindi, l'unico numero \( y \) che soddisfa \( D(\bar{p}, y) \) è proprio \( q = \text{code}(A(\bar{p})) \).
+    \end{itemize}
 
-Notiamo subito che la formula genera una contraddizione: la formula dichiara che ogni numero che sia \( = \delta(p) \) non è vero in \( \Nn \), ma essa stessa è uno di quei numeri (quindi sta dichiarando di ``mentire'' (di non essere vera)).
+    Pertanto, la formula \( A(\bar{p}) \) sta parlando di se stessa - essa afferma:
+    \begin{center}
+        \textit{``L'enunciato con codice \( q \) (cioè io stessa) non soddisfa \( V \)''}
+    \end{center}
 
-Dimostriamolo formalmente, ovvero che l'ipotesi che la verità esprimibile porti alla contraddizione \( \Nn \vDash V(q) \land \Nn \vDash \neg V(q) \).
+    \begin{gframe}{Il Paradosso del Mentitore}
+        Se assumiamo che \( V(y) \) rappresenti la verità (cioè \( V(y) \) è vero se e solo se l'enunciato con codice \( y \) è vero), allora \( A(\bar{p}) \) è l'equivalente formale del paradosso del mentitore:
+        \[ \text{``Io sono falsa''} \]
+    \end{gframe}
 
+Dimostriamolo formalmente, ovvero che l'ipotesi che la verità sia esprimibile porti alla contraddizione\\ \( \Nn \vDash V(q) \land \Nn \vDash \neg V(q) \).
+
+\begin{proofframe}[title=dimostrazione breve]
+    Sia \( p \) il codice della formula \( A(x) \).
+    Sia \( q \) il codice della formula ottenuta per diagonalizzazione \( A(\bar{p}) \).
+
+    Per le proprietà della funzione diagonale rappresentata da \( D \), sappiamo che:
+    \[ \Nn \vDash \forall y (D(\bar{p}, y) \longleftrightarrow y = \bar{q}) \]
+
+    Quindi, valutiamo la verità di \( A(\bar{p}) \) in \( \Nn \):
+    \begin{align*}
+        \Nn \vDash A(\bar{p}) & \iff \Nn \vDash \forall y (D(\bar{p}, y) \to \neg V(y)) \\
+                              & \iff \Nn \vDash \neg V(\bar{q}) \quad \text{(poiché l'unico } y \text{ che soddisfa } D \text{ è } q\text{)}
+    \end{align*}
+
+    D'altra parte, assumiamo per assurdo che \( V(x) \) rappresenti la verità aritmetica \( Th(\Nn) \). Per definizione di rappresentabilità deve valere:
+    \[ \Nn \vDash A(\bar{p}) \iff \Nn \vDash V(\overline{code(A(\bar{p}))}) \iff \Nn \vDash V(\bar{q}) \]
+
+    Unendo le due equivalenze otteniamo la contraddizione:
+    \[ \Nn \vDash V(\bar{q}) \iff \Nn \vDash \neg V(\bar{q}) \]
+
+    Pertanto, l'assunzione iniziale è falsa: \( Th(\Nn) \) non è rappresentabile in \( \Nn \).
+\end{proofframe}
+
+\begin{proofframe}[title=dim fatta in classe]
 Dato che la formula \( D\) definisce la funzione \( \delta \) in \( \N \), abbiamo che
 \[ \N \vDash D(p, q) \]
 
@@ -3334,6 +3368,7 @@ Dunque, \( A(p)\in Th(\N) \), ovvero \( A(p) \) è una verità aritmetica.
 Quindi, dato che \( V \) rappresenta \( Th(\N) \), abbiamo
 \[ \N \vDash V(code(A(p))) = V(q) \]
 il che è impossibile.
+\end{proofframe}
 
 Abbiamo quindi:
 \begin{corframe}{}{}
