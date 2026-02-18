@@ -3169,13 +3169,12 @@ tale che:
 H_1(x_1 \dots x_k, y_1) \land H_2(x_1 \dots x_k, y_2) \land \dots \land H_m(x_1 \dots x_k, y_m)
 \]
 \[
-\land \quad G(y_1, \dots, y_m, W) \quad (\text{valore } G(y_1 \dots y_m))
+\land \quad G(y_1, \dots, y_m, w) \quad (\text{valore } G(y_1 \dots y_m))
 \]
 
-\textit{NB:} Questo finisce nel grafico della composta se \(\exists y_1 \dots\) (se le intermedie sono indefinite, anche la composta lo è).
+\textit{NB:} questo finisce nel grafico della composta se \(\exists y_1 \dots\) (se le intermedie sono indefinite, anche la composta lo è).
 
 Si vede che questa formula è soddisfatta $\iff$ l'elemento appartiene al grafico della composta.
-        \subitem siano 
         
         \item \textbf{chiusura per minimo}: le funzioni definibili in \( \Nn \) sono chiuse per minimo
 
@@ -3231,7 +3230,6 @@ L'implicazione finale vale perché:
 \end{gframe}
 \end{pframe}
 
-
 \textbf{Osservazione}: notiamo che tutte le funzioni calcolabili hanno una simile struttuta sintattica: sono formate da quantificatori esistenziali seguiti da una formula in cui non compaiono quantificatori o essi appaiono solo "limitati" ( es. \( \forall x (x\leq 7 \to \dots) \)) - queste formule vengono dette \( \sum_1^0 \).
 
 \section{I numeri di Gödel}
@@ -3260,6 +3258,8 @@ Ci chiediamo quindi se \( \{cod(E) \mid \Nn \vDash E\} \) sia rappresentabile in
 \textit{La verità aritmetica non può essere definita all'interno dell'aritmetica.}
 
 (L'insieme delle verità aritmetiche \( Th(\Nn) = \{E \mid \Nn \vDash E\} \) non è rappresentabile in \( \Nn \))
+
+{\color{gray}quindi non esiste una formula \( V \) t.c.  \( E \in Th(\Nn) \iff \Nn \vDash V(\overline{code(E)})\)}
 \end{thmframe}
 
 Supponiamo per assurdo che \( Th(\Nn) \) sia rappresentabile.
@@ -3271,25 +3271,30 @@ Sia \( T(x) \) la formula che lo rappresenta.
     \item \( E \not\in Th(\Nn) \implies \Nn \vDash \neg V(\overline{code(E)})\)
 \end{itemize}
 
-Introduciamo una nuova funzione \( \delta : \N \to \N \).
-Dato \( p\in \N \), \( \delta \) controlla se \( p \) è il codice numerico di una formula \( A(x) \) una variabile libera. Se lo è, \( \delta(p) =  \) codice di \( A(x/\bar{p}) \).
+Introduciamo una nuova funzione \( \delta : \N \to \N \) (``\textbf{funzione diagonale}'').\\
+Dato \( p\in \N \), \( \delta \) controlla se \( p \) è il codice numerico di una formula \( A(x) \) una variabile libera. Se lo è, \( \delta(p) =  \) codice di \( A(\bar{p}/x) \).
 
 {\color{CadetBlue}(dato \( p\), controllo se codifica una FML \( A(x) \) - se sì, scrivo \( A(p) \) (metto il numerale \( p \) al posto della variabile {\small(quindi do alla formula il suo stesso codice)}), codifico la nuova stringa e restituisco il suo codice numerico \( q \))}
 
-\( \delta \) è evidentemente calcolabile (uso la tesi di Church-Turing {\color{gray} - ogni funzione descrivibile tramite un algoritmo è calcolabile da una TM - } per non doverlo dimostrare esplicitamente). In quanto calcolabile, \( \delta\in\Cc \), e quindi \( \delta \) rappresentabile.
+\( \delta \) è evidentemente calcolabile (uso la tesi di Church-Turing per non doverlo dimostrare esplicitamente).\\ In quanto calcolabile, \( \delta\in\Cc \), e quindi \( \delta \) rappresentabile.
 
 Quindi, sia \( D(x, y) \) una formula che rappresenta \( \delta \) in \( \Nn \), ovvero tale che:
 \[ \delta(a) = b \iff \Nn \vDash D(\bar{a}, \bar{b})\]
 
 Consideriamo la formula
 \[ \forall y (D(x, y)\to \neg V(y)) \]
-(che dichiara ``per ogni \( y \) valore di \( \delta(x) \) {\color{gray}\small(quindi formula \( A(y/\bar{x}) \) in cui \( x = code(A)\))}, \( y \) non è un enunciato vero in \( \Nn \))
 
+\begin{gframe}{}
+la formula dichiara ``data una formula \( x \), la sua diagonalizzazione (applicazione del suo stesso codice a se stessa) è falsa in \( \Nn \)''
+
+{\color{gray}\small
+più precisamente: per l'unico \( y \) che è il codice della formula ottenuta sostituendo il numerale \(\bar{x}\) dentro la formula con codice \( x \), vale che \( y \) non rappresenta un enunciato vero (cioè non soddisfa \( V \)).}
+\end{gframe}
 Questa formula è una formula con una variabile libera \( x \) (chiamiamola \( A(x) \)). (In quanto tale può essere codificata). 
 
 Sia \( p \) il codice di \( A(x) \).
 
-Consideriamo \( A(x/\bar{p}) \), ovvero
+Consideriamo \( A(\bar{p}) \), ovvero
 \[ \forall y (D(\bar{p}, y)\to \neg V(y)) \]
 (che dichiara che ogni \( y \) valore di \( \delta(p)\) non è un enunciato vero in \(\Nn \))
 
