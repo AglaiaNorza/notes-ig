@@ -1514,13 +1514,13 @@ Un'occorrenza di una variabile \( x \) in una formula \( F \) è \textbf{vincola
 
 Tutte le altre occorrenze di \( x \) sono dette \textbf{libere}.
 
-\begin{defframe}{Enunciato}{}
+\begin{defframe}{Enunciati}{}
 Un \textbf{enunciato} è una formula senza variabili libere.
 \end{defframe}
 
 Se \( F \) è una formula e \( x_1, \dots, x_n \) sono variabili distinte, indichiamo con \( F(x_1, \dots, x_n) \) il fatto che le variabili libere di \( F \) sono contenute nell'insieme \( \{x_1, \dots, x_n\} \).
 
-\begin{defframe}{Termine libero}{}
+\begin{defframe}{Termini liberi}{}
     \label{terlib}
     Un termine \( t \) è \textbf{libero per una variabile} \( v \) in una formula \( F \) se nessuna occorrenza libera di \( v \) in \( F \) è nel dominio di un quantificatore \( \forall y \) o \( \exists y \) con \( y \) una variabile in \( t\).
 
@@ -1618,7 +1618,7 @@ Dato un linguaggio \( \Ll \), ci interessa introdurre questi insiemi degni di no
         \subitem e definiamo quindi \( Mod(T)=\{\Aa : \Aa \vDash T\} \)
         \subitem (nota: una teoria si dice \textit{soddisfacibile} se ha un modello)
     \item \textbf{Conseguenza logica di una teoria} - \( E \) \ t.c. \(E \) è vero in tutti i modelli di \( T \) (diciamo che \( T \) \textit{implica logicamente} \( E \))
-        \subitem definiamo coerentemente \( Conseq(T) = \{E : T\vDash E\} \)
+        \subitem definiamo coerentemente \( Conseq(T) = \{E : T\vDash E\} \) (si usa anche la notazione \( Cons(T) \))
 \end{itemize}
 
 Mentre la teoria di una singola struttura è sempre completa, l'insieme delle sue conseguenze logiche non lo è necessariamente
