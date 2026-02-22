@@ -2026,11 +2026,6 @@ Come già visto, conviene dimostrare la proprietà per le formule (così che val
     \[ \Qq \vDash F[\alpha] \iff \Rr \vDash F[\alpha] \]
 \end{corframe}
 
-\begin{corframe}{Conseguenza della proprietà del testimone}{}
-    Se vale la proprietà del testimone tra \( \Rr \) e \( \Qq \), allora \( \forall F, \forall \alpha \) su \( Q \),
-    \[ \Qq \vDash F[\alpha] \iff \Rr \vDash F[\alpha] \]
-\end{corframe}
-
 \begin{proofframe}{}{}
     Si dimostra per induzione sulla complessità della formula \( F \).
 
@@ -2243,6 +2238,11 @@ se sappiamo che \( \Qq \vDash (E \lor F)\land \neg(E \land F) \) e che \( \Rr \v
     \item  quindi, DLO \(\vDash \neg E\)
 \end{itemize}
 }
+
+Può essere utile anche ricordare che:
+\begin{itemize}
+    \item DLO è una teoria assiomatizzabile in modo finito (ha 7 assiomi) ed è completa. Ogni teoria computazionalmente numerabile e completa è \textbf{decidibile}. Esiste quindi un algoritmo per stabilire in tempo finito se un enunciato \(E\) appartiene a \(Cons(\text{DLO})\).
+\end{itemize}
 
 \section{Criterio di Tarski-Vaught}
 
