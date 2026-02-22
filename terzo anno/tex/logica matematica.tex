@@ -1416,7 +1416,7 @@ Per farlo, utilizziamo un lemma fondamentale che collega la verità semantica (v
     \[ \vdash B \]
 \end{pframe}
 
-\subsection{Conclusione del Teorema di Completezza}
+\subsection{Conclusione del Teorema di Completezza (Proposizionale)}
 
 Grazie al Teorema di Deduzione, possiamo ora completare la strategia descritta all'inizio:
 
@@ -2245,6 +2245,7 @@ Può essere utile anche ricordare che:
 \end{itemize}
 
 \section{Criterio di Tarski-Vaught}
+\label{criterio-tarski}
 
 Per stabilire se una sottostruttura è anche una \textbf{sottostruttura elementare} (\(\mathcal{A} \preceq \mathcal{B}\)), possiamo quindi utilizzare la \textit{Proprietà del Testimone}, che chiamiamo anche ``criterio di Tarski-Vaught''.
 
@@ -2591,6 +2592,8 @@ Se invece di \( T \) coerente avessimo ipotizzato \( T \) soddisfacibile, la con
 
 Il teorema di completezza mostra che le due cose sono equivalenti.
 
+\subsection{Modello dei Termini}
+
 Abbiamo quindi dimostrato che \( T \) coerente \( \implies \exists S \supseteq T\) coerente e completa. \\Vogliamo però \( T \) coerente \( \implies T \) soddisfacibile.
 
 Il passo successivo è dimostrare che \( S \) è già quasi un modello.
@@ -2659,6 +2662,7 @@ Vogliamo dimostrare \( \Mm \vDash S \). Per farlo (come spesso accade) ci è pi�
     \end{itemize}
 \end{proofframe}
 
+\subsection{Teorie con Testimoni}
 Possiamo definire una teoria che ci aiuti nella dimostrazione.
 
 \begin{defframe}{Teoria con testimoni}{}
@@ -2672,6 +2676,15 @@ Possiamo definire una teoria che ci aiuti nella dimostrazione.
 
     {\color{CadetBlue}(un testimone è un termine specifico (\( t \)) che la teoria ``nomina'' per concretizzare un'affermazione esistenziale - normalmente, se diciamo \( \exists x P(x) \), non sappiamo chi sia \( x \) per cui \( P \) vale; se siamo in una teoria con testimoni, invece, abbiamo \( \exists x P(x) \to P(t) \), sappiamo esattamente chi sia \( t \))}
 \end{defframe}
+
+\begin{gframe}{Testimoni Sintattici vs Testimoni Semantici}
+    Le \textit{Teorie con Testimoni} di Henkin e la \textit{Proprietà del Testimone} di Tarski-Vaught (\underline{p.\pageref{criterio-tarski}}) sono `due facce della stessa medaglia':
+    \begin{itemize}
+        \item \textbf{Tarski-Vaught (Semantica):} riguarda i modelli (\( \mathcal{A} \subseteq \mathcal{B} \)) - garantisce che se il modello grande soddisfa un enunciato esistenziale, il testimone concreto si trova già nel dominio del modello piccolo.
+        \item \textbf{Henkin (Sintassi):} riguarda le teorie e il linguaggio (\( T \vdash \dots \)) - garantisce che se la teoria dimostra un enunciato esistenziale, esiste un termine chiuso \( t \) nel linguaggio che fa da testimone.
+    \end{itemize}
+    Il "ponte" tra le due è la costruzione del \textit{modello dei termini}: poiché gli oggetti del dominio di questo modello \textit{sono} i termini stessi, il trucco di Henkin (aggiungere testimoni sintattici al linguaggio) è esattamente ciò che ci assicura che il nostro modello soddisferà la proprietà semantica dei testimoni.
+\end{gframe}
 
 Vediamo come una teoria con testimoni ci aiuta a dimostrare il caso \( \forall x F(x) \) con \( F(x) \) aperta.
 
@@ -2779,17 +2792,18 @@ Costruiamo induttivamente una successione di costanti \( b_{j_1}, b_{j_2}, \dots
     \end{itemize}
 \end{proofframe}
 
-Quindi, possiamo formalizzare i seguenti teoremi:
+\subsection{Conclusione del Teorema di Completezza (Predicativo)}
+Possiamo quindi formalizzare i seguenti teoremi:
 
-\begin{thmframe}{}{}
+\begin{thmframe}{Modello di una Teoria con Testimoni}{}
     Sia \( T \) una teoria con testimoni e coerente in un linguaggio numerabile. Allora, \( T \) ha un modello numerabile.
 \end{thmframe}
 
-\begin{thmframe}{Esistenza del modello}{}
+\begin{thmframe}{Teorema di Completezza (esistenza del modello)}{}
     Ogni teoria coerente (in un linguaggio numerabile) ha un modello numerabile.
 \end{thmframe}
 
-\begin{proofframe}
+\begin{proofframe}[title=passi per dimostrare la Completezza]
     Partiamo da \( T \) coerente \  {\color{CadetBlue}(in \( \Ll) \)}
     \begin{itemize}
         \item \( \overset{\text{Henkin}}{\implies} \ T^* \supseteq T \) coerente con testimoni \  {\color{CadetBlue}(in \( \Ll^* \text{ numerabile } \supseteq \Ll) \)}
