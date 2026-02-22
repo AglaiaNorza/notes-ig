@@ -8,6 +8,10 @@
 \usepackage{./../packages/packs}
 \usepackage{./../packages/macros}
 
+
+\usepackage{tabularx} 
+\usepackage{array}    
+
 \usepackage[italian]{babel}
 
 \usepackage[autostyle=false]{csquotes}
@@ -3547,6 +3551,49 @@ Possiamo quindi formulare più accuratamente il Primo Teorema di Incompletezza:
 
     Dunque, se \( T \) è \( \omega\)-coerente, \( T \) è incompleta.
 \end{thmframe}
+
+
+
+\subsection*{Vademecum per esercizi su MA (Aritmetica Minimale)}
+Riassumiamo le informazioni fondamentali sull'Aritmetica Minimale (MA) e sul suo rapporto con il modello standard dei numeri naturali \( \mathcal{N} \).
+
+A differenza di DLO, MA è una teoria incompleta (manca del Principio di Induzione). Questo crea una netta separazione tra ciò che è vero in \( \mathcal{N} \) e ciò che è dimostrabile da MA. 
+
+È utile ricordare che:
+\begin{itemize}
+    \item tutto ciò che MA dimostra è vero in \( \mathcal{N} \)
+        \subitem \( \text{MA} \vdash E \implies \mathcal{N} \models E \)
+        \subitem \( \text{MA} \vdash \neg E \implies \mathcal{N} \models \neg E \) (ovvero \( \mathcal{N} \not\models E \))
+    
+    \item ma non vale l'inverso - MA è incompleta (quindi moltissimi enunciati veri in \( \Nn \) non sono dimostrabili da MA
+        )       
+        \subitem \( \mathcal{N} \models E \not\implies \text{MA} \vdash E \)
+
+\item se un enunciato \( E \) è vero in \( \mathcal{N} \) ma non è dimostrabile in MA (\( \text{MA} \not\vdash E \)), la sua negazione è coerente con MA (anche se falsa in \( \Nn \))
+\begin{itemize}
+    \item sia \( E \) la proprietà commutativa: \( \mathcal{N} \models E \) ma \( \text{MA} \not\vdash E \).
+    \item di conseguenza, la teoria \( \text{MA} \cup \{\neg E\} \) è coerente e ha modelli.
+    \item questi modelli soddisfano gli assiomi di MA ma l'addizione non commuta (modelli non-standard).
+    \item una ``estensione di MA'', anche se coerente, non è quindi necessariamente vera in \( \Nn \)
+\end{itemize}
+
+\end{itemize}
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.5}
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|c|>{\raggedright\arraybackslash}p{7cm}|}
+\hline
+\textit{Premessa / Affermazione} & \textit{V/F} & \textit{Motivo} \\ \hline
+Se $MA \vdash E$ allora $\mathcal{N} \models E$ & \textbf{V} & $\mathcal{N}$ soddisfa tutto ciò che MA dimostra. \\ \hline
+Se $\mathcal{N} \models E$ allora $MA \vdash E$ & \textbf{F} & Incompletezza \\ \hline
+Se $\mathcal{N} \models E$, $MA \cup \{\neg E\}$ non ha modelli & \textbf{F} & Equivale a dire $MA \vdash E$, falso per incompletezza. \\ \hline
+Se $\mathcal{N} \not\models E$ allora $MA \vdash \neg E$ & \textbf{F} & Speculare all'incompletezza. \\ \hline
+Esiste $E$ t.c. $MA \vdash \neg E \to (\overline{0} = \overline{1})$ & \textbf{V} & Basta scegliere $E$ come una tautologia  \\ \hline
+Se $T$ estensione decidibilmente assiomatizzabile e coerente di MA, l'insieme degli enunciati dimostrabili in $T$ è computabilmente enumerabile & \textbf{V} & Segue da \( T \) decidibile \\ \hline
+Se $T$ estensione decidibilmente assiomatizzabile e coerente di MA, l'insieme degli enunciati NON dimostrabili in $T$ è computabilmente enumerabile & \textbf{F} & Se lo fossero, poiché i teoremi sono già c.e., la teoria sarebbe decidibile. Ma per Incompletezza, ogni estensione coerente e assiomatizzabile di MA è indecidibile. \\ \hline
+\end{tabularx}
+\end{table}
 
 
 \end{document}
