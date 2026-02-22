@@ -1217,6 +1217,8 @@ Nel nostro sistema (in cui limitiamo il linguaggio ai connettivi \( \neg \) e \(
             \subitem {\color{gray}(se \( X \) implica \( Y \to Z \), allora \( X\to Y \) implica \( X\to Z \) (una sorta di transitività))}
         \item \( (\neg Y \to \neg X) \to (X \to Y) \)
     \end{enumerate}
+
+    (e anche \( (X \to Y) \to ((\neg X \to Y) \to Y) \)
 \end{gframe}
 
 Abbiamo scelto questo sistema perché vogliamo la completezza rispetto alla conseguenza logica.
@@ -1420,7 +1422,7 @@ Grazie al Teorema di Deduzione, possiamo ora completare la strategia descritta a
 
 \begin{enumerate}
     \item Dal \textbf{Teorema di Compattezza}: \( T \vDash A \implies \exists \{A_1, \dots, A_n\} \subseteq T \) tale che \( A_1, \dots, A_n \vDash A \).
-    \item Questo equivale a dire \( \vDash (A_1 \to (\dots \to A)\dots) \) (ovvero \(  (A_1 \to (\dots \to A)\dots) \) è una tautologia).
+\item Questo equivale a dire \( \vDash (A_1 \to (\dots \to A)\dots) \) (ovvero \(  (A_1 \to (\dots \to A)\dots) \) è una tautologia).
     \item Per la \textbf{Completezza Semplice} (le tautologie sono teoremi), abbiamo:
     \[ \vdash (A_1 \to (A_2 \to \dots (A_n \to A)\dots)) \]
     \item Applicando \( n \) volte il \textbf{Teorema di Deduzione} (nella direzione \( \Longleftarrow \)), ``scarichiamo'' le premesse una alla volta:
