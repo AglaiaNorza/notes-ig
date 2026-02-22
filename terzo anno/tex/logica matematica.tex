@@ -2269,9 +2269,8 @@ allora  \(\exists a \in A\) tale che:
 \]
 \end{thmframe}
 
-
+\newpage
 \section{Teorema di Löwenheim-Skolem (all'in giù)}
-
 
 \begin{thmframe}{Teorema di Löwenheim-Skolem all'in giù}{}
 Sia \(\mathcal{B}\) una struttura infinita adeguata per un linguaggio numerabile \(\mathcal{L}\). Sia \(X \subseteq B\) un sottoinsieme del suo dominio. Esiste una struttura \(\mathcal{A}\) tale che:
@@ -2414,9 +2413,9 @@ Gli assiomi logici sono i seguenti:
     \begin{enumerate}
         \item Tutti gli assiomi proposizionali (illustrati a p.\pageref{assprop})\\[1em]
             Gli assiomi predicativi:
-        \item \( \forall x F\to F [x/t] \) con \( t \) termine libero per \( x \) in \( F \) {\small \color{gray} (per ``libero'' vedi p.\pageref{terlib})}
+        \item \( \forall x F\to F [t/x] \) con \( t \) termine libero per \( x \) in \( F \) {\small \color{gray} (per ``libero'' vedi \underline{p.\pageref{terlib}})}
             \subitem da questa regola deriva anche:
-            \AxiomC{\( F[x/t] \)}
+            \AxiomC{\( F[t/x] \)}
             \UnaryInfC{\( \exists x \ F\)}
             \DisplayProof
         \item \( \forall x (F\to G)\to (F \to \forall x \ G) \), con \( F \) senza occorrenze libere di \( x \) {\small \color{gray} (si dice ``\( F \) non parla di \( x \)'')}\\[1em]
