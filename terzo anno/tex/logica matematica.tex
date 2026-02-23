@@ -3095,6 +3095,18 @@ Esistono diverse definizioni di algoritmo. Le principali ci vengono date da Göd
 \end{itemize}
 
 \end{defframe}
+\begin{gframe}{Nota sulle funzioni calcolabili}
+  Normalmente, nella teoria della calcolabilità classica (secondo il modello di Kleene delle funzioni parziali ricorsive), la classe viene definita partendo da un insieme di funzioni base ancora più elementare: 
+\begin{itemize}
+    \item la funzione \textit{zero} $Z(x) = 0$
+    \item la funzione \textit{successore} $S(x) = x + 1$
+    \item le proiezioni $\pi_i^n$
+\end{itemize}
+In quel contesto, oltre alla composizione e alla minimalizzazione, viene introdotta un'ulteriore operazione di chiusura: la ricorsione primitiva. 
+
+La definizione adottata in questa sede è del tutto equivalente, ma adotta una "scorciatoia": omette la ricorsione primitiva e la compensa promuovendo addizione ($+$), moltiplicazione ($*$) e test di uguaglianza a funzioni base (approccio utile per snellire la trattazione ed evitare di dover ricostruire l'aritmetica elementare da zero per le dimostrazioni successive).
+\end{gframe}
+
 
 \begin{propframe}{Tesi di Church-Turing}{}
     Una funzione è intuitivamente \textit{calcolabile} se e solo se appartiene alla classe $\mathcal{C}$.
