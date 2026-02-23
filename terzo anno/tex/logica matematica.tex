@@ -3104,7 +3104,7 @@ Esistono diverse definizioni di algoritmo. Le principali ci vengono date da Göd
 \end{itemize}
 In quel contesto, oltre alla composizione e alla minimalizzazione, viene introdotta un'ulteriore operazione di chiusura: la ricorsione primitiva. 
 
-La definizione adottata in questa sede è del tutto equivalente, ma adotta una "scorciatoia": omette la ricorsione primitiva e la compensa promuovendo addizione ($+$), moltiplicazione ($*$) e test di uguaglianza a funzioni base (approccio utile per snellire la trattazione ed evitare di dover ricostruire l'aritmetica elementare da zero per le dimostrazioni successive).
+La definizione adottata in questa sede è del tutto equivalente, ma adotta una "scorciatoia": omette la ricorsione primitiva e la compensa promuovendo addizione ($+$), moltiplicazione ($*$) e test di uguaglianza a funzioni base (approccio utile per snellire la trattazione ed evitare di dover ricostruire l'aritmetica elementare da zero per le dimostrazioni successive ).
 \end{gframe}
 
 
@@ -3354,7 +3354,8 @@ Dimostriamolo formalmente, ovvero che l'ipotesi che la verità sia esprimibile p
     Quindi, valutiamo la verità di \( A(\bar{p}) \) in \( \Nn \):
     \begin{align*}
         \Nn \vDash A(\bar{p}) & \iff \Nn \vDash \forall y (D(\bar{p}, y) \to \neg V(y)) \\
-                              & \iff \Nn \vDash \neg V(\bar{q}) \quad \text{(poiché l'unico } y \text{ che soddisfa } D \text{ è } q\text{)}
+                              & \iff \Nn \vDash \forall y(y = q \to \neg V(\bar{q})) \quad \text{(sse di sopra)}\\
+                              & \iff \Nn \vDash \neg V(\bar{q})     
     \end{align*}
 
     D'altra parte, assumiamo per assurdo che \( V(x) \) rappresenti la verità aritmetica \( Th(\Nn) \). Per definizione di rappresentabilità deve valere:
@@ -3437,18 +3438,19 @@ La differenza principale di questa versione rispetto a quella precedente è che 
 
 \subsection{Aritmetica minimale (MA)}
 L'aritmetica minimale è assiomatizzata dai seguenti assiomi nel linguaggio \( \{0, 1, +, \times\} \). Per ogni \( n\in \N \) denotiamo con \( n \) il termine ottenuto sommando la costante \( 1 \) a se stessa \( n \) volte.
+
 \begin{mdframed}
-        \begin{itemize}
-            \item[(Ax 1)] \( 0 + 1 = 1 \)
-            \item[(Ax 2)] \( \forall x(x + 1 \neq 0) \)
-            \item[(Ax 3)] \( \forall x(x \neq 0 \to \exists z(z + 1 = x)) \)
-            \item[(Ax 4)] \( \forall x\forall y(x + 1 = y + 1 \to x = y) \)
-            \item[(Ax 5)] \( \forall x(x + 0 = x) \)
-            \item[(Ax 6)] \( \forall x\forall y(x + (y + 1) = (x + y) + 1) \)
-            \item[(Ax 7)] \( \forall x(x \times 0 = 0) \)
-            \item[(Ax 8)] \( \forall x\forall y(x \times (y + 1) = (x \times y) + x) \)
-            \item[(Ax 9)] \( \forall x\forall y(x < y \lor x = y \lor y < x) \)
-        \end{itemize}
+    \begin{itemize}
+        \item[(Ax 1)] \( 0 + 1 = 1 \quad \text{definizione dell'unità (1)} \)
+        \item[(Ax 2)] \( \forall x(x + 1 \neq 0) \quad \text{lo zero non è un successore} \)
+        \item[(Ax 3)] \( \forall x(x \neq 0 \to \exists z(z + 1 = x)) \quad \text{esistenza del predecessore} \)
+        \item[(Ax 4)] \( \forall x\forall y(x + 1 = y + 1 \to x = y) \quad \text{iniettività del successore} \)
+        \item[(Ax 5)] \( \forall x(x + 0 = x) \quad \text{elemento neutro dell'addizione} \)
+        \item[(Ax 6)] \( \forall x\forall y(x + (y + 1) = (x + y) + 1) \quad \text{definizione ricorsiva dell'addizione} \)
+        \item[(Ax 7)] \( \forall x(x \times 0 = 0) \quad \text{annullamento della moltiplicazione} \)
+        \item[(Ax 8)] \( \forall x\forall y(x \times (y + 1) = (x \times y) + x) \quad \text{definizione ricorsiva della moltiplicazione} \)
+        \item[(Ax 9)] \( \forall x\forall y(x < y \lor x = y \lor y < x) \quad \text{legge di tricotomia dell'ordine} \)
+    \end{itemize}
 \end{mdframed}
 
 Dobbiamo verificare che MA sia sufficiente a rappresentare tutte le funzioni calcolabili.
