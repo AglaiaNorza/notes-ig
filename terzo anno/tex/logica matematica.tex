@@ -3523,7 +3523,7 @@ Abbiamo che \( G = A(\bar{m}) \equiv \forall y \neg F(\bar{m}, y) \), ovvero ``p
             che è esattamente l'opposto dell'ipotesi \( T \vdash \forall y \neg F(\bar{m}, y)   \) (ovvero avremmo \( T \) incoerente)
 
 
-        \item \( T\not\vdash  \forall y \neg F(\bar{m}, y) \)
+        \item \( T\not\vdash \neg ( \forall y \neg F(\bar{m}, y)) \)
 
             Supponiamo per assurdo \(T\vdash\neg (\forall y \neg F(\bar{m}, y))\equiv \exists y F(m, y)\)
             (ovvero, in termini intuitivi, ``Esiste un numero \( y \) che è il codice della dimostrazione di \( G \)'').
@@ -3536,8 +3536,8 @@ Poiché la teoria \( T \) è corretta nel verificare le proprietà calcolabili (
 
 Sorge questa situazione apparentemente paradossale:
 \begin{itemize}
-    \item  La teoria dice \( \exists y \)
-    \item  Ma dice anche \( \forall n \in \mathbb{N}, \quad T \vdash \neg F(m, n)\)
+    \item  la teoria dice \( \exists y \)
+    \item  ma dice anche \( \forall n \in \mathbb{N}, \quad T \vdash \neg F(m, n)\)
 \end{itemize}
 La semplice coerenza logica non vieta questa situazione (la teoria potrebbe riferirsi a un elemento ``infinito'' non standard). Per escludere questo caso, Gödel introduce la \textbf{$\omega$-coerenza}.
 
