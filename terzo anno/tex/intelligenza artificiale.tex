@@ -1,0 +1,221 @@
+%! TEX program = xelatex
+\documentclass[a4paper,11pt]{report}
+
+\usepackage{./../packages/mainstyle}
+\usepackage{./../packages/colors}
+\usepackage{./../packages/frameboxes}
+\usepackage{./../packages/title}
+\usepackage{./../packages/packs}
+\usepackage{./../packages/macros}
+
+\usepackage{tabularx} 
+\usepackage{array} 
+\usepackage[table]{xcolor}
+
+\definecolor{codeblue}{RGB}{2, 53, 145}
+\definecolor{codegreen}{RGB}{0, 110, 30}
+\definecolor{codeorange}{RGB}{160, 80, 0}
+\definecolor{codegray}{RGB}{100, 100, 100}
+\definecolor{backcolour}{RGB}{248, 248, 248}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\itshape\color{codegreen},
+    keywordstyle=\bfseries\color{codeblue},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codeorange},
+    basicstyle=\ttfamily\small,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    frame=lines, %
+    rulecolor=\color{gray!30},
+    aboveskip=4pt,
+    belowskip=4pt
+}
+\lstset{style=mystyle}
+
+\usepackage[italian]{babel}
+
+\renewcommand{\thepart}{\Alph{part}}
+
+\usepackage{chngcntr}
+\counterwithin*{chapter}{part}
+
+\renewcommand{\thechapter}{\thepart.\arabic{chapter}}
+
+\renewcommand{\chaptermark}[1]{%
+  \markboth{\thechapter\quad #1}{}%
+}
+
+\usepackage[titles]{tocloft}
+
+\addtolength{\cftchapnumwidth}{1.2em} 
+\addtolength{\cftsecnumwidth}{1.2em}
+
+\renewcommand{\cftchapfont}{\sffamily}
+\renewcommand{\cftchappagefont}{\normalfont}
+
+\tocloftpagestyle{fancy}
+
+\usepackage[autostyle=false]{csquotes}
+\MakeOuterQuote{"}
+
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage{bussproofs}
+\usepackage{mdframed}
+
+\usepackage{titlesec}
+
+\newcommand{\SAT}{\texttt{SAT}}
+\newcommand{\FINSAT}{\texttt{FINSAT}}
+\newcommand{\UNSAT}{\texttt{UNSAT}}
+\newcommand{\TAUT}{\texttt{TAUT}}
+
+\setmainfont{XCharter}
+
+\setcoursename{Intelligenza Artificiale}
+\setcoursebook{tbd}
+\setauthorname{aglaia norza}
+\setauthoremail{thisisaglaia@gmail.com}
+\setauthorgithub{AglaiaNorza}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\stepcounter{part}
+\chapter{Agenti Intelligenti}
+\vspace{-2em}
+\begin{defframe}{Agente}{}
+    Un agente è qualsiasi sistema che:
+    \begin{itemize}
+        \item percepisce il suo ambiente mediante \textbf{sensori}
+        \item agisce sull'ambiente mediante \textbf{attuatori}
+    \end{itemize}
+    \vspace{-0.5em}
+    \begin{center}
+    \includegraphics[width=0.5\textwidth]{assets/agent.png}
+    \end{center}
+\end{defframe}
+
+Ci è utile introdurre alcuni termini specifici relativi agli agenti e ai loro ambienti:
+\begin{itemize}
+    \item \textbf{percezioni} (insieme \( \mathcal{P} \)): input percettivi dell'agente in un dato istante
+    \item \textbf{sequenza percettiva}: la storia di quello che l'agente ha percepito nella sua intera esistenza
+    \item \textbf{funzione agente}: descrizione matematica del comportamento dell'agente, che può dipendere dalla sua intera sequenza percettiva (ma non da qualcosa che non ha percepito)
+        \[ f: \mathcal{P}^* \to \mathcal{A} \]
+        \subitem in cui \( \mathcal{A} \) è l'insieme delle azioni che l'agente esegue
+    \item \textbf{programma agente}: implementazione (interna al sistema fisico) della funzione agente
+\end{itemize}
+\vspace{0.5em}
+
+\begin{defframe}{Agente Razionale}{}
+    Definiamo (almeno per adesso) come \textbf{agente razionale} un agente che sceglie le azioni che \textit{massimizzano il valore atteso della sua misura di prestazione}, data la sequenza di percezioni e ogni altra sua conoscenza pregressa.
+
+    La \textbf{misura di prestazione} è una misurazione oggettiva della desiderabilità della sequenza di stati attraversati dall'ambiente a seguito delle azioni dell'agente.
+    \begin{itemize}
+        \item deve essere valutata oggettivamente sugli stati dell'ambiente, non dell'agente
+        \item di solito è preferibile una misura che considera gli effetti delle azioni piuttosto che le azioni stesse
+    \end{itemize}
+\end{defframe}
+
+\begin{gframe}{Esempio: agente aspirapolvere}
+    Consideriamo un semplice agente aspirapolvere che si muove in un ambiente composto da due mattonelle. Un agente reattivo che aspira se la mattonella dove si trova è sporca e si sposta nell'altra mattonella se è pulita risulta razionale rispetto a una misura di prestazione che assegna semplicemente un punteggio per ogni riquadro pulito.
+    \begin{lstlisting}[language=C]
+function agente_reattivo_aspirapolvere([posizione, stato]):
+    if stato = Sporco then return Aspira;
+    else
+        if posizione = A then return Destra;
+        else return Sinistra; /* posizione = B */
+\end{lstlisting}
+    Tuttavia, un agente simile continuerà a muoversi in eterno tra una mattonella e l'altra anche quando entrambe sono pulite. 
+    Se la misura di prestazione fosse formulata in modo diverso, introducendo ad esempio penalità per ogni movimento effettuato, per il consumo di elettricità o per il rumore prodotto, questo stesso agente non sarebbe più razionale a causa del suo inutile dispendio di energie
+\end{gframe}
+
+Il primo passo nella progettazione di un agente è la definizione del suo \textbf{task environment}.
+Un task environment è composto da:
+    \begin{itemize}
+        \item \textbf{P}erformance (misura di prestazione) 
+        \item \textbf{E}nvironment (ambiente) 
+        \item \textbf{A}ctuators (attuatori) 
+        \item \textbf{S}ensors (sensori) 
+    \end{itemize}
+
+    \vspace{0.5em}
+\begin{gframe}{Esempi di PEAS}
+      
+\centering
+\renewcommand{\arraystretch}{1.5}
+\begin{tabularx}{\textwidth}{|l|X|X|X|X|}
+\hline
+\textbf{Agente} & \textbf{P}restazione & \textbf{E}nvironment & \textbf{A}ttuatori & \textbf{S}ensori \\ \hline
+
+Taxi automatico &
+Sicurezza, velocità, legalità, comfort, profitto &
+Strade, altri veicoli, pedoni, clienti &
+Sterzo, acceleratore, freni, frecce, sintesi vocale &
+Telecamere, sonar, tachimetro, GPS, accelerometro, microfono \\ \hline
+
+Diagnosi medica &
+Guarigione, costi minimi, assenza di denunce &
+Paziente, staff medico &
+Schermo &
+Tastiera \\ \hline
+
+Shopping online &
+Prezzo, qualità, attinenza ai desideri &
+Siti web dei negozi, corrieri &
+Schermo, vai-a-URL, riempimento form. &
+Pagine HTML da interpretare \\ \hline
+
+\end{tabularx}
+  \end{gframe}  
+
+  \newpage
+
+È possibile classificare gli ambienti secondo alcune coordinate importanti per la progettazione di agenti:
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.8} 
+\begin{tabularx}{\textwidth}{|l|p{3.5cm}|X|}
+\hline
+\rowcolor[HTML]{EFEFEF} 
+\textbf{Dimensione} & \textbf{Tipi di ambienti} & \textbf{Cosa riguardano} \\ \hline
+
+\textbf{Osservabilità} & Totalmente, parzialmente, inosservabile & Capacità dei sensori di dare accesso a tutte le proprietà rilevanti dello stato dell'ambiente in ogni momento. \\ \hline
+
+\textbf{Agenti} & Mono-agente, multi-agente & Presenza di altri agenti che possono \textit{cooperare} o \textit{competere} per obiettivi o risorse. \\ \hline
+
+\textbf{Determinismo} & Deterministico, stocastico, non-deterministico & Indica se lo stato successivo è determinato univocamente da stato corrente e azione (\textit{stocastico}: incertezza gestita con distribuzioni di probabilità; \textit{non-deterministico}: azioni definite dal set di risultati possibili, spesso richiede successo per \textit{tutti} gli esiti) \\ \hline
+
+\textbf{Episodicità} & Episodico, sequenziale & Specifica se l'esperienza è divisibile in episodi atomici indipendenti o se le scelte influenzano il futuro. \\ \hline
+
+\textbf{Dinamicità} & Statico, dinamico, semi-dinamico & Indica se l'ambiente (\textit{dinamico}) o la misura di prestazione (\textit{semi-dinamico}) muta mentre l'agente riflette.\\ \hline
+
+\textbf{Continuità} & Discreto, continuo & Indica se stato, ambiente, percezioni, azioni sono discrete (interi) o continue (reali). Un ambiente continuo può essere discretizzato\\ \hline
+
+\textbf{Conoscenza} & Noto, ignoto & Denota la conoscenza a priori delle regole "fisiche" dell'ambiente e delle conseguenze delle azioni. \\ \hline
+\end{tabularx}
+\end{table}
+
+%\chapter{Esplorazione sistematica di Spazi degli Stati}
+
+%\chapter{Algoritmi a Miglioramento Iterativo}
+
+%\chapter{Problemi di Soddisfacimento di Vincoli}
+
+%\chapter{Agenti Basati su Conoscenza in Logica Proposizionale}
+
+%\stepcounter{part}
+
+\end{document}

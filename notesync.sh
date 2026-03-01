@@ -28,9 +28,11 @@ fi
 
 notes["$latex/logmat/logmat.pdf"]="terzo anno/logica matematica.pdf"
 notes["$latex/ldp/ldp.pdf"]="terzo anno/linguaggi di programmazione.pdf"
+notes["$latex/ia/ia.pdf"]="terzo anno/intelligenza artificiale.pdf"
 
 notes["$latex/logmat/logmat.tex"]="terzo anno/tex/logica matematica.tex"
 notes["$latex/ldp/ldp.tex"]="terzo anno/tex/linguaggi di programmazione.tex"
+notes["$latex/ia/ia.tex"]="terzo anno/tex/intelligenza artificiale.tex"
 
 for file in "${!notes[@]}"; do
     cp "$file" "$dest/${notes[$file]}" || { echo "$file failed"; exit 1; }
