@@ -43,5 +43,5 @@ alcuni appunti sono presi a mano (su tablet), alcuni sono pdf scritti con LaTeX 
 | [programmazione (embedded e) multicore](https://aglaianorza.github.io/notesig/vault/multicore/multicore) (🇬🇧) | quartz | fino a CUDA |
 | [cybersecurity](https://aglaianorza.github.io/notesig/vault/cybersecurity/cybersecurity) (🇬🇧) | quartz | fino a ppt 9 |
 | **2o sem:**|
-| tecniche di programmazione funzionale e imperativa | tbd |
+| [tecniche di programmazione funzionale e imperativa](../../raw/main/terzo%20anno/tpfi.pdf) | pdf (o .tex) | wip |
 | [intelligenza artificiale](../../raw/main/terzo%20anno/intelligenza%20artificiale.pdf) |  pdf (o .tex) | wip |
