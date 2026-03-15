@@ -1,10 +1,12 @@
 la collezione dei miei appunti (o meglio, di quelli scritti decentemente) per il cdl triennale in informatica della sapienza ! 
 
-alcuni appunti sono presi a mano (su tablet), alcuni sono pdf scritti con LaTeX e altri sono link al mio [quartz](https://aglaianorza.github.io/notesig/) (i file originali (md) si trovano nel mio [vault](https://github.com/AglaiaNorza/obsidian-vault))
+alcuni appunti sono presi a mano (su tablet), alcuni sono pdf scritti con LaTeX e altri sono link al mio [quartz](https://aglaianorza.github.io/notesig/) (i file originali (.md) si trovano nel mio [vault](https://github.com/AglaiaNorza/obsidian-vault))
 
 > li metto qui principalmente come risorsa per amici che magari sono assenti a lezione i guess :)
+> 
+> (also, credo molto nell'open knowledge)
  
-> (potrebbero esserci errori !)
+> (potrebbero esserci errori !) 
 
 ### primo anno
 <details>
