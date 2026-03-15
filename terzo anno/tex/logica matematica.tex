@@ -1,6 +1,7 @@
 %! TEX program = xelatex
 \documentclass[a4paper,11pt]{report}
 
+
 \usepackage{./../packages/mainstyle}
 \usepackage{./../packages/colors}
 \usepackage{./../packages/frameboxes}
@@ -49,7 +50,10 @@
 \setauthoremail{thisisaglaia@gmail.com}
 \setauthorgithub{AglaiaNorza}
 \setcoverphoto{stoplogic.jpg}
-
+\setcoverwidth{0.7\textwidth}
+\setcoverheight{0.7\textwidth}
+\setbeforespace{1.5em}
+\setafterspace{1.5em}
 
 \begin{document}
 
@@ -147,7 +151,6 @@ Per esempio, possiamo riscrivere la definizione di \( \alpha(\neg A) \) come seg
         \hline
         0 & 1 \\
         1 & 0
-
     \end{array}
 \]
 
@@ -2569,7 +2572,6 @@ Definiamo una successione di teorie in quessto modo:
     \item \( S_{n+1} = \begin{cases}
             S_n \cup \{ E_{n+1}\} & \text{se } S_n \cup \{E_{n+1}\} \text{ coerente (ovvero } S_n \not\vdash \neg E_{n+1} \text{)} \\
             S_n  & \text{altrimenti (ovvero } S_n \vdash \neg E_{n+1} \text{)} 
-
     \end{cases} \)
 
     {\color{gray} \small nel secondo caso non serve aggiungere \( \{\neg E_{n+1}\} \) perché si ha già \( S_n \vdash \neg E_{n+1} \) (sarebbe superfluo)}

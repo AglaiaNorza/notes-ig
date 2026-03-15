@@ -33,6 +33,7 @@ notes["$latex/ia/ia.pdf"]="terzo anno/intelligenza artificiale.pdf"
 notes["$latex/logmat/logmat.tex"]="terzo anno/tex/logica matematica.tex"
 notes["$latex/ldp/ldp.tex"]="terzo anno/tex/linguaggi di programmazione.tex"
 notes["$latex/ia/ia.tex"]="terzo anno/tex/intelligenza artificiale.tex"
+notes["$latex/tpfi/tpfi.tex"]="terzo anno/tex/tpfi.tex"
 
 for file in "${!notes[@]}"; do
     cp "$file" "$dest/${notes[$file]}" || { echo "$file failed"; exit 1; }
