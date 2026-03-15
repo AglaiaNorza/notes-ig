@@ -6,19 +6,22 @@ alcuni appunti sono presi a mano (su tablet), alcuni sono pdf scritti con LaTeX 
 > 
 > (also, credo molto nell'open knowledge)
  
-> (potrebbero esserci errori !) 
+> (potrebbero esserci errori !)
 
-### primo anno
-<details>
-    <summary>cheat sheets</summary>
-    <br>
+### terzo anno 
 
-(le mie '**cheat sheets**' !! - contengono le informazioni principali che mi servivano per gli esami, esercizi spiegati, e qualche tip (sono un po' disordinate))
+| corso | formato | status |
+|---| ---|---|
+| **1o sem:**|
+| [linguaggi di programmazione](../../raw/main/terzo%20anno/linguaggi%20di%20programmazione.pdf) | pdf (o .tex) | ☑ |
+| [logica matematica](../../raw/main/terzo%20anno/logica%20matematica.pdf) (1022365) |  pdf (o .tex) | ☑ |
+|[automi, calcolabilità e complessità](../../raw/main/terzo%20anno/automi%2C%20calcolabilit%C3%A0%20e%20complessit%C3%A0.pdf)| scritti a mano (pdf) | ☑ |
+| [programmazione (embedded e) multicore](https://aglaianorza.github.io/notesig/vault/multicore/multicore) (🇬🇧) | quartz | fino a CUDA |
+| [cybersecurity](https://aglaianorza.github.io/notesig/vault/cybersecurity/cybersecurity) (🇬🇧) | quartz | fino a ppt 9 |
+| **2o sem:**|
+| [tecniche di programmazione funzionale e imperativa](../../raw/main/terzo%20anno/tpfi.pdf) | pdf (o .tex) | wip |
+| [intelligenza artificiale](../../raw/main/terzo%20anno/intelligenza%20artificiale.pdf) |  pdf (o .tex) | wip |
 
-- [progettazione di sistemi digitali](../../raw/main/primo%20anno/psd%20cheat%20sheet.pdf) - (tipi di esercizi d'esame della prof.ssa Massini - e la relativa teoria -, spiegati)
-- [calcolo differenziale](../../raw/main/primo%20anno/calcdiff%20cheat%20sheet.pdf) - (formule necessarie ed esempi di esercizi)
-- [architettura degli elaboratori](../../raw/main/primo%20anno/arch%20cheat%20sheet.pdf) - (principalmente tips su come svolgere gli esercizi)
-</details>
 
 ### secondo anno
 
@@ -34,16 +37,15 @@ alcuni appunti sono presi a mano (su tablet), alcuni sono pdf scritti con LaTeX 
 |[reti di elaboratori](https://aglaianorza.github.io/notesig/vault/reti-di-elaboratori/reti-di-elaboratori) | quartz | ☑ |
 | [sistemi operativi 2](https://aglaianorza.github.io/notesig/vault/sistemi-operativi-2/sistemi-operativi-2) | quartz | ☑ |
 
-### terzo anno 
 
-| corso | formato | status |
-|---| ---|---|
-| **1o sem:**|
-| [linguaggi di programmazione](../../raw/main/terzo%20anno/linguaggi%20di%20programmazione.pdf) | pdf (o .tex) | ☑ |
-| [logica matematica](../../raw/main/terzo%20anno/logica%20matematica.pdf) (1022365) |  pdf (o .tex) | ☑ |
-|[automi, calcolabilità e complessità](../../raw/main/terzo%20anno/automi%2C%20calcolabilit%C3%A0%20e%20complessit%C3%A0.pdf)| scritti a mano (pdf) | ☑ |
-| [programmazione (embedded e) multicore](https://aglaianorza.github.io/notesig/vault/multicore/multicore) (🇬🇧) | quartz | fino a CUDA |
-| [cybersecurity](https://aglaianorza.github.io/notesig/vault/cybersecurity/cybersecurity) (🇬🇧) | quartz | fino a ppt 9 |
-| **2o sem:**|
-| [tecniche di programmazione funzionale e imperativa](../../raw/main/terzo%20anno/tpfi.pdf) | pdf (o .tex) | wip |
-| [intelligenza artificiale](../../raw/main/terzo%20anno/intelligenza%20artificiale.pdf) |  pdf (o .tex) | wip |
+### primo anno
+<details>
+    <summary>cheat sheets</summary>
+    <br>
+
+(le mie '**cheat sheets**' !! - contengono le informazioni principali che mi servivano per gli esami, esercizi spiegati, e qualche tip (sono un po' disordinate))
+
+- [progettazione di sistemi digitali](../../raw/main/primo%20anno/psd%20cheat%20sheet.pdf) - (tipi di esercizi d'esame della prof.ssa Massini - e la relativa teoria -, spiegati)
+- [calcolo differenziale](../../raw/main/primo%20anno/calcdiff%20cheat%20sheet.pdf) - (formule necessarie ed esempi di esercizi)
+- [architettura degli elaboratori](../../raw/main/primo%20anno/arch%20cheat%20sheet.pdf) - (principalmente tips su come svolgere gli esercizi)
+</details>
