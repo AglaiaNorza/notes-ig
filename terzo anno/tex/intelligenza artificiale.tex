@@ -16,29 +16,28 @@
 \definecolor{codegreen}{RGB}{0, 110, 30}
 \definecolor{codeorange}{RGB}{160, 80, 0}
 \definecolor{codegray}{RGB}{100, 100, 100}
-\definecolor{backcolour}{RGB}{248, 248, 248}
+\definecolor{keywordblue}{rgb}{0.1, 0.3, 0.8}
+\definecolor{lightgray}{rgb}{0.95, 0.95, 0.95}
 
-\lstdefinestyle{mystyle}{
-    backgroundcolor=\color{backcolour},   
-    commentstyle=\itshape\color{codegreen},
-    keywordstyle=\bfseries\color{codeblue},
-    numberstyle=\tiny\color{codegray},
-    stringstyle=\color{codeorange},
-    basicstyle=\ttfamily\small,
-    breakatwhitespace=false,         
-    breaklines=true,                 
-    captionpos=b,                    
-    keepspaces=true,                 
-    showspaces=false,                
-    showstringspaces=false,
-    showtabs=false,                  
-    tabsize=2,
-    frame=lines, %
-    rulecolor=\color{gray!30},
-    aboveskip=4pt,
-    belowskip=4pt
+\lstdefinestyle{AIPseudoStyle}{
+    backgroundcolor=\color{lightgray},
+    basicstyle=\small\ttfamily,
+    breaklines=true,
+    columns=fullflexible,
+    morekeywords={function, returns, persistent, return, if, then, else},
+    keywordstyle=\color{keywordblue}\bfseries,
+    commentstyle=\color{codegray}\itshape,
+    mathescape=true,
+    escapeinside={(*}{*)},
+    frame=single,
+    rulecolor=\color{lightgray},
+    framesep=5pt,
+    xleftmargin=10pt,
+    captionpos=b
 }
-\lstset{style=mystyle}
+
+\lstset{style=AIPseudoStyle}
+
 
 \usepackage[italian]{babel}
 
@@ -210,9 +209,264 @@ Pagine HTML da interpretare \\ \hline
 \end{tabularx}
 \end{table}
 
-%\chapter{Esplorazione sistematica di Spazi degli Stati}
+\subsection{Tipologie di agenti}
+Ci sono quattro principali \textbf{tipi di agente}:
+\begin{itemize}
+    \item agenti reattivi semplici
+    \item agenti reattivi basati su modello
+    \item agenti basati su obiettivi
+    \item agenti basati sull'utilità
+\end{itemize}
 
-%\chapter{Algoritmi a Miglioramento Iterativo}
+Ad ognuno di questi tipi è possibile aggiungere la capacità di \textit{apprendere}.
+
+\subsubsection{Agenti reattivi semplici}
+Le azioni degli agenti reattivi semplici sono determinate esclusivamente dalla \textbf{percezione corrente}. 
+
+\begin{lstlisting}[language=C]
+function a_r_aspirapolvere([posizione, stato]): azione
+    if stato = Sporco then return Aspira;
+    else
+        if posizione = A then return Destra;
+        else return Sinistra;
+\end{lstlisting}
+
+Gli agenti reattivi semplici seguono una ``condition-action rule'' (\texttt{if condizione then azione})
+
+\begin{itemize}
+    \item è utile che agenti complessi abbiano parti puramente reattive
+\end{itemize}
+
+\subsubsection{Agenti reattivi basati su modello}
+Le azioni degli agenti reattivi basati su modello sono detereminate dalla percezione corrente e da un ``modello del mondo'', una rappresentazione interna della parte del mondo che l'agente non può vedere all'istante corrente.
+
+Il modello deve essere conosciuto a priori (in qualche modo ``hard-coded'' nell'agente)
+
+\begin{lstlisting}
+(*\textbf{function}*) MODEL-BASED-REFLEX-AGENT((*$percept$*)): action
+   (*\textbf{persistent}*): (*$state$*), the agent's current conception of the world state
+               (*$model$*), a description of how the next state depends on current state and action
+               (*$rules$*), a set of condition-action rules
+               (*$action$*), the most recent action, initially none
+
+   (*$state \leftarrow$*) UPDATE-STATE((*$state, action, percept, model$*))
+   (*$rule \leftarrow$*) RULE-MATCH((*$state, rules$*))
+   (*$action \leftarrow rule$*).ACTION
+   (*\textbf{return}*) (*$action$*)
+\end{lstlisting}
+
+\subsubsection{Agenti basati su obiettivi}
+
+    \begin{center}
+    \includegraphics[width=0.4\textwidth]{assets/agente-obiettivo.png}
+    \end{center}
+
+In questa tipologia, l'azione è determinata dalla percezione corrente, dallo stato e dagli obiettivi dell'agente (la sola conoscenza dello stato e delle percezioni spesso non è sufficiente per prendere una decisione)
+
+\begin{gframe}{}
+Consideriamo un pilota di taxi - se la percezione corrente è un incrocio, l'agente non può decidere se girare a destra o a sinistra senza conoscere la destinazione finale; l'obiettivo fornisce questa informazione.
+\end{gframe}
+
+Non sempre l'obiettivo è raggiungibile tramite una singola azione. In questi casi l'agente deve ricorrere a tecniche di \textbf{ricerca e pianificazione} per calcolare intere sequenze di azioni necessarie per raggiungere l'obiettivo desiderato (l'agente sa come sarà il mondo dopo ogni possibile mossa, e sceglie quelle che lo portano all'obiettivo).
+
+\subsubsection{Agenti basati sull'utilità}
+
+    \begin{center}
+    \includegraphics[width=0.4\textwidth]{assets/agente-utility.png}
+    \end{center}
+
+L'azione, in questo caso, è determinata dalla percezione corrente, dallo stato e dagli obiettivi dell'agente, ed è esplicitamente mirata a raggiungere un'alta \textbf{utilità}.
+
+Mentre l'obiettivo definisce uno stato da raggiungere, l'utilità fornisce un criterio per valutare \textit{come} arrivarci.
+
+\begin{gframe}{}
+Se ci sono più percorsi per arrivare alla meta, l'agente pilota di taxi dovrà chiedersi quale sia il percorso più veloce/affidabile/sicuro/ecc.
+\end{gframe}
+
+La funzione di utilità rappresenta un'interiorizzazione della misura di prestazione dell'ambiente (considera quanto sono ``buoni'' gli stati intermedi), e aiuta concretamente l'agente a comportarsi in modo razionale. 
+
+Se l'agente si trova a operare in ambienti non totalmente osservabili o non deterministici, esso agirà in modo da massimizzare l'\textbf{utilità attesa} (ovvero la media ponderata delle utilità dei vari risultati possibili).
+
+\subsubsection{Agenti in grado di apprendere}
+Gli agenti visti in precedenza funzionano bene solo se gli scenari rimangono sempre gli stessi. Se si introducono per esempio elementi \textit{greedy}, il programma può sbagliare; per questo motivo è necessario introdurre un elemento di apprendimento che permetta all'agente di esplorare e sperimentare su stati \textbf{nuovi}.
+
+Ad ognuno dei tipi di agenti finora descritti è possibile aggiungere la capacità di apprendere. In generale, l'apprendimento negli agenti intelligenti può essere riassunto come un processo di modifica di ogni componente dell'agente per allinearli maggiormente alle informazioni di feedback disponibili, migliorandone così le prestazioni complessive.
+
+L'architettura di un agente con capacità di apprendimento è suddivisa in quattro componenti fondamentali:
+
+\begin{itemize}
+    \item \textbf{Performance element} (elemento esecutivo): l'"agente" vero e proprio descritto in precedenza (quello che riceve le percezioni e seleziona le azioni) - a questo punto, però, non sarà più costituito da codice statico, ma da una \textbf{struttura dati di rappresentazione}, in modo che il suo comportamento possa essere effettivamente modificato e aggiornato.
+    \item \textbf{Critic} (elemento critico): Valuta le azioni compiute dall'agente confrontandole con un \textit{performance standard} (standard di prestazione) e fornisce un \textit{feedback}. È necessario perché le percezioni di per sé non indicano all'agente se ha avuto successo (ad esempio, un programma di scacchi sa di aver fatto scacco matto dalle percezioni, ma ha bisogno di uno standard per sapere che "vincere" è un evento positivo).
+    \begin{itemize}
+        \item Lo standard di prestazione deve essere \textbf{fisso} e considerato concettualmente esterno all'agente: l'agente non deve poterlo modificare per adattarlo al proprio comportamento.
+        \item Distingue parte della percezione in entrata sotto forma di \textbf{premio} (\textit{reward}) o \textbf{penalità} (\textit{penalty}), fornendo un feedback diretto sulla qualità del comportamento.
+    \end{itemize}
+
+    \item \textbf{Learning element} (elemento di apprendimento): riceve il feedback dal \textit{critic} e conosce il programma agente. Il suo compito è suggerire i cambiamenti per generare modifiche nel modo di comportarsi dell'agente. Inoltre, acquisisce e memorizza nuova conoscenza (\textit{knowledge}) sull'ambiente.
+\begin{itemize}
+        \item L'osservazione degli stati successivi all'azione consente all'agente di imparare "cosa fanno le azioni" e "come evolve il mondo" (ad esempio, capire quanto il taxi riesca effettivamente a frenare su una strada bagnata).
+\end{itemize}
+    \item \textbf{Problem generator} (generatore di problemi): genera nuovi obiettivi di apprendimento (\textit{learning goals}) suggerendo azioni che portino ad esperienze nuove e "formative". È il componente che spinge l'agente a uscire dalla sua routine per sperimentare su stati nuovi.
+    \begin{itemize}
+        \item Se l'elemento esecutivo fosse lasciato solo, continuerebbe a eseguire all'infinito unicamente le azioni che ritiene migliori in base alle sue limitate conoscenze attuali. 
+        \item Il problem generator spinge l'agente a esplorare, compiendo azioni che nel breve termine potrebbero sembrare \textit{sub-ottimali}, ma che portano a scoprire alternative migliori per il lungo termine.
+    \end{itemize}
+\end{itemize}
+
+    \begin{center}
+    \includegraphics[width=0.5\textwidth]{assets/agente-learning.png}
+    \end{center}
+
+
+\chapter{Esplorazione sistematica di Spazi degli Stati}
+\vspace{-2em}
+\section{Agenti risolutori di problemi}
+
+Gli agenti risolutori di problemi sono agenti basati su obiettivi che considerano gli stati come \textbf{entità atomiche} (prive di struttura interna). Operano tipicamente in ambienti discreti, totalmente osservabili, noti, deterministici e statici.
+
+In queste condizioni favorevoli, l'agente può calcolare in anticipo un'intera sequenza di azioni ( \textbf{piano}) per raggiungere l'obiettivo ed eseguirla ``ad occhi chiusi'', certo del risultato.
+
+\subsection{Formulazione del problema}
+\begin{defframe}{Problema di ricerca}{}
+Un problema di ricerca è definito da cinque componenti:
+\begin{itemize}
+    \item \textbf{Stato iniziale}: lo stato in cui l'agente inizia la ricerca.
+    \item \textbf{Azioni}: l'insieme delle azioni possibili in un dato stato $s$, denotato come $Azioni(s)$.
+    \item \textbf{Modello di transizione}: funzione $Risultato(s, a)$ che descrive la fisica dell'ambiente, restituendo lo stato risultante dall'esecuzione dell'azione $a$ nello stato $s$.
+    \item \textbf{Test obiettivo}: condizione o funzione che determina se un dato stato soddisfa l'obiettivo.
+    \item \textbf{Costo di cammino}: funzione che assegna un costo numerico a ogni cammino (solitamente calcolata come la somma dei costi di passo).
+\end{itemize}
+
+    Una \textbf{soluzione} è una sequenza di azioni che individua un cammino dallo stato iniziale a uno stato obiettivo. Una \textbf{soluzione ottima} è la soluzione a costo minimale.
+\end{defframe}
+
+\subsection{Stato vs. Nodo}
+Durante l'esplorazione, l'algoritmo mantiene una \textbf{frontiera} di ipotesi aperte. È fondamentale distinguere tra stato e nodo:
+\begin{itemize}
+    \item \textbf{Stato}: una rappresentazione di una configurazione del mondo (spesso un'``etichetta'')
+    \item \textbf{Nodo}: struttura dati componente dell'albero di ricerca. Oltre allo stato, un nodo include il puntatore al nodo padre, l'azione generatrice, la profondità e il costo di cammino $g(n)$ calcolato fino a quel punto.
+\end{itemize}
+
+\begin{gframe}{Ricerca su albero vs su grafo}
+La presenza di cammini ciclici o stati ripetuti può generare un albero di ricerca infinito anche in problemi con uno spazio degli stati finito. Per ovviare a ciò, la ricerca su grafo memorizza gli stati già visitati in un insieme \textbf{esplorati} (closed set), espandendo solo nodi che portano a stati non ancora visitati o non presenti in frontiera.
+\end{gframe}
+
+\section{Algoritmi di Ricerca Non Informata}
+Le strategie non informate possiedono solo la formulazione del problema; l'algoritmo può solo generare successori e testare l'obiettivo, senza sapere se uno stato sia "meglio" di un altro in prospettiva.
+
+\subsection{Ricerca in ampiezza (BFS - Breadth-First Search)}
+\begin{itemize}
+    \item \textbf{Strategia}: espande il nodo più vicino alla radice. Usa una coda FIFO per la frontiera.
+    \item \textbf{Completezza}: sì, se il fattore di ramificazione $b$ è finito.
+    \item \textbf{Ottimalità}: se il costo di passo è costante (sse un cammino è funzione monotona della profondità)
+    \item \textbf{Complessità}: tempo e spazio $O(b^d)$ (dove $d$ è la profondità della soluzione)
+        \subitem il problema più grande è l'occupazione di memoria, che cresce esponenzialmente
+\end{itemize}
+
+\subsection{Ricerca Uniform-Cost (Min-Cost)}
+\begin{itemize}
+    \item \textbf{Strategia}: espande il nodo con il costo di cammino $g(n)$ minimo. La frontiera è una coda di priorità.
+    \item \textbf{Completezza/Ottimalità}: se $b$ è finito e tutti i costi di passo sono $\ge \epsilon > 0$.
+    \item \textbf{Complessità}: tempo e spazio $O(b^{1+\lfloor C^*/\epsilon \rfloor})$
+\end{itemize}
+
+\subsection{Ricerca in profondità (DFS - Depth-First Search)}
+\begin{itemize}
+    \item \textbf{Strategia}: espande sempre il nodo più profondo. Usa una coda LIFO (pila).
+    \item \textbf{Completezza}: solo in spazi finiti e se evita i cammini ridondanti (ricerca su grafo). Si perde facilmente in rami infiniti.
+    \item \textbf{Ottimalità}: no.
+    \item \textbf{Complessità}: tempo $O(b^m)$ (dove $m$ è la profondità massima dell'albero)
+        \subitem il vantaggio principale è lo Spazio: se implementata ad albero, richiede solo $O(bm)$
+\end{itemize}
+
+\subsection{Ricerca ad approfondimento iterativo (IDS)}
+L'IDS esegue iterativamente ricerche a profondità limitata, aumentando il limite ad ogni passaggio ($0, 1, 2, \dots$) finché non trova l'obiettivo.
+\begin{itemize}
+    \item \textbf{Pro}: unisce i vantaggi di BFS e DFS. È completa e ottima (come BFS) ma richiede una memoria lineare $O(bd)$ (come DFS).
+    \item \textbf{Tempo}: $O(b^d)$ - la ripetizione dei livelli superiori sembra uno spreco, ma incide poco asintoticamente in quanto la maggior parte dei nodi si trova nei livelli più bassi (vengono ripetuti ``pochi'' nodi, solo quelli più vicini alla radice)
+\end{itemize}
+
+\section{Algoritmi di Ricerca Informata}
+Gli algoritmi di ricerca informata possiedono conoscenza specifica del dominio, incarnata in una \textbf{funzione euristica} $h(n)$.
+\begin{itemize}
+    \item $h(n)$: stima del costo minimo per raggiungere l'obiettivo dal nodo $n$. È $0$ se il nodo è una soluzione, e $> 0$ altrimenti.
+\end{itemize}
+
+\subsection{Ricerca Best-First Greedy}
+\begin{itemize}
+    \item \textbf{Strategia}: estrae dalla frontiera il nodo che \textit{sembra} più vicino all'obiettivo, ordinando i nodi esclusivamente per $h(n)$.
+    \item \textbf{Limitazioni}: dimentica il passato (il costo già sostenuto) e non è garantita per trovare soluzioni ottime; si tratta l'approccio greedy può rivelarsi fuorviante.
+\end{itemize}
+
+\subsection{Ricerca $A^*$}
+L'algoritmo $A^*$ risolve i problemi del Best-First Greedy combinando il costo effettivo passato e la stima futura. La frontiera è ordinata in base alla funzione di valutazione:
+$$f(n) = g(n) + h(n)$$ 
+Dove $f(n)$ rappresenta il costo stimato del cammino più economico che passa per $n$.
+
+\subsubsection{Ottimalità di $A^*$}
+La garanzia che $A^*$ restituisca una soluzione ottima dipende strettamente dalle proprietà dell'euristica $h(n)$.
+\begin{itemize}
+    \item \textbf{Ammissibilità}: un'euristica è \textit{ammissibile} se non sovrastima mai il costo per raggiungere l'obiettivo ($h(n) \le \text{costo reale minimo}$). È in pratica una stima ottimistica.
+        \begin{thmframe}{Euristica ammissibile su albero}{}
+            Con $h$ ammissibile, $A^*$ su \textit{albero} trova sempre la soluzione ottima
+        \end{thmframe}
+    \item \textbf{Consistenza} (o monotonia): un'euristica è \textit{consistente} se rispetta la disuguaglianza triangolare: per ogni nodo $n$ e suo successore $n'$, vale: $h(n) \le costo(n, n') + h(n')$.
+        \subitem $\rightarrow$ un'euristica consistente è implicitamente anche ammissibile
+        \begin{thmframe}{Euristica consistente}{}
+Con $h$ consistente, $A^*$ su \textit{grafo} trova sempre la soluzione ottima. I valori di $f(n)$ lungo un cammino risultano non decrescenti.
+        \end{thmframe}
+\end{itemize}
+
+Il problema principale di $A^*$ è la complessità spaziale.
+
+\subsubsection{Sviluppare Euristiche}
+Se si dispongono di due euristiche ammissibili $h_1$ e $h_2$, e per ogni nodo $h_2(n) \ge h_1(n)$, si dice che $h_2$ \textbf{domina} $h_1$. L'euristica dominante (a valori più alti) è preferibile poiché farà espandere ad $A^*$ un numero minore o uguale di nodi.
+
+Le euristiche ammissibili spesso si derivano calcolando il costo esatto di una soluzione in una versione rilassata (con meno vincoli) del problema originale.
+
+\chapter{Algoritmi a Miglioramento Iterativo}
+\vspace{-2em}
+\section{Ricerca Locale}
+Negli algoritmi di ricerca visti fino ad ora, l'obiettivo era trovare un \textit{cammino} verso la soluzione. In molti problemi di ottimizzazione, tuttavia, il percorso per raggiungere la meta è irrilevante: ciò che conta è solo lo \textbf{stato finale} (es. problema n-queens).
+
+In questi casi si usano algoritmi di \textbf{ricerca locale} che operano utilizzando una formulazione a \textit{stato completo}: partono da una configurazione sub-ottimale e applicano modifiche iterative per migliorarne la qualità (o minimizzarne il costo), esplorando solo il vicinato dello stato corrente.
+
+\textbf{Vantaggi principali}:
+\begin{itemize}
+    \item usano pochissima memoria (spesso tengono traccia di un solo nodo corrente)
+    \item possono trovare soluzioni ragionevoli in spazi degli stati infiniti o continui dove gli algoritmi sistematici classici fallirebbero
+\end{itemize}
+
+\subsection{Hill Climbing (Ricerca in salita)}
+È un algoritmo di tipo \textbf{greedy} che si sposta sempre in direzione di un valore crescente (o decrescente, se sta minimizzando un costo), muovendosi verso il "vicino" migliore. Termina quando raggiunge un "picco" (``massimo locale'') in cui nessun vicino ha un valore più alto.
+
+\begin{gframe}{}
+"cercare di raggiungere la cima del monte Everest in una fitta nebbia, soffrendo di amnesia".
+\end{gframe}
+
+\begin{itemize}
+    \item \textbf{Problemi ricorrenti}:
+    \begin{itemize}
+        \item \textbf{massimi locali}: picchi che sono più alti dei vicini immediati, ma più bassi del massimo globale - l'algoritmo si blocca
+        \item \textbf{creste (ridges)}: sequenze di massimi locali non connesse direttamente tra loro - l'algoritmo è costretto a "oscillare" e procede a fatica
+        \item \textbf{plateaux}: aree piatte dello spazio degli stati; possono essere massimi locali piatti o "spalle" da cui è ancora possibile salire - l'algoritmo finisce per vagare casualmente
+    \end{itemize}
+\end{itemize}
+
+\begin{lstlisting}[caption={Hill-climbing con prima scelta}]
+function hill_climbing(problema): stato ottimo locale
+  nodo_corrente <- crea_nodo(problema.stato_iniziale);
+  while true do
+    mossa_trovata <- false;
+    while mossa_trovata = false and nodo_corrente ha ancora vicini da considerare do
+      vicino <- prossimo 'vicino' di nodo_corrente;
+      if vicino è migliore o della stessa qualità di nodo_corrente then
+        /* effettua mosse laterali */
+        nodo_corrente <- vicino;
+        mossa_trovata <- true;
+    if mossa_trovata = false then
+      return nodo_corrente.stato;
+\end{lstlisting}
 
 %\chapter{Problemi di Soddisfacimento di Vincoli}
 
