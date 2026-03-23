@@ -182,18 +182,23 @@ Il pattern matching decompone le strutture dati in base alla loro forma sintatti
     \begin{itemize}
     \item l'ultima guardia è tipicamente \code{otherwise} (che nel Prelude di Haskell è semplicemente un alias per \code{True}), che funge da caso di default ("catch-all") per assicurarsi che la funzione restituisca sempre un valore.
     \end{itemize}
-\begin{snippet}
+\begin{haskellbox}{}
 confronta x y
   | x == y    = "i numeri sono uguali" -- supera la mancanza di unificazione
   | x > y     = "il primo e' maggiore"
   | otherwise = "il secondo e' maggiore"
-\end{snippet}
+\end{haskellbox}{}
 \item \textbf{equazioni multiple (definizione per casi):} il modo più comune di fare pattern matching è definire la funzione scrivendo più "intestazioni" separate; il compilatore le prova dall'alto verso il basso: se gli argomenti combaciano con la forma (pattern) della riga, esegue quell'equazione, altrimenti controlla la successiva.
-\begin{snippet}
-saluta "mattina" = "buongiorno"
-saluta "sera"    = "buonasera"
-saluta _         = "ciao"
-\end{snippet}
+\begin{haskellbox}{}
+    myAnd True True = True
+    myAnd   _   _   = False
+\end{haskellbox}{}
+\begin{itemize}
+    \item è meno comune, ma è possibile fare pattern-matching anche nelle \textit{lambda-espressioni}:
+        \begin{haskellbox}{}
+            myFst' = \(x, y) -> x
+        \end{haskellbox}
+\end{itemize}
 \end{itemize}
 
 \subsection{Scope locale: \code{let} e \code{where}}
@@ -224,6 +229,8 @@ volumeCilindro r h = (let area = pi * r^2 in area) * h
 \end{haskellbox}
 
 \section{Sistema dei Tipi e Classi}
+
+Haskell è \textbf{statically type-safe}: se un programma è tipato correttamente, nessun errore di tipo si verifica durante l’esecuzione.
 
 \subsection{Type Signatures}
 In Haskell, grazie al meccanismo di type inference, il compilatore è in grado di dedurre automaticamente il tipo più generale per quasi ogni espressione. Tuttavia, è considerata un'ottima pratica (e in alcuni casi più complessi è strettamente necessario) dichiarare esplicitamente il tipo di una funzione subito sopra la sua definizione. 
@@ -347,6 +354,99 @@ instance Eq Bool where
     _ == _         = False
 \end{haskellbox}
 
+\subsection{Tipabilità e Let-Polymorphism}
+\begin{itemize}
+    \item Non tutto è tipabile in Haskell. Il classico esempio è l'auto-applicazione pura:
+    \begin{itemize}
+        \item \code{omega = \textbackslash x -> x x} non è tipabile perché richiederebbe un tipo infinito ($t = t \to t_1$), portando a una teoria dei tipi non decidibile (e quindi a tipi non inferibili dal compilatore)
+    \end{itemize}
+    
+    \item Dal punto di vista del calcolo, \code{let x = N in M} è equivalente all'applicazione di una lambda: \code{(\textbackslash x -> M) N}. Tuttavia, il compilatore Haskell tratta i due casi in modo diverso durante l'inferenza dei tipi.
+
+    \item \textbf{Let-Polymorphism:}
+
+    Il costrutto \code{let} permette di assegnare a una variabile un tipo polimorfo che viene "generalizzato" prima di essere usato nel corpo (\code{in}).
+    \begin{itemize}
+        \item \textbf{tipabile:} \code{let x = \textbackslash y -> y in x x} è tipabile.
+
+            Haskell vede che \code{x} è l'identità ($a \to a$) e, nel corpo \code{x x}, può istanziare il primo \code{x} come $(a \to a) \to (a \to a)$ e il secondo come $(a \to a)$.
+        \item \textbf{non tipabile:} \code{(\textbackslash x -> x x) (\textbackslash y -> y)} \textbf{non} è tipabile. 
+
+            Qui il compilatore deve tipare la funzione \code{\textbackslash x -> x x} prima di sapere che \code{x} sarà l'identità. Come visto sopra, \code{\textbackslash x -> x x} è intrinsecamente non tipabile.
+    \end{itemize}
+
+\end{itemize}
+
+\begin{lemmaframe}{Terminazione}{}
+    Tutti i lambda-termini tipabili nel sistema dei tipi di Haskell (che non usino ricorsione esplicita tramite equazioni) \textbf{terminano}.
+\end{lemmaframe}
+ 
+
+\subsection{Semantica Denotazionale: ricorsione e punti fissi}
+
+Haskell è un linguaggio dichiarativo: una definizione non è un comando, ma un'equazione. 
+Quando definiamo una funzione ricorsiva $f$, stiamo scrivendo un'equazione del tipo $f = \mathcal{E}(f)$, dove $\mathcal{E}$ è un'espressione che contiene $f$ stessa.
+
+\begin{itemize}
+    \item \textbf{Bottom ($\bot$)} rappresenta il "non-valore". Indica un calcolo che non termina (loop infinito) o che fallisce (errore). In Haskell, ogni tipo $t$ contiene implicitamente $\bot$.
+    \item Se la definizione è un'equazione, la "semantica" (ovvero la funzione reale prodotta dal compilatore) deve essere una soluzione dell'equazione. Matematicamente, una soluzione di $f = T(f)$ è un \textbf{punto fisso} del funzionale $T$.
+\end{itemize}
+
+\begin{gframe}{Approfondimento: ricorsione e non-terminazione: \code{omega'}}
+Prendiamo la funzione
+\begin{haskellbox}{}
+omega' x = omega' x
+-- > :t omega'
+-- omega' :: t -> t1
+\end{haskellbox}
+Questa funzione ha il tipo più generico possibile (\code{t -> t1}) perché, non terminando mai, non produce mai un valore reale.
+
+Rimuovendo $x$, otteniamo $omega' = I(omega')$, dove $I$ è l'identità.
+
+Qualsiasi funzione $f$ soddisfa $f = I(f)$. Quale scegliere?
+
+\begin{itemize}
+    \item Haskell sceglie la funzione che "fa il minimo indispensabile" per soddisfare l'equazione. Si usa l'ordinamento $\sqsubseteq$ dove $f \sqsubseteq g$ significa che $g$ è "più definita" di $f$.
+    \item \textbf{Costruzione di Kleene (least-fixpoint):} 
+
+        il computer "costruisce" la funzione partendo dal nulla ($\bot$):
+    \[ f_0 = \bot \quad (\text{non so nulla}) \]
+    \[ f_1 = T(f_0) \quad (\text{applico la definizione una volta}) \]
+    \[ f_{\infty} = \text{limite della catena} = \textit{lfp}(T) \]
+    Nel caso di \code{omega'}, la catena è $\{\bot, \bot, \dots\}$. Il limite è $\bot$. La semantica di \code{omega'} è dunque la funzione che restituisce sempre "non-valore".
+\end{itemize}
+
+\end{gframe}
+
+Il punto fisso è quindi la "semantica" perché è l'unico modo per dare un valore univoco e calcolabile a una definizione circolare. Il \textit{minimo} punto fisso garantisce che il significato sia quello "prodotto" effettivamente dal calcolo ricorsivo.
+
+\begin{gframe}{\code{myundefined}}
+Mentre \code{omega'} è una \textit{funzione} che non termina, possiamo definire un \textit{valore} che non termina:
+\begin{haskellbox}{}
+myUndefined = myUndefined
+-- > :t myUndefined
+-- myUndefined :: a
+\end{haskellbox}
+
+\begin{itemize}
+    \item  Poiché \code{myUndefined} ha tipo \code{a}, esso \textbf{appartiene a tutti i tipi}. È l'implementazione "home-made" della costante \code{undefined} di Haskell. Rappresenta il valore $\bot$ per ogni possibile tipo del linguaggio.
+    \item Matematicamente, \code{myUndefined} è il \textbf{punto fisso dell'identità}: 
+\begin{enumerate}
+\item la definizione \code{x = x} corrisponde all'equazione funzionale $x = I(x)$
+\item la soluzione di questa equazione è, per definizione, il punto fisso dell'identità $I$
+\item poiché Haskell usa la semantica del minimo punto fisso, e l'identità applicata al valore nullo ($\bot$) restituisce ancora $\bot$, il risultato è la non-terminazione
+\item questo spiega perché \code{myUndefined} ha tipo \code{a}: non essendo "sceso" verso nessun valore specifico (come un intero o una stringa), rimane una pura astrazione di errore/loop che può "fingere" di essere qualsiasi tipo.
+\end{enumerate}
+\end{itemize}
+
+
+
+Haskell permette quindi di manipolare la non-terminazione come un valore reale. Ogni tipo in Haskell è in realtà "puntato" (\textit{pointed}), ovvero contiene sempre almeno un valore: $\bot$.
+\end{gframe}
+
+
+
+
 \section{Strutture Dati Predefinite}
 
 \subsection{Tipi di Base e Tuple}
@@ -381,35 +481,35 @@ Haskell supporta le \textbf{list comprehension} (definizioni set-like del conten
 \subsubsection{Funzioni su Liste}
 \begin{itemize}
     \item \textbf{Estrazione:} \code{head}, \code{tail}. \code{last}, \code{init}. \code{(!!)} per estrarre all'indice $n$
-        \begin{snippet}
+        \begin{haskellbox}{}
 head [1, 2, 3]  -- risultato: 1
 tail [1, 2, 3]  -- risultato: [2, 3]
 last [1, 2, 3]  -- risultato: 3
 init [1, 2, 3]  -- risultato: [1, 2]
 [1, 2, 3] !! 1  -- risultato: 2
-\end{snippet}
+\end{haskellbox}{}
 
     \item \textbf{Ispezione:} \code{null}, \code{length}
-\begin{snippet}
+\begin{haskellbox}{}
 null []          -- risultato: True
 length [1, 2, 3] -- risultato: 3
-\end{snippet}
+\end{haskellbox}{}
 
     \item \textbf{Taglio:} \code{take n}, \code{drop n}, \code{splitAt n} (tupla con take e drop).
-\begin{snippet}
+\begin{haskellbox}{}
 take 2 [1, 2, 3, 4]    -- risultato: [1, 2]
 drop 2 [1, 2, 3, 4]    -- risultato: [3, 4]
 splitAt 2 [1, 2, 3, 4] -- risultato: ([1, 2], [3, 4])
-\end{snippet}
+\end{haskellbox}{}
 
     \item \textbf{Generali:} \code{++} (concatenazione), \code{reverse}
-\begin{snippet}
+\begin{haskellbox}{}
 [1, 2] ++ [3, 4]  -- risultato: [1, 2, 3, 4]
 reverse [1, 2, 3] -- risultato: [3, 2, 1]
-\end{snippet}
+\end{haskellbox}{}
 
     \item \textbf{Matematica/logica:} \code{sum}, \code{minimum}, \code{maximum}. \code{and}, \code{or}. \code{any p}, \code{all p} (predicati su almeno uno o tutti)
-        \begin{snippet}
+        \begin{haskellbox}{}
 sum [1, 2, 3]       -- risultato: 6
 minimum [5, 2, 9]   -- risultato: 2
 maximum [5, 2, 9]   -- risultato: 9
@@ -417,28 +517,37 @@ and [True, False]   -- risultato: False
 or [True, False]    -- risultato: True
 any (> 2) [1, 2, 3] -- risultato: True (almeno uno è > 2)
 all (> 0) [1, 2, 3] -- risultato: True (tutti sono > 0)
-\end{snippet}
+\end{haskellbox}{}
 
     \item \textbf{Liste annidate/multiple:} \code{concat} (appiattisce liste di liste), \code{zip} (unisce liste in coppie, fermandosi alla più corta)
-\begin{snippet}
+\begin{haskellbox}{}
 concat [[1, 2], [3, 4]]    -- risultato: [1, 2, 3, 4]
 zip [1, 2] ['a', 'b', 'c'] -- risultato: [(1, 'a'), (2, 'b')]
-\end{snippet}
+\end{haskellbox}{}
 \end{itemize}
 
-\section{Funzionali di Ordine Superiore}
-Funzioni che prendono/restituiscono altre funzioni. Favoriscono la composizionalità.
+\section{Funzion(al)i di Ordine Superiore}
+I funzionali sono funzioni che prendono altre funzioni come argomento o le restituiscono come risultato. Favoriscono la \textbf{composizionalità}, permettendo di costruire programmi complessi tramite piccoli blocchi riutilizzabili.
+
+\begin{itemize}
+    \item \textbf{curryficazione:} si fonda sull'isomorfismo $A \times B \rightarrow C \cong A \rightarrow (B \rightarrow C)$. Le versioni curryficate permettono di passare un solo argomento alla volta, favorendo l'applicazione parziale.
+    \item \textbf{$\eta$-regola:} è possibile omettere un parametro in una definizione se esso compare identico alla fine di entrambi i lati dell'equazione.
+\end{itemize}
 
 \begin{haskellbox}{}
 -- composizione (.) : Equivale a f(g(x))
 (.) f g x = f (g x)
 
--- curry e uncurry (Isomorfismo A x B -> C  <==>  A -> (B -> C))
+-- curry e uncurry (Isomorfismo A x B -> C  < = = >  A -> (B -> C))
 curry :: ((a, b) -> c) -> a -> b -> c
 uncurry :: (a -> b -> c) -> (a, b) -> c
 
 -- flip: inverte l'ordine dei parametri
 flip :: (a -> b -> c) -> b -> a -> c
+myFlip f a b = f b a
+
+-- flip (:) [2, 3] 1
+-- [1, 2, 3]
 
 -- map e filter
 map :: (a -> b) -> [a] -> [b]         -- proprieta': map (f . g) = map f . map g
@@ -488,13 +597,40 @@ myReverse xs = foldl (\acc x -> x : acc) [] xs
 \end{haskellbox}
 
     \item \textbf{\code{foldr1} e \code{foldl1}:} varianti che non richiedono un valore iniziale esplicito, poiché usano il primo o l'ultimo elemento come base; \textit{danno errore su lista vuota}.
-\begin{snippet}
+\begin{haskellbox}{}
 -- utile quando non esiste un elemento neutro sensato (es. min/max assoluto)
 myMinimum = foldr1 min
 myMinimum [5, 3, 8] -- risultato: 3
 -- myMinimum []     -- genera errore a runtime
-\end{snippet}
+\end{haskellbox}{}
 \end{itemize}
 
+\section{Alcuni esempi di stile funzionale}
+Lo stile funzionale evita accumulatori ed indici, preferendo la manipolazione globale delle strutture dati.
+
+\begin{itemize}
+    \item \textbf{prodotto scalare:} può essere implementato in diversi modi (flessibilità dei funzionali):
+
+\begin{haskellbox}{}
+-- accoppia gli elementi, trasforma "*" in una funzione che accetta una tupla
+-- applica la moltiplicazione agli elementi, e somma i prodotti
+ps1 xs ys = sum (map (uncurry (*)) (zip xs ys))
+
+-- crea una lista di funzioni parzialmente applicate
+-- (da [5, 4] si ottiene [(5*), (4*)])
+-- zApp/applyL prende la lista di funzioni ^ e la applica sulla seconda lista
+ps2 xs ys = sum (applyL (map (*) xs) ys)
+
+-- zipWith fa zip e map in un passo solo
+ps3 xs ys = sum (zipWith (*) xs ys)
+\end{haskellbox}
+
+    \item controllare se una lista è ordinata:
+\begin{haskellbox}{}
+ordinata xs = and (zipWith (<=) xs (tail xs))
+\end{haskellbox}
+
+\item \textbf{ricerca su lista} (\code{findVPH}): si può implementare accoppiando la lista agli indici (\code{zip [0..] xs}) e filtrando per il valore cercato.
+\end{itemize}
 
 \end{document}
