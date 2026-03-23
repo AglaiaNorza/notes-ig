@@ -228,6 +228,7 @@ analizzaRaggio r
 volumeCilindro r h = (let area = pi * r^2 in area) * h
 \end{haskellbox}
 
+\newpage
 \section{Sistema dei Tipi e Classi}
 
 Haskell è \textbf{statically type-safe}: se un programma è tipato correttamente, nessun errore di tipo si verifica durante l’esecuzione.
@@ -632,5 +633,88 @@ ordinata xs = and (zipWith (<=) xs (tail xs))
 
 \item \textbf{ricerca su lista} (\code{findVPH}): si può implementare accoppiando la lista agli indici (\code{zip [0..] xs}) e filtrando per il valore cercato.
 \end{itemize}
+
+\chapter{Lambda Calcolo}
+Ideato da Alonzo Church nel 1931, il $\lambda$-calcolo nasce per esplicitare il \textit{processo meccanico di calcolo} (sintassi) di una funzione, in contrasto con la visione matematica classica che vede la funzione solo come una relazione statica tra insiemi (semantica).
+
+\section{Sintassi e Computazione}
+La sintassi del $\lambda$-calcolo è minimalista ed è composta da tre regole:
+\begin{itemize}
+    \item \textbf{variabile:} $x, y, z \dots$
+    \item \textbf{astrazione:} $\lambda x. M$ (corrisponde alla definizione di una funzione con parametro $x$ e corpo $M$)
+    \item \textbf{applicazione:} $(M N)$ (corrisponde all'applicazione della funzione $M$ all'argomento $N$)
+\end{itemize}
+
+\begin{gframe}{Regole di Associazione}
+    \begin{itemize}
+        \item \textbf{l'applicazione associa a sinistra:} $F N_1 N_2 \dots N_n$ equivale a $(\dots (F N_1) \dots N_n)$
+        \item \textbf{l'astrazione associa a destra:} $\lambda x_1 \dots x_n. M$ equivale a $\lambda x_1. (\lambda x_2. (\dots (\lambda x_n. M)\dots))$
+    \end{itemize}
+\end{gframe}
+
+La computazione avviene tramite la \textbf{$\beta$-riduzione} (beta-regola): un termine della forma $(\lambda x.M) N$ si dice \textit{redex} e si riduce sostituendo tutte le occorrenze di $x$ in $M$ con il termine $N$.
+Formalmente:
+$$(\lambda x.M) N \rightarrow_\beta M[N/x]$$
+
+Un termine che non contiene più $\beta$-redex è detto in \textbf{forma normale} e rappresenta un valore finale (il risultato della computazione).
+
+\section{Variabili e Combinatori}
+\begin{itemize}
+    \item \textbf{Variabili libere ($FV$) e legate:} in $\lambda x. M$, la variabile $x$ è \textit{legata} (bound) all'astrazione. Qualsiasi variabile non legata è \textit{libera} (free).
+    \item \textbf{$\alpha$-conversione (alfa-regola):} per evitare la cattura accidentale di variabili libere durante la sostituzione, si possono rinominare le variabili legate (es. $\lambda x.x \equiv \lambda y.y$). 
+        \begin{itemize}
+            \item è buona pratica seguire la ``convenzione di Barendregt'', che stabilisce che, all'interno di un termine lambda o di un insieme di termini, tutte le variabili legate devono avere nomi distinti tra loro e diversi da tutte le variabili libere presenti nel termine stesso
+        \end{itemize} 
+    \item  I termini tali che ($FV(M) = \emptyset$) ($\lambda$-termini chiusi), ovvero senza variabili libere sono chiamati \textbf{combinatori}
+\end{itemize}
+
+\subsection{Combinatori noti e strutture di controllo}
+Il $\lambda$-calcolo puro non ha tipi di dato predefiniti: tutto (booleani, numeri, if-then-else) deve essere codificato tramite funzioni.
+
+\begin{itemize}
+    \item \textbf{Identità ($I$):} $I \equiv \lambda x.x$
+    \item \textbf{Cancellatori (booleani):}
+        \subitem \textbf{True ($K$):} $K \equiv \lambda x y. x$ (prende due argomenti e restituisce il primo)
+        \subitem \textbf{False ($O$):} $O \equiv \lambda x y. y$ (prende due argomenti e restituisce il secondo)
+    \item \textbf{If-Then-Else:} grazie alla definizione dei booleani, la struttura condizionale è banalmente codificata come un'applicazione: $if\ x\ then\ M\ else\ N \equiv x M N$. Se $x$ è True ($K$) selezionerà $M$, se è False ($O$) selezionerà $N$.
+    \item \textbf{Compositori ($S$):} $S \equiv \lambda x y z. x z (y z)$ (si può dimostrare che $S K K \approx I$).
+    \item \textbf{Duplicatori e divergenza:} 
+        \subitem $\omega \equiv \lambda x.xx$ (auto-applicazione)
+        \subitem $\Omega \equiv \omega \omega \rightarrow \omega \omega \rightarrow \dots$ rappresenta la \textbf{funzione indefinita}, il loop infinito (non tipabile)
+\end{itemize}
+
+\subsubsection{Numeri di Church e iteratori}
+I \textbf{Numerali di Church} rappresentano i numeri naturali come funzioni di ordine superiore che \textit{iterano} un'operazione. Il numero $n$ è una funzione che prende una funzione (es. successore) $s$ e un valore di partenza (es. zero) $z$, e applica $s$ ad $z$ esattamente $n$ volte
+$$\underline{n} \equiv \lambda s z. s(s(\dots(sz)\dots)) \quad [n\text{ applicazioni}]$$
+\begin{itemize}
+    \item $\underline{0} \equiv \lambda s z. z$ (equivale a \code{False})
+    \item $\underline{3} \equiv \lambda s z. s(s(s(z)))$
+\end{itemize}
+
+Per calcolare il successore ($+1$) di un numero di Church, basta creare una funzione che applica $s$ una volta in più: $succ \equiv \lambda x s z. s(x s z)$ (o anche $\lambda x s z. xs (s z)$)
+
+ 
+I numerali di Church non sono quindi solo dati, ma \textbf{iteratori intrinseci}.
+
+\section{Ricorsione e Combinatori di Punto Fisso}
+Per definire funzioni ricorsive complesse il $\lambda$-calcolo necessita di un principio di ricorsione generale. 
+
+\begin{thmframe}{Combinatore di Punto Fisso}{}
+ Nel $\lambda$-calcolo esiste un termine $Y$ (detto \textbf{Combinatore di Punto Fisso}) tale che, per ogni termine $M$, si ha $Y M \rightarrow M (Y M)$. 
+ 
+ Il combinatore permette di trovare quindi il punto fisso di una funzione (quel valore $x$ tale che $f(x) = x$)
+\end{thmframe}
+
+Due combinatori di punto fisso sono:
+\begin{itemize}
+    \item \textbf{Combinatore di Turing ($Y_T$):} definito come $Y_T = \theta \theta$ dove $\theta \equiv \lambda x y. y(x x y)$.
+    \item \textbf{Combinatore di Curry ($Y_C$):} definito come $Y_C \equiv \lambda f. (\lambda x.f(xx))(\lambda x.f(xx))$. Se applicato all'identità $I$, questo combinatore riduce inesorabilmente a $\Omega$ (divergenza).
+\end{itemize}
+
+\begin{thmframe}{Tesi di Church-Turing}{}
+ Ogni funzione calcolabile è $\lambda$-definibile.
+\end{thmframe}
+
+
 
 \end{document}

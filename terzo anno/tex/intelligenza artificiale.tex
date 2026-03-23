@@ -468,7 +468,343 @@ function hill_climbing(problema): stato ottimo locale
       return nodo_corrente.stato;
 \end{lstlisting}
 
-%\chapter{Problemi di Soddisfacimento di Vincoli}
+\todo{finisci sezione}
+
+\chapter{Problemi di Soddisfacimento di Vincoli (CSP)}
+Fino ad ora, abbiamo esaminato problemi di ricerca in cui gli stati erano visti come una scatola nera (\textbf{rappresentazione atomica}). Passiamo ora ad analizzare algoritmi che considerano gli stati come insieme di coppie attributo/valore (\textbf{rappresentazione fattorizzata}).
+
+\section{CSP}
+\begin{defframe}{CSP}{}
+    Un \textbf{constraint satisfaction problem} è definito da:
+    \begin{itemize}
+        \item un insieme di \textbf{variabili}: $X_1, \dots, X_n$
+        \item un insieme di \textbf{domini} (valori possibili per le variabili): $D_1, \dots, D_n$
+        \item un insieme di \textbf{vincoli} (su sottoinsiemi di variabili), ovvero dei requisiti che un assegnamento deve rispettare: $C_j = (Y_j, R_j)$
+            \begin{itemize}
+                \item con $Y_j \subseteq X$ e $R_j$ una relazione tra i domini delle variabili $Y_j$ (combinazioni ammesse)
+            \end{itemize}
+    \end{itemize}
+    
+\end{defframe}
+    \begin{gframe}{Esempio: colorazione di una mappa}
+Data la mappa dell'Australia e tre colori, colorare tutti gli stati di modo che stati adiacenti abbiano colore diverso.
+
+\begin{center}
+    \includegraphics[width=0.4\textwidth]{assets/mappa_australia.png}
+\end{center}
+
+\begin{itemize}
+    \item \textbf{Variabili:} \texttt{WA, NT, Q, NSW, V, SA, T}
+\item \textbf{Domini:} tutti pari a $\{r, g, b\}$
+    \item \textbf{Vincoli:}
+    \begin{itemize}
+        \item $\langle \{\texttt{WA}, \texttt{NT}\}, \overbrace{\{(r,g), (r,b), (g,r), (g,b), (b,r), (b,g)\}}^{\text{comb. ammesse}} \rangle \implies \texttt{WA} \neq \texttt{NT}$ \quad \textit{(si può scrivere così)}
+        \item $\langle \{\texttt{WA}, \texttt{SA}\}, \{(r,g), (r,b), (g,r), (g,b), (b,r), (b,g)\} \rangle \implies \texttt{WA} \neq \texttt{SA}$
+        \item $\dots$
+    \end{itemize}
+\end{itemize}
+
+
+    \end{gframe}
+
+\begin{defframe}{Assegnamento consistente, soluzione}{}
+    Un \textbf{assegnamento} ad alcune variabili dai valori dei relativi domini ($\langle \dots, X_i = v_i, X_j = v_j \rangle X_i, X_j \in X, v_i \in D_i, v_j \in D_j$) si dice \textbf{consistente} se \textit{non viola alcun vincolo}, ovvero se per ogni vincolo $C_j$ le cui variabili $Y_j$ sono tutte coinvolte dall'assegnamento, la relazione $R_j$ (le ``coppie ammesse'') contiene la tupla dei valori dati dall'assegnamento alle variabili.
+
+    Una \textbf{soluzione} è un assegnamento consistente per tutte le variabili $X$.
+\end{defframe}
+
+\subsection{Vantaggi}
+I principali vantaggi dei CSP sono:
+\begin{itemize}
+    \item formalizzazione naturale di molti problemi (ogni problema di ricerca in NP è formalizzabile come CSP)
+    \item le tecniche di ricerca sono generali e non dipendono dal singolo problema: il problema viene modellato e risolto con solver general-purpose (le euristiche sono indipendenti dal dominio, dipendono da variabili e vincoli)
+    \item la rappresentazione fattorizzata degli stati permette di alternare ragionamento e ricerca tramite la \textbf{propagazione dei vincoli} (una volta assegnato un valore ad una variabile si possono fare delle ``inferenze'' sui futuri assegnamenti)
+    \item non è necessario calcolare per intero assegnamenti parziali non consistenti: nonappena un assegnamento viola i vincoli, tutte le clausole in cui è in AND (tutti gli assegnamenti che lo estendono) si possono scartare
+    \item si può ragionare sulle cause delle violazioni dei vincoli
+\end{itemize}
+
+\subsection{Tipi di vincoli}
+
+\begin{itemize}
+    \item \textbf{Vincoli unari:} su una sola variabile. 
+
+        esempio: $\texttt{SA}\neq g$
+    \begin{itemize}
+        \item un vincolo unario si può gestire riformulando il problema (cambiando direttamente il dominio della variabile)
+    \end{itemize}
+    
+    \vspace{0.2cm}
+\item \textbf{Vincoli binari:} su due variabili. 
+    
+    esempio: $\texttt{WA} \neq \texttt{NT}$
+    
+    \vspace{0.2cm}
+    \item \textbf{Vincoli di globali:} su tre o più variabili
+
+    esempio: alldiff$(X,Y,Z,W,T)$
+    \begin{itemize}
+        \item ogni CSP si può riscrivere con vincoli al massimo binari (es: $\text{alldiff}(X,Y,Z) \equiv (X \neq Y) \land (Y \neq Z) \land (X \neq Z)$)
+        \item conviene comunque usare i vincoli globali, in quanto offrono una componente riusabile con librerie e algoritmi ottimizzati (quindi il solver va più veloce), ed rappresentano un approccio migliore per la modellazione del problema
+    \end{itemize}
+\end{itemize}
+
+\subsection{Grafo dei vincoli}
+I vincoli si possono rappresentare tramite un \textbf{grafo} (che rispecchia quindi la struttura del problema) in cui
+\begin{itemize}
+    \item i nodi rappresentano le variabili
+    \item gli archi legano coppie di variabili che partecipano ad un vincolo
+\end{itemize}
+
+\vspace{0.5cm}
+\begin{figure}[htbp]
+    \centering
+\begin{tikzpicture}[
+    mynode/.style={circle, draw, thick, minimum size=10mm, inner sep=0pt, font=\sffamily}
+]
+
+\node[mynode] (WA) at (0, 2.5) {WA};
+\node[mynode] (NT) at (2.5, 3.5) {NT};
+\node[mynode] (SA) at (2.7, 1.3) {SA};
+\node[mynode] (Q) at (5.2, 3) {Q};
+\node[mynode] (NSW) at (5.8, 1.3) {NSW};
+\node[mynode] (V) at (4.8, -0.2) {V};
+\node[mynode] (T) at (5, -2) {T};
+
+\draw[thick] (WA) -- (NT);
+\draw[thick] (WA) -- (SA);
+\draw[thick] (NT) -- (SA);
+\draw[thick] (NT) -- (Q);
+\draw[thick] (SA) -- (Q);
+\draw[thick] (SA) -- (NSW);
+\draw[thick] (SA) -- (V);
+\draw[thick] (Q) -- (NSW);
+\draw[thick] (NSW) -- (V);
+\end{tikzpicture}
+\caption{Grafo dei vincoli per il problema della colorazione dell'Australia}
+\end{figure}
+
+Se i vincoli sono globali, il grafo dei vincoli diventa un \textbf{iper-grafo} (in cui gli archi sono sostituiti da \textit{iper-archi}, formati da insiemi di nodi).
+
+\begin{gframe}{}
+Un esempio di iper-grafo si ha nei problemi di cripto-aritmetica, dove bisogna sostituire delle lettere con delle cifre in modo che l'operazione aritmetica risulti corretta.
+
+\begin{center}
+$\begin{array}{c@{\quad}c@{\quad}c@{\quad}c@{\quad}c}
+    & X_3 & X_2 & X_1 &   \\
+    &     & T   & W   & O \\
+  + &     & T   & W   & O \\
+  \hline
+    & F   & O   & U   & R
+\end{array}$
+\end{center}
+
+\begin{itemize}
+    \item \textbf{Variabili:} $T, W, O, F, U, R$ e i riporti $X_1, X_2, X_3$.
+    \item \textbf{Domini:} per ogni variabile il dominio è $\{0, 1, 2, \dots, 9\}$.
+    \item \textbf{Vincoli:}
+    \begin{itemize}
+        \item alldifff$(T, W, O, F, U, R)$ (lettere diverse devono corrispondere a cifre diverse).
+        \item $O + O = R + 10 \cdot X_1$ (vincolo per la prima colonna, che considera il riporto).
+        \item $X_1 + W + W = U + 10 \cdot X_2$ (vincolo per la seconda colonna).
+        \item etc
+    \end{itemize}
+\end{itemize}
+
+\vspace{0.5cm}
+\begin{center}
+    \begin{tikzpicture}[
+        var/.style={circle, draw, thick, minimum size=8mm, inner sep=0pt, font=\sffamily},
+        const/.style={rectangle, draw, thick, minimum size=6mm, inner sep=0pt}
+    ]
+
+    \node[const] (C_all) at (3, 2.5) {};
+
+    \node[var] (F) at (0, 1) {F};
+    \node[var] (T) at (1.2, 1) {T};
+    \node[var] (U) at (2.4, 1) {U};
+    \node[var] (W) at (3.6, 1) {W};
+    \node[var] (R) at (4.8, 1) {R};
+    \node[var] (O) at (6, 1) {O};
+
+    \draw[thick] (C_all) -- (F);
+    \draw[thick] (C_all) -- (T);
+    \draw[thick] (C_all) -- (U);
+    \draw[thick] (C_all) -- (W);
+    \draw[thick] (C_all) -- (R);
+    \draw[thick] (C_all) -- (O);
+
+    \node[const] (C_F) at (0, -0.5) {};
+    \node[const] (C_T) at (1.2, -0.5) {};
+    \node[const] (C_W) at (3.6, -0.5) {};
+    \node[const] (C_O) at (6, -0.5) {};
+
+    \node[var] (X3) at (0.6, -2) {$X_3$};
+    \node[var] (X2) at (2.4, -2) {$X_2$};
+    \node[var] (X1) at (4.8, -2) {$X_1$};
+
+    \draw[thick] (C_F) -- (F);
+    \draw[thick] (C_F) -- (X3);
+
+    \draw[thick] (C_T) -- (T);
+    \draw[thick] (C_T) -- (X3);
+    \draw[thick] (C_T) -- (X2);
+    \draw[thick] (C_T) -- (O); 
+
+    \draw[thick] (C_W) -- (W);
+    \draw[thick] (C_W) -- (U); 
+    \draw[thick] (C_W) -- (X2);
+    \draw[thick] (C_W) -- (X1);
+
+    \draw[thick] (C_O) -- (O);
+    \draw[thick] (C_O) -- (R);
+    \draw[thick] (C_O) -- (X1);
+
+    \end{tikzpicture}
+
+{\footnotesize Iper-grafo per il problema \texttt{TWO + TWO = FOUR}.\\
+I quadrati rappresentano gli iper-archi (vincoli) che legano insiemi di variabili (cerchi).\\
+Usare l'iper-grafo permette di mantenere la visione d'insieme su vincoli unici complessi senza doverli frammentare in archi binari}
+\end{center}
+\end{gframe}
+
+\subsection{Risolvere un CSP: Ricerca nello spazio degli stati}
+Ogni problema di soddisfacimento di vincoli può essere affrontato formulandolo come un classico problema di ricerca. La formulazione base è \textbf{identica per tutti i CSP}:
+
+\begin{itemize}
+    \item \textbf{Stati:} sono gli assegnamenti \textbf{consistenti} (anche parziali).
+    \item \textbf{Successori:} si ottengono aggiungendo una \textbf{nuova variabile} assegnata ad un valore che non confligge con i vincoli.
+    \begin{itemize}
+        \item \textit{Nota:} non conviene definire i successori tramite l'operazione di ``modifica di un assegnamento già fatto'', perché questo ci porterebbe ad esplorare inutilmente stati che esistono già in un altro ramo dell'albero di ricerca.
+    \end{itemize}
+    \item \textbf{Test obiettivo:} l'assegnamento corrente è completo?
+\end{itemize}
+
+Poiché l'albero di ricerca ha una profondità limitata e sappiamo per certo che una soluzione si troverà esattamente a profondità $n$ (dove $n$ è il numero totale di variabili), l'approccio ideale è usare una \textbf{ricerca in profondità (DFS)}.
+
+\subsubsection{Approccio naive e commutatività}
+Se applicassimo una DFS cieca su domini di taglia $d$, esploreremmo un numero di nodi foglia pari a $n! \cdot d^n$ (ad esempio, con 10 variabili e domini di 10 valori, avremmo $3.6 \cdot 10^{16}$ foglie). 
+
+Questo fattoriale $n!$ è dovuto al fatto che l'algoritmo, in questo modo, arriva alla stessa identica foglia (stessa combinazione finale) percorrendo cammini diversi (cambiando solo l'ordine in cui ha assegnato le variabili).
+
+In realtà, possiamo fare molto meglio sfruttando una proprietà fondamentale dei CSP: la \textbf{commutatività}.
+L'ordine con cui si estendono gli assegnamenti è totalmente ininfluente ai fini della consistenza.
+
+Pertanto:
+\begin{enumerate}
+    \item in ogni livello dell'albero possiamo decidere di considerare \textbf{una sola variabile}. Questo elimina completamente il fattore $n!$ dalla formula.
+    \item la ricerca in profondità può \textbf{tornare indietro (backtrack)} non appena si accorge che un assegnamento parziale diventa inconsistente, potando fin da subito enormi sotto-alberi morti.
+\end{enumerate}
+
+\begin{gframe}{Algoritmo di Backtracking}{}
+    Il \textbf{backtracking} è la versione base per la risoluzione dei CSP.
+
+    A differenza di altri algoritmi di ricerca, \textit{non rappresenta in modo esplicito la frontiera} in memoria e lavora \textit{modificando il nodo corrente} anziché generare materialmente i nodi figli. Inoltre, non attraversa mai stati non consistenti.
+
+\begin{tcolorbox}[colback=gray!10, colframe=gray!10, arc=4pt, boxrule=0pt, left=5pt, right=5pt, top=5pt, bottom=5pt]
+    \begin{tabbing}
+        \hspace{0.5cm} \= \hspace{0.5cm} \= \hspace{0.5cm} \= \hspace{0.5cm} \= \kill
+        \textbf{function} \texttt{backtracking\_ric}(ass, csp): soluzione $\lor$ fallimento \\
+        \> \textbf{if} ass è completo \textbf{then} \textbf{return} ass; \\[0.2cm]
+        \> $var \leftarrow$ seleziona una variabile che non occorre in ass; \\
+        \> \textbf{foreach} $val \in$ dominio di $var$ \textbf{do} \\
+        \> \> \textbf{if} $val$ è consistente con ass dati i vincoli \textbf{then} \\
+        \> \> \> aggiungi $\{var = val\}$ ad ass; \\
+        \> \> \> $risultato \leftarrow \texttt{backtracking\_ric}$(ass, csp); \\[0.1cm]
+        \> \> \> \textbf{if} $risultato \neq fallimento$ \textbf{then} \textbf{return} risultato; \textcolor{gray}{// è una sol} \\
+        \> \> \> \textbf{else} rimuovi $\{var = val\}$ da ass; \textcolor{gray}{// fallimento: torno su e disfo} \\[0.2cm]
+        \> \textbf{return} fallimento;
+    \end{tabbing}
+\end{tcolorbox}
+\end{gframe}
+
+L'algoritmo base funziona, ma si può rendere molto più efficiente agendo su tre direzioni:
+\begin{itemize}
+    \item \textbf{propagazione dei vincoli:} aggiungere ad ogni passo un'attività di inferenza logica per ridurre i domini delle variabili non ancora assegnate
+    \item scelta, ad ogni passo, della \textbf{variabile} da assegnare (quale variabile mi conviene valutare per prima?)
+    \item scelta, ad ogni passo, dell'\textbf{ordine dei valori} (quale valore del dominio provo per primo?)
+\end{itemize}
+
+\newpage
+\section{Modellazione con MiniZinc}
+
+    MiniZinc è un linguaggio di modellazione ad alto livello utilizzato per formulare problemi di ottimizzazione e di soddisfacimento di vincoli (CSP). 
+
+\subsection{Parametri e Variabili di Decisione}
+In MiniZinc è fondamentale distinguere ciò che è noto a priori da ciò che il solver deve calcolare. Questa distinzione si traduce in due macro-categorie:
+\begin{itemize}
+    \item \textbf{parametri} (dichiarati implicitamente o con la keyword \texttt{par}): rappresentano i dati di input del problema. Hanno un valore è fisso e immutabile durante la risoluzione.
+    \item \textbf{variabili di decisione} (keyword \texttt{var}): rappresentano le incognite dello spazio degli stati. Il solver manipola questi valori all'interno dei loro domini per rispettare i vincoli.
+\end{itemize}
+
+\begin{lstlisting}[language=C]
+int: n_prodotti = 5;       /* parametro: valore fisso e noto */
+var 1..100: quantita;      /* variabile di decisione: dominio tra 1 e 100 */
+\end{lstlisting}
+
+\begin{gframe}{Tipi di dato e domini}
+MiniZinc è fortemente tipizzato. Ogni variabile deve avere un tipo e, nel caso delle variabili di decisione, un dominio limitato per restringere lo spazio di ricerca.
+\begin{itemize}
+    \item \textbf{\texttt{int}} e \textbf{\texttt{float}}: numeri interi e a virgola mobile.
+    \item \textbf{\texttt{bool}}: valori di verità (\texttt{true} o \texttt{false})
+    \item \textbf{\texttt{set of <tipo>}}: insiemi di valori, spesso usati per definire indici di iterazione (es. \texttt{set of int: Citta = 1..5;}).
+    \item \textbf{\texttt{array}}: collezioni n-dimensionali di elementi.
+\end{itemize}
+\end{gframe}
+
+\subsection{Vincoli (Constraints)}
+I vincoli definiscono le regole del mondo del problema, restringendo le assegnazioni valide. Si dichiarano con la parola chiave \texttt{constraint} seguita da un'espressione logica/matematica.
+
+\begin{lstlisting}
+constraint quantita > 10;
+constraint spesa_totale <= budget_massimo;
+constraint x != y;
+\end{lstlisting}
+
+\subsection{Risoluzione (Solve Item)}
+Ogni modello deve terminare indicando al solver il tipo di ricerca desiderata:
+\begin{itemize}
+    \item \texttt{solve satisfy;}: cerca \textit{una qualsiasi} assegnazione che rispetti tutti i vincoli
+    \item \texttt{solve maximize <expr>;}: cerca l'assegnazione ammissibile che \textit{massimizza} il valore dell'espressione fornita 
+    \item \texttt{solve minimize <expr>;}: cerca l'assegnazione ammissibile che \textit{minimizza} l'espressione
+\end{itemize}
+
+\begin{gframe}{Esempio: Colorazione di una mappa}
+    Vogliamo assegnare a tre regioni (WA, NT, SA) uno tra due colori disponibili, garantendo che regioni confinanti abbiano colori diversi.
+    \begin{lstlisting}[language=C]
+/* parametri: numero di colori */
+int: nc = 2;
+
+/* variabili di decisione: assegnazione dei colori (dominio 1..nc) */
+var 1..nc: wa;
+var 1..nc: nt;
+var 1..nc: sa;
+
+/* vincoli di confinamento */
+constraint wa != nt;
+constraint wa != sa;
+constraint nt != sa;
+
+/* obiettivo */
+solve satisfy;
+
+/* output formattato */
+output ["WA=\(wa), NT=\(nt), SA=\(sa)\n"];
+    \end{lstlisting}
+\end{gframe}
+
+\subsection{Iterazioni e Array}
+Nei problemi scalabili, dichiarare ogni vincolo singolarmente è impossibile. MiniZinc utilizza strutture ad array e \textbf{list comprehension} tramite il costrutto \texttt{forall}.
+
+\begin{lstlisting}[language=C]
+/* array di 5 variabili incognite */
+array[1..5] of var 1..10: x;
+
+/* applica un vincolo a tutti gli elementi: tutti devono essere pari */
+constraint forall(i in 1..5)(x[i] mod 2 == 0);
+
+/* vincolo relazionale: elementi adiacenti devono essere diversi */
+constraint forall(i in 1..4)(x[i] != x[i+1]);
+\end{lstlisting}
 
 %\chapter{Agenti Basati su Conoscenza in Logica Proposizionale}
 
