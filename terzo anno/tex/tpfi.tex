@@ -635,6 +635,7 @@ ordinata xs = and (zipWith (<=) xs (tail xs))
 \end{itemize}
 
 \chapter{Lambda Calcolo}
+\todo{sistemare}
 Ideato da Alonzo Church nel 1931, il $\lambda$-calcolo nasce per esplicitare il \textit{processo meccanico di calcolo} (sintassi) di una funzione, in contrasto con la visione matematica classica che vede la funzione solo come una relazione statica tra insiemi (semantica).
 
 \section{Sintassi e Computazione}
@@ -693,7 +694,6 @@ $$\underline{n} \equiv \lambda s z. s(s(\dots(sz)\dots)) \quad [n\text{ applicaz
 
 Per calcolare il successore ($+1$) di un numero di Church, basta creare una funzione che applica $s$ una volta in più: $succ \equiv \lambda x s z. s(x s z)$ (o anche $\lambda x s z. xs (s z)$)
 
- 
 I numerali di Church non sono quindi solo dati, ma \textbf{iteratori intrinseci}.
 
 \section{Ricorsione e Combinatori di Punto Fisso}
@@ -708,7 +708,7 @@ Per definire funzioni ricorsive complesse il $\lambda$-calcolo necessita di un p
 Due combinatori di punto fisso sono:
 \begin{itemize}
     \item \textbf{Combinatore di Turing ($Y_T$):} definito come $Y_T = \theta \theta$ dove $\theta \equiv \lambda x y. y(x x y)$.
-    \item \textbf{Combinatore di Curry ($Y_C$):} definito come $Y_C \equiv \lambda f. (\lambda x.f(xx))(\lambda x.f(xx))$. Se applicato all'identità $I$, questo combinatore riduce inesorabilmente a $\Omega$ (divergenza).
+    \item \textbf{Combinatore di Curry ($Y_C$):} definito come $Y_C \equiv \lambda f. (\lambda x.f(xx))(\lambda x.f(xx))$. Se applicato all'identità $I$, questo combinatore riduce a $\Omega$ (divergenza).
 \end{itemize}
 
 \begin{thmframe}{Tesi di Church-Turing}{}
