@@ -59,6 +59,10 @@
 
 \renewcommand{\cftchapfont}{\sffamily}
 \renewcommand{\cftchappagefont}{\normalfont}
+\renewcommand{\cftsecfont}{\sffamily}
+\renewcommand{\cftsecpagefont}{\sffamily}
+\renewcommand{\cftsubsecfont}{\sffamily}
+\renewcommand{\cftsubsecpagefont}{\sffamily}
 
 \tocloftpagestyle{fancy}
 
@@ -723,6 +727,166 @@ L'algoritmo base funziona, ma si può rendere molto più efficiente agendo su tr
     \item scelta, ad ogni passo, della \textbf{variabile} da assegnare (quale variabile mi conviene valutare per prima?)
     \item scelta, ad ogni passo, dell'\textbf{ordine dei valori} (quale valore del dominio provo per primo?)
 \end{itemize}
+
+\subsection{Consistenza locale}
+Per ridurre lo spazio dei valori locali senza perdere soluzioni, si può \textbf{forzare la consistenza} locale del CSP. Questo si può fare sia come preprocessamento prima dell'inizio della ricerca, e sia durante la ricerca stessa.
+
+Esistono diversi "gradi" di consistenza.
+
+\begin{defframe}{Node-consistency}{}
+    Una variabile è \textbf{node-consistent} se tutti i valori del suo dominio soddisfano i suoi vincoli unari.
+\end{defframe}
+\begin{itemize}
+    \item i vincoli unari si possono, come già menzionato, eliminare prima della ricerca rendendo ogni variabile node-consistent
+\end{itemize}
+
+\begin{defframe}{Arc-consistency}{}
+    Una variabile $X$ si dice \textbf{arc-consistent} se, per ogni vincolo binario $C$ che coinvolge $X$ e un'altra variable $Y$, si ha che, per ogni valore $v_X \in D_X$ esiste un valore $v_Y \in D_Y$ che soddisfa $C$.
+\end{defframe}
+
+\paragraph{Esempio}
+Se si ha $Y=X^2$ e $D_X=D_Y=\{0,\dots, 9\}$, per rendere $X$ arc-consistent, si riduce $D_X$ a $\{0,1,2,3\}$ (gli altri valori non potranno produrre un quadrato $\leq 9$); per rendere $Y$ arc-consistent, si riduce $D_Y$ a $\{0,1,4,9\}$ (gli unici quadrati).
+
+\begin{defframe}{Generalised arc consistency (GAC)}{}
+    Una variabile $X$ è \textbf{generalised-arc-consistent} (GAC) se per ogni vincolo $C(X, Y_1, \dots, Y_k)$ che coinvolge $X$ e altre variabili $Y_1, \dots, Y_k$, si ha che per ogni valore $v_X \in D_X$ esistono $v_{Y_1}, \dots, v_{Y_k}$ che soddisfano $C$.
+\end{defframe}
+
+\subsubsection{Algoritmo GAC-3}
+
+L'algoritmo GAC-3 funziona solo su domini finiti, ma ne esistono estensioni che lavorano su domini infiniti. GAC-3 impone GAC \textit{prima} di avviare la ricerca.
+
+\begin{gframe}{Generalised arc-consistency: GAC-3}{}
+\begin{tcolorbox}[colback=gray!10, colframe=gray!10, arc=4pt, boxrule=0pt, left=5pt, right=5pt, top=5pt, bottom=5pt]
+    \begin{tabbing}
+        \hspace{0.5cm} \= \hspace{0.5cm} \= \hspace{0.5cm} \= \hspace{0.5cm} \= \kill
+        \textbf{function} \texttt{GAC-3}(csp): false (trovata inconsistenza) o true \\
+        \> \textbf{input} csp, un CSP con componenti $(X, D, C)$ \\
+        \> $Q \leftarrow \{(X_i, c) \mid c(\dots, X_i, \dots) \in C\}$; \\
+        \> \textcolor{gray}{// (Q deve essere senza duplicati ma ordinato)} \\
+        \> \textbf{while} $Q$ non è vuoto \textbf{do} \\
+        \> \> $(X_i, c) \leftarrow$ estrai un elemento da $Q$; \\
+        \> \> \textbf{if} \texttt{rimuovi\_valori\_inconsistenti}(csp, $X_i$, $c$) \textbf{then} \\
+        \> \> \> \textbf{if} $D_i$ è vuoto \textbf{then return} false; \\
+        \> \> \> \textbf{foreach} $X_k \neq X_i$ e vincolo $c'(\dots, X_i, \dots, X_k, \dots) \neq c$ \textbf{do} \\
+        \> \> \> \> inserisci $(X_k, c')$ in $Q$;  \\
+        \> \> \> \> \textcolor{gray}{// devo ri-aggiungere i vincoli con X anche se già visti} \\
+        \> \> \> \> \textcolor{gray}{// perche il suo dominio è appena cambiato } \\
+        \> \textbf{return} true; \\[0.3cm]
+        \textbf{function} \texttt{rimuovi\_valori\_inconsistenti}(csp, $X_i$, $c$): bool \\
+        \> \textbf{output:} true se viene rimosso un valore, false altrimenti \\
+        \> $Y_1, \dots, Y_m \leftarrow$ variabili coinvolte in $c$ eccetto $X_i$; \\
+        \> $rimosso \leftarrow$ false; \\
+        \> \textbf{foreach} $v_i \in D_i$ \textbf{do} \\
+        \> \> \textbf{if} nessuna $m$-pla di valori $(Y_1=v_1, \dots, Y_m=v_m) \in D_{Y_1} \times \dots \times D_{Y_m}$ è \\
+        \> \> \> tale che $(X_i=v_{X_i}, Y_1=v_1, \dots, Y_m=v_m)$ soddisfa $c$ \textbf{then} \\
+        \> \> \> rimuovi $v_i$ da $D_i$; \\
+        \> \> \> $rimosso \leftarrow$ true; \\
+        \> \textbf{return} rimosso;
+    \end{tabbing}
+\end{tcolorbox}
+\end{gframe}
+
+\begin{defframe}{Path-consistency (consistenza di cammino)}{}
+    Un insieme di due variabili $\{X_i, X_j\}$ è \textbf{path-consistent} rispetto a una terza variabile $X_m$ se, per ogni assegnamento $\{X_i = v_i, X_j = v_j\}$ consistente con i vincoli su $\{X_i, X_j\}$, esiste un assegnamento $X_m = v_m$ tale che:
+    \begin{itemize}
+        \item $(v_i, v_m)$ soddisfa i vincoli su $\{X_i, X_m\}$
+        \item $(v_m, v_j)$ soddisfa i vincoli su $\{X_m, X_j\}$
+    \end{itemize}
+\end{defframe}
+    \begin{gframe}{}
+ Mentre la \textit{arc-consistency} agisce riducendo i domini delle singole variabili, la \textit{path-consistency} agisce sui vincoli binari. Se per una coppia di valori $(v_i, v_j)$ non esiste un valore ``intermediario'' $v_m$ che soddisfi il triangolo, la coppia viene rimossa dalla relazione ammissibile tra $X_i$ e $X_j$. Questo processo permette di esplicitare vincoli impliciti e restringere ulteriormente lo spazio di ricerca.
+    \end{gframe}
+
+\begin{defframe}{k-consistency}{}
+    Un CSP è \textbf{k-consistent} se, per ogni insieme di $k-1$ variabili e ogni loro assegnamento consistente, è possibile assegnare un valore consistente ad ogni $k$-esima variabile.
+    \begin{itemize}
+        \item \textbf{1-consistent:} node-consistency
+        \item \textbf{2-consistent:} (generalised) arc-consistency
+        \item \textbf{3-consistent:} path-consistency
+    \end{itemize}
+\end{defframe}
+
+Un CSP si dice \textbf{strong k-consistent} se è $i$-consistent per ogni $i \le k$. Se un CSP con $n$ variabili è strong $n$-consistent, possiamo risolverlo in tempo polinomiale.
+Tuttavia, forzare la strong $n$-consistency richiede tempo esponenziale. 
+
+\begin{gframe}{}
+\textit{N.B.:} imporre tutte le consistenze equivale di fatto a risolvere il problema. Nella pratica, conviene fermarsi a forzare la GAC, non necessariamente spingendosi fino alla path-consistency.
+\end{gframe}
+
+\subsection{Backtracking + propagazione}
+L'algoritmo di backtracking può essere potenziato con l'aggiunta della propagazione dei vincoli ad ogni assegnamento. 
+
+\begin{tcolorbox}[colback=gray!10, colframe=gray!10, arc=4pt, boxrule=0pt, left=5pt, right=5pt, top=5pt, bottom=5pt]
+    \begin{tabbing}
+        \hspace{0.5cm} \= \hspace{0.5cm} \= \hspace{0.5cm} \= \hspace{0.5cm} \= \kill
+        \dots \\
+        \> \textbf{if} $val$ è consistente con ass dati i vincoli \textbf{then} \\
+        \> \> aggiungi $\{var = valore\}$ ad ass; \\
+        \> \> \textcolor{blue}{$inferenze \leftarrow \texttt{propagazione}(csp, var, val)$;} \textcolor{gray}{// es. rende le altre var GAC rispetto a var} \\
+        \> \> \textbf{if} $inferenze \neq fallimento$ \textbf{then} \\
+        \> \> \> aggiungi $inferenze$ ad ass; \\
+        \> \> \> $risultato \leftarrow \texttt{backtracking\_prop\_ric}$(ass, csp); \\
+        \dots
+    \end{tabbing}
+\end{tcolorbox}
+
+Effettuare queste inferenze permette un pruning dei sottoalberi. 
+
+La funzione \texttt{propagazione()} può essere implementata in vari modi:
+\begin{itemize}
+    \item \textbf{Forward checking (FC):} ogni volta che si aggiunge l'assegnamento $X_i = v$, si considerano tutti i vincoli che hanno \textit{una sola} variabile non assegnata $Y$ e si rimuovono dal dominio di $Y$ i valori non consistenti con $X_i=v$.
+    \item \textbf{Maintaining Arc Consistency (MAC):} ogni volta che si assegna $X_i = v$, si richiama GAC-3 (è sufficiente far partire l'algoritmo dai soli vincoli a cui $X_i$ partecipa con variabili non ancora assegnate)
+\end{itemize}
+
+\subsection{Euristiche per il Backtracking}
+L'ordine in cui si esplorano variabili e valori cambia drasticamente le prestazioni della ricerca.
+
+\subsubsection{Scelta della variabile da assegnare}
+\begin{itemize}
+    \item \textbf{Minimum Remaining Values (MRV):} ad ogni passo, sceglie la variabile con il dominio attivo più piccolo (detta anche euristica \textit{fail-first}, perché cerca di far fallire subito i rami ciechi riducendo il fattore di ramificazione).
+    \item \textbf{Max-degree:} ad ogni passo sceglie la variabile coinvolta nel maggior numero di vincoli. Di solito si usa MRV come euristica principale e Max-degree per rompere gli eventuali pareggi. (MRV da sola non è d'aiuto al primissimo livello, dove i domini sono tutti pieni).
+\end{itemize}
+
+\subsubsection{Scelta dell'ordinamento dei valori}
+Una volta scelta la variabile, bisogna decidere quale valore provare per primo.
+\begin{itemize}
+    \item \textbf{Valore meno vincolante (Least constraining value):} assegna il valore che lascia più libertà di scelta alle variabili adiacenti nel grafo dei vincoli. 
+    \item \textit{Nota:} mentre per le variabili si usa un approccio \textit{fail-first}, per i valori si usa un approccio \textit{fail-last}: dato che cerchiamo una sola soluzione, ha senso esplorare per primi i valori più "probabili" che minimizzano i conflitti.
+\end{itemize}
+
+\begin{gframe}{Simmetrie e ottimizzazioni}{}
+    In molti problemi, alcune scelte sono equivalenti. La simmetria rappresenta una relazione di equivalenza (o un gruppo). 
+    
+    Nel problema della mappa d'Australia, ad esempio, se il primo assegnamento $\texttt{SA}=r$ fallisce, sappiamo già che falliranno anche $\texttt{SA}=g$ e $\texttt{SA}=b$ per simmetria. Si può fare \textbf{symmetry breaking}: si sceglie un rappresentante per ogni classe di equivalenza in modo da restringere le soluzioni possibili ed eliminare interi rami di branching simmetrici. 
+    \begin{itemize}
+        \item Il \textit{symmetry breaking} aiuta molto quando il problema è UNSAT (insoddisfacibile, perché evita di esplorare lo spazio simmetrico per dimostrarlo), ma aiuta meno quando è SAT.
+        \item Scegliere un rappresentante per le simmetrie potrebbe però "rompere" l'andamento di alcune euristiche. I solver avanzati permettono di calcolare le scelte "during search" a seconda dell'euristica desiderata, anche se questo comporta costi computazionali maggiori.
+    \end{itemize}
+\end{gframe}
+
+\subsection{Backjumping (cenni)}
+Il backtracking standard fa marcia indietro cronologicamente: se fallisce, torna all'ultima variabile assegnata. Ma spesso non è questa ad essere la causa del fallimento.
+
+Il \textbf{Conflict-driven backjumping} salta direttamente all'"ultima" variabile (la più in basso nell'albero) colpevole del fallimento, ignorando i livelli intermedi non correlati.
+
+Questa tecnica si abbina al \textbf{no-good learning}:
+\begin{itemize}
+    \item quando si arriva a un caso di fallimento, si apprende che quello specifico sotto-assegnamento "non è buono" (\textit{no-good}) e non potrà mai essere completato.
+    \item poiché lo stesso sotto-assegnamento potrebbe ripresentarsi in un'altra area dell'albero di ricerca, si aggiungono dinamicamente nuovi vincoli durante la ricerca per ricordare il conflitto.
+    \item per non esaurire la memoria, questi vincoli appresi vengono spesso "swappati" (gestiti come una cache, ad esempio con politiche LFU - Least Frequently Used).
+\end{itemize}
+
+\subsection{CSP e Ricerca Locale}
+Gli algoritmi di ricerca locale possono essere molto utili per risolvere i CSP.
+\begin{itemize}
+    \item \textbf{Stati:} si parte da un assegnamento iniziale \textit{completo} (anche casuale) in cui sono ammesse violazioni dei vincoli.
+    \item \textbf{Euristica Min-conflicts:} ad ogni mossa, si sceglie casualmente una variabile che si trova attualmente in conflitto, e le si riassegna il valore che \textbf{minimizza il numero di vincoli violati}.
+\end{itemize}
+È fondamentale avere una metrica di violazione dei vincoli ("quanto" un assegnamento sia buono); serve calcolare esattamente il grado di violazione di un vincolo per orientare la ricerca, altrimenti l'algoritmo si bloccherebbe in plateau.
+
+\paragraph{Vantaggi prestazionali}
+Se si esclude il tempo per generare l'assegnamento casuale iniziale, \textit{min-conflicts} risolve problemi complessi (come le $n$-regine) in un tempo quasi indipendente da $n$.
+I solver moderni impiegano pochissimo tempo a risolvere istanze casuali di CSP, tranne che in una specifica "zona critica" definita dal rapporto $R = \frac{\text{numero di vincoli}}{\text{numero di variabili}}$. Al di fuori di questo ristretto intervallo, il problema è facilmente risolvibile o facilmente riconoscibile come insoddisfacibile; solo nella fascia "in mezzo" la probabilità di incappare in un problema davvero "difficile" si aggira intorno al 50\%.
 
 \newpage
 \section{Modellazione con MiniZinc}
