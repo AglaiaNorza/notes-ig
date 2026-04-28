@@ -21,7 +21,6 @@
 \usepackage{xcolor}
 
 \tcbuselibrary{skins, listings}
-
 \definecolor{hsbg}{HTML}{F8F9FA}       
 \definecolor{hspurple}{HTML}{5E5086}   
 \definecolor{hsgreen}{HTML}{118C4F}   
@@ -800,5 +799,87 @@ Ricordando la definizione di \code{foldr} basata sulla decomposizione della list
 \end{itemize}
 \end{proofframe}
 
+\section{TODO: tutto il resto}
+
+\section{Funtori e applicativi}
+L'idea alla base di un \textbf{funtore} è la generalizzazione del funzionale \code{map}, tipicamente utilizzato per le liste, a tutti i possibili costruttori di tipo.
+
+Se si ha:
+\begin{itemize}
+    \item una funzione $f:: a\to b$
+    \item un costruttore di tipo $T$ che trasforma un tipo $a$ in un tipo $T a$ (come per esempio \code{[a]} oppure \code{Maybe a})
+\end{itemize}
+
+Si può ottenere in modo canonico una funzione
+$$T f :: T a \to T b$$
+
+\begin{center}
+\begin{tikzpicture}[x=5cm, y=2.5cm, >=latex, very thick, font=\Large]
+    \node (a)  at (0,0) {$a$};
+    \node (b)  at (1,0) {$b$};
+    \node (Ta) at (0,1) {$Ta$};
+    \node (Tb) at (1,1) {$Tb$};
+    
+    \node[text=teal] at (0.5, 0.5) {\huge $\mathbf{=}$};
+    
+    \draw[->] (a) -- node[below=4pt] {$f$} (b);
+    \draw[->] (a) -- (Ta);
+    \draw[->] (b) -- (Tb);
+    
+    \draw[->, teal] (Ta) -- node[above=4pt, text=green!60!black] {$Tf$} (Tb);
+\end{tikzpicture}
+\end{center}
+
+\begin{gframe}{}
+Nel mondo categoriale, il concetto di ``funtore'' descrive un passaggio tra due categorie: dati due oggetti (tipi come $a$ o $b$), un funtore agisce come un costruttore di tipo ($T$) - prende un oggetto $a$ nella categoria $C$ e lo trasforma in un oggetto $T a$ nella categoria $D$.
+\begin{itemize}
+    \item il punto importante è che un funtore non mappa solo i tipi, ma anche le relazioni tra essi: se esiste una funzione $f : a \to b$, il funtore deve fornire un modo per ottenere una funzione corrispondente $T f$ che operi sui tipi $T a \to T b$
+    \item un funtore è quindi una \textbf{mappa che preserva la struttura}
+\end{itemize}
+\end{gframe}
+
+La classe \code{Functor} richiede che sia definita una funzione \code{fmap} che rende commutativo il passaggio dai tipi base ai tipi ``inscatolati''
+
+\begin{haskellbox}{}
+class Functor t where
+    fmap :: (a -> b) -> t a -> t b
+\end{haskellbox}
+\begin{itemize}
+    \item il tipo di \code{fmap} è parametrico, oltre che nei tipi \code{a} e \code{b}, anche rispetto a un \textbf{costruttore di tipo} \code{t} (si vede che \code{t} deve essere un costruttore di tipo perché si applica ad altri tipi)
+\end{itemize}
+
+\begin{gframe}{Esempi}
+    Alcuni esempi noti di istanze di funtori sono:
+    \begin{itemize}
+        \item le liste
+\begin{haskellbox}{}
+class Functor [] where
+    fmap = map
+\end{haskellbox}
+
+\item il tipo \code{Maybe}
+\begin{haskellbox}{}
+class Functor Maybe where
+    fmap f Nothing = Nothing
+    fmap f (Just x) = Just (f x)
+\end{haskellbox}
+
+\item gli alberi binari
+\begin{haskellbox}{}
+class Functor BinTree where
+    fmap f (F x) = F (f x)
+    fmap f (R r lft rgt) = 
+        R (f r) (fmap f lft) (fmap f rgt)
+\end{haskellbox}
+    \end{itemize}
+\end{gframe}
+
+Definire un tipo come istanza di \code{Functor} permette di scrivere codice generico che funziona su diverse strutture dato. 
+
+Per esempio, si può definire una funzione \code{inc} che incrementa i valori all'interno di qualsiasi funtore:
+\begin{haskellbox}{}
+inc :: Functor t => t Int -> t Int
+inc = fmap (+1)
+\end{haskellbox}
 
 \end{document}
