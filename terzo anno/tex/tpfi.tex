@@ -635,7 +635,6 @@ ordinata xs = and (zipWith (<=) xs (tail xs))
 \end{itemize}
 
 \chapter{Lambda Calcolo}
-\todo{sistemare}
 Ideato da Alonzo Church nel 1931, il $\lambda$-calcolo nasce per esplicitare il \textit{processo meccanico di calcolo} (sintassi) di una funzione, in contrasto con la visione matematica classica che vede la funzione solo come una relazione statica tra insiemi (semantica).
 
 \section{Sintassi e Computazione}
@@ -645,8 +644,11 @@ La sintassi del $\lambda$-calcolo è minimalista ed è composta da tre regole:
     \item \textbf{astrazione:} $\lambda x. M$ (corrisponde alla definizione di una funzione con parametro $x$ e corpo $M$)
     \item \textbf{applicazione:} $(M N)$ (corrisponde all'applicazione della funzione $M$ all'argomento $N$)
 \end{itemize}
+\vspace{0.5em}
+in BNF, quindi, la grammatica del lambda-calcolo è quindi:
+$$T ::= V \mid \lambda V.T \mid (T \ T)$$
 
-\begin{gframe}{Regole di Associazione}
+\begin{gframe}{Regole di associazione}
     \begin{itemize}
         \item \textbf{l'applicazione associa a sinistra:} $F N_1 N_2 \dots N_n$ equivale a $(\dots (F N_1) \dots N_n)$
         \item \textbf{l'astrazione associa a destra:} $\lambda x_1 \dots x_n. M$ equivale a $\lambda x_1. (\lambda x_2. (\dots (\lambda x_n. M)\dots))$
@@ -666,7 +668,7 @@ Un termine che non contiene più $\beta$-redex è detto in \textbf{forma normale
         \begin{itemize}
             \item è buona pratica seguire la ``convenzione di Barendregt'', che stabilisce che, all'interno di un termine lambda o di un insieme di termini, tutte le variabili legate devono avere nomi distinti tra loro e diversi da tutte le variabili libere presenti nel termine stesso
         \end{itemize} 
-    \item  I termini tali che ($FV(M) = \emptyset$) ($\lambda$-termini chiusi), ovvero senza variabili libere sono chiamati \textbf{combinatori}
+    \item  I termini tali che ($FV(M) = \emptyset$) ($\lambda$-termini chiusi), ovvero senza variabili libere, sono chiamati \textbf{combinatori}
 \end{itemize}
 
 \subsection{Combinatori noti e strutture di controllo}
@@ -677,7 +679,7 @@ Il $\lambda$-calcolo puro non ha tipi di dato predefiniti: tutto (booleani, nume
     \item \textbf{Cancellatori (booleani):}
         \subitem \textbf{True ($K$):} $K \equiv \lambda x y. x$ (prende due argomenti e restituisce il primo)
         \subitem \textbf{False ($O$):} $O \equiv \lambda x y. y$ (prende due argomenti e restituisce il secondo)
-    \item \textbf{If-Then-Else:} grazie alla definizione dei booleani, la struttura condizionale è banalmente codificata come un'applicazione: $if\ x\ then\ M\ else\ N \equiv x M N$. Se $x$ è True ($K$) selezionerà $M$, se è False ($O$) selezionerà $N$.
+    \item \textbf{If-Then-Else:} grazie alla definizione dei booleani, la struttura condizionale è codificata come un'applicazione: $if\ x\ then\ M\ else\ N \equiv x M N$. Se $x$ è True ($K$) selezionerà $M$, se è False ($O$) selezionerà $N$.
     \item \textbf{Compositori ($S$):} $S \equiv \lambda x y z. x z (y z)$ (si può dimostrare che $S K K \approx I$).
     \item \textbf{Duplicatori e divergenza:} 
         \subitem $\omega \equiv \lambda x.xx$ (auto-applicazione)
@@ -708,13 +710,95 @@ Per definire funzioni ricorsive complesse il $\lambda$-calcolo necessita di un p
 Due combinatori di punto fisso sono:
 \begin{itemize}
     \item \textbf{Combinatore di Turing ($Y_T$):} definito come $Y_T = \theta \theta$ dove $\theta \equiv \lambda x y. y(x x y)$.
+\begin{align*}
+Y_T M &\equiv (\theta \theta) M \\
+&\equiv ((\lambda x y. y(x x y)) \theta) M \\
+&\rightarrow_\beta (\lambda y. y(\theta \theta y)) M \\
+&\rightarrow_\beta M (\theta \theta M) \\
+&\equiv M (Y_T M)
+\end{align*}
+
     \item \textbf{Combinatore di Curry ($Y_C$):} definito come $Y_C \equiv \lambda f. (\lambda x.f(xx))(\lambda x.f(xx))$. Se applicato all'identità $I$, questo combinatore riduce a $\Omega$ (divergenza).
+    \begin{align*}
+    Y_C M &= (\lambda f. (\lambda x. f(x x)) (\lambda x. f(x x))) M \\
+    &\rightarrow_\beta (\lambda x. M(x x)) (\lambda x. M(x x)) \\
+    &\rightarrow_\beta M ( (\lambda x. M(x x)) (\lambda x. M(x x)) ) \\
+    &\equiv M (Y_C M)
+    \end{align*}
+    {\small \color{gray}(l'ultima equivalenza $\equiv$ vale perché $(\lambda x. M(x x)) (\lambda x. M(x x))$ è la forma ridotta di $Y_C M$)}
+
 \end{itemize}
 
 \begin{thmframe}{Tesi di Church-Turing}{}
  Ogni funzione calcolabile è $\lambda$-definibile.
 \end{thmframe}
 
+
+\chapter{Temi avanzati di programmazione funzionale}
+
+\section{Fusion law per foldr}
+
+La \textbf{Fusion Law} per \code{foldr} è un principio di induzione generalizzato che permette di trasformare la composizione di una funzione con una \code{foldr} in un'unica fold. Essa stabilisce le condizioni per cui vale l'uguaglianza:
+
+\code{f . foldr g a = foldr h b}
+
+L'obiettivo è quindi trovare funzioni o valori \code{h} e \code{b} tali che l'applicazione di \code{f} al risultato di una \code{foldr} sia equivalente ad una nuova \code{foldr} che lavora direttamente su di essi - l'utilità computazionale risiede nella capacità di ``fondere'' due passaggi (una trasformazione \code{f} applicata dopo un fold con \code{g}) in un unico ciclo sulla struttura dati, evitando allocazioni intermedie.
+
+\begin{thmframe}{Fusion law}{}
+    Siano \code{f}, \code{g}, \code{h} funzioni e \code{a}, \code{b} valori. L'uguaglianza \code{f . foldr g a = foldr h b} è garantita se sono soddisfatti i seguenti tre requisiti:
+    \begin{enumerate}
+        \item \code{f} è stretta (\code{f undefined = undefined}) (così che valga anche nel caso di liste parziali/indefinite)
+        \item \textbf{caso base}: \code{f a = b} - \code{f} applicata all'accumulatore iniziale della prima \code{foldr} (\code{a}) deve dare come risultato l'accumulatore iniziale della seconda (\code{b})
+        \item \textbf{passo induttivo} (condizione di fusione): per ogni \code{x}, \code{y}, deve valere: 
+            \subitem \code{f (g x y) = h x (f y)} - in questo modo, l'operazione \code{h} del nuovo \code{foldr} riproduce esattamente l'effetto di \code{g} seguito da \code{f}
+    \end{enumerate}
+
+\end{thmframe}
+
+\begin{gframe}{parallelo con un omorfismo}
+    La fusion law può essere interpretata come la dimostrazione che \code{f} agisce come un \textbf{omomorfismo} tra due strutture algebriche di calcolo:
+\begin{itemize}
+    \item \textbf{preservazione dell'identità}: \code{f a = b} mappa l'elemento neutro (accumulatore iniziale) del primo dominio in quello del secondo, analogamente a $f(1_A) = 1_B$.
+    \item \textbf{preservazione dell'operazione}: La condizione \code{f(g x y) = h x (f y)} ricalca la proprietà omomorfica $f(a \bullet b) = f(a) \circ f(b)$. 
+    \begin{itemize}
+        \item \textit{sorgente (\code{g x y})}: rappresenta l'operazione di combinazione di un elemento \code{x} con il risultato parziale \code{y} tramite la funzione \code{g}
+        \item \textit{destinazione (\code{h x (f y)})}: rappresenta la nuova operazione \code{h} che combina \code{x} con il risultato già trasformato da \code{f}
+    \end{itemize}
+\item \textbf{NB}: in \code{h x (f y)}, l'elemento \code{x} non viene trasformato da \code{f} - nella struttura della lista, \code{x} è un dato ``guida'' di tipo $A$, mentre \code{y} è il risultato della ricorsione (accumulatore) di tipo $B$. La fusion law mira a trasformare il \textit{risultato complessivo} del fold, non i singoli elementi contenuti nella lista.
+\end{itemize}
+\end{gframe}
+
+\begin{proofframe}[title=Derivazione formale]
+Per dimostrare la validità dell'uguaglianza \code{f . foldr g a = foldr h b}, analizziamo separatamente i due lati della relazione applicando i principi di induzione sulla struttura della lista:
+
+Ricordando la definizione di \code{foldr} basata sulla decomposizione della lista:
+\begin{itemize}
+    \item \code{foldr g a [] = a}
+    \item \code{foldr g a (x:xs) = g x (foldr g a xs)} 
+\end{itemize}
+
+\textbf{Caso \code{[]} (base)}:
+\begin{itemize}
+    \item \textbf{sinistra}: \code{(f . foldr g a) []} \\
+        \code{= f (foldr g a [])} \textit{ (def di .)} \\
+    \code{= f a} \textit{(def di foldr)}
+\item \textbf{destra}: \code{foldr h b []}   \\
+          \code{= b} \textit{(def di foldr)}
+    \item da cui deriva la prima condizione: \code{f a = b}
+\end{itemize}
+
+\textbf{Caso \code{(x:xs)} (induttivo)}:
+\begin{itemize}
+    \item \textbf{sinistra}: \code{(f . foldr g a) (x:xs)} \\
+        \code{= f (foldr g a (x:xs))}  \textit{ (def di .)}\\
+        \code{= f (g x (foldr g a xs))} \textit{ (def di foldr)} 
+    \item \textbf{destra}: \code{foldr h b (x:xs)} \\
+        \code{= h x (foldr h b xs)} \textit{ (def di foldr)} \\
+        \code{= h x (f (foldr g a xs))} \textit{ (induzione)}
+      \item ponendo \code{y = foldr g a xs}, deriviamo la condizione di fusione:
+          \subitem\code{f (g x y) = h x (f y)}
+\end{itemize}
+\end{proofframe}
 
 
 \end{document}
