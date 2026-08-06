@@ -1,8 +1,8 @@
 #!/bin/bash
 # script to push my handwritten notes to my gh repo
 drive="$HOME/Documents/gdrive"
-latex="$HOME/Documents/uni/latex"
-dest="$HOME/Documents/uni/notes-ig"
+latex="$HOME/Documents/BSc/latex"
+dest="$HOME/Documents/BSc/notes-ig"
 
 declare -A notes
 
