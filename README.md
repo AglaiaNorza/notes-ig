@@ -47,3 +47,5 @@ some notes are handwritten (via my tablet), some are pdfs (and .tex files) writt
 - [calcolo differenziale](../../raw/main/primo%20anno/calcdiff%20cheat%20sheet.pdf) - (necessary formulae and examples of exercises)
 - [architettura degli elaboratori](../../raw/main/primo%20anno/arch%20cheat%20sheet.pdf) - (mainly tips on how to solve the exercises)
 </details>
+
+> N.B.: the packages needed to compile the LaTeX are available [here](https://github.com/AglaiaNorza/latex-setup) (i have since changed some things, but the `packages/old` folder is the one used for these notes)
