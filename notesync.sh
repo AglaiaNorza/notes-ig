@@ -13,32 +13,32 @@ if [ "$(uname -n )" = "aglaia-otg" ]; then
 elif ! mount | grep "gdrive" > /dev/null; then
     echo "mounting drive"
     rclone mount --daemon gdrive:GoodNotes/ ~/Documents/gdrive
-    notes["$drive/automi/automi.pdf"]="terzo anno/automi, calcolabilità e complessità.pdf"
+    notes["$drive/automi/automi.pdf"]="y3/automi, calcolabilità e complessità.pdf"
 else
     echo "drive is mounted"
-    notes["$drive/automi/automi.pdf"]="terzo anno/automi, calcolabilità e complessità.pdf"
+    notes["$drive/automi/automi.pdf"]="y3/automi, calcolabilità e complessità.pdf"
 fi
 
 # did not need to declare a fancy array for this but i've never used bash arrays before so i wanted to try !
-#notes["$drive/algebra/algebra ALGEBRA.pdf"]="secondo anno/algebra.pdf"
-#notes["$drive/algebra/REFILE/algebra FORMULE.pdf"]="secondo anno/algebra formule.pdf"
-#notes["$drive/algebra/REFILE/algebra ES SHEET.pdf"]="secondo anno/algebra es sheet.pdf"
-#notes["$drive/algebra/REFILE/algebra DIMOSTRAZIONI.pdf"]=secondo anno/algebra dimostrazioni.pdf"
-#notes["$drive/probabilità/probabilità appunti.pdf"]="secondo anno/calcolo delle probabilità.pdf"
+#notes["$drive/algebra/algebra ALGEBRA.pdf"]="y2/algebra.pdf"
+#notes["$drive/algebra/REFILE/algebra FORMULE.pdf"]="y2/algebra formule.pdf"
+#notes["$drive/algebra/REFILE/algebra ES SHEET.pdf"]="y2/algebra es sheet.pdf"
+#notes["$drive/algebra/REFILE/algebra DIMOSTRAZIONI.pdf"]=y2/algebra dimostrazioni.pdf"
+#notes["$drive/probabilità/probabilità appunti.pdf"]="y2/calcolo delle probabilità.pdf"
 
-notes["$latex/logmat/logmat.pdf"]="terzo anno/logica matematica.pdf"
-notes["$latex/ldp/ldp.pdf"]="terzo anno/linguaggi di programmazione.pdf"
-notes["$latex/ia/ia.pdf"]="terzo anno/intelligenza artificiale.pdf"
-notes["$latex/tpfi/tpfi.pdf"]="terzo anno/tpfi.pdf"
+notes["$latex/logmat/logmat.pdf"]="y3/logica matematica.pdf"
+notes["$latex/ldp/ldp.pdf"]="y3/linguaggi di programmazione.pdf"
+notes["$latex/ia/ia.pdf"]="y3/intelligenza artificiale.pdf"
+notes["$latex/tpfi/tpfi.pdf"]="y3/tpfi.pdf"
 
-notes["$latex/logmat/logmat.tex"]="terzo anno/tex/logica matematica.tex"
-notes["$latex/ldp/ldp.tex"]="terzo anno/tex/linguaggi di programmazione.tex"
-notes["$latex/ia/ia.tex"]="terzo anno/tex/intelligenza artificiale.tex"
-notes["$latex/tpfi/tpfi.tex"]="terzo anno/tex/tpfi/tpfi.tex"
-notes["$latex/tpfi/1-le-basi.tex"]="terzo anno/tex/tpfi/1-le-basi.tex"
-notes["$latex/tpfi/2-lambda-calcolo.tex"]="terzo anno/tex/tpfi/2-lambda-calcolo.tex"
-notes["$latex/tpfi/3-tipi.tex"]="terzo anno/tex/tpfi/3-tipi.tex"
-notes["$latex/tpfi/4-temi-avanzati.tex"]="terzo anno/tex/tpfi/4-temi-avanzati.tex"
+notes["$latex/logmat/logmat.tex"]="y3/tex/logica matematica.tex"
+notes["$latex/ldp/ldp.tex"]="y3/tex/linguaggi di programmazione.tex"
+notes["$latex/ia/ia.tex"]="y3/tex/intelligenza artificiale.tex"
+notes["$latex/tpfi/tpfi.tex"]="y3/tex/tpfi/tpfi.tex"
+notes["$latex/tpfi/1-le-basi.tex"]="y3/tex/tpfi/1-le-basi.tex"
+notes["$latex/tpfi/2-lambda-calcolo.tex"]="y3/tex/tpfi/2-lambda-calcolo.tex"
+notes["$latex/tpfi/3-tipi.tex"]="y3/tex/tpfi/3-tipi.tex"
+notes["$latex/tpfi/4-temi-avanzati.tex"]="y3/tex/tpfi/4-temi-avanzati.tex"
 
 for file in "${!notes[@]}"; do
     cp "$file" "$dest/${notes[$file]}" || { echo "$file failed"; exit 1; }
