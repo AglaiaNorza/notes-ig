@@ -11,14 +11,14 @@ some notes are handwritten (via my tablet), some are pdfs (and .tex files) writt
 | course | format | status |
 |---| ---|---|
 | **1st sem:**|
-| [linguaggi di programmazione](../../raw/main/terzo%20anno/linguaggi%20di%20programmazione.pdf) | pdf (or .tex) | ☑ |
-| [logica matematica](../../raw/main/terzo%20anno/logica%20matematica.pdf) (1022365) |  pdf (or .tex) | ☑ |
-|[automi, calcolabilità e complessità](../../raw/main/terzo%20anno/automi%2C%20calcolabilit%C3%A0%20e%20complessit%C3%A0.pdf)| handwritten (pdf) | ☑ |
+| [linguaggi di programmazione](../../raw/main/y3/linguaggi%20di%20programmazione.pdf) | pdf (or .tex) | ☑ |
+| [logica matematica](../../raw/main/y3/logica%20matematica.pdf) (1022365) |  pdf (or .tex) | ☑ |
+|[automi, calcolabilità e complessità](../../raw/main/y3/automi%2C%20calcolabilit%C3%A0%20e%20complessit%C3%A0.pdf)| handwritten (pdf) | ☑ |
 | [multicore programming](https://aglaianorza.github.io/notesig/vault/multicore/multicore) (🇬🇧) | quartz | until CUDA |
 | [cybersecurity](https://aglaianorza.github.io/notesig/vault/cybersecurity/cybersecurity) (🇬🇧) | quartz | until ppt 9 |
 | **2nd sem:**|
-| [tecniche di programmazione funzionale e imperativa](../../raw/main/terzo%20anno/tpfi.pdf) | pdf (or .tex) | ☑ |
-| [intelligenza artificiale](../../raw/main/terzo%20anno/intelligenza%20artificiale.pdf) |  pdf (or .tex) | wip |
+| [tecniche di programmazione funzionale e imperativa](../../raw/main/y3/tpfi.pdf) | pdf (or .tex) | ☑ |
+| [intelligenza artificiale](../../raw/main/y3/intelligenza%20artificiale.pdf) |  pdf (or .tex) | wip |
 
 
 ### 2nd year
@@ -26,8 +26,8 @@ some notes are handwritten (via my tablet), some are pdfs (and .tex files) writt
 |corso | formato | status |
 |---|--| --- |
 | **1st sem:**| 
-| [algebra](../../raw/main/secondo%20anno/algebra.pdf) | handwritten (pdf) | ☑ |
-| [calcolo delle probabilità](../../raw/main/secondo%20anno/calcolo%20delle%20probabilità.pdf) | handwritten (pdf) | ☑ |
+| [algebra](../../raw/main/y2/algebra.pdf) | handwritten (pdf) | ☑ |
+| [calcolo delle probabilità](../../raw/main/y2/calcolo%20delle%20probabilità.pdf) | handwritten (pdf) | ☑ |
 | [basi di dati 1](https://aglaianorza.github.io/notesig/vault/basi-di-dati-1/basi-di-dati-1) | quartz | ☑ |
 | [sistemi operativi 1](https://aglaianorza.github.io/notesig/vault/sistemi-operativi-1/sistemi-operativi-1) | quartz | ☑ |
 |**2nd sem:**|
@@ -43,9 +43,9 @@ some notes are handwritten (via my tablet), some are pdfs (and .tex files) writt
  
 (some of my '**cheat sheets**' !! - they contain the main info i needed for exams, explanations of some exercises, and a few tips (they're a bit messy))
 
-- [progettazione di sistemi digitali](../../raw/main/primo%20anno/psd%20cheat%20sheet.pdf) - (types of exam exercises by prof. Massini - and the related theory -, explained)
-- [calcolo differenziale](../../raw/main/primo%20anno/calcdiff%20cheat%20sheet.pdf) - (necessary formulae and examples of exercises)
-- [architettura degli elaboratori](../../raw/main/primo%20anno/arch%20cheat%20sheet.pdf) - (mainly tips on how to solve the exercises)
+- [progettazione di sistemi digitali](../../raw/main/y1/psd%20cheat%20sheet.pdf) - (types of exam exercises by prof. Massini - and the related theory -, explained)
+- [calcolo differenziale](../../raw/main/y1/calcdiff%20cheat%20sheet.pdf) - (necessary formulae and examples of exercises)
+- [architettura degli elaboratori](../../raw/main/y1/arch%20cheat%20sheet.pdf) - (mainly tips on how to solve the exercises)
 </details>
 
 > N.B.: the packages needed to compile the LaTeX are available [here](https://github.com/AglaiaNorza/latex-setup) (i have since changed some things, but the `packages/old` folder is the one used for these notes)
